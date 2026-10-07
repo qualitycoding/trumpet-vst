@@ -1,0 +1,66 @@
+loops (m): {'2': 0.0896, '1': 0.1841, '3': 0.2837}
+0 partials 2..8 dev from ET (c): [np.float64(-2.8), np.float64(-7.7), np.float64(-13.3), np.float64(-1.7), np.float64(-21.6), np.float64(-33.0), np.float64(-45.7)]
+1 partials 2..8 dev from ET (c): [np.float64(-35.5), np.float64(-2.5), np.float64(-20.2), np.float64(-6.4), np.float64(-15.2), np.float64(-21.9), np.float64(-37.8)]
+2 partials 2..8 dev from ET (c): [np.float64(-17.9), np.float64(-5.2), np.float64(-17.8), np.float64(-3.2), np.float64(-18.1), np.float64(-27.2), np.float64(-42.6)]
+3 partials 2..8 dev from ET (c): [np.float64(-54.7), np.float64(-0.5), np.float64(-20.5), np.float64(-9.9), np.float64(-13.4), np.float64(-17.4), np.float64(-31.8)]
+12 partials 2..8 dev from ET (c): [np.float64(-43.1), np.float64(9.1), np.float64(-10.8), np.float64(0.1), np.float64(-3.8), np.float64(-8.1), np.float64(-22.7)]
+13 partials 2..8 dev from ET (c): [np.float64(-62.1), np.float64(27.2), np.float64(10.9), np.float64(13.5), np.float64(14.0), np.float64(16.9), np.float64(5.5)]
+23 partials 2..8 dev from ET (c): [np.float64(-57.8), np.float64(14.4), np.float64(-5.0), np.float64(1.7), np.float64(1.2), np.float64(0.3), np.float64(-12.6)]
+123 partials 2..8 dev from ET (c): [np.float64(-56.8), np.float64(46.7), np.float64(35.2), np.float64(34.4), np.float64(34.4), np.float64(40.6), np.float64(30.7)]
+54 123 p2 - std nat -56.8 c -> -56.8 c
+55 13 p2 - std nat -62.1 c -> -62.1 c
+56 23 p2 - std nat -57.8 c -> -57.8 c
+57 12 p2 - std nat -43.1 c -> -43.1 c
+58 1 p2 - std nat -35.5 c -> -35.5 c
+59 2 p2 - std nat -17.9 c -> -17.9 c
+60 0 p2 - std nat -2.8 c -> -2.8 c
+61 123 p3 3 std nat +48.6 c -> -7.7 c
+62 13 p3 3 std nat +29.2 c -> -7.7 c
+63 23 p3 - std nat +16.4 c -> +16.4 c
+64 12 p3 - std nat +11.1 c -> +11.1 c
+65 1 p3 - std nat -0.6 c -> -0.6 c
+66 2 p3 - std nat -3.2 c -> -3.2 c
+67 0 p3 - std nat -5.7 c -> -5.7 c
+68 23 p4 - std nat -5.0 c -> -5.0 c
+69 12 p4 - std nat -10.8 c -> -10.8 c
+70 1 p4 - std nat -20.2 c -> -20.2 c
+71 2 p4 - std nat -17.8 c -> -17.8 c
+72 0 p4 - std nat -13.3 c -> -13.3 c
+73 12 p5 - std nat -13.6 c -> -13.6 c
+74 1 p5 - std nat -20.1 c -> -20.1 c
+75 2 p5 - std nat -16.9 c -> -16.9 c
+76 0 p5 - std nat -15.4 c -> -15.4 c
+77 1 p6 1 std nat -13.2 c -> -21.6 c
+78 2 p6 - std nat -16.1 c -> -16.1 c
+79 0 p6 - std nat -19.6 c -> -19.6 c
+80 23 p8 - std nat -12.6 c -> -12.6 c
+81 12 p8 1 std nat -22.7 c -> -45.7 c
+82 1 p8 1 std nat -37.8 c -> -45.7 c
+83 2 p8 - std nat -42.6 c -> -42.6 c
+84 0 p8 - std nat -45.7 c -> -45.7 c
+85 2 p9 - std nat -33.2 c -> -33.2 c
+86 0 p9 - std nat -30.8 c -> -30.8 c
+87 2 p10 - std nat -46.1 c -> -46.1 c
+88 0 p10 - std nat -40.3 c -> -40.3 c
+89 1 p12 - std nat -26.5 c -> -26.5 c
+57 3 p2 - alt nat -54.7 c -> -54.7 c
+64 3 p3 - alt nat +1.5 c -> +1.5 c
+66 123 p4 - alt nat +35.2 c -> +35.2 c
+67 13 p4 - alt nat +10.9 c -> +10.9 c
+69 3 p4 - alt nat -20.5 c -> -20.5 c
+72 23 p5 - alt nat -12.0 c -> -12.0 c
+73 123 p6 - alt nat +36.3 c -> +36.3 c
+74 13 p6 - alt nat +16.0 c -> +16.0 c
+75 23 p6 - alt nat +3.1 c -> +3.1 c
+76 12 p6 - alt nat -1.8 c -> -1.8 c
+78 123 p8 - alt nat +30.7 c -> +30.7 c
+79 13 p8 - alt nat +5.5 c -> +5.5 c
+80 123 p9 - alt nat +34.9 c -> +34.9 c
+81 3 p8 - alt nat -31.8 c -> -31.8 c
+82 23 p9 - alt nat -10.1 c -> -10.1 c
+83 12 p9 - alt nat -19.3 c -> -19.3 c
+84 1 p9 - alt nat -32.0 c -> -32.0 c
+85 12 p10 - alt nat -41.5 c -> -41.5 c
+86 1 p10 - alt nat -50.4 c -> -50.4 c
+87 23 p12 - alt nat -17.9 c -> -17.9 c
+88 12 p12 - alt nat -19.2 c -> -19.2 c
