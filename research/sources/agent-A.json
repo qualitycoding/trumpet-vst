@@ -1,0 +1,524 @@
+[
+ {
+  "id": "A-1",
+  "question": "Q-A1",
+  "claim": "Velut et al. 2017 outward-striking one-mass lip model: h'' + (w_l/Q_l) h' + w_l^2 (h - h0) = (p_b - p(t))/mu (eq. 1), Bernoulli flow u = W h sqrt(2(p_b - p)/rho) (eq. 5), impedance as sum of complex modes Z(w) = Zc sum_n [C_n/(jw - s_n) + C_n*/(jw - s_n*)] (eq. 3), with modal ODEs dp_n/dt = Zc C_n u + s_n p_n and p = 2 sum Re(p_n) (eq. 4).",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-01245846v4",
+    "doi": "10.3813/AAA.919039",
+    "title": "How well can linear stability analysis predict the behaviour of an outward-striking valve brass instrument model? (Velut, Vergez, Gilbert, Djahanbani), Acta Acust. united Acust. 103(1):132-148",
+    "version": "2017 (HAL author version v4, dated 13 Dec 2016)",
+    "locator": "Sec. 2.1, eqs. (1)-(8), pp. 4-6 of HAL version",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Eq.(1): d2h/dt2 + (wl/Ql) dh/dt + wl^2 (h - h0) = (1/mu)(pb - p(t)); wl = 2 pi fl; mu = lip surface-mass equivalent (kg/m^2). Eq.(2) Z = P/U. Eq.(3) Z(w) = Zc * sum_{n=1..N} [Cn/(jw - sn) + Cn*/(jw - sn*)], Zc = rho c / S with S the input cross-section at the mouthpiece rim. Eq.(4) dpn/dt = Zc Cn u(t) + sn pn, p(t) = 2 sum_n Re(pn). Eq.(5) u(t) = sqrt(2/rho) * W * h(t) * sqrt(pb - p(t)), rho = 1.19 kg/m^3 at 20 C, W = lip channel width. Eqs.(6)-(8) state-space form X = [h, dh/dt, {pn}]. Jet assumed laminar in lip channel, turbulent in mouthpiece, no pressure recovery. Mouth pressure pb treated as constant (vocal tract ignored). Velut uses a trombone (Courtois T149) with 18-mode fit, not a trumpet. Practical implementation note (from Freour 2020 eq. 2 and Doc 2023 eq. 4): use u = b*sqrt(2|p0-p|/rho)*sign(p0-p)*max(h,0) to handle reverse flow and lip closure."
+ },
+ {
+  "id": "A-2",
+  "question": "Q-A1",
+  "claim": "Velut et al. 2017 lip parameters (Table 2): h0 = 5e-4 m, W = 12e-3 m, 1/mu = 0.11 m^2/kg (mu ~ 9.1 kg/m^2), Q_l = 7, with f_l swept 20-500 Hz; rho = 1.19 kg/m^3.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-01245846v4",
+    "doi": "10.3813/AAA.919039",
+    "title": "How well can linear stability analysis predict the behaviour of an outward-striking valve brass instrument model? (Velut, Vergez, Gilbert, Djahanbani), Acta Acust. united Acust. 103(1):132-148",
+    "version": "2017 (HAL author version v4, dated 13 Dec 2016)",
+    "locator": "Table 2, p. 8 (Sec. 2.2); rho in text below eq. (5)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Q_l = 7 was chosen because Q_l ~ 1 (measured on human lips) gave unrealistic thresholds of 1e4-1e5 Pa (p. 8). Table 1 (p. 7) literature review (h0, W, fl, 1/mu, Ql): Elliott&Bowsher 1982: -, -, 200 Hz, 0.2, 0.5; Cullen et al. 2000 artificial lips soft/medium/tight: 6.3e-4/5.3e-4/4.4e-4 m, 18e-3/12e-3/11e-3 m, 189/203.5/222 Hz, 0.07/0.11/0.09, 10.5/6/9; Lopez et al. 2006: 2e-4, 30e-3, 162, 0.03, 5; Gazengel 2007 human lips: fl 115.7/479.9/1073 Hz, Ql 0.79/0.46/0.46; Newton 2008: fl 32 Hz, Ql 1.2-1.8; Richards 2003: 5e-4, 7e-3, 162, 0.19, 3.7; Rodet & Vergez 1996 (TRUMPET, adjusted for simulation): fl 428.4 Hz, 1/mu 0.67, Ql 2.88; Adachi & Sato 1996 (TRUMPET): h0 1e-3 m, W 7e-3 m, fl 60-700 Hz, 1/mu variable, Ql 0.5. Text p. 7-8: geometric parameters consistent around W = 12e-3 m, h0 = 5e-4 m; mu in [5, 33] kg/m^2 for trombone. Adachi&Sato 1996 original table NOT read (paywalled); values only via Velut Table 1."
+ },
+ {
+  "id": "A-3",
+  "question": "Q-A1",
+  "claim": "Freour et al. 2020 trumpet parameter set (same one-mass outward model, eq. 1-6): Q_l = 3, mu_l = 2 kg/m^2, y0 = 0.1 mm, b = 8 mm (eq. 15), with f_l = 382.18 Hz chosen by LSA 'sweet spot' so that the 4th regime (Bb4, ~470 Hz) is played; Hopf bifurcation at p0 ~ 2.2 kPa.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-03094997",
+    "doi": "10.1121/10.0001603",
+    "title": "Numerical continuation of a physical model of brass instruments: Application to trumpet comparisons (Freour, Guillot, Masuda, Usa, Tominaga, Tohgi, Vergez, Cochelin), JASA 148(2):748-758",
+    "version": "2020 (HAL author version)",
+    "locator": "Sec. II.A eqs. (1)-(6) pp. 4-5; eq. (15) p. 10; Sec. IV.A.1-2 and Fig. 6, pp. 10-11; Table 1 p. 14",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://hal.science/hal-03837108",
+    "doi": "10.1051/aacus/2022004",
+    "title": "Parameter identification of a physical model of brass instruments by constrained continuation (Freour, Guillot, Masuda, Vergez, Cochelin), Acta Acustica 6:9",
+    "version": "2022 (CC BY 4.0)",
+    "locator": "Table 2 (same values Ql=3, mu_l=2 kg/m^2, y0=0.1 mm, b=8 mm), fl=382.18 Hz, p. 9",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Freour eq.(1): y'' + (wl/Ql) y' + wl^2 (y - y0) = (p0 - p)/mu_l. Eq.(2): u = sqrt(2|p0-p|/rho) * b * sign(p0-p) * theta(y), theta(y) = (|y|+y)/2 (forces u=0 when y<0, no contact model). Eq.(3) same pole-residue impedance; eq.(5) pk' = Zc Ck u + sk pk; eq.(6) p = 2 sum Re(pk). 11-12 modes, measured 20 Hz-2 kHz, frequency corrected to 27 C. Dimensionless scaling eq.(9): x = y/y0, PM = mu_l wl^2 y0, gamma = p0/PM, zeta = Zc b y0 sqrt(2/(rho PM)). Freour 2022 constrained continuation (Table 3, p. 11) gives an alternative identified set: Ql = 5.25, mu_l = 2.46 kg/m^2, y0 = 0.078 mm, b = 12.78 mm, fl = 414 Hz (LSA) for Bb4; along branch 2.9 < Ql < 5 and 0.04 < zeta < 0.1 for p0 up to ~3 kPa. Freour 2020 Table 1: sweet-spot fl across 8 high-end Bb trumpets = 376.9-385.1 Hz (mean 380.47, std 2.77) for f4 = 462.5-467.6 Hz."
+ },
+ {
+  "id": "A-4",
+  "question": "Q-A1",
+  "claim": "Doc, Vergez & Hannebicq 2023 give a register-by-register trumpet lip parameter set (L = 12 mm, Q_l = 20, mu = 9 kg/m^2) that makes the one-mass outward model play registers 2-6 in time-domain synthesis: p_b = 1256/2146/2973/3790/4931 Pa, f_l = 235/340/467/586/703 Hz, h0 = 0.242/0.218/0.190/0.172/0.168 mm.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-04019734",
+    "doi": "10.1121/10.0016808",
+    "title": "Inverse problem to estimate lips parameters values of outward-striking trumpet model for successive playing registers (Doc, Vergez, Hannebicq), JASA 153(1):168-178",
+    "version": "2023 (HAL author version)",
+    "locator": "Table II (Sec. V.C, p. 30 of HAL version); model eqs. (1)-(4) pp. 11-13",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Model: eq.(1) same as Velut eq.(1); eq.(2) pole-residue Z; eq.(3) modal ODE; eq.(4) u = sqrt(2/rho) L max(0,h) sqrt|pb - p| sign(pb - p), rho = 1.19. Trumpet: Yamaha YTR 1335, Bach 1-1/2C mouthpiece. pb values in Table II are measured thresholds +20%. Simulation with MoReeSC at 44.1 kHz; register change by 20 ms linear ramps of pb, fl, h0. Authors note many parameter combinations fit; lowering h0 selects higher registers (Fig. 10). Fig. 7 example: Ql = 40, mu = 6 kg/m^2, h0 = 0.5 mm, L = 6 mm plays the first eight registers. THIS IS THE RECOMMENDED STARTING TABLE for a multi-register real-time trumpet (only open-valve registers 2-6 covered)."
+ },
+ {
+  "id": "A-5",
+  "question": "Q-A1",
+  "claim": "Berjamin et al. (2017) trumpet-like simulation uses a one-mass lip m y'' + r y' + k(y - y_eq) = A (p_m - p_e) with m = 1.78e-4 kg, k = 1278.8 N/m, r = sqrt(mk)/4 (i.e. Q = 4, f_l ~ 427 Hz), lip width l = 1e-2 m, A = 1e-4 m^2, y_eq = 5e-4 m, p_m = 20 kPa.",
+  "sources": [
+   {
+    "url": "https://arxiv.org/abs/1511.04247",
+    "doi": "",
+    "title": "Time-domain numerical modeling of brass instruments including nonlinear wave propagation, viscothermal losses, and lips vibration (Berjamin, Lombard, Vergez, Cottanceau), Acta Acust. united Acust. 103 (2017) 117-131",
+    "version": "arXiv v1 2015 preprint (published 2017)",
+    "locator": "Sec. 3.1 eqs. (43)-(49); Table 2 (Sec. 4.2)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Derived: f_l = sqrt(k/m)/(2 pi) = 426.6 Hz; mu = m/A = 1.78 kg/m^2. Resonator: cylinder R = 7 mm, D = 1.4 m, Menguy-Gilbert nonlinear model. Parameters 'from publications and trial and error until self-oscillation'. Read from arXiv preprint, published version not checked."
+ },
+ {
+  "id": "A-6",
+  "question": "Q-A1",
+  "claim": "Bilbao/NESS-style FDTD lip parameter set (as tabulated in Willemsen, Bilbao, Ducceschi, Serafin, DAFx20in21, citing Harrison-Harsley 2018 thesis): M_r = 5.37e-5 kg, S_r = 1.46e-5 m^2, sigma_r = 5 s^-1, w_r = 0.01 m, H0 = 2.9e-4 m, omega_r/2pi 20-1000 Hz, P_m 0-6000 Pa (trombone context).",
+  "sources": [
+   {
+    "url": "https://dafx2020.mdw.ac.at/proceedings/papers/DAFx20in21_paper_25.pdf",
+    "doi": "",
+    "title": "A Physical Model of the Trombone Using Dynamic Grids for Finite-Difference Schemes (Willemsen, Bilbao, Ducceschi, Serafin), DAFx20in21",
+    "version": "2021",
+    "locator": "Table 2",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://www.dafx.de/paper-archive/2015/DAFx-15_submission_55.pdf",
+    "doi": "",
+    "title": "An algorithm for a valved brass instrument synthesis environment using FDTD methods with performance optimisation (Harrison, Bilbao, Perry), DAFx-15",
+    "version": "2015",
+    "locator": "Sec. 2.4, eqs. (10a)-(10e)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Harrison 2015 eq.(10a): y'' + sigma y' + w0^2 y = Sr dp / mu_r (y measured from equilibrium H); (10c) um = w [y+H]+ sqrt(2|dp|/rho) sign(dp); (10d) ur = Sr dy/dt (lip-motion flow); (10e) S(0) v(0,t) = um + ur. Note sigma = w0/Q, so Q = w0/5 (very high Q, e.g. Q ~ 250 at 200 Hz) - different damping convention from the Velut/Freour family. Equivalent mu = Mr/Sr = 3.68 kg/m^2. Original source of values (Bilbao 2009 book / Harrison-Harsley 2018 thesis) not read directly."
+ },
+ {
+  "id": "A-7",
+  "question": "Q-A2",
+  "claim": "For the outward-striking one-mass model the playing (threshold) frequency is always just ABOVE the acoustic resonance f_ac,n, and the least-threshold ('optimal') lip frequency lies slightly BELOW it: trombone Table 5 gives f_l,opt/f_ac,n = 110/112 = 0.98, 162/170 = 0.95, 215/228 = 0.94, 271/290 = 0.93 for regimes 2-5, with f_thresh/f_ac,n = 1.10, 1.06, 1.05, 1.04 (Q_l = 7).",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-01245846v4",
+    "doi": "10.3813/AAA.919039",
+    "title": "How well can linear stability analysis predict the behaviour of an outward-striking valve brass instrument model? (Velut, Vergez, Gilbert, Djahanbani), Acta Acust. united Acust. 103(1):132-148",
+    "version": "2017 (HAL author version v4, dated 13 Dec 2016)",
+    "locator": "Sec. 3.1 pp. 10-11, Fig. 4; Sec. 4.1 Table 5 p. 21",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "fl ranges giving each regime (Velut Table-2 params, trombone): [30,63] Hz regime 1, [72,123] regime 2, [124,179], [180,234], [235,288], [289,352], [353,404], [405,460] Hz regimes 3-8; equilibrium unconditionally stable for 64-71 Hz. Within each regime fthresh rises monotonically with fl (pitch bending). pthresh(fl) is U-shaped; pthresh rises faster for fl above fl_opt than below (bending down easier). popt,n spans 500 Pa - 15.3 kPa over the regimes. Example: fl = 90 Hz, pthresh = 1222 Pa, fthresh = 116 Hz, steady state 126 Hz (+143 cents) at pb = 1234 Pa; at pb = 3 kPa fosc = 130.5 Hz vs 120.8 Hz from LSA (8% higher). Steady-state frequency therefore drifts sharp with pb in this model - plan for intonation compensation."
+ },
+ {
+  "id": "A-8",
+  "question": "Q-A2",
+  "claim": "With trumpet parameters of low Q_l the optimal lip frequency is much further below the resonance: Freour et al. 2020 find f_l = 382.18 Hz for the 4th resonance at 462.98 Hz (ratio 0.825, Q_l = 3), playing near 470 Hz; across 8 trumpets f_l/f_4 = 0.81-0.82.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-03094997",
+    "doi": "10.1121/10.0001603",
+    "title": "Numerical continuation of a physical model of brass instruments: Application to trumpet comparisons (Freour, Guillot, Masuda, Usa, Tominaga, Tohgi, Vergez, Cochelin), JASA 148(2):748-758",
+    "version": "2020 (HAL author version)",
+    "locator": "Sec. IV.A.1, Fig. 6 and Table 1 (p. 14); p. 10 lines 177-178",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Freour p.10: 'As expected for an outward-striking lip model, the lip natural frequency is smaller than the oscillation frequency of the corresponding regime.' Contrast with Doc 2023 Table II (Q_l = 20): fl = 235, 340, 467, 586, 703 Hz for registers 2-6, i.e. fl ~ 1.0 x f_ac,n (resonances ~ 233, 349, 463, 582, 691 Hz from Freour 2022 Table 1 trumpet), and Doc Fig.7 text: minimum-threshold point has fthresh close to fl. Rule for implementation: the fl/f_ac ratio depends strongly on Q_l: ~0.82 for Q_l = 3, ~0.93-0.98 for Q_l = 7, ~1.0 for Q_l = 20. Use a per-regime lookup tuned by LSA offline."
+ },
+ {
+  "id": "A-9",
+  "question": "Q-A2",
+  "claim": "Hysteresis: with Freour's trumpet parameters the Bb4 branch emerges from an inverse (subcritical) Hopf bifurcation at p0 ~ 2.2 kPa with a fold at lower p0, so sound starts at 2.2 kPa but can be sustained below it on decrescendo; across 8 trumpets the hysteresis width H = 0.25-0.59 kPa and the dynamic range D (p-p up to p0 = 5 kPa) = 8.4-9.8 kPa.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-03094997",
+    "doi": "10.1121/10.0001603",
+    "title": "Numerical continuation of a physical model of brass instruments: Application to trumpet comparisons (Freour, Guillot, Masuda, Usa, Tominaga, Tohgi, Vergez, Cochelin), JASA 148(2):748-758",
+    "version": "2020 (HAL author version)",
+    "locator": "Sec. IV.A.2 Figs. 7-8 pp. 11-13; Sec. IV.B p. 15 lines 228-234",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "With 20 'virtual players' (Ql, mu_l, y0 varied +-10%) H ranged 0.31-0.71 kPa and D 8.0-9.6 kPa (lines 262-265). Velut 2017: LSA predicts multiple simultaneous instabilities but not which regime wins; e.g. fl = 120 Hz, pb = 6.5 kPa (pthresh 1056 Pa) the model jumps to the 3rd regime at 187.5 Hz (overblowing, Fig. 9 and text pp. 18-19); quasi-periodicity at fl = 110 Hz and period doubling at fl = 55 Hz also occur. Doc 2023: register change in synthesis done by 20 ms ramps of pb, fl, h0 together; establishing register 2 near threshold took ~100 ms."
+ },
+ {
+  "id": "A-10",
+  "question": "Q-A3",
+  "claim": "A one-mass outward-striking model CAN produce a pedal-like note well above the strongly inharmonic first resonance: for the trombone Velut et al. find f_thresh,1 = 55.6 Hz vs f_ac,1 = 38 Hz (ratio 1.46, close to Bb1 = 58.27 Hz) at f_l = 49 Hz, and time-domain simulation at p_b = 150 Pa gives 61.86 Hz; a single-mode resonator still gives 61.06 Hz, so the pedal is attributed to coupling with the first mode, not the privileged-frequency mechanism of upper modes.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-01245846v4",
+    "doi": "10.3813/AAA.919039",
+    "title": "How well can linear stability analysis predict the behaviour of an outward-striking valve brass instrument model? (Velut, Vergez, Gilbert, Djahanbani), Acta Acust. united Acust. 103(1):132-148",
+    "version": "2017 (HAL author version v4, dated 13 Dec 2016)",
+    "locator": "Sec. 4.1 Table 5 p. 21, text pp. 21-22, Conclusions p. 26-27",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Velut: for the saxhorn the model gives a 'ghost note' at fthresh/fac,1 = 1.23 but could NOT reproduce the saxhorn pedal Bb1 (Sec. 4.2-4.3). The ratio fthresh,1/fac,1 increases as fac,1 decreases (Fig. 15). No paper found that simulated the TRUMPET pedal note with this model; Doc 2023 explicitly excludes register 1 ('pedal tone rarely used by trumpet players', Sec. II). Trumpet first resonance is ~83 Hz (Freour 2022 pole 1: 522.47 rad/s) vs the pedal note (written C3, concert Bb2 = 116.5 Hz, UNSW brass page): ratio 1.40 - comparable to the trombone case, so the Velut mechanism plausibly applies (INFERRED, untested). Related: Velut, Vergez, Gilbert 2017 'Physical modelling of trombone mutes, the pedal note issue', Acta Acust. 103(4):668-675; Gilbert & Aumond 2008 'Pedal notes of brass instruments, a mysterious regime of oscillation' (Acoustics'08) - not read."
+ },
+ {
+  "id": "A-11",
+  "question": "Q-A4",
+  "claim": "A downloadable B-flat-trumpet-like bore (based on measurements of a real commercial trumpet; 9 cones mouthpiece, 4 cones leadpipe, 1 central cylinder, 20 cones bell; total length 1.4187 m) is published as two-column (x [m], r [m]) file Tr_co_MP in the OpenWInD repository (GPL-3.0).",
+  "sources": [
+   {
+    "url": "https://inria.hal.science/hal-01963674",
+    "doi": "10.3813/AAA.919364",
+    "title": "A comparison of a one-dimensional finite element method and the transfer matrix method for the computation of wind music instrument impedance (Tournemenne, Chabassier), Acta Acust. united Acust. 105(5):838",
+    "version": "2019 (HAL v2)",
+    "locator": "Sec. 5 p. 7 lines 348-356, Fig. 3 (top left)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://gitlab.inria.fr/openwind/openwind/-/raw/master/examples/Tournemenne-Chabassier_ACTA2019/Tr_co_MP",
+    "doi": "",
+    "title": "OpenWInD repository, examples/Tournemenne-Chabassier_ACTA2019/Tr_co_MP (also examples/frequential/Geom_trumpet_conical.txt, identical)",
+    "version": "master branch, Copyright 2019-2025 INRIA",
+    "locator": "file contents",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Licence: repository LICENSE = GNU GPL v3 (source headers 'GPL v3 or later'); data file itself carries no separate licence. Key points (x m, r m): mouthpiece: (0, 8.4e-3) (0.002, 8.4e-3) (0.006, 6.626e-3) (0.010, 3.107e-3) (0.014, 1.990e-3) (0.017734, 1.825e-3 throat); backbore to (0.083704, 4.2e-3); leadpipe: step to 4.64e-3 at 0.083704, (0.138704, 5.0e-3) (0.193704, 5.5e-3) (0.248704, 5.7e-3) (0.303704, 5.82e-3); cylinder r = 5.82 mm (11.64 mm bore) from 0.3037 to 0.7987 m (0.495 m); bell: (0.79870, 5.825e-3) (0.81870, 6.125e-3) (0.83770, 6.100e-3) (0.86770, 5.985e-3) (0.90270, 6.205e-3) (0.93270, 6.325e-3) (0.96170, 6.65e-3) (0.99170, 6.97e-3) (1.02270, 7.39e-3) (1.05270, 8.45e-3) (1.11370, 8.68e-3) (1.14370, 9.25e-3) (1.17470, 9.845e-3) (1.20670, 1.0645e-2) (1.23670, 1.155e-2) (1.26170, 1.275e-2) (1.29770, 1.4375e-2) (1.32770, 1.67e-2) (1.36170, 2.25e-2) (1.39070, 3.47e-2) (1.41870, 6.1e-2). Linear interpolation between points = cones. NO valve loops in this geometry (valves at 'open' position, unrolled). Simplified alternatives in same repo: examples/frequential/Geom_trumpet.txt (spline mouthpiece to 0.0177 m, cone to r=5.82 mm at 0.3 m, cylinder 0.3-0.8 m, Bessel bell 0.8-1.4187 m, r_end 0.061 m, alpha 0.67); examples/Thibault-Chabassier_JASA2020/simplified-trumpet (cylinder 0-0.716 m r=6 mm + Bessel bell 0.716-1.335 m to r=60 mm, alpha 0.7). Raw URL: https://gitlab.inria.fr/openwind/openwind/-/raw/master/examples/Tournemenne-Chabassier_ACTA2019/Tr_co_MP"
+ },
+ {
+  "id": "A-12",
+  "question": "Q-A5",
+  "claim": "Modal fit of a measured B-flat trumpet input impedance (open valves, with mouthpiece, corrected to 27 C) gives pole frequencies Im(s_k)/2pi = 83.2, 232.7, 348.1, 462.6, 582.1, 690.6, 800.4, 908.0, 1028.1, 1147.7, 1262.3 Hz, i.e. -3, -8, -13, -2, -22, -33, -46 cents relative to n x 116.54 Hz for n = 2..8.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-03837108",
+    "doi": "10.1051/aacus/2022004",
+    "title": "Parameter identification of a physical model of brass instruments by constrained continuation (Freour, Guillot, Masuda, Vergez, Cochelin), Acta Acustica 6:9",
+    "version": "2022 (CC BY 4.0)",
+    "locator": "Table 1 (poles s_k and residues C_k, 11 modes), pp. 4-5 of HAL version; Fig. 1",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Poles (s^-1 / rad s^-1): s1 = -13.979 + 522.47i, s2 = -22.419 + 1462.1i, s3 = -28.642 + 2187.0i, s4 = -37.641 + 2906.6i, s5 = -45.031 + 3657.7i, s6 = -49.819 + 4339.0i, s7 = -58.425 + 5029.0i, s8 = -66.774 + 5705.4i, s9 = -72.239 + 6459.5i, s10 = -94.396 + 7210.9i, s11 = -128.62 + 7931.0i. Residues Ck (as printed): 1.3601e9+2.5960e7i, 1.7437e9+3.6566e7i, 2.4381e9+3.4217e7i, 4.7175e9-6.5252e6i, 5.7356e9+8.7953e5i, 7.6553e9-1.1749e7i, 7.3308e9+1.3414e8i, 4.7527e9+2.2058e8i, 2.3351e9+2.8082e8i, 1.6618e9+2.8424e8i, 1.1338e9+4.9805e8i. CAVEAT: the residues appear to be in Pa.s/m^3 per s (i.e. Zc already folded in, Zc*Ck), since |Zc Ck| with Ck~1e9 would be unphysical; verify by reconstructing |Z| peaks (~1e8 Pa s m^-3 expected). Freour 2020 Table 1 lists |C4| = 2245-2492 'Pa.m-3' for 8 trumpets in a different normalisation. Derived values (frequency, Q = |Im s|/(2|Re s|), cents) computed by me (INFERRED from table): Q = 18.7, 32.6, 38.2, 38.6, 40.6, 43.5, 43.0, 42.7, 44.7, 38.2, 30.8. Freour 2022 notes tuning reference A4 = 442 Hz (Bb4 = 468.28 Hz), so deviations vs A440 equal temperament differ by +7.9 cents. Pole frequency is not exactly the |Z| peak frequency (differs slightly for low Q). Freour 2020 Table 1: 4th-mode frequency f4 = 462.5-467.6 Hz across 8 high-end trumpets (mean 464.70, std 1.67 Hz)."
+ },
+ {
+  "id": "A-13",
+  "question": "Q-A6",
+  "claim": "Lossless weakly nonlinear simple-wave propagation used for brassiness: dp/dt + [c0 + ((gamma+1)/2) u] dp/dx = 0 (eq. 1), which with p = rho0 c0 u and retarded time tau = t - x/c0 becomes dp/dx - ((gamma+1)/(2 rho0 c0^3)) p dp/dtau = 0 (eq. 2); for a flaring bore D(x) add + p (1/D) dD/dx (eq. 5), removed by the stretched coordinate z(x) = int_0^x D0/D(y) dy and w = D p (eqs. 6-8).",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-00475561",
+    "doi": "",
+    "title": "Differences between brass instruments arising from variations in brassiness due to nonlinear propagation (Gilbert, Campbell, Myers, Pyle), ISMA 2007 Barcelona",
+    "version": "2007",
+    "locator": "eqs. (1)-(2) p. 2 (paper p. 2 of 7), eqs. (4)-(8) p. 3, Fig. 1",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://hal.science/hal-00207999",
+    "doi": "",
+    "title": "A simulation tool for brassiness studies (Gilbert, Menguy, Campbell), JASA 123(4):1854-1857",
+    "version": "2008 (HAL author version)",
+    "locator": "eqs. (1)-(2) generalized Burgers twin equations with volume (Gamma) and wall (T/eps, half-order derivative) losses; eq. (4) harmonic-balance solution",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Generalized Burgers (Gilbert 2008 eqs. 1-2, dimensionless): dq+/dsigma - q+ dq+/dtheta+ + q+ d ln(D/D0)/dsigma = (1/Gamma) d2q+/dtheta2 - (T/eps) d^(1/2) q+/dtheta^(1/2); sigma = ((gamma+1)/2) M x (slow scale). Backward wave has twin equation; forward/backward waves do not interact in the bulk (only at ends). Berjamin et al. (Menguy-Gilbert model, eq. 3a-4): du+/dt + d/dx(a u+ + b u+^2/2) + (a/S) dS/dx u+ = -c d^(-1/2)/dt^(-1/2) du+/dx + d d2u+/dx2, a = a0, b = (gamma+1)/2, c(x) = C a0 sqrt(nu)/R(x), d = nu_d/2. Gilbert 2007 Fig.1 example: cylinder r = 6 mm, sine 350 Hz, 5000 Pa -> shock formation distance 3.64 m."
+ },
+ {
+  "id": "A-14",
+  "question": "Q-A6",
+  "claim": "Shock formation distance: x_s = 2 gamma P_at c / ((gamma+1)(dp_m/dt)_max) (Hirschberg et al. eq. 1), equivalently x_s = rho0 c0^3 / (beta (dp/dt)_max) with beta = (gamma+1)/2 = 1.2; for a sinusoid of amplitude P, (dp/dt)_max = 2 pi f P, giving e.g. 2.76 m at 466 Hz/5 kPa, 1.38 m at 466 Hz/10 kPa, 0.69 m at 466 Hz/20 kPa (rho0 = 1.2, c0 = 343 m/s).",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-01105563",
+    "doi": "",
+    "title": "Shock waves in trombones (Hirschberg, Gilbert, Msallam, Wijnands), JASA 99(3):1754-1758",
+    "version": "1996 (HAL preprint dated 1995)",
+    "locator": "eq. (1), p. 4 of HAL scan (JASA p. 1755-1756)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://hal.science/hal-00475561",
+    "doi": "",
+    "title": "Differences between brass instruments arising from variations in brassiness due to nonlinear propagation (Gilbert, Campbell, Myers, Pyle), ISMA 2007 Barcelona",
+    "version": "2007",
+    "locator": "Fig. 1 caption, p. 3 (3.64 m for 350 Hz / 5 kPa / r = 6 mm, consistent with formula)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "gamma P_at = rho0 c0^2, so both forms are identical. Numerical examples are my calculations (INFERRED). Hirschberg: shocks expected in the trombone at ff because its cylindrical segment (2-3 m) exceeds x_s; steep mouthpiece pressure rise at lip opening sets (dp/dt)_max; '...we can also expect that non-linear wave propagation is musically relevant for the trumpet'. Proposed real-time caricature (Hirschberg p. 4): linear model of pipe with >= 8 resonances drives lips; computed mouthpiece pressure drives a simple wave into a cylindrical bore (weak-shock theory if needed); output radiated through a linear horn model with audio-band filtering. This is exactly the plan's 'output-side nonlinear propagation' architecture."
+ },
+ {
+  "id": "A-15",
+  "question": "Q-A6",
+  "claim": "Effective nonlinear (equivalent-cylinder) length of a modern B-flat trumpet: brassiness potential B = (1/L_ecN) int_0^L Dmin/D(x) dx = 0.58 with Dmin = 8.7 mm for a Yamaha trumpet (c. 2002), i.e. L_NDeq = B x L_ecN ~ 0.85 m of 8.7 mm tube (L_ecN = c/(2 f1) ~ 1.47 m); a 19th-century Kessler trumpet has B = 0.74; the OpenWInD Tr_co_MP bore gives B ~ 0.61 (Dmin 9.28 mm, z(L) = 0.90 m).",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-03234054",
+    "doi": "10.48465/fa.2020.0286",
+    "title": "Brassiness and the Understanding of Brass Instruments (Campbell, Gilbert, Myers), Forum Acusticum 2020, pp. 3169-3175",
+    "version": "2020",
+    "locator": "eqs. (4)-(5) p. 3171; Sec. 5 p. 3173 (B = 0.58, Dmin 8.7 mm; Kessler B = 0.74; cornet B = 0.58/Dmin 8.4 mm)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://hal.science/hal-00475561",
+    "doi": "",
+    "title": "Differences between brass instruments arising from variations in brassiness due to nonlinear propagation (Gilbert, Campbell, Myers, Pyle), ISMA 2007 Barcelona",
+    "version": "2007",
+    "locator": "eq. (8) definition B = z(L)/L(ecl), L(ecl) = c/2f1; Table 1 trombone B = 0.81 (z(L) = 2.397 m)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "L_NDeq = int_0^L Dmin/D(x) dx (Campbell 2020 eq. 4). L_NDeq ~ 0.85 m is INFERRED (0.58 x 1.47). OpenWInD value computed by me from Tr_co_MP integrating from the leadpipe start (x = 0.0837 m), excluding the mouthpiece; c = 343 m/s, f1 = 116.54 Hz. So the plan's guess of 1.3-1.5 m of cylinder is too long: use ~0.85-0.90 m of ~9 mm-diameter equivalent cylinder (the geometric cylindrical section alone is ~0.5 m in Tr_co_MP). Campbell 2020 also: E1 = 1 + alpha B / Dmin with alpha = 5 mm (eq. 6) as spectral-enrichment predictor."
+ },
+ {
+  "id": "A-16",
+  "question": "Q-A6",
+  "claim": "Real-time algorithm options: Vergez & Rodet 2000 (J. Signal Processing 4(1):79-87) proposed a new algorithm for nonlinear propagation applied to a trumpet model, Msallam et al. 2000 (Acta Acust. 86(4):725-736) a trombone model with nonlinear propagation in the cylindrical part, and Helie & Smet 2008 a real-time 'brassy' audio effect for a straight pipe; none of these full texts were accessible, so the algorithm details below are derived from eq. (2) and not from them.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-01105576v1",
+    "doi": "",
+    "title": "New Algorithm for Nonlinear Propagation of a sound Wave, Application to a Physical Model of a Trumpet (Vergez, Rodet), J. Signal Processing 4(1):79-87",
+    "version": "2000",
+    "locator": "HAL notice only, no file",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://arxiv.org/abs/1511.04247",
+    "doi": "",
+    "title": "Time-domain numerical modeling of brass instruments including nonlinear wave propagation, viscothermal losses, and lips vibration (Berjamin, Lombard, Vergez, Cottanceau), Acta Acust. united Acust. 103 (2017) 117-131",
+    "version": "arXiv v1 2015 preprint (published 2017)",
+    "locator": "Introduction refs [8]-[10] (bibliographic data)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "inferred",
+  "notes": "Implementable scheme (derived from the exact implicit solution of eq. (2), Poisson/Earnshaw simple wave, valid before shock formation): output at the end of an equivalent cylinder of length Leq: p_out(t) = p_in(t - Leq/c0 + beta Leq p_in / (rho0 c0^3)) evaluated implicitly, i.e. each input sample s_k = p_in(t_k) arrives at time t_k + Leq/c0 - beta Leq s_k/(rho0 c0^3): positive pressure arrives early. Real-time realisation = amplitude-dependent fractional delay / time warping: compute arrival times for incoming samples, resample onto the uniform output grid (monotonic as long as Leq < x_s; when arrival times would cross, a shock has formed - apply weak-shock rule or simply limit dp/dt/oversample and low-pass). Delta delay for p = 10 kPa, Leq = 0.85 m: beta Leq p/(rho c^3) = 1.2*0.85*1e4/(1.2*4.04e7) = 0.21 ms (~9 samples at 44.1 kHz). Add wall losses as a linear low-pass/fractional (sqrt(jw)) filter in series, split into a few segments (operator splitting as in Berjamin et al. 2017). Berjamin uses a TVD finite-volume scheme + diffusive approximation of the fractional integral (too slow for real time: 18 min per simulated second). Berjamin results: nonlinear propagation raised playing frequency by up to 45 Hz (+157 cents) in transients, and altered thresholds/register behaviour - output-side-only modelling (no feedback) ignores these effects."
+ },
+ {
+  "id": "A-17",
+  "question": "Q-A4",
+  "claim": "No open, citable measured set of B-flat trumpet valve-loop lengths was found; the valves are specified acoustically as lowering pitch by 2 (1st), 1 (2nd) and 3 (3rd) equal-tempered semitones, so with a first-order cylindrical-pipe estimate the added effective lengths are (2^(k/12) - 1) x L_eff = 0.1225, 0.0595 and 0.1892 x L_eff, i.e. about 18.0, 8.8 and 27.8 cm for L_eff = 1.47 m.",
+  "sources": [
+   {
+    "url": "https://newt.phys.unsw.edu.au/jw/brassacoustics.html",
+    "doi": "",
+    "title": "Brass instrument (lip reed) acoustics: an introduction (Wolfe, UNSW Music Acoustics)",
+    "version": "web page, accessed 2026",
+    "locator": "section 'Valves and slides' (2nd valve 5.9% length per semitone example; valve semitone assignment)",
+    "accessed": "2026-10-07",
+    "tier": 3
+   }
+  ],
+  "confidence": "inferred",
+  "notes": "Numbers are my calculation (INFERRED): L_eff = c/(2 x 116.54 Hz) = 1.472 m at c = 343 m/s. Physical loop lengths differ from these because the effective length includes mouthpiece/bell end corrections and the loops are inserted in the ~11.6 mm cylindrical section; recommended practice: in the offline TMM, insert cylindrical loops (r = 5.82 mm in Tr_co_MP) at x ~ 0.35-0.75 m and tune each loop length so that resonances 2-8 shift by the intended interval, then optionally lengthen the 3rd loop (and 1st-valve trigger) as makers do. OpenWInD supports valves natively (InstrumentGeometry with 'valve' rows: position, reconnection, radius, length; fingering chart 'o'/'x'), see examples/technical/Ex2bis_Brass_Valves.py (example values there are arbitrary, not a real trumpet). Harrison, Bilbao & Perry DAFx-15 used a 1.381 m trumpet with one test valve (default 0.02 m, bypass 0.2 m) - not a real valve set."
+ },
+ {
+  "id": "A-18",
+  "question": "Q-A5",
+  "claim": "Independent corroboration of the 4th resonance: eight high-end B-flat trumpets measured with the same mouthpiece have f4 = 462.5-467.6 Hz (mean 464.70 Hz, std 1.67 Hz) and damping alpha4 = 33.75-35.04 s^-1, close to the 462.6 Hz pole in Freour 2022.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-03094997",
+    "doi": "10.1121/10.0001603",
+    "title": "Numerical continuation of a physical model of brass instruments: Application to trumpet comparisons (Freour, Guillot, Masuda, Usa, Tominaga, Tohgi, Vergez, Cochelin), JASA 148(2):748-758",
+    "version": "2020 (HAL author version)",
+    "locator": "Table 1, p. 14",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://hal.science/hal-03837108",
+    "doi": "10.1051/aacus/2022004",
+    "title": "Parameter identification of a physical model of brass instruments by constrained continuation (Freour, Guillot, Masuda, Vergez, Cochelin), Acta Acustica 6:9",
+    "version": "2022 (CC BY 4.0)",
+    "locator": "Table 1, p. 4",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "Both from the Yamaha/LMA group (same measurement chain), so not fully independent. Against B-flat equal temperament at A440 (Bb4 = 466.16 Hz) f4 is about -2 to -13 cents. The coordinator's 'typical' list 85, 233, 349, 466, 583, 698, 816, 932 Hz matches Freour 2022 within ~2 Hz for n = 1-5 but Freour's n = 6-8 resonances are lower (690.6, 800.4, 908.0 Hz). UNSW (Wolfe) notes the first resonance is far below the pedal note and that resonances weaken and vanish at high frequency (bell acts as a megaphone above ~700-800 Hz for the bass trombone, i.e. ~1.4-1.6 kHz for the half-scale trumpet - INFERRED scaling)."
+ },
+ {
+  "id": "A-19",
+  "question": "Q-A7",
+  "claim": "For the trumpet the bell radiation resistance rises as the square of frequency up to a radiation cut-off at about 1000 Hz, above which the bell radiates efficiently and reflects little, so the mouthpiece-to-radiated-pressure transfer function is a high-pass shape that rises with frequency up to ~1-1.5 kHz and is roughly flat above.",
+  "sources": [
+   {
+    "url": "https://www.phys.unsw.edu.au/music/people/publications/Fletcher1999a.pdf",
+    "doi": "",
+    "title": "The nonlinear physics of musical instruments (N. H. Fletcher), Rep. Prog. Phys. 62:723-764",
+    "version": "1999",
+    "locator": "Sec. 7, p. 744-745 (text before Fig. 13)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://newt.phys.unsw.edu.au/jw/brassacoustics.html",
+    "doi": "",
+    "title": "Brass instrument (lip reed) acoustics: an introduction (Wolfe, UNSW)",
+    "version": "web page",
+    "locator": "sections 'The effect of the bell', 'Weakness of the high harmonics', 'Frequency response and acoustic impedance'",
+    "accessed": "2026-10-07",
+    "tier": 3
+   }
+  ],
+  "confidence": "single-source",
+  "notes": "Fletcher p. 744: '...radiation resistance rises as the square of the frequency up to the radiation cutoff at about 1000 Hz.' The exact slope of the pressure transfer function (mouthpiece -> far field) was NOT found in an accessible source; commonly quoted Benade (Fundamentals of Musical Acoustics 1976) 'spectrum transformation' rising ~6 dB/octave below ~1.5 kHz is from memory and UNVERIFIED. Implementation suggestion (inferred): derive it from the same TMM: H(w) = p_rad/p_mouthpiece = (transfer-matrix bell output volume velocity x radiation impedance) / p_in, which automatically gives the high-pass behaviour and per-fingering differences; or fit a 1st/2nd-order high-pass at fc ~ 1-1.5 kHz. Campbell 2020 (p. 3171): 'the transfer function from the mouthpiece to the radiated sound field increases with the radial scale of the instrument'."
+ },
+ {
+  "id": "A-20",
+  "question": "Q-A8",
+  "claim": "Trumpet blowing pressures for C5 (523 Hz): pp 3.3 kPa, mf 6.3 kPa, ff 13 kPa; expert players reach up to ~25 kPa in loud high playing; mouthpiece sound pressure can reach ~175 dB (~20 kPa).",
+  "sources": [
+   {
+    "url": "https://www.phys.unsw.edu.au/music/people/publications/Fletcher1999a.pdf",
+    "doi": "",
+    "title": "The nonlinear physics of musical instruments (N. H. Fletcher), Rep. Prog. Phys. 62:723-764",
+    "version": "1999",
+    "locator": "Fig. 13 caption and text, p. 745 (citing Fletcher & Tarnopolsky 1999)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://pubs.aip.org/asa/jasa/article/105/2/874/559058/Blowing-pressure-power-and-spectrum-in-trumpet",
+    "doi": "",
+    "title": "Blowing pressure, power, and spectrum in trumpet playing (Fletcher, Tarnopolsky), JASA 105(2):874-881",
+    "version": "1999",
+    "locator": "abstract (via search snippet; full text not accessible)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "Fletcher & Tarnopolsky abstract: threshold blowing pressure approximately proportional to the note frequency; sound output rises ~15 dB per doubling of blowing pressure in an extended region, then ~3 dB per doubling in saturation; some players up to 25 kPa. Measured minimal (threshold) mouth pressures, 4 amateur players, Yamaha YTR1335 (Doc et al. 2023 Table I): written C4 1047 Pa, G4 1788 Pa, C5 2477 Pa, E5 3158 Pa, G5 4109 Pa (registers 2-6, medians). Freour 2020 p. 10: 5 kPa taken as a reasonable upper limit for Bb4 (concert) as measured in trumpet players' mouths (refs 39, 40). Berjamin's simulations used up to 20 kPa."
+ },
+ {
+  "id": "A-21",
+  "question": "Q-A8",
+  "claim": "Threshold blowing pressure grows with register: medians 1047, 1788, 2477, 3158, 4109 Pa for registers 2-6 (written C4, G4, C5, E5, G5) of a B-flat trumpet.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-04019734",
+    "doi": "10.1121/10.0016808",
+    "title": "Inverse problem to estimate lips parameters values of outward-striking trumpet model for successive playing registers (Doc, Vergez, Hannebicq), JASA 153(1):168-178",
+    "version": "2023 (HAL author version)",
+    "locator": "Table I and Fig. 4, Sec. II.C, p. 8",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Measured with a thin tube in the corner of the mouth, Endevco 8510B-5 sensor; 4 experienced amateur players; values are medians after outlier removal."
+ },
+ {
+  "id": "A-22",
+  "question": "Q-A9",
+  "claim": "Ideal harmonic-series deviations from equal temperament (reference for 'natural' tendencies): partials 3 and 6 +2.0 c, 5 and 10 -13.7 c, 7 -31.2 c, 9 +3.9 c; on a real B-flat trumpet the measured open-valve resonances lie further below the harmonic series in the upper register (Freour 2022 poles: n = 4 -13 c, n = 6 -22 c, n = 7 -33 c, n = 8 -46 c relative to n x 116.54 Hz), but players' sounding pitch sits above the resonance (outward-striking behaviour) and is lipped.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-03837108",
+    "doi": "10.1051/aacus/2022004",
+    "title": "Parameter identification of a physical model of brass instruments by constrained continuation (Freour, Guillot, Masuda, Vergez, Cochelin), Acta Acustica 6:9",
+    "version": "2022 (CC BY 4.0)",
+    "locator": "Table 1, p. 4 (computed)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://blog.utc.edu/erika-schafer/trumpet-tuning-tendencies-relating-to-the-overtone-series-with-solutions-2/",
+    "doi": "",
+    "title": "Trumpet Tuning Tendencies Relating to the Overtone Series with Solutions (UTC Trumpet Studio)",
+    "version": "web page, undated",
+    "locator": "list of overtone deviations (+2, -14, +2, -31 c)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "inferred",
+  "notes": "Harmonic-series cents are exact math: 1200 log2(n) mod 100 rounding. Pedagogical sources (Tier 4) state: 5th and 10th partials flat, 3rd/6th slightly sharp, 7th very flat; 1-3 sharp (use 3rd slide), 1-2-3 very sharp (1st and 3rd slides), 1-2 tends sharp. Valve-combination sharpness, first-order cylinder model (INFERRED, my calculation, valves tuned to ET individually): 1-2 +10 c, 2-3 +15 c, 1-3 +30 c, 1-2-3 +53 c (e.g. 1-2-3: added 0.3712 L vs required 0.4142 L -> 1200 log2(1.4142/1.3712) = +53 c). Real trumpets reduce this by tuning the 3rd loop long. UNSW gives the didjeridu example: after 1+3, the 2nd valve adds only ~3/4 semitone. No peer-reviewed table of measured played-note deviations per partial for a modern B-flat trumpet was accessed (Campbell, Gilbert & Myers 2021 book likely has one; not read)."
+ },
+ {
+  "id": "A-23",
+  "question": "Q-R3",
+  "claim": "No direct C-vs-B-flat trumpet timbre comparison was found; the brassiness potential B is normalised by the equivalent cone length precisely so that instruments of similar bore profile but different length (e.g. C vs B-flat trumpets, ~11% length difference) have comparable B, while bore diameter (Dmin) and transfer function differences dominate timbre differences between trumpets.",
+  "sources": [
+   {
+    "url": "https://hal.science/hal-03234054",
+    "doi": "10.48465/fa.2020.0286",
+    "title": "Brassiness and the Understanding of Brass Instruments (Campbell, Gilbert, Myers), Forum Acusticum 2020, pp. 3169-3175",
+    "version": "2020",
+    "locator": "Sec. 3, p. 3171 (normalising factor L_ecN; trumpet vs trombone example; narrow bores brassier)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://viennatalk.mdw.ac.at/papers/Pap_01_85_Myers.pdf",
+    "doi": "",
+    "title": "The influence of bore size on brassiness potential (Myers, Pyle, Gilbert, Campbell), Second Vienna Talk 2010",
+    "version": "2010",
+    "locator": "Sec. 2 Figs. 2-3: Shires (bore 11.66 mm) vs Vega (11.13 mm) trumpets: narrower bore shows steeper spectral-enrichment curve",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "inferred",
+  "notes": "Inference for the plan: a C trumpet recording is an acceptable but imperfect timbre reference; expect slightly higher resonance frequencies (x 1.12), similar B, and bore/bell-dependent brightness differences comparable to differences between B-flat models. Prefer B-flat recordings for validation where possible."
+ }
+]

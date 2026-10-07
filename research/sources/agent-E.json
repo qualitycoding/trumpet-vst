@@ -1,0 +1,618 @@
+[
+ {
+  "id": "E-1",
+  "question": "Q-E1",
+  "claim": "The latest stable JUCE release is tag 9.0.3, published 2026-09-28T10:41:30Z (not a prerelease/draft).",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/releases/tag/9.0.3",
+    "title": "JUCE 9.0.3 release",
+    "version": "9.0.3",
+    "locator": "GitHub release metadata (gh api repos/juce-framework/JUCE/releases)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Releases API order: 9.0.3 (2026-09-28), 9.0.2 (2026-09-07), 9.0.1 (2026-08-10), 9.0.0 (2026-07-21), 8.0.15 (2026-07-21), 8.0.14 (2026-06-22), 8.0.13 (2026-05-19), 8.0.12 (2025-12-16). Note the 8.x line is still maintained in parallel (8.0.15 released the same day as 9.0.0)."
+ },
+ {
+  "id": "E-2",
+  "question": "Q-E1",
+  "claim": "Tag 9.0.3 is a lightweight tag pointing directly at commit be29c81492b6151c8ea8d14c840e1311963b3a83 (git/ref/tags/9.0.3 object.type == 'commit', no tag object to dereference).",
+  "sources": [
+   {
+    "url": "https://api.github.com/repos/juce-framework/JUCE/git/ref/tags/9.0.3",
+    "title": "GitHub git ref API",
+    "version": "9.0.3",
+    "locator": "object.sha / object.type",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Cross-checked: repos/juce-framework/JUCE/tags lists 9.0.3 -> be29c81492b6151c8ea8d14c840e1311963b3a83; releases API target_commitish is the same SHA. Other SHAs: 9.0.2=72782788ce18c2d4d760b28e0921d6ffc6431102, 9.0.1=e18f7f506c0b96f2c738a0bcd7fe6467a5005ad8, 9.0.0=f8f8864172464b9adf9eba6101e1f784838d1597, 8.0.15=91ad83ae34a81e0833b1a2b0866f54846370ae53 (all lightweight/commit-type tags)."
+ },
+ {
+  "id": "E-3",
+  "question": "Q-E1",
+  "claim": "The previous JUCE release before 9.0.3 is 9.0.2 (2026-09-07, commit 72782788ce18c2d4d760b28e0921d6ffc6431102), and JUCE 9.x exists (9.0.0 released 2026-07-21).",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/releases/tag/9.0.3",
+    "title": "JUCE 9.0.3 release",
+    "version": "9.0.3",
+    "locator": "GitHub release metadata (gh api repos/juce-framework/JUCE/releases)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/juce-framework/JUCE/releases/tag/9.0.2",
+    "title": "JUCE 9.0.2 release",
+    "version": "9.0.2",
+    "locator": "release metadata",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "The previous 8.x release is 8.0.15 (2026-07-21)."
+ },
+ {
+  "id": "E-4",
+  "question": "Q-E1",
+  "claim": "JUCE 9.0.3 modules are dual-licensed under AGPLv3 and the commercial JUCE 9 End User Licence Agreement (no plain GPLv3).",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/LICENSE.md",
+    "title": "JUCE LICENSE.md at 9.0.3",
+    "version": "9.0.3",
+    "locator": "LICENSE.md lines 1-8 ('dual-licensed under the AGPLv3 and the commercial JUCE licence')",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Examples are ISC-licensed. Module headers (e.g. juce_audio_processors) declare 'license: AGPLv3/Commercial'. If not using AGPLv3 the JUCE 9 EULA (https://juce.com/legal/juce-9-licence/) binds the user. Third-party inventory is in JUCE.spdx.json at repo root. Closed-source distribution therefore needs a commercial JUCE licence; an open-source plugin must be AGPLv3-compatible."
+ },
+ {
+  "id": "E-5",
+  "question": "Q-E1",
+  "claim": "JUCE 9.0.3's top-level CMakeLists.txt requires cmake_minimum_required(VERSION 3.22).",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/CMakeLists.txt",
+    "title": "JUCE top-level CMakeLists.txt at 9.0.3",
+    "version": "9.0.3",
+    "locator": "CMakeLists.txt:33",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "BREAKING_CHANGES.md (Version 7.0.7 section, ~line 2208) records the minimum CMake being raised to 3.22; runner images ship CMake 3.31.6 (ubuntu-24.04) / 4.4.3 (macos-15, windows-2025)."
+ },
+ {
+  "id": "E-6",
+  "question": "Q-E1",
+  "claim": "JUCE 9.0.3's docs/Linux Dependencies.md lists these Ubuntu packages: libasound2-dev, libjack-jackd2-dev, ladspa-sdk, libcurl4-openssl-dev, libfreetype-dev, libfontconfig1-dev, libx11-dev, libxcomposite-dev, libxcursor-dev, libxext-dev, libxinerama-dev, libxrandr-dev, libxrender-dev, libxi-dev, libwebkit2gtk-4.1-dev, libglu1-mesa-dev, mesa-common-dev, libegl-dev.",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/docs/Linux%20Dependencies.md",
+    "title": "JUCE Linux Dependencies at 9.0.3",
+    "version": "9.0.3",
+    "locator": "docs/Linux Dependencies.md (whole file)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Compiler: clang or g++.\njuce_audio_devices: libasound2-dev; libjack-jackd2-dev (unless JUCE_JACK=0)\njuce_audio_processors: ladspa-sdk (unless JUCE_PLUGINHOST_LADSPA=0)\njuce_core: libcurl4-openssl-dev (unless JUCE_USE_CURL=0)\njuce_graphics: libfontconfig1-dev (unless JUCE_USE_FONTCONFIG=0); libfreetype-dev (unless JUCE_USE_FREETYPE=0; libfreetype6-dev as fallback name)\njuce_gui_basics: libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libxi-dev (each Xcursor/Xinerama/Xrandr/Xrender/Xinput unless the matching JUCE_USE_X*=0)\njuce_gui_extra: libwebkit2gtk-4.1-dev (unless JUCE_WEB_BROWSER=0; libwebkit2gtk-4.0-dev on older systems)\njuce_opengl: libglu1-mesa-dev mesa-common-dev libegl-dev\nFull command: sudo apt update && sudo apt install libasound2-dev libjack-jackd2-dev ladspa-sdk libcurl4-openssl-dev libfreetype-dev libfontconfig1-dev libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libxi-dev libwebkit2gtk-4.1-dev libglu1-mesa-dev mesa-common-dev libegl-dev\nNew vs older JUCE: libegl-dev is required because JUCE 9 uses EGL rather than GLX for OpenGL contexts on Linux (BREAKING_CHANGES.md, Version 9.0.0, 'JUCE now uses EGL'). Doc states it was tested on Ubuntu 16.04-20.04 and that libfreetype-dev/libfontconfig1-dev are available on Ubuntu 22/24. A plugin that sets JUCE_WEB_BROWSER=0 (NEEDS_WEB_BROWSER defaults to not linking WebKit per CMake API.md line 427) can drop libwebkit2gtk; if not using juce_opengl, GL packages can be dropped."
+ },
+ {
+  "id": "E-7",
+  "question": "Q-E2",
+  "claim": "The latest Catch2 release is v3.16.0 (published 2026-08-25), an annotated tag whose commit is 317ac1ed4c0bb6e6b91eafc817e05c488feffcb3.",
+  "sources": [
+   {
+    "url": "https://github.com/catchorg/Catch2/releases/tag/v3.16.0",
+    "title": "Catch2 v3.16.0",
+    "version": "v3.16.0",
+    "locator": "releases/latest + git/ref/tags/v3.16.0 -> tag object -> object.sha",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Previous: v3.15.3 (2026-07-26), v3.15.2, v3.15.1, v3.15.0, v3.14.0. Tag object type was 'tag'; dereferenced to commit."
+ },
+ {
+  "id": "E-8",
+  "question": "Q-E2",
+  "claim": "The latest nlohmann/json release is v3.12.0 (published 2025-04-11), an annotated tag whose commit is 55f93686c01528224f448c19128836e7df245f72.",
+  "sources": [
+   {
+    "url": "https://github.com/nlohmann/json/releases/tag/v3.12.0",
+    "title": "nlohmann/json v3.12.0",
+    "version": "v3.12.0",
+    "locator": "releases/latest + git/ref/tags/v3.12.0 -> tag object -> object.sha",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Previous: v3.11.3 (2023-11-28). No release newer than v3.12.0 as of 2026-10-07."
+ },
+ {
+  "id": "E-9",
+  "question": "Q-E3",
+  "claim": "The latest pluginval release is v1.0.4 (published 2024-12-04), tag commit ed19c2c16b57a6d94db391bea3ef4a80b769d5bf (annotated tag, dereferenced).",
+  "sources": [
+   {
+    "url": "https://github.com/Tracktion/pluginval/releases/tag/v1.0.4",
+    "title": "pluginval v1.0.4",
+    "version": "v1.0.4",
+    "locator": "releases/latest",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Previous: v1.0.3 (2023-03-03). master has newer unreleased commits (e.g. 2026-06-07 drag-and-drop UI work) but no release/tag after v1.0.4. Release assets carry no 'digest' field in the API, so hashes below were computed locally."
+ },
+ {
+  "id": "E-10",
+  "question": "Q-E3",
+  "claim": "pluginval v1.0.4 asset pluginval_Linux.zip (5911681 bytes) has SHA-256 c01c49d8063965c4c2dea8324468336768f5c9139e0b1caebde14c2400b55352.",
+  "sources": [
+   {
+    "url": "https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Linux.zip",
+    "title": "pluginval_Linux.zip",
+    "version": "v1.0.4",
+    "locator": "downloaded with curl -L and hashed with sha256sum on 2026-10-07",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Zip contains single file 'pluginval'. Download URL stable form: https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Linux.zip. Local copy in scratchpad research/pv/. Only these three assets exist; there is no Linux arm64 or macOS-arch-specific asset (macOS zip is presumably universal; not verified)."
+ },
+ {
+  "id": "E-11",
+  "question": "Q-E3",
+  "claim": "pluginval v1.0.4 asset pluginval_macOS.zip (9202795 bytes) has SHA-256 3c4c533bda0c5059eea3ddaea752d757ee2025041f0f47e6bcb0e87f6082b29f.",
+  "sources": [
+   {
+    "url": "https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_macOS.zip",
+    "title": "pluginval_macOS.zip",
+    "version": "v1.0.4",
+    "locator": "downloaded with curl -L and hashed with sha256sum on 2026-10-07",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Zip contains pluginval.app (binary at pluginval.app/Contents/MacOS/pluginval). Download URL stable form: https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_macOS.zip. Local copy in scratchpad research/pv/. Only these three assets exist; there is no Linux arm64 or macOS-arch-specific asset (macOS zip is presumably universal; not verified)."
+ },
+ {
+  "id": "E-12",
+  "question": "Q-E3",
+  "claim": "pluginval v1.0.4 asset pluginval_Windows.zip (2408590 bytes) has SHA-256 c08e61ce3b96db41636f8ec7e76f4c7e2c13ebdac7fa1b5a1f52b4f32ec715ab.",
+  "sources": [
+   {
+    "url": "https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Windows.zip",
+    "title": "pluginval_Windows.zip",
+    "version": "v1.0.4",
+    "locator": "downloaded with curl -L and hashed with sha256sum on 2026-10-07",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Zip contains pluginval.exe. Download URL stable form: https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Windows.zip. Local copy in scratchpad research/pv/. Only these three assets exist; there is no Linux arm64 or macOS-arch-specific asset (macOS zip is presumably universal; not verified)."
+ },
+ {
+  "id": "E-13",
+  "question": "Q-E3",
+  "claim": "pluginval v1.0.4 CLI sets strictness with --strictness-level [1-10] (default 5, clamped to 1..10; 5 is the recommended minimum for host compatibility).",
+  "sources": [
+   {
+    "url": "https://github.com/Tracktion/pluginval/blob/v1.0.4/Source/CommandLine.cpp",
+    "title": "pluginval CommandLine.cpp at v1.0.4",
+    "version": "v1.0.4",
+    "locator": "CommandLine.cpp:147 (getStrictnessLevel), help text ~line 363-366",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/Tracktion/pluginval/blob/v1.0.4/README.md",
+    "title": "pluginval README at v1.0.4",
+    "version": "v1.0.4",
+    "locator": "'Running in Headless Mode' section",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Usage: ./pluginval --strictness-level 5 <path_to_plugin>; exit code 0 = pass, 1 = any failure. The legacy 'strictnessLevel' spelling is deprecated. Any option can also be set via env var (e.g. STRICTNESS_LEVEL, TIMEOUT_MS, SKIP_GUI_TESTS=1)."
+ },
+ {
+  "id": "E-14",
+  "question": "Q-E3",
+  "claim": "pluginval v1.0.4 timeout flag is --timeout-ms [milliseconds] (default 30000; -1, quoted, disables it); it fires when no test output has occurred for that long.",
+  "sources": [
+   {
+    "url": "https://github.com/Tracktion/pluginval/blob/v1.0.4/Source/CommandLine.cpp",
+    "title": "pluginval CommandLine.cpp at v1.0.4",
+    "version": "v1.0.4",
+    "locator": "CommandLine.cpp:165 (getTimeout), help text ~line 367-370",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Also relevant for CI: --skip-gui-tests ('avoids tests that create GUI windows, which can cause problems on headless CI systems'), --output-dir, --output-filename, --verbose, --repeat, --randomise, --random-seed, --sample-rates, --block-sizes, --disabled-tests, --vst3validator."
+ },
+ {
+  "id": "E-15",
+  "question": "Q-E3",
+  "claim": "The pluginval CI guide (docs/Adding pluginval to CI.md at v1.0.4) invokes it as 'pluginval --validate-in-process --output-dir ./bin <plugin>' on all three OSes, but in v1.0.4 the command-line code path hard-codes in-process validation and has no '--validate-in-process' option in its help or option table.",
+  "sources": [
+   {
+    "url": "https://github.com/Tracktion/pluginval/blob/v1.0.4/docs/Adding%20pluginval%20to%20CI.md",
+    "title": "Adding pluginval to CI at v1.0.4",
+    "version": "v1.0.4",
+    "locator": "example blocks (macOS/Linux/Windows)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/Tracktion/pluginval/blob/v1.0.4/Source/CommandLine.cpp",
+    "title": "pluginval CommandLine.cpp at v1.0.4",
+    "version": "v1.0.4",
+    "locator": "CommandLine.cpp:96-98 CommandLineValidator::validate uses ValidationType::inProcess; possibleOptions[] lines 275-287 and help text lines 325-405 do not list --validate-in-process",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "Conclusion that the flag is redundant for CLI use is inferred from reading source (grep for 'validate-in-process' in CommandLine.cpp returns nothing; setValidateInProcess exists only for the GUI/MainComponent child-process mode via Validator.cpp:530). Passing the flag is documented by upstream so is presumably accepted/ignored; not executed. Recommend running pluginval --help at build time of the plan to confirm."
+ },
+ {
+  "id": "E-16",
+  "question": "Q-E4",
+  "claim": "The VST3 SDK bundled in JUCE 9.0.3 lives at modules/juce_audio_processors_headless/format_types/VST3_SDK and its top-level LICENSE.txt is the MIT License (Copyright (c) 2025, Steinberg Media Technologies GmbH).",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/modules/juce_audio_processors_headless/format_types/VST3_SDK/LICENSE.txt",
+    "title": "Bundled VST3 SDK LICENSE.txt at JUCE 9.0.3",
+    "version": "9.0.3",
+    "locator": "modules/juce_audio_processors_headless/format_types/VST3_SDK/LICENSE.txt lines 1-4",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "First lines quoted: \"//---...\\nMIT License\\n\\nCopyright (c) 2025, Steinberg Media Technologies GmbH\\n\\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \\\"Software\\\"), to deal in the Software without restriction...\" Same MIT text is also present in base/LICENSE.txt, pluginterfaces/LICENSE.txt, public.sdk/LICENSE.txt in that folder. Not GPLv3 and not the old Steinberg proprietary licence. The bundled README.md says \"VST SDK 3.8.x\" and notes that the full SDK package (with validator and the Steinberg licensing agreement) is a separate download. JUCE modules themselves are AGPLv3/Commercial regardless."
+ },
+ {
+  "id": "E-17",
+  "question": "Q-E4",
+  "claim": "In JUCE 9.0.3 the bundled VST3 SDK is no longer under modules/juce_audio_processors/format_types (that folder has no VST3_SDK); it moved to the juce_audio_processors_headless module.",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/modules/juce_audio_processors_headless/juce_audio_processors_headless.h",
+    "title": "juce_audio_processors_headless.h at 9.0.3",
+    "version": "9.0.3",
+    "locator": "module declaration block",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/extras/Build/CMake/JUCEModuleSupport.cmake",
+    "title": "JUCEModuleSupport.cmake at 9.0.3",
+    "version": "9.0.3",
+    "locator": "lines ~516-545: juce_vst3_headers/juce_lilv_headers/juce_ara_headers linked to juce_audio_processors_headless",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Directory listing of modules/juce_audio_processors/format_types at 9.0.3: AudioUnit, LADSPA, LV2, VST3PluginFormat.*, VSTPluginFormat.* sources only; git tree search for 'VST3_SDK' under juce_audio_processors found nothing. The CMake module support adds the SDK include path from juce_audio_processors_headless/format_types/VST3_SDK."
+ },
+ {
+  "id": "E-18",
+  "question": "Q-E5",
+  "claim": "The latest release of actions/checkout is v7.0.1 (2026-07-20), a lightweight tag at commit 3d3c42e5aac5ba805825da76410c181273ba90b1.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/checkout/releases/tag/v7.0.1",
+    "title": "actions/checkout v7.0.1",
+    "version": "v7.0.1",
+    "locator": "releases/latest + git/ref/tags/v7.0.1",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "previous majors: v6.1.0=d23441a48e516b6c34aea4fa41551a30e30af803. action.yml at v7.0.1 declares runs.using node24. Releases API listings are not sorted by version (e.g. checkout lists v7.0.1 before v6.1.0 but v7.0.1 is the 'latest' release); SHA obtained via git/ref/tags/<tag> (object.type commit)."
+ },
+ {
+  "id": "E-19",
+  "question": "Q-E5",
+  "claim": "The latest release of actions/setup-python is v7.0.0 (2026-07-20), a lightweight tag at commit 5fda3b95a4ea91299a34e894583c3862153e4b97.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/setup-python/releases/tag/v7.0.0",
+    "title": "actions/setup-python v7.0.0",
+    "version": "v7.0.0",
+    "locator": "releases/latest + git/ref/tags/v7.0.0",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "previous: v6.3.0 (2026-06-24). action.yml at v7.0.0 declares runs.using node24. Releases API listings are not sorted by version (e.g. checkout lists v7.0.1 before v6.1.0 but v7.0.1 is the 'latest' release); SHA obtained via git/ref/tags/<tag> (object.type commit)."
+ },
+ {
+  "id": "E-20",
+  "question": "Q-E5",
+  "claim": "The latest release of actions/upload-artifact is v7.0.2 (2026-10-07T10:08Z), a lightweight tag at commit cf430e030ddbb5b0abf93d22962f4752f3646cd9.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/upload-artifact/releases/tag/v7.0.2",
+    "title": "actions/upload-artifact v7.0.2",
+    "version": "v7.0.2",
+    "locator": "releases/latest + git/ref/tags/v7.0.2",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "published only hours before the research date; previous v7.0.1=043fb46d1a93c77aae656e7c1c64a875d1fc6a0a (2026-04-10) is the more settled pin. action.yml at v7.0.2 declares runs.using node24. Releases API listings are not sorted by version (e.g. checkout lists v7.0.1 before v6.1.0 but v7.0.1 is the 'latest' release); SHA obtained via git/ref/tags/<tag> (object.type commit)."
+ },
+ {
+  "id": "E-21",
+  "question": "Q-E5",
+  "claim": "The latest release of actions/download-artifact is v8.0.2 (2026-10-07T10:09Z), a lightweight tag at commit 9000827ccba6bdab643e8b6fd33ac0654aef8333.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/download-artifact/releases/tag/v8.0.2",
+    "title": "actions/download-artifact v8.0.2",
+    "version": "v8.0.2",
+    "locator": "releases/latest + git/ref/tags/v8.0.2",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "published only hours before the research date; previous v8.0.1=3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c (2026-03-11). Note upload-artifact is on major v7 while download-artifact is on major v8: pairing them is intended (same artifact backend), not a typo.. action.yml at v8.0.2 declares runs.using node24. Releases API listings are not sorted by version (e.g. checkout lists v7.0.1 before v6.1.0 but v7.0.1 is the 'latest' release); SHA obtained via git/ref/tags/<tag> (object.type commit)."
+ },
+ {
+  "id": "E-22",
+  "question": "Q-E5",
+  "claim": "The latest release of actions/cache is v6.1.0 (2026-06-26), a lightweight tag at commit 55cc8345863c7cc4c66a329aec7e433d2d1c52a9.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/cache/releases/tag/v6.1.0",
+    "title": "actions/cache v6.1.0",
+    "version": "v6.1.0",
+    "locator": "releases/latest + git/ref/tags/v6.1.0",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "previous: v6.0.0 (2026-06-23); v5.1.0=caa296126883cff596d87d8935842f9db880ef25 also exists. action.yml at v6.1.0 declares runs.using node24. Releases API listings are not sorted by version (e.g. checkout lists v7.0.1 before v6.1.0 but v7.0.1 is the 'latest' release); SHA obtained via git/ref/tags/<tag> (object.type commit)."
+ },
+ {
+  "id": "E-23",
+  "question": "Q-E5",
+  "claim": "The runner-images README (as of 2026-10-07) lists ubuntu-24.04 (also ubuntu-latest) as a supported x64 GitHub-hosted label; newer ubuntu-26.04 is also GA.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/runner-images/blob/main/README.md",
+    "title": "actions/runner-images README",
+    "version": "main @ 2026-10-07",
+    "locator": "Available Images table, Ubuntu 24.04 row",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "ubuntu-24.04 image 20261004.327 released 2026-10-05. The ubuntu-24.04 image preinstalls xvfb (2:21.1.12-1ubuntu1.8, listed in Ubuntu2404-Readme.md and toolset-2404.json common_packages), CMake 3.31.6, Ninja 1.13.2, gcc 13.2, clang 16/17/18. The JUCE Linux -dev packages (libasound2-dev, libx11-dev, libwebkit2gtk etc.) still need apt install; I did not verify which are preinstalled."
+ },
+ {
+  "id": "E-24",
+  "question": "Q-E5",
+  "claim": "The runner-images README lists macos-15 as a supported label for macOS 15 arm64 (also macos-15-xlarge; Intel is macos-15-intel / macos-15-large); macos-latest now points at macOS 26 (macos-26) and macOS 14 is deprecated.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/runner-images/blob/main/README.md",
+    "title": "actions/runner-images README",
+    "version": "main @ 2026-10-07",
+    "locator": "Available Images table, macOS 15 Arm64 row",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "macos-15 arm64 image 20260907.0337.1: macOS 15.7.9, default Xcode 16.4 (26.0-26.3 also installed), CMake 3.31.5 and 4.1.2 (toolcache; readme also shows Cmake 4.4.3 in brew list), Ninja 1.13.2. macOS 14 images are fully unsupported by 2026-11-02."
+ },
+ {
+  "id": "E-25",
+  "question": "Q-E5",
+  "claim": "The runner-images README lists windows-2025 (also windows-latest and windows-2025-vs2026) as supported, but since June 2026 these labels map to the Windows Server 2025 image with Visual Studio 2026 (18.x), not VS2022; VS2022 requires windows-2022.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/runner-images/blob/main/README.md",
+    "title": "actions/runner-images README",
+    "version": "main @ 2026-10-07",
+    "locator": "Windows Server 2025 row",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/actions/runner-images/issues/14017",
+    "title": "[Windows] windows-latest and windows-2025 will use VS 2026 image",
+    "version": "2026-05-07",
+    "locator": "Breaking changes / Target date (June 8-15, 2026)",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Windows2025-VS2026-Readme.md (image 20260925.250.1) lists Visual Studio Enterprise 2026 18.10.12217.157, CMake 4.4.3, Ninja 1.13.2. The plan's CMake generator selection should not hard-code 'Visual Studio 17 2022' for windows-2025; prefer Ninja + MSVC via ilammy/msvc-dev-cmd or default generator detection. Whether JUCE 9.0.3 officially supports VS2026 was not checked."
+ },
+ {
+  "id": "E-26",
+  "question": "Q-E5",
+  "claim": "Whether `auval` is present on macos-15 images could not be confirmed from the runner-images repo: neither the macos-15-arm64 readme nor the macos build scripts mention auval.",
+  "sources": [
+   {
+    "url": "https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md",
+    "title": "macOS 15 arm64 image readme",
+    "version": "20260907.0337.1",
+    "locator": "full file grep for auval/audio",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "inferred",
+  "notes": "auval is Apple's /usr/bin/auval, shipped with macOS (AudioToolbox) rather than installed by the image scripts, so it is expected to exist on any macOS GitHub runner; however this is an inference, not verified, and AU validation on a headless runner may need the component registered (copy to ~/Library/Audio/Plug-Ins/Components) and the audio component registry refreshed. Recommend a `which auval; auval -h` smoke step in the first CI run. GitHub code search API returned HTTP 500 so a repo-wide grep was not possible; I grepped the git tree paths and readmes only. macOS runner readme lists an 'install-audiodevice.sh' script (audio device tooling), unrelated to auval."
+ },
+ {
+  "id": "E-27",
+  "question": "Q-E9",
+  "claim": "In JUCE 9.0.3 the AudioProcessor class lives in the headless module at modules/juce_audio_processors_headless/processors/juce_AudioProcessor.h/.cpp, while AudioProcessorEditor (which needs GUI) stays in modules/juce_audio_processors/processors/juce_AudioProcessorEditor.h/.cpp.",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/modules/juce_audio_processors_headless/processors/juce_AudioProcessor.h",
+    "title": "juce_AudioProcessor.h at 9.0.3",
+    "version": "9.0.3",
+    "locator": "path in repo tree",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/modules/juce_audio_processors/juce_audio_processors.h",
+    "title": "juce_audio_processors.h at 9.0.3",
+    "version": "9.0.3",
+    "locator": "module declaration: dependencies juce_gui_extra, juce_audio_processors_headless",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "A processor-only unit test (no editor) can therefore link just juce_audio_processors_headless (dependencies: juce_audio_basics, juce_events; no juce_graphics since 8.0.9 per BREAKING_CHANGES.md 'AudioProcessor::TrackProperties::colour removed'), avoiding X11/freetype entirely on Linux. Testing the editor needs juce_audio_processors (-> juce_gui_extra -> juce_gui_basics -> X11 on Linux)."
+ },
+ {
+  "id": "E-28",
+  "question": "Q-E9",
+  "claim": "juce::ScopedJuceInitialiser_GUI (declared in modules/juce_events/messages/juce_Initialisation.h, defined in modules/juce_events/messages/juce_MessageManager.cpp lines 531-550) just calls initialiseJuce_GUI() = MessageManager::getInstance() on the first instance and shutdownJuce_GUI() = MessageManager::deleteInstance() on the last, and is documented for use at the start of a console app's main().",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/modules/juce_events/messages/juce_Initialisation.h",
+    "title": "juce_Initialisation.h at 9.0.3",
+    "version": "9.0.3",
+    "locator": "class ScopedJuceInitialiser_GUI doc comment ~lines 60-92",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/modules/juce_events/messages/juce_MessageManager.cpp",
+    "title": "juce_MessageManager.cpp at 9.0.3",
+    "version": "9.0.3",
+    "locator": "lines 531-550",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Doc comment warns to create/delete these on the message thread. Typical test main(): `juce::ScopedJuceInitialiser_GUI init;` then run Catch2 session (or a custom main in Catch2 with a test-listener). MessageManager::runDispatchLoopUntil(ms) (juce_MessageManager.h:180, only if JUCE_MODAL_LOOPS_PERMITTED) can be used to pump async/timer messages in tests; MessageManager::setCurrentThreadAsMessageThread() (juce_MessageManager.h:274) designates the test thread as the message thread."
+ },
+ {
+  "id": "E-29",
+  "question": "Q-E9",
+  "claim": "JUCE 9.0.3 ships no xvfb/headless-GUI testing guidance; using xvfb-run on Linux for editor tests is an inference. The JUCE repo's own workflows (.github/workflows) do not mention xvfb.",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/tree/9.0.3/.github/workflows",
+    "title": "JUCE .github/workflows at 9.0.3",
+    "version": "9.0.3",
+    "locator": "grep -i xvfb over all workflow files: no matches",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "inferred",
+  "notes": "On Linux, creating a Component/AudioProcessorEditor that is not added to the desktop should not need an X connection, but anything touching Desktop/ComponentPeer/Displays (e.g. addToDesktop, screen metrics, some LookAndFeel/Typeface paths) opens an X display; using `xvfb-run -a ctest` (xvfb is preinstalled on ubuntu-24.04 per runner-images Ubuntu2404-Readme.md) is the safe approach. I did not execute a test to confirm which calls need X. pluginval offers --skip-gui-tests for headless CI (v1.0.4 CommandLine.cpp help text)."
+ },
+ {
+  "id": "E-30",
+  "question": "Q-E9",
+  "claim": "JUCE split juce_audio_processors into a headless module: juce_audio_processors_headless exists at 9.0.3 and was introduced in 8.0.11 (absent in 8.0.10, present in 8.0.11, 8.0.12, 8.0.15, 9.0.0), so it is not new in JUCE 9.",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/modules/juce_audio_processors_headless/juce_audio_processors_headless.h",
+    "title": "juce_audio_processors_headless.h at 9.0.3",
+    "version": "9.0.3",
+    "locator": "BEGIN_JUCE_MODULE_DECLARATION: 'JUCE audio processor classes without UI', dependencies juce_audio_basics juce_events",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/modules/juce_audio_processors/juce_audio_processors.h",
+    "title": "juce_audio_processors.h at 9.0.3",
+    "version": "9.0.3",
+    "locator": "dependencies: juce_gui_extra, juce_audio_processors_headless",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Checked by listing modules/ at tags 8.0.0, 8.0.8-8.0.12, 8.0.15, 9.0.0, 9.0.3. juce_audio_processors now depends on and #includes juce_audio_processors_headless, so existing projects linking juce_audio_processors (juce_add_plugin does so via juce_audio_plugin_client) continue to work unchanged. Host-class names have Headless variants (VST3PluginFormatHeadless, VSTPluginFormatHeadless); BREAKING_CHANGES.md 9.0.0/8.0.13 sections describe removed functions and a new AudioPluginClient::getVSTClient()/getVST3Client() API."
+ },
+ {
+  "id": "E-31",
+  "question": "Q-E9",
+  "claim": "docs/CMake API.md at 9.0.3 is byte-identical to the one at 8.0.15, and relative to 8.0.12 it only adds optional juce_add_plugin/juce_add_gui_app arguments (ICON_COMPOSER_BUNDLE, LV2_PLUGIN_CLASS) plus clarifications on AU_SANDBOX_SAFE; no new required juce_add_plugin arguments, and nothing about the headless split.",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/docs/CMake%20API.md",
+    "title": "JUCE CMake API.md at 9.0.3",
+    "version": "9.0.3",
+    "locator": "juce_add_plugin section ~lines 245-300; `ICON_COMPOSER_BUNDLE` ~line 380; `LV2_PLUGIN_CLASS` ~line 588",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/8.0.12/docs/CMake%20API.md",
+    "title": "JUCE CMake API.md at 8.0.12 (for diff)",
+    "version": "8.0.12",
+    "locator": "diff baseline",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Obtained both files via contents API and ran cmp/diff: 9.0.3 vs 8.0.15 identical (48503 bytes); 8.0.12 vs 9.0.3 differ by +ICON_COMPOSER_BUNDLE (Xcode 26 Icon Composer bundle, optional), +LV2_PLUGIN_CLASS (optional; defaults InstrumentPlugin for synths), and notes that AU_SANDBOX_SAFE TRUE makes SUPPRESS_AU_PLIST_RESOURCE_USAGE ineffective. juce_add_plugin <target> [KEY value]... with all keys optional. grep for 'headless' in CMake API.md returns nothing. Standard keys (COMPANY_NAME, PLUGIN_MANUFACTURER_CODE, PLUGIN_CODE, FORMATS, IS_SYNTH, NEEDS_MIDI_INPUT, PRODUCT_NAME) unchanged. Caveat: JUCE 9.0.0 release notes mention 'Improved the CMake build system for headless environments' but no corresponding API doc change was found."
+ },
+ {
+  "id": "E-32",
+  "question": "Q-E9",
+  "claim": "JUCE 9.0.3 headline changes relevant to a plugin build: EGL replaces GLX for OpenGL on Linux (adds libegl-dev), Drawable no longer inherits from Component and has a new SVG parser, and juce_graphics no longer depends on juce_gui_basics for SVG/Drawable.",
+  "sources": [
+   {
+    "url": "https://github.com/juce-framework/JUCE/blob/9.0.3/BREAKING_CHANGES.md",
+    "title": "JUCE BREAKING_CHANGES.md at 9.0.3",
+    "version": "9.0.3",
+    "locator": "Version 9.0.0 section, lines ~195-330",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "notes": "9.0.3 itself (2026-09-28) is a bugfix release: Opus and WebP support, ALSA fixes, SystemStats::isOperatingSystem64Bit() semantics change (BREAKING_CHANGES.md lines 3-30). Code using Drawable as a Component, or the old Drawable::createFromSVG(XmlElement) path, will need migration."
+ }
+]

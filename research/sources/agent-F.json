@@ -1,0 +1,636 @@
+[
+ {
+  "id": "F-1",
+  "question": "Q-F1",
+  "claim": "Rule: the n-th partial of the open B-flat trumpet sounds (and is written) 12*log2(n) semitones above C3 (p1=C3/MIDI48, p2=C4/60, p3=G4/67, p4=C5/72, p5=E5/76, p6=G5/79, p7=Bb5(flat)/82, p8=C6/84, p9=D6/86, p10=E6/88, p12=G6/91); a valve fingering lowering L semitones (1=2, 2=1, 3=3, additive) plays written pitch = partial pitch - L, so partial = round(2^((MIDI-48+L)/12)).",
+  "sources": [
+   {
+    "url": "https://pressbooks.palni.org/brasstechniquesandpedagogy/chapter/brass-acoustics/",
+    "title": "Weidner, B. N., Brass Techniques and Pedagogy, ch. 4 Brass Acoustics (CC BY-NC-SA 4.0)",
+    "version": "web edition, undated",
+    "locator": "sections 'Valve acoustics' (valve roles + intonation table) and partial-tendency table",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://sites.lib.jmu.edu/brasspedagogy/2016/05/26/partials-and-overtones/",
+    "title": "Partials and Overtones (JMU Brass Pedagogy)",
+    "version": "2016-05-26",
+    "locator": "trumpet valve/intonation paragraph (summary via fetch tool)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Trumpet",
+    "title": "Trumpet - Wikipedia",
+    "version": "accessed 2026-10-07",
+    "locator": "Range / Valves sections (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "inferred",
+  "notes": "Derivation checked in Python for every line of the expected chart: all derived partials match the p-numbers in the request. Valve lowerings (1=whole step, 2=half step, 3=minor third) are stated by Weidner (Pressbooks), JMU and Wikipedia and by the Arban chart row labels. NOTE numbering: Pressbooks numbers partials from the fundamental=0, so its '4th partial 14c flat' is p5 (E5) here, '5th +2c' is p6, '6th 31c flat/unusable' is p7. Natural-partial deviations (ET, cents): p3 +2, p5 -14, p6 +2, p7 -31, p9 +4, p10 -14, p12 +2."
+ },
+ {
+  "id": "F-2",
+  "question": "Q-F1",
+  "claim": "F#3 to C4: F#3=123, G3=13, G#3=23, A3=12, A#3=1, B3=2, C4=0, all on partial 2.",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://ca.yamaha.com/files/download/other_assets/8/326908/trumpet_en_om_b0.pdf",
+    "title": "Yamaha Trumpet/Cornet/Flugelhorn/Rotary Trumpet Owner's Manual",
+    "version": "(c)2013",
+    "locator": "printed p.14 'Fingering Chart' (PDF p.14), read as rendered image; alternates in parentheses; chart covers only F#3-A4",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Arban chromatic strip and Yamaha chart (image) both show these; Yamaha also lists 4th-valve alternates irrelevant to 3-valve horns."
+ },
+ {
+  "id": "F-3",
+  "question": "Q-F1",
+  "claim": "C#4 to G4: C#4=123, D4=13, D#4=23, E4=12, F4=1, F#4=2, G4=0, all on partial 3.",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://ca.yamaha.com/files/download/other_assets/8/326908/trumpet_en_om_b0.pdf",
+    "title": "Yamaha Trumpet/Cornet/Flugelhorn/Rotary Trumpet Owner's Manual",
+    "version": "(c)2013",
+    "locator": "printed p.14 'Fingering Chart' (PDF p.14), read as rendered image; alternates in parentheses; chart covers only F#3-A4",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "verified",
+  "notes": "DISCREPANCY: in the Arban sample page the chromatic-strip label under C#4 appears as '1 2' (two lines) while that note sits in the 1-2-3 row of the matrix; I treat it as a printing quirk of the sample, not a different fingering. Yamaha shows 1.2.3 (2.4) for C#4/Db4."
+ },
+ {
+  "id": "F-4",
+  "question": "Q-F1",
+  "claim": "G#4 to C5: G#4=23, A4=12, A#4=1, B4=2, C5=0 on partial 4; C#5=12, D5=1, D#5=2, E5=0 on partial 5; F5=1, F#5=2, G5=0 on partial 6.",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   },
+   {
+    "url": "https://tunableapp.com/instruments/trumpet-bb/fingering/",
+    "title": "B-flat Trumpet Fingering Chart: Valve Combinations (Tunable)",
+    "version": "web page, 2026 access",
+    "locator": "standard fingerings table F#3 upward; I only read the entries up to E5/D#5 before interruption",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Yamaha chart stops at A4 (A4=1.2, alternate 3; G#4=2.3). Arban row/column matrix shows the same standard column fingerings in its chromatic strip."
+ },
+ {
+  "id": "F-5",
+  "question": "Q-F1",
+  "claim": "G#5 to C6: G#5=23, A5=12, A#5=1, B5=2, C6=0 on partial 8.",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Arban chromatic strip (second system) ends at C6 (=0) and reads ...G#5/Ab5 '2 3', A5 '1 2', Bb5 '1', B5 '2', C6 '0'. No source cited G#5 = 3 alone as a standard; Spang lists G#5 alternate 1-2-3 only (possible: 1); tfc lists alternate 1-2-3."
+ },
+ {
+  "id": "F-6",
+  "question": "Q-F1",
+  "claim": "C#6 to F6 DISAGREES with the expected chart: Spang's chart (valve picture) and trumpetfingeringchart.com give C#6=2 (partial 9) and D6=0 (partial 9, true 9th harmonic D6, +4c), D#6=2 and E6=0 (partial 10), F6=1 (partial 12), whereas the expected chart has C#6=12, D6=1 (partial 10).",
+  "sources": [
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "Both give 12 (C#6) and 1 (D6) as ALTERNATES (p10, E6 -3 / -2; p10 is 14c flat, so those are flatter). Arban chart stops at C6. Only two low-tier sources; no Tier 1/2 source seen above C6. Recommend: standard C#6=2 p9, D6=0 p9; alternates C#6=12/3, D6=1 on p10. D#6=2 and E6=0 on p10, F6=1 on p12 are agreed by both. thewholehorn lists F6 alternate open (p11, which is ~F6/F#6 mid-way, impractical) - single-source."
+ },
+ {
+  "id": "F-7",
+  "question": "Q-F2",
+  "claim": "Alternates appearing in at least two sources (pitch, valves, partial): A3 3 p2; E4 3 p3; F#4 123 p4; G4 13 p4; A4 3 p4; C5 23 p5; C#5 123 p6; D5 13 p6; D#5 23 p6; E5 12 and 3 p6; F#5 123 p8; G5 13 p8; G#5 123 p9; A5 3 p8 and 13 p9; A#5 23 p9; B5 12 p9; C6 1 p9 and 23 p10; C#6 12 and 3 p10; D6 1 p10; D#6 23 p12; E6 12 and 3 p12.",
+  "sources": [
+   {
+    "url": "https://ca.yamaha.com/files/download/other_assets/8/326908/trumpet_en_om_b0.pdf",
+    "title": "Yamaha Trumpet/Cornet/Flugelhorn/Rotary Trumpet Owner's Manual",
+    "version": "(c)2013",
+    "locator": "printed p.14 'Fingering Chart' (PDF p.14), read as rendered image; alternates in parentheses; chart covers only F#3-A4",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   },
+   {
+    "url": "http://www.hsutrumpets.com/tuning-and-valve-slides/",
+    "title": "Buckner, Dr. Jim: Tuning and Valve Slides (hsutrumpets.com)",
+    "version": "undated web page",
+    "locator": "sections 'Third Valve Slide', 'First Valve Slide', 'Choice of Slide'",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "Yamaha (Tier 1) gives only A3 (3), E4 (3), G4 (1.3), A4 (3) for the 3-valve horn up to A4. Spang and trumpetfingeringchart.com agree on all items listed (Spang labels some 'Alt.', some 'Possible'). Buckner (Tier 2) corroborates the general '1 and 2 makes 3' substitution (esp. high A) and says first-valve-slide helps F5/A5/A#5. C#5 3 (p5) is listed by trumpetfingeringchart.com and generically by Buckner but not on Spang's C#5 card, so it is left out of the consensus. Spang/tfc 'Possible' lists (e.g. G#5=1, B4=13, A#4=123, F5=13, G5=12 or 3) are weaker and listed only in one source each."
+ },
+ {
+  "id": "F-8",
+  "question": "Q-F2",
+  "claim": "The Arban matrix chart (Tier 1) prints every valve-combination row against the full partial series (open, 2, 1, 1-2/3, 2-3, 1-3, 1-2-3), so every alternate above exists there, and marks the diagonal of partial 7 and high-register partials 'Overtone too flat for regular use'; Arban's introduction also gives a historical alternate for F3 (low F below F#3): third slide drawn out a half step, fingering sequence popular with German cavalry trumpeters.",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "single-source",
+  "notes": "Hooten/Marotta footnotes: that fingering 'is no longer common practice'; modern trumpets have a long enough third slide for low F. I did not transcribe the full matrix."
+ },
+ {
+  "id": "F-9",
+  "question": "Q-F3",
+  "claim": "Third-valve slide (ring/saddle/trigger): push it out about 1/2 inch for 1-3 (D4, G3) and about 1 inch for 1-2-3 (C#4, F#3); on many horns G3 and F#3 are already low so only D4 and C#4 need correcting; the fix must arrive and leave with the note.",
+  "sources": [
+   {
+    "url": "http://www.hsutrumpets.com/tuning-and-valve-slides/",
+    "title": "Buckner, Dr. Jim: Tuning and Valve Slides (hsutrumpets.com)",
+    "version": "undated web page",
+    "locator": "sections 'Third Valve Slide', 'First Valve Slide', 'Choice of Slide'",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://promusicvault.com/trumpet-fingering-chart/",
+    "title": "Trumpet Fingering Chart: Every Note, With Alternates and Tuning Fixes",
+    "version": "web page, 2026 access",
+    "locator": "third-slide guidance (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   },
+   {
+    "url": "https://bobgillis.wordpress.com/2012/08/24/bb-trumpet-fingering-chart-and-overtone-series/",
+    "title": "Bb Trumpet Fingering Chart and Overtone Series (Bob Gillis)",
+    "version": "2012-08-24",
+    "locator": "text beside chart image; chart image itself not read",
+    "accessed": "2026-10-07",
+    "tier": 4
+   },
+   {
+    "url": "https://www.americanforkband.com/uploads/1/2/6/5/12657294/trumpet_tuning.pdf",
+    "title": "Trumpet Basic Tuning Rules (school band method excerpt)",
+    "version": "undated",
+    "locator": "printed p.114 'How to Adjust for Other Notes' items 5-8; pitch-tendency charts pp.115+ are images I could not read",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://sites.lib.jmu.edu/brasspedagogy/2016/05/26/partials-and-overtones/",
+    "title": "Partials and Overtones (JMU Brass Pedagogy)",
+    "version": "2016-05-26",
+    "locator": "trumpet valve/intonation paragraph (summary via fetch tool)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://thewholehorn.com/fingering-charts/trumpet/",
+    "title": "Trumpet Fingering Chart - Valve Combinations, Every Note",
+    "version": "web page, 2026 access",
+    "locator": "intonation guidance (via fetch-tool extraction, lossy)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Buckner: 'extended about one-half inch ... 1-3 and about one inch ... 1-2-3'; 'only notes normally fingered 1-3 are low D and low G ... 1-2-3 are low C-sharp and low F-sharp'. AmericanFork p.114: 1-3 'very sharp - you must use the third valve slide', 1-2-3 'extremely sharp'. Gillis: '1&3 and 1,2&3 sharp (1-2-3 even more) ... third valve slide needs to be lengthened'. Same statements repeated by promusicvault and thewholehorn (Tier 4)."
+ },
+ {
+  "id": "F-10",
+  "question": "Q-F3",
+  "claim": "First-valve slide (thumb trigger/throw): lowers notes using valve 1 alone or 1-2, 1-3, 1-2-3 - Buckner names fifth-line F (F5), high A (A5) and high B-flat as sharp notes it corrects; Spang's chart prints 'USE 1st VALVE SLIDE' on A3, E4, A4, F5 and A5 (the 1-2 notes plus F5), and 'USE 3rd VALVE SLIDE' on G3, D4, C#4 and F#3; on low F3/E3 both.",
+  "sources": [
+   {
+    "url": "http://www.hsutrumpets.com/tuning-and-valve-slides/",
+    "title": "Buckner, Dr. Jim: Tuning and Valve Slides (hsutrumpets.com)",
+    "version": "undated web page",
+    "locator": "sections 'Third Valve Slide', 'First Valve Slide', 'Choice of Slide'",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://tsmp.org/IMAGES/notation/322Trump.pdf",
+    "title": "Trumpet Intonation (tsmp.org handout)",
+    "version": "undated",
+    "locator": "pp.1-2; only the text labels were extractable, the notated examples are images I did not see",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://www.americanforkband.com/uploads/1/2/6/5/12657294/trumpet_tuning.pdf",
+    "title": "Trumpet Basic Tuning Rules (school band method excerpt)",
+    "version": "undated",
+    "locator": "printed p.114 'How to Adjust for Other Notes' items 5-8; pitch-tendency charts pp.115+ are images I could not read",
+    "accessed": "2026-10-07",
+    "tier": 3
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "TSMP handout text: for 1-3 / 1-2-3 'Lip down. Kick first valve slide. Use 3rd valve, kick 3rd slide' and 'Learn KICK OUT 3rd valve slide as normal fingering' (text only; notated examples are images I did not see). Buckner adds: when trilling low D-Eb, correct D with the first slide so Eb stays in tune (no air goes through the 1st slide on Eb); for D-E either slide works. The question's guess 'first slide for D5 (1), C#5 (12), E4 (12)' is only partly supported: E4(12) yes (Spang), C#5 and D5 not annotated by Spang; Buckner only generically allows it for valve-1 notes."
+ },
+ {
+  "id": "F-11",
+  "question": "Q-F3",
+  "claim": "Intonation reason: valve tubes are cut for the open horn, so a combination adds tubing computed on the unlengthened tube; the real second valve adds length to an already lengthened tube, so combinations come out short = sharp; the third slide cannot be tuned for everything, so design is a compromise (1 and 2 slightly flat, 3 alone very flat, to make combinations less sharp).",
+  "sources": [
+   {
+    "url": "https://pressbooks.palni.org/brasstechniquesandpedagogy/chapter/brass-acoustics/",
+    "title": "Weidner, B. N., Brass Techniques and Pedagogy, ch. 4 Brass Acoustics (CC BY-NC-SA 4.0)",
+    "version": "web edition, undated",
+    "locator": "sections 'Valve acoustics' (valve roles + intonation table) and partial-tendency table",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://sites.lib.jmu.edu/brasspedagogy/2016/05/26/partials-and-overtones/",
+    "title": "Partials and Overtones (JMU Brass Pedagogy)",
+    "version": "2016-05-26",
+    "locator": "trumpet valve/intonation paragraph (summary via fetch tool)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://bobgillis.wordpress.com/2012/08/24/bb-trumpet-fingering-chart-and-overtone-series/",
+    "title": "Bb Trumpet Fingering Chart and Overtone Series (Bob Gillis)",
+    "version": "2012-08-24",
+    "locator": "text beside chart image; chart image itself not read",
+    "accessed": "2026-10-07",
+    "tier": 4
+   },
+   {
+    "url": "http://www.hsutrumpets.com/tuning-and-valve-slides/",
+    "title": "Buckner, Dr. Jim: Tuning and Valve Slides (hsutrumpets.com)",
+    "version": "undated web page",
+    "locator": "sections 'Third Valve Slide', 'First Valve Slide', 'Choice of Slide'",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "Pressbooks: 'the 1st and 2nd valves on their own are naturally slightly flat and the 3rd valve is unusably flat. This is to accommodate fingering combinations with them that become sharper.' JMU: 'All trumpets should have a moveable third valve slide ... for sharp 1-3 and 1-2-3'; Buckner: 'not design flaws, but ... the result of acoustics'. The tsmp.org handout text labels 2-3 'usually flat' and 1-3 and 1-2-3 'usually sharp'."
+ },
+ {
+  "id": "F-12",
+  "question": "Q-F4",
+  "claim": "Valve lowerings: 2nd valve = 1 semitone (minor 2nd), 1st = 2 semitones (major 2nd), 3rd = 3 semitones (minor 3rd); 1-2 (or 3) = 3, 2-3 = 4, 1-3 = 5, 1-2-3 = 6 semitones (Arban row labels).",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://pressbooks.palni.org/brasstechniquesandpedagogy/chapter/brass-acoustics/",
+    "title": "Weidner, B. N., Brass Techniques and Pedagogy, ch. 4 Brass Acoustics (CC BY-NC-SA 4.0)",
+    "version": "web edition, undated",
+    "locator": "sections 'Valve acoustics' (valve roles + intonation table) and partial-tendency table",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://sites.lib.jmu.edu/brasspedagogy/2016/05/26/partials-and-overtones/",
+    "title": "Partials and Overtones (JMU Brass Pedagogy)",
+    "version": "2016-05-26",
+    "locator": "trumpet valve/intonation paragraph (summary via fetch tool)",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Trumpet",
+    "title": "Trumpet - Wikipedia",
+    "version": "accessed 2026-10-07",
+    "locator": "Range / Valves sections (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "verified",
+  "notes": "Arban rows: 'lower a minor 2nd', 'major 2nd', '1st and 2nd (or 3rd alone) lower a minor 3rd', '2nd and 3rd lower a major 3rd', '1st and 3rd lower a perfect 4th', '1st, 2nd, 3rd lower a diminished 5th'."
+ },
+ {
+  "id": "F-13",
+  "question": "Q-F4",
+  "claim": "Typical cent deviations of combinations on real horns (Weidner): 2 -5c, 1 -5c, 1-2 +1c, 3 -21c, 2-3 -8c, 1-3 +7c, 1-2-3 +28c; school method (AmericanFork p.114): 1-2 moderately sharp, 2-3 moderately flat, 1-3 very sharp, 1-2-3 extremely sharp.",
+  "sources": [
+   {
+    "url": "https://pressbooks.palni.org/brasstechniquesandpedagogy/chapter/brass-acoustics/",
+    "title": "Weidner, B. N., Brass Techniques and Pedagogy, ch. 4 Brass Acoustics (CC BY-NC-SA 4.0)",
+    "version": "web edition, undated",
+    "locator": "sections 'Valve acoustics' (valve roles + intonation table) and partial-tendency table",
+    "accessed": "2026-10-07",
+    "tier": 2
+   },
+   {
+    "url": "https://www.americanforkband.com/uploads/1/2/6/5/12657294/trumpet_tuning.pdf",
+    "title": "Trumpet Basic Tuning Rules (school band method excerpt)",
+    "version": "undated",
+    "locator": "printed p.114 'How to Adjust for Other Notes' items 5-8; pitch-tendency charts pp.115+ are images I could not read",
+    "accessed": "2026-10-07",
+    "tier": 3
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "These do NOT match the request's guesses (1-3 ~+20, 2-3 ~+10 sharp): in real horns 2-3 is slightly FLAT and 1-3 only ~+7c."
+ },
+ {
+  "id": "F-14",
+  "question": "Q-F4",
+  "claim": "Ideal equal-tempered valve tube lengths (each valve cut for the open tube; sums of independent additions) give sharpness of +10.6c (1-2), +15.5c (2-3), +30.3c (1-3), +53.6c (1-2-3); trumpetfingeringchart.com quotes +11, +16, +30, +54.",
+  "sources": [
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "inferred",
+  "notes": "My calculation: lowering = 1200*log2(1 + sum(2^(n_i/12)-1)); n=2,1,3. Matches TFC (Tier 4) to rounding. A search-result snippet (UAF student page, not fetched: expired certificate) gives lengths 148 cm open, +17.9, +8.6, +27.8 cm and says the next interval must be computed from the already lengthened tube; treated as unverified. Real horns lengthen the 1st/3rd slides to compromise (hence smaller numbers in Weidner)."
+ },
+ {
+  "id": "F-15",
+  "question": "Q-F4",
+  "claim": "Normal written range of the B-flat trumpet: F#3 to about C6 as the chart/standard range (Arban chart F# below staff to C above the staff; Wikipedia: fingering charts go to the high C), with professional/orchestral parts to E6 and F6/F#6 at loud dynamics (Hugill); F3 on some horns with movable slides.",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://andrewhugill.com/OrchestraManual/trumpet_range.html",
+    "title": "Hugill, The Orchestra: A User's Manual - Trumpets: Range",
+    "version": "2015 (per fetch)",
+    "locator": "range paragraph (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Trumpet",
+    "title": "Trumpet - Wikipedia",
+    "version": "accessed 2026-10-07",
+    "locator": "Range / Valves sections (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "Arban footnote (Hooten/Marotta): 'two-and-a-half octave range is the minimum required for all professional trumpet players today'. No Adler/Rimsky orchestration text was fetched, so no orchestration-treatise page cited; a search snippet attributed 'F#3-C6, higher for advanced players' to a web page, and 'about 2 octaves and a minor 6th' to Adler (snippet only, not verified)."
+ },
+ {
+  "id": "F-16",
+  "question": "Q-F4",
+  "claim": "Pedal tones: tones below F#3 on the fundamental of each valve combination (open pedal C3, MIDI 48, partial 1); Arban edition footnotes say players can go 'from pedal C' and that pedal tones are used for practice and in contemporary repertoire; Wikipedia: possible below low F#.",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Trumpet",
+    "title": "Trumpet - Wikipedia",
+    "version": "accessed 2026-10-07",
+    "locator": "Range / Valves sections (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "Arban (Hooten/Marotta) footnotes 3-4 to the Introduction. Pedal pitches are inferred from the harmonic rule (not fully tuned; pedal C is the p1 of the open horn): C3 0, B2 2, A#2 1, A2 12, G#2 23, G2 13, F#2 123."
+ },
+ {
+  "id": "F-TABLE",
+  "question": "Q-F1",
+  "claim": "Consensus standard fingering table F#3-F6",
+  "sources": [
+   {
+    "url": "https://www.jazzbooks.com/mm5/download/ARB-TPAE.pdf",
+    "title": "Arban, Complete Conservatory Method for Trumpet/Cornet, ed. Hooten & Marotta (Carl Fischer O21X) - sample excerpt: Fingering Chart for Trumpet/Cornet + Introduction",
+    "version": "(c)1982; edition (c)2005, 2013 (not the public-domain IMSLP 1864 edition)",
+    "locator": "printed p. vi (PDF p.3) chart, read as rendered image; Introduction 'Range' and 'Alternate Fingering' (PDF p.4) as text",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "https://ca.yamaha.com/files/download/other_assets/8/326908/trumpet_en_om_b0.pdf",
+    "title": "Yamaha Trumpet/Cornet/Flugelhorn/Rotary Trumpet Owner's Manual",
+    "version": "(c)2013",
+    "locator": "printed p.14 'Fingering Chart' (PDF p.14), read as rendered image; alternates in parentheses; chart covers only F#3-A4",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "F#3 54 123 p2\nG3 55 13 p2\nG#3 56 23 p2\nA3 57 12 p2\nA#3 58 1 p2\nB3 59 2 p2\nC4 60 0 p2\nC#4 61 123 p3\nD4 62 13 p3\nD#4 63 23 p3\nE4 64 12 p3\nF4 65 1 p3\nF#4 66 2 p3\nG4 67 0 p3\nG#4 68 23 p4\nA4 69 12 p4\nA#4 70 1 p4\nB4 71 2 p4\nC5 72 0 p4\nC#5 73 12 p5\nD5 74 1 p5\nD#5 75 2 p5\nE5 76 0 p5\nF5 77 1 p6\nF#5 78 2 p6\nG5 79 0 p6\nG#5 80 23 p8\nA5 81 12 p8\nA#5 82 1 p8\nB5 83 2 p8\nC6 84 0 p8\nC#6 85 2 p9\nD6 86 0 p9\nD#6 87 2 p10\nE6 88 0 p10\nF6 89 1 p12\n\nDeviation from request: C#6 and D6 are listed as 2 (p9) and 0 (p9), D#6=2 and E6=0 on p10, per Spang and trumpetfingeringchart.com; request's C#6=12 p10 and D6=1 p10 are alternates. F6=1 p12 agreed. Everything up to C6 matches the request exactly (Arban chart to C6, Yamaha to A4)."
+ },
+ {
+  "id": "F-ALT",
+  "question": "Q-F2",
+  "claim": "Consensus alternates (present in >=2 sources among Yamaha, Spang chart, trumpetfingeringchart.com; Buckner for the 1-2 -> 3 substitution)",
+  "sources": [
+   {
+    "url": "https://ca.yamaha.com/files/download/other_assets/8/326908/trumpet_en_om_b0.pdf",
+    "title": "Yamaha Trumpet/Cornet/Flugelhorn/Rotary Trumpet Owner's Manual",
+    "version": "(c)2013",
+    "locator": "printed p.14 'Fingering Chart' (PDF p.14), read as rendered image; alternates in parentheses; chart covers only F#3-A4",
+    "accessed": "2026-10-07",
+    "tier": 1
+   },
+   {
+    "url": "http://trumpet.bandzana.net/trumpet-fingering-chart.pdf",
+    "title": "Bb Trumpet Fingering Chart, Andrew B. Spang (Trumpet Studio of David J. Apple)",
+    "version": "(c)1999; PDF produced 2002, modified 2015",
+    "locator": "chart pages 1-2 (PDF pp.2-3), one card per pitch G6 down to E3; standard fingering read from valve pictures (image), Alt/Possible/USE 1st/3rd VALVE SLIDE text",
+    "accessed": "2026-10-07",
+    "tier": 3
+   },
+   {
+    "url": "https://trumpetfingeringchart.com/",
+    "title": "Trumpet Fingering Chart - Interactive, Every Note F#3 to C7",
+    "version": "web page, 2026 access",
+    "locator": "table of standard/alternate fingerings and cent estimates (via fetch-tool extraction)",
+    "accessed": "2026-10-07",
+    "tier": 4
+   },
+   {
+    "url": "http://www.hsutrumpets.com/tuning-and-valve-slides/",
+    "title": "Buckner, Dr. Jim: Tuning and Valve Slides (hsutrumpets.com)",
+    "version": "undated web page",
+    "locator": "sections 'Third Valve Slide', 'First Valve Slide', 'Choice of Slide'",
+    "accessed": "2026-10-07",
+    "tier": 2
+   }
+  ],
+  "confidence": "corroborated",
+  "notes": "A3 57 3 p2\nE4 64 3 p3\nF#4 66 123 p4\nG4 67 13 p4\nA4 69 3 p4\nC5 72 23 p5\nC#5 73 123 p6\nD5 74 13 p6\nD#5 75 23 p6\nE5 76 12 p6\nE5 76 3 p6\nF#5 78 123 p8\nG5 79 13 p8\nG#5 80 123 p9\nA5 81 3 p8\nA5 81 13 p9\nA#5 82 23 p9\nB5 83 12 p9\nC6 84 1 p9\nC6 84 23 p10\nC#6 85 12 p10\nC#6 85 3 p10\nD6 86 1 p10\nD#6 87 23 p12\nE6 88 12 p12\nE6 88 3 p12\n\nOnly A3 3, E4 3, G4 13, A4 3 are in a Tier 1 manufacturer chart (Yamaha). Above A4 the support is Spang (Tier 3) + trumpetfingeringchart.com (Tier 4). Spang calls some of these 'Possible' rather than 'Alt'."
+ }
+]
