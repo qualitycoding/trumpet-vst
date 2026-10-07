@@ -1,0 +1,134 @@
+{
+ "artifacts": {
+  "lessons/L-20261007T150000Z-sandbox-no-pip-no-sudo.md": "6a835a8cf73c385241ba6e72e7c0c0a81798ba01dd3de52c83172cc04ac126d3",
+  "lessons/L-20261007T150100Z-no-credentials-in-command-lines.md": "a989db9219d16ab272eeb9fd5cddd6dc038a655d52969de48e4519010170940d",
+  "lessons/L-20261007T150200Z-restart-means-fresh-state.md": "2fa6ae7e51a15cebda2c61164e3ce9f070fbf6bbb03314a7fb59e6ef7a15043e",
+  "lessons/L-20261007T150300Z-hand-typed-frozen-constant.md": "6d329a8597fa3d5afd648780a4958249665ecda8fb0eaa8b6894a4e60746f66a",
+  "lessons/L-20261007T150400Z-threshold-not-checked-against-reference-spread.md": "5c7219a4847095331b0891c25bcfd72bd6d3decc9778018af16f453a12847f19",
+  "lessons/L-20261007T150500Z-linear-bore-realism-ceiling.md": "1a2cd23627a0c4dbe8f208132ad4d42d8aed4a4b7e503d37e58f03ac8eda61da",
+  "lessons/L-20261007T150600Z-control-mapping-formulas-unverified.md": "b7410697b6902cd86984d60f8faa4938e02f19d8534b8e3b9a5335a9adcb8918",
+  "lessons/L-20261007T150700Z-regime-selection-per-note.md": "2335f4ca4f59dbafca5d1a5097d2d9b574c16703117e48ba8188f6e18075ccb4",
+  "lessons/L-20261007T150800Z-host-facing-accessors-missing.md": "3055929c00188a5eef56eec0cdb001a0c9a6b7f92a0493f2aac478af47c01c7e",
+  "lessons/L-20261007T150900Z-windows-sha256sum-backslash.md": "46e64aa2b731a90ee363477cb28fe6049c0c62c1d9cae31617989987ddde2ce4",
+  "lessons/L-20261007T151000Z-large-evidence-off-impl-branch.md": "43f6204be4cabd9a34c24fcabab6bf89a7c0212dc35b6bef792d56245d73b6dc",
+  "plan/ASSUMPTIONS.md": "dd2eeade098c2b2e94f467368035e2408319285cae65b622c4ce2f41298b0e2e",
+  "plan/PROFILE.md": "7e4bd04e40505fe5f82b15923ff150b13225c59fc36d00f3c1d570cbece72335",
+  "research/spikes/checkpoint.py": "f9a8c82c0d7effd6256dc3fda31a0bb48e783f2ad108ad72e4bca512cc42ed24",
+  "research/spikes/schema_check.py": "abffe0ce0ed44f2670963f5ebdd68891cbd0f08df639af6edaf7544af4b58926"
+ },
+ "branch": "gen-20261007T145241Z-trumpet-vst-plan",
+ "completed": [
+  "0.1",
+  "0.2",
+  "0.3",
+  "0.3.7",
+  "1.1"
+ ],
+ "diagnostic": {
+  "date": "2026-10-07",
+  "github": {
+   "identity": "qualitycoding (fine-grained PAT, gh keyring only)",
+   "knowledge_store": "qualitycoding/agent-knowledge: 404",
+   "pull_requests": "api readable (permissions.admin true)",
+   "push": "verified (git push --dry-run exit 0; permissions admin/push true)",
+   "repo": "qualitycoding/trumpet-vst",
+   "workflows": "to be verified by pushing .github/workflows on the generation branch (R6)"
+  },
+  "hosts_reachable": [
+   "github.com",
+   "api.github.com",
+   "codeload.github.com",
+   "pypi.org",
+   "bootstrap.pypa.io",
+   "registry.npmjs.org",
+   "cmake.org",
+   "zenodo.org",
+   "sandbox.zenodo.org",
+   "freesound.org",
+   "hal.science",
+   "arxiv.org",
+   "www.jstor.org",
+   "doi.org",
+   "api.crossref.org",
+   "docs.juce.com",
+   "www.steinberg.net"
+  ],
+  "hosts_restricted": [
+   "pubs.aip.org (403 to curl)"
+  ],
+  "implementer_credentials": [
+   "GitHub token with contents:write + workflows:write on qualitycoding/trumpet-vst (CI and impl branch push)",
+   "contents:write on qualitycoding/agent-knowledge (S-KNOW)"
+  ],
+  "sandbox": {
+   "cmake": "4.4.4 from GitHub release (scratchpad)",
+   "compilers": "g++ 13.3.0",
+   "juce_linux_deps": "missing except libx11-dev; xvfb missing",
+   "ninja": "1.13.2 from GitHub release",
+   "os": "Ubuntu 24.04 x86-64, 4 vCPU, 209 GB free",
+   "python": "3.12 + venv (get-pip) numpy 2.5.3 scipy 1.18.1 soundfile 0.14.0",
+   "sudo": false,
+   "system_pip": false
+  },
+  "subagents": "supported (Agent tool); tiers available: fable, opus, sonnet, haiku"
+ },
+ "exploration_round": 0,
+ "knowledge_added": [],
+ "knowledge_store": {
+  "commit_read": null,
+  "location": "qualitycoding/agent-knowledge",
+  "note": "does not exist (HTTP 404, 2026-10-07)",
+  "readable": false
+ },
+ "lessons_loaded": [],
+ "lessons_recorded": [
+  "L-20261007T150000Z-sandbox-no-pip-no-sudo",
+  "L-20261007T150100Z-no-credentials-in-command-lines",
+  "L-20261007T150200Z-restart-means-fresh-state",
+  "L-20261007T150300Z-hand-typed-frozen-constant",
+  "L-20261007T150400Z-threshold-not-checked-against-reference-spread",
+  "L-20261007T150500Z-linear-bore-realism-ceiling",
+  "L-20261007T150600Z-control-mapping-formulas-unverified",
+  "L-20261007T150700Z-regime-selection-per-note",
+  "L-20261007T150800Z-host-facing-accessors-missing",
+  "L-20261007T150900Z-windows-sha256sum-backslash",
+  "L-20261007T151000Z-large-evidence-off-impl-branch"
+ ],
+ "mode_flags": {
+  "software.deploys": false
+ },
+ "not_applicable": [
+  "0.3.3",
+  "0.3.4",
+  "0.3.5",
+  "R2b",
+  "2A",
+  "2B.2",
+  "2B.4",
+  "2C",
+  "2D",
+  "plan/OPERATIONS.md",
+  "G-001"
+ ],
+ "open_items": [],
+ "pending": [
+  "R0",
+  "R1",
+  "R2",
+  "R3",
+  "R4",
+  "R5",
+  "R6"
+ ],
+ "phase": "0",
+ "premortem_round": 0,
+ "profiles": [
+  "software"
+ ],
+ "proof_review_round": 0,
+ "research_round": 0,
+ "run_id": "20261007T145241Z-trumpet-vst-plan",
+ "subphase": "0.3",
+ "tier_substitutions": [],
+ "updated_at": "2026-10-07T15:02:09Z"
+}
