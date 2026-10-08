@@ -1,0 +1,62 @@
+# FROZEN — DO NOT MODIFY (hash in tests/FROZEN_MANIFEST.sha256)
+# B-flat trumpet fingerings (T-003, D-002) (written pitch, MIDI). Columns: written_midi valves partial trigger kind
+# valves: 0 = open, digits = pressed valves. partial: harmonic of that valve combination (open p2 = written C4).
+# trigger: '-' none, '3' third-valve slide extended, '1' first-valve slide extended. kind: std | alt
+# Sources: research/claims.json C-057..C-065 (Arban chart via Carl Fischer edition p. vi; Yamaha owner's manual p. 14;
+# Buckner (Henderson State); Spang; trumpetfingeringchart.com). Normal range 54..84, extended 85..89 (A-002).
+54 123 p2 - std
+55 13  p2 - std
+56 23  p2 - std
+57 12  p2 - std
+58 1   p2 - std
+59 2   p2 - std
+60 0   p2 - std
+61 123 p3 3 std
+62 13  p3 3 std
+63 23  p3 - std
+64 12  p3 - std
+65 1   p3 - std
+66 2   p3 - std
+67 0   p3 - std
+68 23  p4 - std
+69 12  p4 - std
+70 1   p4 - std
+71 2   p4 - std
+72 0   p4 - std
+73 12  p5 - std
+74 1   p5 - std
+75 2   p5 - std
+76 0   p5 - std
+77 1   p6 1 std
+78 2   p6 - std
+79 0   p6 - std
+80 23  p8 - std
+81 12  p8 1 std
+82 1   p8 1 std
+83 2   p8 - std
+84 0   p8 - std
+85 2   p9 - std
+86 0   p9 - std
+87 2   p10 - std
+88 0   p10 - std
+89 1   p12 - std
+57 3   p2 - alt
+64 3   p3 - alt
+66 123 p4 - alt
+67 13  p4 - alt
+69 3   p4 - alt
+72 23  p5 - alt
+73 123 p6 - alt
+74 13  p6 - alt
+75 23  p6 - alt
+76 12  p6 - alt
+78 123 p8 - alt
+79 13  p8 - alt
+81 3   p8 - alt
+82 23  p9 - alt
+83 12  p9 - alt
+84 1   p9 - alt
+85 12  p10 - alt
+86 1   p10 - alt
+87 23  p12 - alt
+88 12  p12 - alt
