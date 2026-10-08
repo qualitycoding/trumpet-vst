@@ -26,14 +26,14 @@ def test_t028_centroid_and_mad():
     x = tone(1000.0, [1.0])
     assert m.spectral_centroid_hz(x, FS) == pytest.approx(1000.0, rel=0.01)
     assert m.spectral_centroid_hz(np.zeros(1000), FS) == 0.0
-    assert m.harmonic_mad_db([0, -3, -6, -9, -12, -15, -18, -21, -99], [0, -4, -6, -8, -12, -16, -18, -20, 0]) == pytest.approx(0.5)
+    assert m.harmonic_mad_db([0, -3, -6, -9, -12, -15, -18, -21, -99], [0, -4, -6, -8, -12, -16, -18, -20, 0]) == pytest.approx(0.5)  # EXPECTED:mad_example_db
 
 
 def test_t028_onset_metric():
     # linear 100 ms ramp from silence: -40 dB re max at 1 ms, half amplitude (-6.02 dB) at 50 ms -> about 49 ms
     t = np.arange(int(1.0 * FS)) / FS
     x = np.concatenate([np.zeros(int(0.05 * FS)), np.clip(t / 0.1, 0, 1) * np.sin(2 * np.pi * 440 * t)])
-    assert m.onset_ms(x, FS) == pytest.approx(49.0, abs=3.0)
+    assert m.onset_ms(x, FS) == pytest.approx(49.0, abs=3.0)  # EXPECTED:onset_ramp100_ms
     slow = np.concatenate([np.zeros(int(0.05 * FS)), np.clip(t / 0.2, 0, 1) * np.sin(2 * np.pi * 440 * t)])
     assert m.onset_ms(slow, FS) > m.onset_ms(x, FS) + 30.0     # a slower attack measures later (L-20261008T010500Z)
 

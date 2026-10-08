@@ -4,9 +4,9 @@ arithmetic facts behind claims C-054, C-056, C-069.
 Usage:
   python3 research/spikes/expected_values.py            # print all values (JSON)
   python3 research/spikes/expected_values.py --check    # verify every 'EXPECTED:<name>' literal in tests/
-Each frozen test that uses one of these numbers carries a comment `// EXPECTED:<name>` (or `# EXPECTED:<name>`) on
-the same line, followed by the literal; --check parses the literal and compares it with the value below
-(relative difference < 1e-12).
+Each frozen test that uses one of these numbers carries a comment `// EXPECTED:<name>` (or `# EXPECTED:<name>`) at the
+end of the line holding the literal; --check takes the argument of `Approx(`/`approx(` on that line (else the last float
+literal before the comment) and compares it with the value below (relative difference < 1e-12).
 """
 import json, math, pathlib, re, sys
 
@@ -39,6 +39,10 @@ def values():
     v["db_quarter"] = 20 * math.log10(0.25)
     v["sine_rms_db"] = 20 * math.log10(1 / math.sqrt(2))
     v["cents_442_440"] = 1200 * math.log2(442 / 440)
+    # T-028: linear 100 ms ramp: first 1 ms frame above -40 dB (amplitude 0.01 -> 1 ms) to half amplitude (50 ms)
+    v["onset_ramp100_ms"] = (0.5 - 0.01) * 100.0
+    syn = [0, -3, -6, -9, -12, -15, -18, -21]; ref = [0, -4, -6, -8, -12, -16, -18, -20]
+    v["mad_example_db"] = sum(abs(a - b) for a, b in zip(syn, ref)) / 8
     # Freour et al. 2022 Table 1 pole 4 frequency (Hz) and Fréour f_l
     v["freour_f4_hz"] = 2.9066e3 / (2 * math.pi)
     v["freour_fl_hz"] = 382.18
@@ -57,10 +61,13 @@ def check():
             if not m:
                 continue
             name = m.group(1)
-            nums = re.findall(r"[-+]?\d+\.\d+(?:[eE][-+]?\d+)?", line.split("EXPECTED:")[0])
+            code = line.split("EXPECTED:")[0]
+            # the literal is the argument of Approx(...) / approx(...); otherwise the last float literal on the line
+            nums = re.findall(r"[Aa]pprox\(\s*([-+]?\d+\.\d+(?:[eE][-+]?\d+)?)", code) or \
+                re.findall(r"[-+]?\d+\.\d+(?:[eE][-+]?\d+)?", code)[-1:]
             if name not in v or not nums:
                 print(f"{p}: unknown or missing literal for {name}"); bad += 1; continue
-            got = float(nums[-1])
+            got = float(nums[0])
             if abs(got - v[name]) > 1e-12 * max(1.0, abs(v[name])):
                 print(f"{p}: {name} literal {got!r} != {v[name]!r}"); bad += 1
     print("expected values OK" if not bad else f"{bad} mismatches")
