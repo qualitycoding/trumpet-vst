@@ -63,7 +63,7 @@ bash tests/scripts/run_pluginval.sh build/plugin/TrumpetVST_artefacts/Release/VS
   - Configure succeeded in 61 s (FetchContent of Catch2 and json). The build succeeded.
   - Red run: unit 22/22 test cases fail, integration 19/19, operational 5/5, alloc 1/1, perf 1/1. Every failure is `tpt::NotImplemented`; no fixture or syntax errors.
 - **Planning sandbox Python** (venv from the lock):
-  - 10 failed (`NotImplementedError`, or missing outputs of S-002/S-005), 2 errors (generator fixture: the stub raises inside a subprocess), 6 skipped (T-029), 2 passed (T-031 guards, D-018).
+  - 9 failed (`NotImplementedError`, or missing outputs of S-002/S-005), 2 errors (generator fixture: the stub raises inside a subprocess), 6 skipped (T-029), 3 passed (T-031 guards, D-018).
 - **CI `plan-verify` (stubs with plugin, three OSes, run 37748754510):**
   - builds succeeded on ubuntu-24.04, macos-15 and windows-2025 (VS 2026);
   - all ctest suites red;

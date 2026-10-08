@@ -278,7 +278,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Stubs:** every non-`noexcept` stub throws `tpt::NotImplemented`. Every `noexcept` real-time stub is inert: it outputs zeros, latency −1, default `UiState`. `deserializeState` returns nullopt.
 - **Expected red:** all C++ test cases fail (verified: 48/48), and all T-026 plugin cases fail.
 - **Guards** (tests that pass against the stubs, by design):
-  - T-031 `fetchcontent_pins` and `python_lock` (files pinned during planning);
+  - T-031 `fetchcontent_pins`, `python_lock` and `workflows_pinned_and_least_privilege` (files pinned during planning; the last is satisfied by `plan-verify.yml` until S-002 replaces it with `ci.yml`);
   - T-026 "parameters" (Parameters.h is final);
   - pluginval and auval on the stub plugin (must pass, `plan-verify` workflow).
 - T-029 is skipped without `TPT_RENDER` and `TINYSOL_DIR`.

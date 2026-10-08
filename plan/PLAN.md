@@ -57,7 +57,7 @@
   3. `.venv/bin/python -m pytest tests/python > logs/S-001-red-pytest.txt 2>&1 || true`.
   4. Compare with the planning red run in `plan/ENVIRONMENT.md`:
      - every C++ test case fails;
-     - Python results: 2 passed (T-031 guards), 6 skipped (T-029), the rest failing on `NotImplementedError` or missing S-002/S-005 outputs.
+     - Python results: 3 passed (T-031 guards), 6 skipped (T-029), the rest failing or erroring on `NotImplementedError` or missing S-002/S-005 outputs.
 - Outputs: `build/`, `.venv/`, `logs/S-001-red-ctest.txt`, `logs/S-001-red-pytest.txt`
 - Evidence produced: none (baseline)
 - Done when: the build succeeds and the red pattern matches D-018.
