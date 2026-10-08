@@ -1,5 +1,8 @@
 trumpet-vst
 Copyright 2026 qualitycoding
 
-This product is licensed under the Apache License, Version 2.0 (see LICENSE).
-Third-party components are listed in THIRD_PARTY_NOTICES.md once they are added.
+The source code in this repository is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Binaries built from it link JUCE. A binary distributed under JUCE's open-source licence is, as a whole, an AGPLv3
+work; distributing it under other terms requires a commercial JUCE licence. Third-party components and the
+attribution of third-party data (CC BY 4.0) are listed in THIRD_PARTY_NOTICES.md and ATTRIBUTION.md.
