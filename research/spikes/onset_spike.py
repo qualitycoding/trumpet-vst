@@ -23,8 +23,8 @@ if __name__ == "__main__":
             for note in notes:
                 fsc = reg[(note["written"], "std")]["fscale"]
                 p = render(table, note, fsc, ksus * rm.pth(note["partial"]), max(k_acc, 1.3 / ksus if ksus < 1.3 else 1.0) if k_acc > 1 else max(1.0, 1.3 / ksus), t_acc)
-                T = ts.radiation(fit["geometry"], table["loops_m"], note["valves"], len(p))
-                y = np.fft.irfft(np.fft.rfft(ts.nlp(p / 2, 0.85, t.RHO, t.C0)) * T, len(p))
+                T = ts.radiation(fit["geometry"], table["loops_m"], note["valves"], 4 * len(p))
+                y = np.fft.irfft(np.fft.rfft(ts.nlp(p / 2, 0.85, t.RHO, t.C0), 4 * len(p)) * T, 4 * len(p))[:len(p)]
                 ons.append(ref.onset_ms(y, 48000))
             ons = np.array(ons)
             print(f"acc x{k_acc} {t_acc*1000:.0f} ms {dyn}: onset q10/med/q90 = {np.percentile(ons,10):.0f}/{np.median(ons):.0f}/{np.percentile(ons,90):.0f} ms, max {ons.max():.0f}", flush=True)

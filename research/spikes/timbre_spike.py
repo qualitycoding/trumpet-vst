@@ -68,8 +68,8 @@ if __name__ == "__main__":
                     continue
                 p = render(table, note, fsc, k * rm.pth(note["partial"]))
                 y = nlp(p / 2, L, t.RHO, t.C0)
-                T = radiation(geo, loops, note["valves"], len(y))
-                yo = np.fft.irfft(np.fft.rfft(y) * T, len(y))
+                T = radiation(geo, loops, note["valves"], 4 * len(y))   # zero-padded linear convolution
+                yo = np.fft.irfft(np.fft.rfft(y, 4 * len(y)) * T, 4 * len(y))[:len(y)]
                 seg = yo[int(0.5 * FS):]
                 f0 = 440 * 2 ** ((note["concert"] - 69) / 12)
                 hdb, cen = ref.harmonics(seg, FS, f0)

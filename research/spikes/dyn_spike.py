@@ -23,10 +23,10 @@ if __name__ == "__main__":
         T = None
         for (kon, ksus, Ql) in ((1.3, 1.3, 20), (1.3, 1.0, 20), (1.3, 0.8, 20), (1.3, 0.6, 20), (1.5, 1.0, 10), (1.5, 0.8, 10), (2.0, 1.2, 7)):
             p, r = render(table, note, fsc, kon * pth, ksus * pth, Ql)
-            if T is None: T = ts.radiation(fit["geometry"], table["loops_m"], note["valves"], len(p))
+            if T is None: T = ts.radiation(fit["geometry"], table["loops_m"], note["valves"], 4 * len(p))
             res = []
             for L in (0.0, 0.85):
-                y = np.fft.irfft(np.fft.rfft(ts.nlp(p / 2, L, t.RHO, t.C0)) * T, len(p))[int(0.6 * 48000):]
+                y = np.fft.irfft(np.fft.rfft(ts.nlp(p / 2, L, t.RHO, t.C0), 4 * len(p)) * T, 4 * len(p))[:len(p)][int(0.6 * 48000):]
                 if np.max(np.abs(y)) < 1e-9: res.append("silent"); continue
                 hdb, cen = ref.harmonics(y, 48000, f0)
                 for dyn in ("pp", "mf"):

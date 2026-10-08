@@ -3321,13 +3321,48 @@
   "question": "Q-A1",
   "claim": "A 'tongue release' attack (lips closed at t = 0, 3 ms pressure rise) shortens the time to half the steady RMS (25 ms windows) from 0.17-0.57 s to 0.02-0.12 s, but by the reference onset metric it produces a 0-6 ms click-dominated onset (too fast vs TinySOL 22-164 ms), so the attack parameters (rise time, initial opening, accent) must be calibrated against the reference band.",
   "kind": "numerical",
-  "load_bearing": true,
+  "load_bearing": false,
   "sources": [
    {
     "url": "research/spikes/onset_spike.py",
     "title": "planner spike",
     "version": "2026-10-07",
     "locator": "session output 2026-10-07",
+    "accessed": "2026-10-07",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [
+   "C-090"
+  ],
+  "informs": [
+   "D-007",
+   "T-029"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:brass-lip-model"
+  ],
+  "superseded_by": "C-090",
+  "notes": "Superseded: the 0-6 ms onsets were an artefact of circular FFT filtering (lesson L-20261008T010500Z)."
+ },
+ {
+  "id": "C-089",
+  "source_item": "planner-spike",
+  "question": "Q-A1",
+  "claim": "With the bell filter applied as a linear (zero-padded) convolution, the 'tongue release' attack gives onset medians of 40-160 ms by the reference metric (TinySOL band q10-q90: pp 26-164, mf 22-103, ff 22-99 ms); the best single setting (pressure rise 15 ms, lips closed, accent 1.5) puts 92/58/25 % of pp/mf/ff notes inside the band, and dynamic-dependent settings reach >= 50 % for every dynamic (pp 92 % at 15 ms/closed, mf 58 % at 15 ms/closed/accent 1.5, ff 50 % at 15 ms/half-open); >= 80 % per dynamic was not reached. Supersedes C-088 (circular-convolution artefact, lesson L-20261008T010500Z).",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/spikes/onset_grid.py",
+    "title": "planner spike",
+    "version": "2026-10-07",
+    "locator": "onset_grid_result.txt",
     "accessed": "2026-10-07",
     "tier": 1
    }
@@ -3347,7 +3382,7 @@
   ]
  },
  {
-  "id": "C-089",
+  "id": "C-090",
   "source_item": "planner-spike",
   "question": "Q-E6",
   "claim": "The planning sandbox (Claude Code cloud, Ubuntu 24.04) has no sudo, no system pip/ensurepip and no cmake; a venv created with --without-pip + get-pip.py, CMake 4.4.4 and Ninja 1.13.2 release binaries work; JUCE Linux -dev packages except libx11-dev and xvfb are missing.",

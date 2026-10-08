@@ -1,0 +1,9 @@
+64 on1.3 sus1.0 Ql20 pk 3.47 kPa rms 1828 L0.0/pp:6.2dB,cr1.24 L0.0/mf:3.4dB,cr1.05 L0.85/pp:7.3dB,cr1.39 L0.85/mf:4.6dB,cr1.17
+64 on1.3 sus0.8 Ql20 pk 2.85 kPa rms 1481 L0.0/pp:5.5dB,cr1.17 L0.0/mf:2.8dB,cr0.98 L0.85/pp:6.6dB,cr1.29 L0.85/mf:3.9dB,cr1.08
+64 on1.3 sus0.6 Ql20 pk 2.25 kPa rms 1138 L0.0/pp:4.3dB,cr1.06 L0.0/mf:2.9dB,cr0.89 L0.85/pp:5.4dB,cr1.14 L0.85/mf:2.8dB,cr0.96
+74 on1.3 sus1.0 Ql20 pk 4.34 kPa rms 2579 L0.0/pp:8.4dB,cr1.20 L0.0/mf:7.0dB,cr0.77 L0.85/pp:13.4dB,cr1.41 L0.85/mf:3.2dB,cr0.90
+74 on1.3 sus0.8 Ql20 pk 3.46 kPa rms 2037 L0.0/pp:7.4dB,cr1.12 L0.0/mf:8.4dB,cr0.72 L0.85/pp:10.0dB,cr1.27 L0.85/mf:6.6dB,cr0.81
+74 on1.3 sus0.6 Ql20 pk 2.58 kPa rms 1484 L0.0/pp:6.1dB,cr0.97 L0.0/mf:11.2dB,cr0.62 L0.85/pp:4.7dB,cr1.07 L0.85/mf:10.4dB,cr0.68
+78 on1.3 sus1.0 Ql20 pk 4.98 kPa rms 3021 L0.0/pp:6.3dB,cr1.11 L0.0/mf:5.3dB,cr0.81 L0.85/pp:11.4dB,cr1.34 L0.85/mf:2.3dB,cr0.99
+78 on1.3 sus0.8 Ql20 pk 3.89 kPa rms 2335 L0.0/pp:4.9dB,cr1.01 L0.0/mf:6.8dB,cr0.75 L0.85/pp:9.5dB,cr1.17 L0.85/mf:6.2dB,cr0.86
+78 on1.3 sus0.6 Ql20 pk 2.37 kPa rms 1338 L0.0/pp:26.9dB,cr0.86 L0.0/mf:37.7dB,cr0.63 L0.85/pp:10.1dB,cr0.89 L0.85/mf:20.8dB,cr0.65

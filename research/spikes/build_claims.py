@@ -66,6 +66,8 @@ SPIKES = [
      "research/spikes/regime_map.py", "PTH and DYN constants", ["D-008"], ["trumpet-blowing-pressure"]),
     ("Q-A1", "A 'tongue release' attack (lips closed at t = 0, 3 ms pressure rise) shortens the time to half the steady RMS (25 ms windows) from 0.17-0.57 s to 0.02-0.12 s, but by the reference onset metric it produces a 0-6 ms click-dominated onset (too fast vs TinySOL 22-164 ms), so the attack parameters (rise time, initial opening, accent) must be calibrated against the reference band.",
      "research/spikes/onset_spike.py", "session output 2026-10-07", ["D-007", "T-029"], ["brass-lip-model"]),
+    ("Q-A1", "With the bell filter applied as a linear (zero-padded) convolution, the 'tongue release' attack gives onset medians of 40-160 ms by the reference metric (TinySOL band q10-q90: pp 26-164, mf 22-103, ff 22-99 ms); the best single setting (pressure rise 15 ms, lips closed, accent 1.5) puts 92/58/25 % of pp/mf/ff notes inside the band, and dynamic-dependent settings reach >= 50 % for every dynamic (pp 92 % at 15 ms/closed, mf 58 % at 15 ms/closed/accent 1.5, ff 50 % at 15 ms/half-open); >= 80 % per dynamic was not reached. Supersedes C-088 (circular-convolution artefact, lesson L-20261008T010500Z).",
+     "research/spikes/onset_grid.py", "onset_grid_result.txt", ["D-007", "T-029"], ["brass-lip-model"]),
     ("Q-E6", "The planning sandbox (Claude Code cloud, Ubuntu 24.04) has no sudo, no system pip/ensurepip and no cmake; a venv created with --without-pip + get-pip.py, CMake 4.4.4 and Ninja 1.13.2 release binaries work; JUCE Linux -dev packages except libx11-dev and xvfb are missing.",
      "https://bootstrap.pypa.io/get-pip.py", "Phase 0.1 diagnostic", ["D-022"], ["claude-code-cloud-sandbox"]),
 ]
@@ -103,6 +105,11 @@ def main():
             c["confidence"] = "verified"
             c["sources"].append({"url": "research/spikes/expected_values.py", "title": "computation", "version": "2026-10-07",
                                  "locator": "values(): hs_dev_p*, open_partial_written_p*, ideal_sharp_*", "accessed": "2026-10-07", "tier": 1})
+        if c["id"] == "C-088":
+            c["load_bearing"] = False
+            c["contradicted_by"] = ["C-090"]
+            c["superseded_by"] = "C-090"
+            c["notes"] = "Superseded: the 0-6 ms onsets were an artefact of circular FFT filtering (lesson L-20261008T010500Z)."
         if c["source_item"] in ("E-26", "E-29"):
             c["load_bearing"] = True
             c["confidence"] = "corroborated"
@@ -124,18 +131,24 @@ def main():
     kdir.mkdir(exist_ok=True)
     for old in kdir.glob("K-20261007T16*.md"):
         old.unlink()
+    kids = {}
+    for i, c in enumerate(claims):
+        mm, ss = divmod(i, 60)
+        kids[c["id"]] = (f"K-20261007T16{mm:02d}{ss:02d}Z-{re.sub(r'[^a-z0-9]+', '-', c['id'].lower())}", mm, ss)
+    superseders = {c["superseded_by"]: c["id"] for c in claims if c.get("superseded_by")}
     for i, c in enumerate(claims):
         s0 = c["sources"][0] if c["sources"] else {}
-        mm, ss = divmod(i, 60)
-        kid = f"K-20261007T16{mm:02d}{ss:02d}Z-{re.sub(r'[^a-z0-9]+', '-', c['id'].lower())}"
+        kid, mm, ss = kids[c["id"]]
+        status = "superseded" if c.get("superseded_by") else "current"
+        sup = [kids[superseders[c["id"]]][0]] if c["id"] in superseders else []
         src = {k: s0.get(k, "") for k in ("url", "doi", "title", "locator", "accessed", "tier")}
         stmt = c["claim"].replace("\n", " ").replace('"', "'")
         version = s0.get("version", "") or "version-independent"
         text = f"""---
 id: {kid}
 statement: "{stmt}"
-status: current
-supersedes: []
+status: {status}
+supersedes: {json.dumps(sup)}
 tags: [{', '.join(c['tags'] + ['phase:research'])}]
 applies_to_version: "{version}"
 source: {json.dumps(src, ensure_ascii=False)}

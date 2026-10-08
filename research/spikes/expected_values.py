@@ -34,6 +34,11 @@ def values():
     r = {"1": 2 ** (2 / 12) - 1, "2": 2 ** (1 / 12) - 1, "3": 2 ** (3 / 12) - 1}
     for combo, st in (("12", 3), ("23", 4), ("13", 5), ("123", 6)):
         v[f"ideal_sharp_{combo}"] = 1200 * math.log2(2 ** (st / 12) / (1 + sum(r[c] for c in combo)))
+    # analysis test signals (T-010)
+    v["db_half"] = 20 * math.log10(0.5)
+    v["db_quarter"] = 20 * math.log10(0.25)
+    v["sine_rms_db"] = 20 * math.log10(1 / math.sqrt(2))
+    v["cents_442_440"] = 1200 * math.log2(442 / 440)
     # Freour et al. 2022 Table 1 pole 4 frequency (Hz) and Fréour f_l
     v["freour_f4_hz"] = 2.9066e3 / (2 * math.pi)
     v["freour_fl_hz"] = 382.18
