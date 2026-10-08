@@ -2853,7 +2853,7 @@
   "question": "Q-R2",
   "claim": "Reference spread (TinySOL TpC, concert 54-82): onset (10 % -> 50 % of the first-300 ms maximum, 1 ms frames) q10/median/q90 = 26/61/164 ms pp, 22/41/103 ms mf, 22/62/99 ms ff; a leave-one-out neighbour prediction gives harmonic MAD (H1..H8) mean 2.6/1.6/1.5 dB and q90 4.2/2.6/2.3 dB (pp/mf/ff), centroid ratio within [0.75, 1.33] for 100/100/93 % of notes, onset ratio within [0.5, 2] for only 52/76/89 %.",
   "kind": "numerical",
-  "load_bearing": true,
+  "load_bearing": false,
   "sources": [
    {
     "url": "research/spikes/ref_spread.py",
@@ -2866,7 +2866,9 @@
   ],
   "confidence": "verified",
   "evidence_class": "n/a",
-  "contradicted_by": [],
+  "contradicted_by": [
+   "C-096"
+  ],
   "informs": [
    "D-017",
    "T-029"
@@ -2876,7 +2878,8 @@
    "domain:musical-acoustics",
    "domain:brass",
    "subject:trumpet-reference-recordings"
-  ]
+  ],
+  "superseded_by": "C-096"
  },
  {
   "id": "C-074",
@@ -3073,7 +3076,7 @@
   "question": "Q-A2",
   "claim": "With the Doc 2023 Table II lip set (W 12 mm, Ql 20, mu 9 kg/m^2; f_l/f_res and h0 per partial, extrapolated above partial 6) and pressure = k x threshold (k pp 1.3, mf 2.5, ff 5), every standard fingering written 54-87 locks to its intended partial at pp, mf and ff; written 88 (E6, 0, p10) speaks only at ff and written 89 (F6) not at pp.",
   "kind": "numerical",
-  "load_bearing": true,
+  "load_bearing": false,
   "sources": [
    {
     "url": "research/spikes/regime_map.py",
@@ -3086,7 +3089,9 @@
   ],
   "confidence": "verified",
   "evidence_class": "n/a",
-  "contradicted_by": [],
+  "contradicted_by": [
+   "C-091"
+  ],
   "informs": [
    "D-005",
    "D-023",
@@ -3097,7 +3102,8 @@
    "domain:musical-acoustics",
    "domain:brass",
    "subject:brass-regime-selection"
-  ]
+  ],
+  "superseded_by": "C-091"
  },
  {
   "id": "C-081",
@@ -3105,7 +3111,7 @@
   "question": "Q-A2",
   "claim": "Uncalibrated, the model plays 4-117 cents above equal temperament; one per-note frequency scale (all poles, residues and f_l x s) found by secant iteration at mf keeps pp, mf and ff within +-4.6 cents of equal temperament for all standard notes 54-87 (alternate written 80 = 1-2-3 p9 fails: jumps at pp).",
   "kind": "numerical",
-  "load_bearing": true,
+  "load_bearing": false,
   "sources": [
    {
     "url": "research/spikes/regime_map.py",
@@ -3118,7 +3124,9 @@
   ],
   "confidence": "verified",
   "evidence_class": "n/a",
-  "contradicted_by": [],
+  "contradicted_by": [
+   "C-092"
+  ],
   "informs": [
    "D-011",
    "T-013"
@@ -3128,7 +3136,8 @@
    "domain:musical-acoustics",
    "domain:brass",
    "subject:brass-regime-selection"
-  ]
+  ],
+  "superseded_by": "C-092"
  },
  {
   "id": "C-082",
@@ -3166,7 +3175,7 @@
   "question": "Q-A2",
   "claim": "Register jumps implemented as a 20 ms ramp of (f_l, h0, p_m) from the setting of partial n to that of partial m succeed for 131/133 tested jumps (n+1, n+2, n-1, n-2, including down to the pedal partial 1); all jumps in the normal range succeed; settling time median 45 ms, max 145 ms; failures: written 86 p9 -> p11 and 87 p10 -> p12.",
   "kind": "numerical",
-  "load_bearing": true,
+  "load_bearing": false,
   "sources": [
    {
     "url": "research/spikes/overblow_d.py",
@@ -3179,7 +3188,9 @@
   ],
   "confidence": "verified",
   "evidence_class": "n/a",
-  "contradicted_by": [],
+  "contradicted_by": [
+   "C-093"
+  ],
   "informs": [
    "D-009",
    "T-015"
@@ -3189,7 +3200,8 @@
    "domain:musical-acoustics",
    "domain:brass",
    "subject:brass-regime-selection"
-  ]
+  ],
+  "superseded_by": "C-093"
  },
  {
   "id": "C-084",
@@ -3260,7 +3272,7 @@
   "question": "Q-A8",
   "claim": "Relaxing the blowing pressure after the onset (start 1.3 x threshold, sustain 0.6-1.0 x threshold, using the subcritical hysteresis) lowers the mouthpiece amplitude and gives harmonic MAD vs TinySOL pp 4.3-6.6 dB and mf 2.3-4.6 dB on written 64, 74, 78; sustaining below ~0.8 x threshold loses the note on partial 6 (written 78); lip Ql 7-10 with the Doc set does not oscillate.",
   "kind": "numerical",
-  "load_bearing": true,
+  "load_bearing": false,
   "sources": [
    {
     "url": "research/spikes/dyn_spike.py",
@@ -3273,7 +3285,9 @@
   ],
   "confidence": "verified",
   "evidence_class": "n/a",
-  "contradicted_by": [],
+  "contradicted_by": [
+   "C-094"
+  ],
   "informs": [
    "D-008",
    "T-029"
@@ -3283,7 +3297,8 @@
    "domain:musical-acoustics",
    "domain:brass",
    "subject:trumpet-blowing-pressure"
-  ]
+  ],
+  "superseded_by": "C-094"
  },
  {
   "id": "C-087",
@@ -3291,7 +3306,7 @@
   "question": "Q-A8",
   "claim": "Doc 2023 thresholds x dynamic factors (pp 1.3, mf 2.5, ff 5) give 3.2 / 6.2 / 12.4 kPa for written C5 (partial 4), matching Fletcher & Tarnopolsky 1999 (3.3 / 6.3 / 13 kPa, C-A20).",
   "kind": "numerical",
-  "load_bearing": true,
+  "load_bearing": false,
   "sources": [
    {
     "url": "research/spikes/regime_map.py",
@@ -3304,7 +3319,9 @@
   ],
   "confidence": "verified",
   "evidence_class": "n/a",
-  "contradicted_by": [],
+  "contradicted_by": [
+   "C-095"
+  ],
   "informs": [
    "D-008"
   ],
@@ -3313,7 +3330,8 @@
    "domain:musical-acoustics",
    "domain:brass",
    "subject:trumpet-blowing-pressure"
-  ]
+  ],
+  "superseded_by": "C-095"
  },
  {
   "id": "C-088",
@@ -3335,7 +3353,7 @@
   "confidence": "verified",
   "evidence_class": "n/a",
   "contradicted_by": [
-   "C-090"
+   "C-089"
   ],
   "informs": [
    "D-007",
@@ -3347,7 +3365,7 @@
    "domain:brass",
    "subject:brass-lip-model"
   ],
-  "superseded_by": "C-090",
+  "superseded_by": "C-089",
   "notes": "Superseded: the 0-6 ms onsets were an artefact of circular FFT filtering (lesson L-20261008T010500Z)."
  },
  {
@@ -3410,5 +3428,294 @@
    "domain:brass",
    "subject:claude-code-cloud-sandbox"
   ]
+ },
+ {
+  "id": "C-091",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "Over 4 s runs (R5 review) the Doc 2023 lip set with pressure k x threshold (pp 1.3, mf 2.5, ff 5) sustains standard notes written 54-85 at pp/mf/ff, 86-87 at mf/ff only, 88 at ff only, 89 at mf/ff only (86/87 at pp are ring-downs of the attack transient); with blowing-factor floors (86, 87, 89 >= 2.5; 88 >= 5.0, D-023) all four sustain for 3 s.",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 1 (C-080 row); research/spikes/floors_cap_check_result.txt",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-005",
+   "D-023",
+   "T-012"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:brass-regime-selection"
+  ],
+  "supersedes_claim": "C-080"
+ },
+ {
+  "id": "C-092",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "The per-note frequency scale holds pp/mf/ff within +-4.6 cents only by construction: it shifts all poles and f_l by up to -84 cents (standard notes) and -114 cents (alternates), so at Intonation realism = 0 it overrides the bore's natural tendencies; pitch values reported for non-sustaining notes (87 pp, 89 pp) are invalid.",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 1 (C-081 row)",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-011",
+   "T-013"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:brass-regime-selection"
+  ],
+  "supersedes_claim": "C-081"
+ },
+ {
+  "id": "C-093",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "Held for 3 s, 125/133 tested 20 ms register jumps sustain; the 6 additional failures are all upward jumps into partials 10-14 (84 p8->p10, 85 p9->p11, 86 p9->p10, 87 p10->p11, 89 p12->p13/p14); jumps from partial 8 to 9 (written 80-84) sustain for 2.5 s, so Overblow is capped at partial max(n, 9) (D-009).",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 1 (C-083 row); research/spikes/floors_cap_check_result.txt",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-009",
+   "T-015"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:brass-regime-selection"
+  ],
+  "supersedes_claim": "C-083"
+ },
+ {
+  "id": "C-094",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "Relaxing the sustain pressure to 1.0/0.8/0.6 x threshold is stable for >= 4.9 s on written 64, 74 and 78 (78 dies only at 0.5 x), confirming the hysteresis mechanism for soft dynamics; the pp/mf harmonic MAD figures of the dyn spike stand.",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 1 (C-086 row); research/spikes/dyn_spike_result.txt",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-008",
+   "T-029"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:trumpet-blowing-pressure"
+  ],
+  "supersedes_claim": "C-086"
+ },
+ {
+  "id": "C-095",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "Doc 2023 register 4 is written C5 = concert B-flat4 (466 Hz); Fletcher & Tarnopolsky's 3.3/6.3/13 kPa refer to concert C5 (523 Hz), i.e. about 2.9/5.6/11.6 kPa scaled to 466 Hz, so the dynamics map (3.2/6.2/12.4 kPa) agrees within about 10 %.",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 1 (C-087 row)",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-008"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:trumpet-blowing-pressure"
+  ],
+  "supersedes_claim": "C-087"
+ },
+ {
+  "id": "C-096",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "TinySOL TpC files are trimmed at the attack (90/96 start within 5 ms of the attack), so onset times measured from a -40 dB-re-max start are relative to the editor's cut point and cannot serve as a reference band for synthetic onsets; four files (tag R100u/R100d: A#3 ff, B3 ff, G#3 ff, E5 mf) are semitone-resampled neighbours and are excluded from the reference set; the harmonic-MAD and centroid spread figures of C-073 stand (neighbour MAD changes <= 0.4 dB without them).",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 1 (C-073 row), defects D-3, D-4",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-017",
+   "T-029"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:trumpet-reference-recordings"
+  ],
+  "supersedes_claim": "C-073"
+ },
+ {
+  "id": "C-097",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "Breaking changes of the pinned action majors: setup-python v7 removed the pip-install input, download-artifact v8 fails on digest mismatch by default and no longer unzips non-zip artifacts, checkout v7 refuses fork-PR heads under pull_request_target/workflow_run; all moved to node24/ESM.",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 1 (C-018..C-022 row)",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-020",
+   "T-031"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:github-actions-pins"
+  ],
+  "supersedes_claim": null
+ },
+ {
+  "id": "C-098",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "Binaries that link JUCE 9 under its open licence are AGPLv3 works as a whole (own sources stay Apache-2.0); JUCE >= 8.0.11 ships the ASIO SDK under GPLv3 (compiled only with JUCE_ASIO=1); TinySOL (CC BY 4.0) and Freour et al. 2022 (CC BY 4.0, Acta Acustica) require attribution when derived material is committed.",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 3",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-021",
+   "T-031"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:vst3-sdk"
+  ],
+  "supersedes_claim": null
+ },
+ {
+  "id": "C-099",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "Measured complex residues make |Z| peak frequencies differ from pole frequencies Im(s)/2pi (modes 9-11: +9/+14/+24 cents), so the resonator generator must calibrate like with like (complex modal fit of the TMM vs measured poles) and keep the measured complex residues for the open state (D-004).",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "round-3-adversarial.md section 1 (C-044 row), defect D-5",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-004",
+   "T-007",
+   "T-030"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:trumpet-input-impedance"
+  ],
+  "supersedes_claim": null
  }
 ]

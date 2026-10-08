@@ -1,0 +1,10 @@
+floor 86 factor 2.5 sustains True
+floor 87 factor 2.5 sustains True
+floor 88 factor 5.0 sustains True
+floor 89 factor 2.5 sustains True
+jump 80 p8->p9 sustains True
+jump 81 p8->p9 sustains True
+jump 82 p8->p9 sustains True
+jump 83 p8->p9 sustains True
+jump 84 p8->p9 sustains True
+9/9 sustained

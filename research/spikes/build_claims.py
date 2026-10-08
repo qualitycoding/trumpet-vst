@@ -73,6 +73,32 @@ SPIKES = [
 ]
 
 
+R5 = "research/rounds/round-3-adversarial.md"
+# (old claim id, corrected claim, locator, informs, subjects) -> new claims that supersede the weakened ones (Rule 12)
+CORRECTIONS = [
+    ("C-080", "Over 4 s runs (R5 review) the Doc 2023 lip set with pressure k x threshold (pp 1.3, mf 2.5, ff 5) sustains standard notes written 54-85 at pp/mf/ff, 86-87 at mf/ff only, 88 at ff only, 89 at mf/ff only (86/87 at pp are ring-downs of the attack transient); with blowing-factor floors (86, 87, 89 >= 2.5; 88 >= 5.0, D-023) all four sustain for 3 s.",
+     "round-3-adversarial.md section 1 (C-080 row); research/spikes/floors_cap_check_result.txt", ["D-005", "D-023", "T-012"], ["brass-regime-selection"]),
+    ("C-081", "The per-note frequency scale holds pp/mf/ff within +-4.6 cents only by construction: it shifts all poles and f_l by up to -84 cents (standard notes) and -114 cents (alternates), so at Intonation realism = 0 it overrides the bore's natural tendencies; pitch values reported for non-sustaining notes (87 pp, 89 pp) are invalid.",
+     "round-3-adversarial.md section 1 (C-081 row)", ["D-011", "T-013"], ["brass-regime-selection"]),
+    ("C-083", "Held for 3 s, 125/133 tested 20 ms register jumps sustain; the 6 additional failures are all upward jumps into partials 10-14 (84 p8->p10, 85 p9->p11, 86 p9->p10, 87 p10->p11, 89 p12->p13/p14); jumps from partial 8 to 9 (written 80-84) sustain for 2.5 s, so Overblow is capped at partial max(n, 9) (D-009).",
+     "round-3-adversarial.md section 1 (C-083 row); research/spikes/floors_cap_check_result.txt", ["D-009", "T-015"], ["brass-regime-selection"]),
+    ("C-086", "Relaxing the sustain pressure to 1.0/0.8/0.6 x threshold is stable for >= 4.9 s on written 64, 74 and 78 (78 dies only at 0.5 x), confirming the hysteresis mechanism for soft dynamics; the pp/mf harmonic MAD figures of the dyn spike stand.",
+     "round-3-adversarial.md section 1 (C-086 row); research/spikes/dyn_spike_result.txt", ["D-008", "T-029"], ["trumpet-blowing-pressure"]),
+    ("C-087", "Doc 2023 register 4 is written C5 = concert B-flat4 (466 Hz); Fletcher & Tarnopolsky's 3.3/6.3/13 kPa refer to concert C5 (523 Hz), i.e. about 2.9/5.6/11.6 kPa scaled to 466 Hz, so the dynamics map (3.2/6.2/12.4 kPa) agrees within about 10 %.",
+     "round-3-adversarial.md section 1 (C-087 row)", ["D-008"], ["trumpet-blowing-pressure"]),
+    ("C-073", "TinySOL TpC files are trimmed at the attack (90/96 start within 5 ms of the attack), so onset times measured from a -40 dB-re-max start are relative to the editor's cut point and cannot serve as a reference band for synthetic onsets; four files (tag R100u/R100d: A#3 ff, B3 ff, G#3 ff, E5 mf) are semitone-resampled neighbours and are excluded from the reference set; the harmonic-MAD and centroid spread figures of C-073 stand (neighbour MAD changes <= 0.4 dB without them).",
+     "round-3-adversarial.md section 1 (C-073 row), defects D-3, D-4", ["D-017", "T-029"], ["trumpet-reference-recordings"]),
+]
+EXTRA = [
+    ("Q-E5", "Breaking changes of the pinned action majors: setup-python v7 removed the pip-install input, download-artifact v8 fails on digest mismatch by default and no longer unzips non-zip artifacts, checkout v7 refuses fork-PR heads under pull_request_target/workflow_run; all moved to node24/ESM.",
+     "round-3-adversarial.md section 1 (C-018..C-022 row)", ["D-020", "T-031"], ["github-actions-pins"]),
+    ("Q-E4", "Binaries that link JUCE 9 under its open licence are AGPLv3 works as a whole (own sources stay Apache-2.0); JUCE >= 8.0.11 ships the ASIO SDK under GPLv3 (compiled only with JUCE_ASIO=1); TinySOL (CC BY 4.0) and Freour et al. 2022 (CC BY 4.0, Acta Acustica) require attribution when derived material is committed.",
+     "round-3-adversarial.md section 3", ["D-021", "T-031"], ["vst3-sdk"]),
+    ("Q-A4", "Measured complex residues make |Z| peak frequencies differ from pole frequencies Im(s)/2pi (modes 9-11: +9/+14/+24 cents), so the resonator generator must calibrate like with like (complex modal fit of the TMM vs measured poles) and keep the measured complex residues for the open state (D-004).",
+     "round-3-adversarial.md section 1 (C-044 row), defect D-5", ["D-004", "T-007", "T-030"], ["trumpet-input-impedance"]),
+]
+
+
 def tier_of(src):
     return int(src.get("tier", 3)) if isinstance(src, dict) else 3
 
@@ -99,6 +125,21 @@ def main():
             "sources": [{"url": url, "title": "planner spike", "version": "2026-10-07", "locator": loc, "accessed": "2026-10-07", "tier": 1}],
             "confidence": "verified", "evidence_class": "n/a", "contradicted_by": [], "informs": informs,
             "tags": ["domain:audio", "domain:musical-acoustics", "domain:brass"] + [f"subject:{s}" for s in subj]})
+    for old, claim, loc, informs, subj in CORRECTIONS + EXTRA:
+        n += 1
+        claims.append({
+            "id": f"C-{n:03d}", "source_item": "R5-review", "question": "", "claim": claim, "kind": "numerical",
+            "load_bearing": True,
+            "sources": [{"url": R5, "title": "R5 adversarial review (fresh-context Opus)", "version": "2026-10-08", "locator": loc,
+                         "accessed": "2026-10-08", "tier": 1}],
+            "confidence": "verified", "evidence_class": "n/a", "contradicted_by": [], "informs": informs,
+            "tags": ["domain:audio", "domain:musical-acoustics", "domain:brass"] + [f"subject:{x}" for x in subj],
+            "supersedes_claim": old if old.startswith("C-") else None})
+    byid = {c["id"]: c for c in claims}
+    for c in claims:
+        if c.get("supersedes_claim"):
+            o = byid[c["supersedes_claim"]]
+            o["superseded_by"] = c["id"]; o["contradicted_by"] = sorted(set(o["contradicted_by"]) | {c["id"]}); o["load_bearing"] = False
     # R3/R4 resolutions: arithmetic facts verified by computation; claims superseded by spike-based design decisions.
     for c in claims:
         if c["source_item"] in ("A-22", "F-1", "F-14"):
@@ -106,9 +147,10 @@ def main():
             c["sources"].append({"url": "research/spikes/expected_values.py", "title": "computation", "version": "2026-10-07",
                                  "locator": "values(): hs_dev_p*, open_partial_written_p*, ideal_sharp_*", "accessed": "2026-10-07", "tier": 1})
         if c["id"] == "C-088":
+            new = next(x["id"] for x in claims if x["claim"].startswith("With the bell filter applied as a linear"))
             c["load_bearing"] = False
-            c["contradicted_by"] = ["C-090"]
-            c["superseded_by"] = "C-090"
+            c["contradicted_by"] = [new]
+            c["superseded_by"] = new
             c["notes"] = "Superseded: the 0-6 ms onsets were an artefact of circular FFT filtering (lesson L-20261008T010500Z)."
         if c["source_item"] in ("E-26", "E-29"):
             c["load_bearing"] = True
