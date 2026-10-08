@@ -1,5 +1,9 @@
 # Prior knowledge (R0) and how it is applied
 
+## Aliases
+"R5" and "R5 review" refer to the round-3 adversarial review, `research/rounds/round-3-adversarial.md`; "R5 D-n" is its
+defect n (section 2) and "R5 question n" its section 5 item n.
+
 ## Sources
 The knowledge store `qualitycoding/agent-knowledge` does not exist (HTTP 404, 2026-10-07), so nothing was loaded from
 it. The sibling runs clarinet-vst, saxophone-vst and chinese-strings recorded no lessons. Their problems were backfilled

@@ -20,7 +20,7 @@
   - Contents read/write and Workflows read/write on `qualitycoding/trumpet-vst`: push to `impl-*`, `evidence/*` and `ci-results`, and create `.github/workflows/ci.yml`.
   - Actions read: read CI results.
   - Contents read/write on `qualitycoding/agent-knowledge` for S-KNOW, plus Administration write if the repository has to be created.
-  - Provide it via `gh auth login --with-token`; never write it to a file (L-20261007T150100Z).
+  - Provide it as the environment variable `GH_TOKEN` (the harness sets it; `gh` reads it, `gh auth setup-git` lets git use it); never write it to a file or expand it in a command line (L-20261007T150100Z).
 - **CI:** no secrets are needed. The realism job pushes with `GITHUB_TOKEN` (job-level `contents: write`).
 
 ## Setup commands

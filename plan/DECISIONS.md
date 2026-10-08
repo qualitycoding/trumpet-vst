@@ -36,7 +36,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - The sounding note is that partial's natural pitch.
 - **fscale for fixed-valves notes,** taken from the first rule that applies:
   - (1) the table entry with the same valve combination (no-trigger state) and the same partial, standard before alternate;
-  - (2) otherwise the mean `fscale` of all entries on that state;
+  - (2) otherwise the mean `fscale` of all entries (standard and alternate) whose state is that combination's no-trigger state;
   - (3) otherwise the mean of all entries.
   - Intonation realism does not apply in Fixed-valves mode (natural pitch).
 - **Pedal tones** (partial 1) started directly in Fixed-valves mode are untested (R-008). They are reachable by Underblow (T-015).
@@ -93,6 +93,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - Accept if the RMS error is ≤ 3 dB, otherwise add a section (up to 6).
 - **Embedding:** the table is embedded at configure time (`file(READ … HEX)` → a generated `.cpp` with a byte array and a terminating 0), as in saxophone-vst. `CMAKE_CONFIGURE_DEPENDS` is set on the JSON file.
 - **`fscale` values:** written by `tpt_calibrate` (D-011). `generate_table --keep-calibration` preserves them.
+- **Number formatting:** `generate_table` and `tpt_calibrate` write every float rounded to 10 significant digits
+  (Python `float(format(x, '.10g'))`, C++ `snprintf("%.10g")`), including `air.c` and `air.rho` (unrounded otherwise,
+  e.g. c = 347.288…). The C++ side reads exactly these numbers. `--keep-calibration` copies `fscale` unchanged.
 
 ## D-005 Lip model and per-partial settings
 - **Model:** Fréour 2022 eq. 1, the outward-striking one-mass valve (header `LipModel.h`), with the Doc 2023 parameter set: Ql 20, μ 9 kg/m², width 12 mm (C-036).
@@ -110,7 +113,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 ## D-006 Numerical scheme (real time)
 - **Internal rate** f_int = fs × os, with os = min(4, ceil(88200 / fs)): 4 at 22.05 kHz, 2 at 44.1 and 48 kHz, 1 at ≥ 88.2 kHz. The lip and modal scheme therefore always runs at ≥ 88.2 kHz, the regime of the spikes (96 kHz).
 - **Decimation:** cascaded half-band FIR stages, 63 taps each, Kaiser β = 8, linear phase.
-  - `latencySamples()` is the sum of the stage delays in output samples, rounded: 16 at os = 2 (31 internal samples = 15.5 output samples), 23 at os = 4 (7.75 + 15.5), 0 at os = 1.
+  - `latencySamples()` is the sum of the stage delays in output samples, rounded half away from zero (`std::lround`): 16 at os = 2 (31 internal samples = 15.5 output samples), 23 at os = 4 (7.75 + 15.5), 0 at os = 1.
   - It is reported to the host.
 - **Modes:** q[k+1] = a·q[k] + g·(u[k+1] + u[k]), with a = (1 + sT/2)/(1 − sT/2) and g = R·T/2/(1 − sT/2) (bilinear). This is the same as `lipsim.cpp`.
 - **Implicit flow:** closed form, both signs (`lipsim.cpp`, verified by R5).
@@ -133,6 +136,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - parameters are interpolated linearly across ±0.05 around each boundary.
 - Grid evidence (C-089): pp 92 %, mf 58 %, ff 50 % of notes inside the trimmed-reference band. The frozen criterion is only the absolute median onset ≤ 150 ms (T-029; spike medians 47–102 ms).
 - Legato note-on while sounding: no attack, D-010 instead.
+- **Release:** on the last note-off, pm falls to 0 over 40 ms (raised cosine; `kReleaseS` in `VoiceTuning.h`); the lips and
+  resonator keep running until the idle rule of D-006 stops the voice.
 - All attack constants live in `VoiceTuning.h` and are calibrated in S-016.
 
 ## D-008 Dynamics map
@@ -152,8 +157,11 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 ## D-009 Overblow / Underblow (A-007a; C-083, C-084, C-093)
 - **Mapping:** a = 2·o, for o in [−1, 1].
 - **Register offset k:**
-  - o ≥ 0: k = floor(a), with hysteresis. Move up when a ≥ k + 1; move down when a < k − 0.2.
-  - o < 0: k = −floor(−a), symmetric.
+  - Work on the magnitude b = |a| with the register count j = |k| when sign(a) = sign(k) or k = 0; if the sign of a is
+    opposite to that of k, first set k = 0.
+  - Up: if b ≥ j + 1, set j = floor(b). Down: else if b < j − 0.2, set j = floor(b + 0.2). Otherwise keep j.
+    Then k = sign(a)·j. Evaluated at every control-rate update.
+  - Examples: o 0 → 0.6 → 1.0 → 0 gives k = 0 → 1 → 2 → 0; o = 0.47 after 0.6 keeps k = 1 (b = 0.94 ≥ 0.8).
 - **Target partial:** m = clamp(n + k, 1, max(n, 9)). The cap at 9 is there because jumps into partials 10–14 don't sustain (C-093).
 - **Register change:**
   - Ramp f_l, h0 and pm from the current setting to partial m's setting over 20 ms (C-083).
@@ -182,10 +190,14 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - Secant iteration on fscale until |cents vs ET| < 0.5, at most 8 iterations, on the YIN f0 of the last 0.5 s.
   - Write fscale back.
   - Reject the table if any note fails to sustain (sustain gate as in T-012) → DR-CAL.
+- **Bore state:** the voice always plays the note entry's own state, including its trigger state (e.g. written 62 plays
+  on `13+t3@62` at every r). The natural deviation of a trigger note is therefore the table value (≈ the harmonic-series
+  deviation, because the trigger corrects the combination's sharpness), not the uncorrected sharpness of the plain
+  combination.
 - **Evidence:** C-081 and C-092. At r = 0 the virtual player is fully corrected. At r = 1 the deviations are the table's `natural_dev_cents` (T-014). Their realism for p2 valved notes is R-005, judged by the human at G-005.
 
 ## D-012 Output stage
-- **Outgoing wave:** p⁺ = (p + Zc_in·u)/2, with Zc_in = ρc/(π·8.25 mm²) (R5 D-7).
+- **Outgoing wave:** p⁺ = (p + Zc_in·u)/2, with Zc_in = ρ·c / (π·(8.25e-3 m)²) (cup radius; R5 review defect D-7).
 - **Nonlinear propagation** (simple-wave time warping, C-045, C-047, C-085):
   - L_nl = nlp.length_m × 2·brightness, so 0.85 m at the default;
   - arrival time t_k = t − β·L_nl·p⁺/(ρc³);
@@ -196,22 +208,25 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise (seed 0x7A11C0DE at `reset()`) through a 3 kHz one-pole;
   - plus 0.002·breathNoise·pm/pth·w added to the output.
 - **Gain:** scale by K_out (fixed so that written C5 at ff peaks near −6 dBFS; in `VoiceTuning.h`) × dB(gain), then the decimator.
-- **Safety limiter:** y = tanh-based soft clip above 0.9, so that |y| ≤ 1.
+- **Safety limiter:** after decimation, on the output sample: y = x for |x| ≤ 0.9, else sign(x)·(0.9 + 0.1·tanh((|x| − 0.9)/0.1)), so that |y| < 1; then the cast to float.
 
 ## D-013 UI state and drawing
 - **`UiState` fields** come from atomics written once per block.
+- **Level meter:** one meter for everything: RMS of the final output (after gain, decimator and limiter) over the last
+  20 ms, in absolute dBFS. `sounding` = a note is held, or the meter is above −60 dBFS. The partial tracker
+  reports 0 when the meter is below −60 dBFS. The idle rule (D-006) uses the same meter (< −100 dBFS for 50 ms after release).
 - **`soundingPartial` tracker:**
   - A zero-crossing period estimate on p⁺ with hysteresis, over the last 1024 internal samples.
   - Updated every 16 control steps.
   - Maps to the nearest partial of the current state × fscale_eff on a log scale.
-  - 0 if the RMS is below −60 dB re the steady level.
+  - 0 if the level meter is below −60 dBFS.
 - **`trigger`** shows the fingering trigger only if r < 0.5.
 - **Layout** (`trumpetLayout`), in normalised coordinates, side view with the bell to the right:
-  - valve caps at y 0.18–0.26 and x 0.36, 0.44, 0.52 (w 0.05);
-  - casings below them (y 0.28–0.52);
+  - valve caps at y 0.18–0.26 and x 0.36, 0.44, 0.52 (w 0.05, h 0.08);
+  - casings below them, same x and w, y 0.28–0.52 (h 0.24);
   - first trigger left of valve 1, at (0.27, 0.30, 0.05, 0.05);
   - third trigger right of valve 3 below the casings, at (0.58, 0.55, 0.05, 0.05);
-  - ladder: 13 rungs at x 0.86–0.98, partial 1 at y 0.90, step 0.06 upwards;
+  - ladder: 13 rungs at x 0.86, w 0.12, h 0.05; rung of partial k at y = 0.90 − 0.06·(k − 1);
   - caption at (0.02, 0.92, 0.80, 0.07);
   - instrument box (0.02, 0.10, 0.80, 0.70).
   - The values may be adjusted only to satisfy T-033.
@@ -231,14 +246,24 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Controllers:**
   - CC2 and CC11 → `setBreath(v/127)`;
   - CC1 and channel pressure → `setVibratoControl(v/127)`, the maximum of the two;
-  - pitch bend → ±2 semitones;
+  - pitch bend → semitones = 2·(value − 8192)/8192 (14-bit value);
   - CC16 → Overblow (D-009);
   - CC120/CC123 → `allNotesOff()`;
   - CC121 → reset the controllers (breath absent, bend 0, vibrato 0, overblow control released).
 - **Timing:** the processor splits each block at event sample positions.
+- **Invalid input:** non-finite floats passed to any setter are ignored (previous value kept); note numbers outside
+  0..127 are ignored; velocity is clamped to (0, 1], non-finite velocity is ignored.
+- **CC1 and channel pressure:** the vibrato control is the maximum of the last CC1 value and the last channel-pressure
+  value (any channel).
 
 ## D-015 State persistence
 - `serializeState` / `deserializeState` (header contract), stored by the processor as the UTF-8 JSON of `tpt-state-1`.
+- Compact JSON (nlohmann `dump()` without indentation). Keys of `params` are the C++ `VoiceParameters` field names
+  (`brightness`, `lipStiffness`, `breathNoise`, `vibratoRateHz`, `vibratoDepth`, `tuningA4Hz`, `intonationRealism`,
+  `outputGainDb`, `overblow`, `useAlternates`, `fixedValves`). `params` that is not an object → nullopt.
+- APVTS id → field: brightness→brightness, lipStiffness→lipStiffness, breathNoise→breathNoise, vibratoRate→vibratoRateHz,
+  vibratoDepth→vibratoDepth, tuning→tuningA4Hz, intonation→intonationRealism, gain→outputGainDb, overblow→overblow,
+  alternates→useAlternates, fixedValves→fixedValves.
 - `setStateInformation` with invalid data leaves the parameters unchanged.
 - APVTS values are set from the deserialised parameters.
 
@@ -263,6 +288,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Metric definitions:** `tools/realism/metrics.py`, the same as `research/spikes/ref_spread.py`.
 - **Reference:** TinySOL TpC ordinario, concert 54–82, excluding the 4 resampled files (C-096). 82 notes.
 - **Renders:** `tpt_render` (S-015), 2.0 s at 44.1 kHz, velocities pp 24 / mf 76 / ff 124 (out of 127).
+- **Harmonics:** levels of harmonics 1..10 relative to the strongest of the ten (`harmonic_levels_db(count=10)`); the MAD
+  uses the first 8 (`harm_syn` and `harm_ref` hold 10 values each).
+- **`--tinysol`:** the download destination; `compare_tinysol` calls `tinysol.download(dest)` itself.
 - **Frozen thresholds, per dynamic:**
 
 | Metric | Threshold |
@@ -303,11 +331,28 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - `python` (ubuntu): venv from `tools/requirements.lock`, then `pytest tests/python -k "not t029"` and `pip-audit -r tools/requirements.lock`.
   - `plugin` (3 OSes): build with the plugin, run `tpt_plugin_tests` (xvfb-run on Linux), `run_pluginval.sh`, and `auval -v aumu Tpts Qcod` on macOS.
   - `realism` (ubuntu, needs `core`): build `tpt_render`, download TinySOL (cache key = archive md5), run T-029, and push the results (results.json + meta) to the `ci-results` branch with a commit message containing the source SHA.
-- **Write permission:** the `realism` job's push needs `permissions: contents: write` on that job only, using `GITHUB_TOKEN`.
+- **Write permission:** the `realism` and `gate-evidence` jobs' pushes need `permissions: contents: write` on those jobs
+  only, using `GITHUB_TOKEN`.
+- **`realism` job conditions:** `needs: build-linux` (a job that only builds `tpt_render` in Release), not `core`, so it
+  runs while frozen core tests are still red; it is skipped when `tools/render/main.cpp` does not exist
+  (`if: hashFiles('tools/render/main.cpp') != ''`).
+- **`ci-results`:** an orphan branch, created by the first push (`git checkout --orphan ci-results; git rm -rf .`), holding
+  `results.json`, `results.meta.json`, `SUMMARY.md` and `ATTRIBUTION.txt`, overwritten on every run; commit message
+  `realism results for <source sha>`.
+- **`gate-evidence` job:** ubuntu, `contents: write`, runs on `workflow_dispatch` with input `gate` (`G-004` or `G-005`):
+  builds the plugin and tools, runs `tpt_ui_snapshots` under `xvfb-run -a` (G-004) or `make_g005_bundle.py` (G-005), and
+  force-pushes the output directory with `SHA256SUMS` to the orphan branch `evidence/<gate>` via
+  `tools/render/push_evidence.sh`.
+- **Windows:** multi-config generator: always `cmake --build build --config Release` and `ctest -C Release`.
+- **Wording constraint (T-031 substring checks):** `ci.yml` must not contain the strings `pull_request_target`,
+  `workflow_run` or `pip-install:` anywhere, comments included.
+- **WAV files:** renders and bundles go under `renders/` (git-ignored); `git worktree`s for evidence branches are created
+  outside the repository directory (e.g. `../trumpet-evidence`), so that T-031 finds no WAV in the tree.
 - **Failure reporting:** each job writes a one-line summary with `::error::` annotations, so failures are readable through the checks API even when the log host is unreachable.
 
 ## D-021 Third-party notices
-`THIRD_PARTY_NOTICES.md` (S-002) has one row per component (name, version, licence, URL, use, shipped yes/no):
+`THIRD_PARTY_NOTICES.md` (S-002) has one row per component (name, version, licence, URL, use, shipped yes/no). Versions and
+URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com; TinySOL and Fréour DOIs from `ATTRIBUTION.md`):
 
 | Component | Licence | Use |
 |---|---|---|
@@ -346,7 +391,7 @@ Each rule names the step(s) where it applies.
 | DR-T003 (S-003) | The fixture disagrees with a source the implementer trusts | The fixture wins. Write `TEST_CHALLENGE.md`, and the human decides at G-004. |
 | DR-T007 (S-005, S-006) | The open state misses the measured modes, or a valve's lowering is off by > 5 c | Check the like-with-like fit (C-099) and the bisection tolerance. Never widen tolerances. |
 | DR-T009 (S-007) | The Fréour reproduction is off | Compare line by line with `research/spikes/lipsim.cpp`. The port must be exact (same ρ = 1.2041, os = 2). |
-| DR-REGIME (S-008–S-011) | T-012 fails for some notes | (1) Check that sustain gating and the floors are applied. (2) Tune the per-partial trims in `VoiceTuning.h` (fl ratio ±3 %, h0 ±15 %), at most 5 rounds. (3) If still failing, `TEST_CHALLENGE.md` with the evidence; never edit T-012. |
+| DR-REGIME (S-008–S-011) | T-012 fails for some notes | (1) Check that sustain gating and the floors are applied. (2) Tune the per-partial trims in `VoiceTuning.h` (fl ratio ±3 %, h0 ±15 %), at most 5 rounds. (2b) For failures only at lip-stiffness extremes: narrow the h0 span of D-005 (1.15 − 0.3·s) symmetrically around 1.0, down to ±0.05 (logged). (3) If still failing, `TEST_CHALLENGE.md` with the evidence; never edit T-012. |
 | DR-CAL (S-009) | Calibration does not converge for a note, or fscale leaves [0.8, 1.25] | Apply DR-REGIME to that note first. If still failing, `BLOCKED.md`. |
 | DR-OVERBLOW (S-011) | T-015 fails | Check hysteresis and cap. Tune the ramp time (10–40 ms) and the brightening slope (0.5–1.2) in `VoiceTuning.h`, at most 5 rounds. Then `TEST_CHALLENGE.md`. |
 | DR-VALVE (S-011) | T-016 valve slurs fail (dip or no settle) | Try, in order: (a) 25 ms interpolation; (b) interpolation in log-frequency; (c) a 15 ms equal-power crossfade of two voices with shared lips (an allowed private implementation change). Log it. |

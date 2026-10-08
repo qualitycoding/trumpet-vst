@@ -3,6 +3,6 @@
 
 
 def fit():
-    """Returns {"params": [...7 floats...], "geometry": {"profile", "valve_x_m", "valve_r_m"}, "cents_err": [10 floats],
+    """Returns {"params": [...7 floats...], "geometry": {"profile", "valve_x_m", "valve_r_m"}, "cents_err": [10 floats: modes 2..11],
     "air": {"T_C", "c", "rho"}} with the pole frequencies of a complex modal fit compared like with like (C-099)."""
     raise NotImplementedError("bore_fit.fit")

@@ -30,11 +30,12 @@ def test_t028_centroid_and_mad():
 
 
 def test_t028_onset_metric():
-    # linear 100 ms ramp from silence: -40 dB re max at 1 ms, half amplitude (-6.02 dB) at 50 ms -> about 49 ms
+    # linear 100 ms / 200 ms ramps after 50 ms of silence; values from the reference metric (t028_values.py)
     t = np.arange(int(1.0 * FS)) / FS
     x = np.concatenate([np.zeros(int(0.05 * FS)), np.clip(t / 0.1, 0, 1) * np.sin(2 * np.pi * 440 * t)])
-    assert m.onset_ms(x, FS) == pytest.approx(49.0, abs=3.0)  # EXPECTED:onset_ramp100_ms
+    assert m.onset_ms(x, FS) == pytest.approx(53.0, abs=1.0)  # EXPECTED:onset_ramp100_ms
     slow = np.concatenate([np.zeros(int(0.05 * FS)), np.clip(t / 0.2, 0, 1) * np.sin(2 * np.pi * 440 * t)])
+    assert m.onset_ms(slow, FS) == pytest.approx(102.0, abs=1.0)  # EXPECTED:onset_ramp200_ms
     assert m.onset_ms(slow, FS) > m.onset_ms(x, FS) + 30.0     # a slower attack measures later (L-20261008T010500Z)
 
 

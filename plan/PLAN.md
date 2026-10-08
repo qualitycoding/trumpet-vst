@@ -2,14 +2,17 @@
 # Execution plan — trumpet-vst v1
 
 ## Conventions
+- **Directories:** run `mkdir -p logs` once in S-000; `logs/` is committed.
 - **Branch:** run every command from the repository root on the implementation branch
   `impl-20261007T145241Z-trumpet-vst-plan` (created in S-000).
 - **Build:** "build" means `cmake --build build -j4`, with the build directory configured as in `plan/ENVIRONMENT.md`.
-- **After every step:**
-  - commit with the message `S-0xx: <title>`;
-  - append one line to `EXECUTION_LOG.md`: `UTC time | step | attempt | pass/fail/blocked | commit | note`;
-  - update `.checkpoints/impl-state.json` with `{"step":"S-0xx","status":"done","commit":"<sha>","utc":"…"}`;
-  - push.
+- **After every step attempt:**
+  1. commit the work with the message `S-0xx: <title>`;
+  2. append one line to `EXECUTION_LOG.md`: `UTC time | step | attempt | pass/fail/blocked | <sha of commit 1> | note`;
+  3. append `{"step":"S-0xx","status":"done|failed|blocked","commit":"<sha of commit 1>","utc":"…"}` to the JSON array in
+     `.checkpoints/impl-state.json` (create it as `[]` in S-000);
+  4. commit steps 2 and 3 as `S-0xx: record`;
+  5. push.
 - **Freeze check:** run `bash tests/scripts/verify_freeze.sh` before and after every step; it must print `freeze OK`.
 - **Idempotency:** every step is safe to re-run. Completion is detected by its "Done when" checks.
 - **Lessons and knowledge:**
@@ -26,16 +29,23 @@
 - Depends on: none
 - Inputs: generation branch head; `plan/ENVIRONMENT.md`; `HANDOFF.md`
 - Actions:
-  1. `git fetch origin && git checkout -b impl-20261007T145241Z-trumpet-vst-plan origin/gen-20261007T145241Z-trumpet-vst-plan` (if the branch exists: `git checkout impl-20261007T145241Z-trumpet-vst-plan`).
+  1. Credentials: the harness provides the token in the environment variable `GH_TOKEN` (gh reads it; never echo it). Run
+     `gh auth setup-git`, `git config user.name qualitycoding` and
+     `git config user.email qualitycoding@users.noreply.github.com` (A-024).
+     Then `git fetch origin && git checkout -b impl-20261007T145241Z-trumpet-vst-plan origin/gen-20261007T145241Z-trumpet-vst-plan`
+     (if the branch exists: `git checkout impl-20261007T145241Z-trumpet-vst-plan`). `mkdir -p logs`.
   2. Install the tools per `plan/ENVIRONMENT.md` (the sudo variant if `sudo -n true` succeeds, else the no-sudo variant).
   3. Check access:
      - `gh auth status`;
      - `git push --dry-run origin HEAD:refs/heads/impl-20261007T145241Z-trumpet-vst-plan`;
      - `gh api repos/qualitycoding/trumpet-vst --jq .permissions.push` (must be `true`);
      - `gh api repos/qualitycoding/trumpet-vst/actions/runs --jq '.total_count'` (must succeed).
-  4. Check that hosts are reachable, with `curl -s -o /dev/null -w "%{http_code}"` returning a code < 400 after redirects (`-L`): github.com, api.github.com, zenodo.org, pypi.org, files.pythonhosted.org. Record each result.
+  4. Check that hosts are reachable with `curl -s -o /dev/null -m 15 -w "%{http_code}" https://<host>/`. Any HTTP
+     status (not `000`) counts as reachable; some hosts answer 404 at the root (files.pythonhosted.org). Hosts:
+     github.com, api.github.com, codeload.github.com, zenodo.org, pypi.org, files.pythonhosted.org, bootstrap.pypa.io.
+     Record each result.
   5. `bash tests/scripts/verify_freeze.sh`.
-  6. Create `EXECUTION_LOG.md` with its header line and the S-000 line.
+  6. Create `EXECUTION_LOG.md` with its header line, and `.checkpoints/impl-state.json` containing `[]`.
 - Outputs: `EXECUTION_LOG.md`, `.checkpoints/impl-state.json`
 - Evidence produced: none
 - Done when: every check succeeds and `freeze OK` is printed.
@@ -56,7 +66,8 @@
   2. `ctest --test-dir build --output-on-failure > logs/S-001-red-ctest.txt 2>&1 || true`.
   3. `.venv/bin/python -m pytest tests/python > logs/S-001-red-pytest.txt 2>&1 || true`.
   4. Compare with the planning red run in `plan/ENVIRONMENT.md`:
-     - every C++ test case fails;
+     - every C++ test case in unit, integration, operational, alloc and perf fails;
+     - if the plugin was built: `tpt_plugin_tests` has 1 passing case ("T-026 parameters", guard) and 4 failing;
      - Python results: 3 passed (T-031 guards), 6 skipped (T-029), the rest failing or erroring on `NotImplementedError` or missing S-002/S-005 outputs.
 - Outputs: `build/`, `.venv/`, `logs/S-001-red-ctest.txt`, `logs/S-001-red-pytest.txt`
 - Evidence produced: none (baseline)
@@ -99,9 +110,9 @@
 - Depends on: S-001
 - Inputs: `core/include/tpt/{Pitch,Valves,Fingering}.h`; `tests/fixtures/trumpet_fingerings.txt`; D-001–D-003, D-023
 - Actions:
-  1. Implement `core/src/Pitch.cpp`, `core/src/Valves.cpp` and `core/src/Fingering.cpp`. The table is a static array transcribed from the fixture in fixture order; generate it with a short script and paste it, never by hand. `resolveNote` follows the header contract exactly.
+  1. Implement `core/src/Pitch.cpp`, `core/src/Valves.cpp` and `core/src/Fingering.cpp`. The table is a static array transcribed from the fixture in fixture order; generate it with `tools/gen_fingering_table.py` (reads the fixture, prints the C++ array), never by hand. `resolveNote` follows the header contract exactly.
   2. Build; run `build/tests/tpt_unit_tests "[T-001],[T-002],[T-003],[T-004],[T-005]"`.
-- Outputs: `core/src/{Pitch,Valves,Fingering}.cpp`
+- Outputs: `core/src/{Pitch,Valves,Fingering}.cpp`, `tools/gen_fingering_table.py`
 - Evidence produced: T-001, T-002, T-003, T-004, T-005
 - Done when: those tags pass.
 - Checkpoint: passing tags.
@@ -115,14 +126,19 @@
 - Tier: Sonnet
 - Profile: software
 - Depends on: S-001
-- Inputs: `core/include/tpt/Analysis.h`; `tools/realism/metrics.py`; `research/spikes/ref_spread.py`; `research/spikes/lipsim.cpp` (`f0_acf`); D-017
+- Inputs: `core/include/tpt/Analysis.h`; `tools/realism/metrics.py`; `research/spikes/{ref_spread,regime_map}.py`; `research/spikes/lipsim.cpp`; `research/spikes/table_draft.json`; `research/spikes/regime_map_result.json`; D-017
 - Actions:
   1. Implement YIN, `harmonicLevelsDb`, `spectralCentroidHz`, `nearestPartial` and `rmsDb` in `core/src/Analysis.cpp`, with a self-written radix-2 FFT (no new dependency), exactly per the header contracts.
   2. Implement `tools/realism/metrics.py` with the same definitions as `research/spikes/ref_spread.py` (`frames_db`, `steady_segment`, `harmonic_levels_db`, `spectral_centroid_hz`, `onset_ms`, `harmonic_mad_db`).
   3. Cross-check (R5 question 5), testing the shipped C++ estimator:
      - create `tools/render/CMakeLists.txt` with a target `tpt_f0` (`tools/render/f0.cpp`, links `tpt_core`). It reads a raw float32 mono file plus a sample rate and prints `estimateF0` for the last 0.5 s;
      - add `add_subdirectory(tools/render)` after `add_subdirectory(core)` in the root `CMakeLists.txt`;
-     - write `tools/render/yin_crosscheck.py`, which re-renders each row of `research/spikes/regime_map_result.json` at mf with `research/spikes/lipsim.cpp` (built with `g++ -O2 -std=c++20`) for 2 s, raw output;
+     - write `tools/render/yin_crosscheck.py`, which re-renders each row of `research/spikes/regime_map_result.json`
+       with `research/spikes/lipsim.cpp` (built with `g++ -O2 -std=c++20`), calling it exactly as `sim()` in
+       `research/spikes/regime_map.py` does: poles from `research/spikes/table_draft.json` (state of the row),
+       `fl = ratio(n)·f_res`, `H = h0(n)`, `Ql=20 mu=9 b=12e-3 attack=0.003 yinit=0 fscale=1.0 fmax=2000 fmin=40`,
+       `pm = 2.5·pth(n)`, `dur=2.0`, `wav=<file> raw=1` (raw float32, no header);
+       set `LIPSIM` and `TMPDIR_SPIKE` to paths of your own;
      - for each row, take the nearest partial of the `tpt_f0` result and compare it with the row's `mf_partial`;
      - write `logs/S-004-yin-crosscheck.md`.
   4. Run `build/tests/tpt_unit_tests "[T-010]"` and `.venv/bin/python -m pytest tests/python/test_realism_metrics.py`.
@@ -130,7 +146,9 @@
 - Evidence produced: T-010, T-028
 - Done when:
   - T-010 and T-028 pass;
-  - the cross-check reports agreement on ≥ 55/57 rows, with every disagreement explained in the log (an octave error is a YIN defect → fix it).
+  - the cross-check covers the 57 rows (56 fixture fingerings plus the dropped alternate written 80); rows whose
+    `mf_partial` is 0 (written 88: no sound at mf) are excluded; agreement on all remaining rows except at most 2, each
+    explained in the log (an octave error is a YIN defect → fix it).
 - Checkpoint: cross-check agreement count.
 - On failure: f0 error > 0.5 c → check the parabolic interpolation and the 1.0 s window. A YIN octave error → lower the absolute threshold to 0.08 (a private constant; log the change).
 - Gate: none
@@ -228,7 +246,7 @@
   3. Run `tpt_operational_tests` and `tpt_alloc_tests`.
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h` (+ private helpers in `core/src/`)
 - Evidence produced: T-023, T-024 (alloc part), T-025
-- Done when: T-023 (all cases except those needing calibration: a pitch within ±15 c is allowed to fail until S-009), T-024 alloc and T-025 pass.
+- Done when: `tpt_operational_tests` and `tpt_alloc_tests` pass, except that the single pitch assertion `std::fabs(1200 * std::log2(f0 / tpt::equalTemperedHz(67))) <= 15.0` in the case "T-023 sample rates and latency (T-025)" may still fail (it needs calibration, S-009); every other assertion of that case passes (inspect the Catch2 output).
 - Checkpoint: test status.
 - On failure: DR-ALLOC. Non-finite output → the D-006 safety reset; investigate the flow-solve branch.
 - Gate: none
@@ -243,11 +261,11 @@
 - Inputs: D-011; `data/trumpet_resonators.json`
 - Actions:
   1. (`tools/render/CMakeLists.txt` exists from S-004.)
-  2. Add `tools/render/calibrate.cpp` → target `tpt_calibrate` (links `tpt_core` and nlohmann_json). It loads the JSON, calibrates every note per D-011 (with sustain gating), and rewrites `fscale` in place, preserving formatting as in `generate_table`.
+  2. Add `tools/render/calibrate.cpp` → target `tpt_calibrate` (links `tpt_core` and nlohmann_json). It loads the JSON, calibrates every note per D-011 (with sustain gating), and rewrites `fscale` in place, formatted with `%.10g` and otherwise preserving the file as in `generate_table` (D-004 number formatting).
   3. Run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`; rebuild (this re-embeds the table).
-  4. Run `tpt_integration_tests "[T-012],[T-013],[T-014],[T-018]"` and `tpt_unit_tests "[T-007]"`.
+  4. Run `tpt_integration_tests "[T-012],[T-013]"` and `tpt_unit_tests "[T-007]"`.
 - Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`
-- Evidence produced: T-012, T-013, T-014, T-018
+- Evidence produced: T-012, T-013
 - Done when: those tags pass.
 - Checkpoint: maximum |cents| per note, and the fscale range.
 - On failure: DR-CAL, DR-REGIME.
@@ -265,13 +283,13 @@
   1. Implement in the voice:
      - breath and velocity handling;
      - legato note stack behaviour;
-     - pitch bend and vibrato (`fscale_eff`);
+     - the full `fscale_eff` of D-011: Intonation realism with `naturalDevCents`, A4 tuning, pitch bend, vibrato;
      - all-notes-off;
      - out-of-range note-ons ignored.
-  2. Run `tpt_integration_tests "[T-019]"` plus every previously green tag.
+  2. Run `tpt_integration_tests "[T-014],[T-019]"` plus every previously green tag.
 - Outputs: `core/src/TrumpetVoice.cpp`
-- Evidence produced: T-019
-- Done when: T-019 passes with no regression.
+- Evidence produced: T-014, T-019
+- Done when: T-014 and T-019 pass with no regression.
 - Checkpoint: test status.
 - On failure: DR-DEFAULT.
 - Gate: none
@@ -292,7 +310,7 @@
      - `useAlternates`.
   2. Run `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022]"` plus every previously green tag.
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`
-- Evidence produced: T-015, T-016, T-017, T-020, T-021, T-022
+- Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022
 - Done when: those pass with no regression. T-021/T-022 failures may wait for S-016 under DR-REAL; record them in the checkpoint.
 - Checkpoint: test status and final constants.
 - On failure: DR-OVERBLOW, DR-VALVE.
@@ -359,9 +377,17 @@
      - 9 rotary knobs and 2 toggles with APVTS attachments;
      - a caption label;
      - the 60 Hz timer and `refreshFromProcessor()`.
-  4. Add `tools/render/snapshot_ui.cpp` → target `tpt_ui_snapshots` (in `plugin/CMakeLists.txt`, links TrumpetVST). It renders each G-004 image into `gates/G-004/` (via `createComponentSnapshot`) under `xvfb-run -a`. Push the PNGs to an orphan branch `evidence/G-004`, with `git worktree`; keep only `SHA256SUMS` on the implementation branch.
+  4. Add `tools/render/snapshot_ui.cpp` → target `tpt_ui_snapshots` (in `plugin/CMakeLists.txt`, links TrumpetVST).
+     - It does not run the voice: for each image it builds a `UiState` from `resolveNote` (soundingPartial = target
+       partial, sounding = true, trigger per D-013 at realism 0) and calls `TrumpetView::setState`, then
+       `createComponentSnapshot` of the editor (960×600) and writes PNGs to `renders/G-004/` (git-ignored).
+     - The image list and names are in `plan/GATES.md` (G-004).
+     - Produce the bundle with the CI job `gate-evidence` (D-020), which builds the plugin, runs `tpt_ui_snapshots` under
+       `xvfb-run -a`, and pushes the PNGs plus `SHA256SUMS` to the orphan branch `evidence/G-004`. (With sudo locally you
+       may run the same script `tools/render/push_evidence.sh G-004 renders/G-004`.) Copy only `SHA256SUMS` to
+       `gates/G-004/` on the implementation branch.
   5. Run all T-026 cases. Write `GATE-G-004.md` per `plan/GATES.md`.
-- Outputs: `core/src/Layout.cpp`, `plugin/src/{TrumpetView,PluginEditor}.cpp`, `tools/render/snapshot_ui.cpp`, `plugin/CMakeLists.txt`, `GATE-G-004.md`, `gates/G-004/SHA256SUMS`
+- Outputs: `core/src/Layout.cpp`, `plugin/src/{TrumpetView,PluginEditor}.cpp`, `tools/render/{snapshot_ui.cpp,push_evidence.sh}`, `plugin/CMakeLists.txt`, `.github/workflows/ci.yml` (job `gate-evidence`), `GATE-G-004.md`, `gates/G-004/SHA256SUMS`
 - Evidence produced: T-033, T-026 (editor case)
 - Done when: T-033 and all of T-026 pass, the G-004 bundle is pushed, and `GATE-G-004.md` is committed.
 - Checkpoint: gate issued.
@@ -378,9 +404,15 @@
 - Inputs: D-017; `tools/realism/{tinysol,compare_tinysol}.py` stubs; C-072, C-096
 - Actions:
   1. Add `tools/render/main.cpp` → target `tpt_render` (core only):
-     - `tpt_render --note <concert> --velocity <0..1> --seconds <s> --fs <hz> --out <file.wav> [--param <name>=<value> ...]`;
+     - `tpt_render --note <concert> --velocity <0..1> --seconds <s> --fs <hz> --out <file.wav> [--param <name>=<value> ...]`
+       renders one held note (`<name>` = a `VoiceParameters` field name);
+     - `tpt_render --events <file.json> --fs <hz> --out <file.wav>` renders a timed event list:
+       `{"seconds": 6.0, "params": {...}, "events": [{"t": 0.0, "type": "noteOn", "note": 58, "velocity": 0.6},
+       {"t": 1.0, "type": "noteOff", "note": 58}, {"t": 0.5, "type": "param", "name": "overblow", "value": 0.6},
+       {"t": 0.2, "type": "breath|bend|vibrato|overblowCC", "value": 0.5}, {"t": 0.0, "type": "keyswitch", "note": 29}]}`;
+       events are applied at the first sample at or after `t`, in list order;
      - writes a mono float32 WAV;
-     - exits 0 on success, 2 on bad arguments.
+     - exits 0 on success, 2 on bad arguments or a malformed event file.
   2. Implement `tinysol.download` (Zenodo REST API, record 3685367, streamed download, md5 verify, partial extraction, idempotent) and `trumpet_notes`.
   3. Implement `compare_tinysol.main` per its docstring, using `metrics.py`.
   4. Download to `reference-data/tinysol` (git-ignored). Record the md5 values, the note count (82) and the attribution in `data/REFERENCE_DATA.md`.
@@ -403,12 +435,13 @@
   1. Run T-029 (locally or in the CI `realism` job), T-021 and T-022. Write `logs/S-016-round-<k>.md` with the per-dynamic metrics and the 10 worst notes, split by register (p2–p3, p4–p6, p8+).
   2. Adjust only the non-frozen constants listed in DR-REAL. After each round, re-run every frozen test (no regression). At most 5 rounds.
   3. Build the G-005 bundle per `plan/GATES.md`:
-     - `tools/realism/make_g005_bundle.py`, using `tpt_render` and the TinySOL files;
-     - 12 blind pairs from `random.Random(20261008)`;
-     - 8 demos;
-     - `ATTRIBUTION.txt`.
-     Push it to the orphan branch `evidence/G-005`. Write `GATE-G-005.md`.
-- Outputs: `core/src/VoiceTuning.h`, `logs/S-016-*.md`, `tools/realism/make_g005_bundle.py`, `GATE-G-005.md`
+     - `tools/realism/make_g005_bundle.py --tinysol <download dest> --render <tpt_render> --out renders/G-005`, using
+       `tpt_render --events` with the event files `tools/realism/demos/*.json` (contents in `plan/GATES.md`) and the
+       blind-pair recipe in `plan/GATES.md`; plus `ATTRIBUTION.txt` (copy of the TinySOL section of `ATTRIBUTION.md`);
+     - run it in the CI job `gate-evidence` (D-020), which pushes `renders/G-005` to the orphan branch
+       `evidence/G-005`, or locally with `tools/render/push_evidence.sh G-005 renders/G-005`.
+     Write `GATE-G-005.md`.
+- Outputs: `core/src/VoiceTuning.h`, `logs/S-016-*.md`, `tools/realism/make_g005_bundle.py`, `tools/realism/demos/*.json`, `GATE-G-005.md`
 - Evidence produced: T-029, T-021, T-022
 - Done when: T-029, T-021 and T-022 pass, or 5 rounds are exhausted; and the G-005 bundle is pushed.
 - Checkpoint: round number and metrics.
@@ -431,7 +464,7 @@
   2. Run `pip-audit -r tools/requirements.lock` (DR-SECURITY).
 - Outputs: fixes as needed
 - Evidence produced: T-024 (perf), T-026, T-027 on three OSes
-- Done when: the CI jobs `freeze`, `core`, `python`, `plugin` and `realism` are green on the same commit.
+- Done when: the CI jobs `freeze`, `core`, `python`, `plugin` and `realism` are green on the same commit — except, when the human answered G-005 with `proceed` or `proceed-with-rescope` while T-029/T-021/T-022 were red (`GATE-G-005.RESPONSE.md`), those named tests may stay red: they are listed as accepted failures in `REPORT.md` (the frozen tests are not changed or skipped).
 - Checkpoint: CI run URL.
 - On failure: DR-PERF, DR-PLUGINVAL, DR-SECURITY.
 - Gate: none
@@ -451,7 +484,7 @@
   4. Push.
 - Outputs: `README.md`, `REPORT.md`
 - Evidence produced: every T-ID green on one commit (CI link)
-- Done when: everything is green and `REPORT.md` is pushed.
+- Done when: everything is green apart from the accepted failures recorded at G-005, and `REPORT.md` is pushed.
 - Checkpoint: final.
 - On failure: DR-DEFAULT.
 - Gate: none (merging, tags and releases are G-002, outside this plan)
@@ -465,8 +498,8 @@
 - Depends on: S-000 … S-018 (every step before it)
 - Inputs: `EXECUTION_LOG.md`, `git log`, `DEVIATIONS.md`, `BLOCKED.md`, `TEST_CHALLENGE.md`, `GATE-*.md`, the CI history (`gh run list`), `research/PRIOR_KNOWLEDGE.md`, `lessons/`, `knowledge/`
 - Actions:
-  1. A Haiku agent collects every input into `logs/retro-digest.md`.
-  2. A fresh Opus agent answers the four questions of protocol 3.7.1 and writes `RETROSPECTIVE.md`, linking every finding to an `L-` or `K-` file.
+  1. A Haiku agent collects every input into `logs/retro-digest.md` (without subagent support: do it yourself, then start a fresh section of reasoning for step 2 and log the substitution in `EXECUTION_LOG.md`).
+  2. A fresh Opus agent answers the four questions of protocol 3.7.1 (`plan/PROTOCOL_EXTRACTS.md`) and writes `RETROSPECTIVE.md`, linking every finding to an `L-` or `K-` file.
   3. Add a lesson (Appendix A) for every error or overlooked step not yet recorded, and a knowledge item (Appendix B) for every missing fact.
   4. Run `python3 research/spikes/schema_check.py`.
 - Outputs: `RETROSPECTIVE.md`, `logs/retro-digest.md`, new `lessons/L-*.md`, new `knowledge/K-*.md`
@@ -483,7 +516,7 @@
 - Tier: Haiku
 - Profile: software
 - Depends on: S-RETRO
-- Inputs: `lessons/`, `knowledge/`; A-018; protocol Appendix C
+- Inputs: `lessons/`, `knowledge/`; A-018; `plan/PROTOCOL_EXTRACTS.md` (3.7.2, Appendix A–C)
 - Actions:
   1. Write `GATE-G-003.md` per `plan/GATES.md` and halt at G-003.
   2. On `push-to-proposed` or `push-to: <repo>`:

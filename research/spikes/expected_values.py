@@ -39,8 +39,11 @@ def values():
     v["db_quarter"] = 20 * math.log10(0.25)
     v["sine_rms_db"] = 20 * math.log10(1 / math.sqrt(2))
     v["cents_442_440"] = 1200 * math.log2(442 / 440)
-    # T-028: linear 100 ms ramp: first 1 ms frame above -40 dB (amplitude 0.01 -> 1 ms) to half amplitude (50 ms)
-    v["onset_ramp100_ms"] = (0.5 - 0.01) * 100.0
+    # T-028: onset of the exact T-028 ramp signals measured with the reference metric (ref_spread.onset_ms), produced
+    # by research/spikes/t028_values.py (needs numpy; it re-checks these numbers). Not derived by reasoning
+    # (lesson L-20261008T151500Z: a reasoned 49 ms was wrong; the frame RMS of a 440 Hz carrier is phase dependent).
+    v["onset_ramp100_ms"] = 53.0
+    v["onset_ramp200_ms"] = 102.0
     syn = [0, -3, -6, -9, -12, -15, -18, -21]; ref = [0, -4, -6, -8, -12, -16, -18, -20]
     v["mad_example_db"] = sum(abs(a - b) for a, b in zip(syn, ref)) / 8
     # Freour et al. 2022 Table 1 pole 4 frequency (Hz) and Fréour f_l

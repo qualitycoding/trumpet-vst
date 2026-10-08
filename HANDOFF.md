@@ -16,14 +16,15 @@ questions, except at the human gates in `plan/GATES.md`.
 6. `plan/ENVIRONMENT.md`.
 7. `plan/TRACEABILITY.md`.
 8. `research/PRIOR_KNOWLEDGE.md` (lessons checklist).
-9. As needed: `research/claims.json`, `research/rounds/*.md` and `research/spikes/*`. The spikes are reference
+9. `plan/PROTOCOL_EXTRACTS.md` (verbatim protocol text for S-000, S-RETRO, S-KNOW and test challenges).
+10. As needed: `research/claims.json`, `research/rounds/*.md` and `research/spikes/*`. The spikes are reference
    implementations: lip simulator, transfer-matrix model, table generator, metrics.
 
 ## Environment
 Follow `plan/ENVIRONMENT.md`. There is a no-sudo variant. In it the plugin builds only in CI, while the core library,
 tests and Python run locally.
 
-**Credentials:** a GitHub token with the permissions listed there, held by `gh` only. Never write it to a file, commit,
+**Credentials:** a GitHub token with the permissions listed there, provided by the harness as the environment variable `GH_TOKEN` and read by `gh` only (`gh auth setup-git` for git). Never write it to a file, commit,
 lesson or log, and never expand it into a command line.
 
 ## Running the frozen suites
