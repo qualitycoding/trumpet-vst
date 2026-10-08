@@ -14,6 +14,7 @@ Order: severity, then most recent.
 
 | # | Lesson | Prevention rule |
 |---|---|---|
+| 0 | High — L-20261008T151500Z-reasoned-expected-value-wrong (recurrence of L-20261007T150300Z) | Produce every algorithm-derived expected value by running the reference implementation on the exact test input. |
 | 1 | High — L-20261008T010500Z-circular-fft-filter-fakes-onsets | Zero-pad spectral filtering of audio whose time structure is measured. |
 | 2 | High — L-20261007T150300Z-hand-typed-frozen-constant | Generate every numeric expected value in a frozen test with a committed script. |
 | 3 | High — L-20261007T150400Z-threshold-not-checked-against-reference-spread | Show that a plausible prediction passes each reference-comparison threshold before freezing. |
@@ -30,6 +31,7 @@ Order: severity, then most recent.
 ## Application
 | Lesson | Applied as |
 |---|---|
+| L-20261008T151500Z | T-028 values from `research/spikes/t028_values.py` (reference metric); `expected_values.py` names the producing script; S-004 cites it. |
 | L-20261008T010500Z | Spikes fixed and re-run (C-089). T-028 checks that a slower attack measures later. S-004 and S-005 cite the rule. |
 | L-20261007T150300Z | `research/spikes/expected_values.py`. Every float literal in frozen tests carries an `EXPECTED:` tag. T-032 runs `--check`. S-003 generates the fingering table by script. |
 | L-20261007T150400Z | `ref_spread.py` (C-073), corrected by C-096: the onset reference is invalid, so the absolute bound uses the spike medians (C-089). T-029 docstring records feasibility for every threshold. |
@@ -41,7 +43,7 @@ Order: severity, then most recent.
 | L-20261007T150800Z | `latencySamples()`, `uiState()`, `soundingHz()`, `keyswitch()` and `currentUiState()` are in the frozen headers (D-013); S-006/S-008/S-013 log any additive accessor. |
 | L-20261007T150200Z | Not applicable to plan steps (a planner process rule); restated in the HANDOFF halt protocol for restarts. |
 | L-20261007T150900Z | `tests/scripts/run_pluginval.sh` hashes via stdin. Verified on windows-2025 (`plan_verify_ci.md`). |
-| L-20261007T151000Z | D-019 evidence branches. S-014 and S-016 use orphan branches. `.gitignore` excludes renders and WAVs. |
+| L-20261007T151000Z | D-019 evidence branches. S-014 and S-016 use orphan branches. `.gitignore` excludes `renders/`, `*.wav`, `*.raw`. |
 
 ## Knowledge items used
 None from the store.

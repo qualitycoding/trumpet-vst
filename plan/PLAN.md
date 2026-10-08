@@ -32,17 +32,22 @@
   1. Credentials: the harness provides the token in the environment variable `GH_TOKEN` (gh reads it; never echo it). Run
      `gh auth setup-git`, `git config user.name qualitycoding` and
      `git config user.email qualitycoding@users.noreply.github.com` (A-024).
-     Then `git fetch origin && git checkout -b impl-20261007T145241Z-trumpet-vst-plan origin/gen-20261007T145241Z-trumpet-vst-plan`
-     (if the branch exists: `git checkout impl-20261007T145241Z-trumpet-vst-plan`). `mkdir -p logs`.
+     Then `git fetch origin && git checkout --no-track -b impl-20261007T145241Z-trumpet-vst-plan origin/gen-20261007T145241Z-trumpet-vst-plan`
+     (if the branch exists: `git checkout impl-20261007T145241Z-trumpet-vst-plan`). `mkdir -p logs`. The first push is
+     `git push -u origin impl-20261007T145241Z-trumpet-vst-plan`; later pushes are plain `git push`.
   2. Install the tools per `plan/ENVIRONMENT.md` (the sudo variant if `sudo -n true` succeeds, else the no-sudo variant).
   3. Check access:
      - `gh auth status`;
      - `git push --dry-run origin HEAD:refs/heads/impl-20261007T145241Z-trumpet-vst-plan`;
      - `gh api repos/qualitycoding/trumpet-vst --jq .permissions.push` (must be `true`);
-     - `gh api repos/qualitycoding/trumpet-vst/actions/runs --jq '.total_count'` (must succeed).
+     - `gh api repos/qualitycoding/trumpet-vst/actions/runs --jq '.total_count'` (must succeed);
+     - record the scopes shown by `gh auth status` (fine-grained tokens show none: the workflows permission is then first
+       exercised by the S-002 push; a rejection there is a `BLOCKED.md` for the missing permission);
+     - `gh api repos/qualitycoding/agent-knowledge` (200 or 404 are both acceptable; record which).
   4. Check that hosts are reachable with `curl -s -o /dev/null -m 15 -w "%{http_code}" https://<host>/`. Any HTTP
      status (not `000`) counts as reachable; some hosts answer 404 at the root (files.pythonhosted.org). Hosts:
-     github.com, api.github.com, codeload.github.com, zenodo.org, pypi.org, files.pythonhosted.org, bootstrap.pypa.io.
+     github.com, api.github.com, codeload.github.com, objects.githubusercontent.com, release-assets.githubusercontent.com,
+     zenodo.org, pypi.org, files.pythonhosted.org, bootstrap.pypa.io.
      Record each result.
   5. `bash tests/scripts/verify_freeze.sh`.
   6. Create `EXECUTION_LOG.md` with its header line, and `.checkpoints/impl-state.json` containing `[]`.
@@ -85,7 +90,8 @@
 - Depends on: S-001
 - Inputs: D-020, D-021; `.github/workflows/plan-verify.yml` (template for runner setup)
 - Actions:
-  1. Create `.github/workflows/ci.yml` with the five jobs of D-020 (`freeze`, `core`, `python`, `plugin`, `realism`):
+  1. Create `.github/workflows/ci.yml` with the six jobs of D-020 (`freeze`, `core`, `python`, `plugin`, `build-linux`,
+     `realism`; the seventh, `gate-evidence`, is added in S-014). Add `*.wav` and `logs/*.raw` to `.gitignore`:
      - `on: [push, pull_request]`, top-level `permissions: contents: read`, and job-level `contents: write` for `realism` only;
      - actions pinned to the D-020 SHAs;
      - Linux packages exactly as in `plan-verify.yml`;
@@ -139,6 +145,7 @@
        `fl = ratio(n)·f_res`, `H = h0(n)`, `Ql=20 mu=9 b=12e-3 attack=0.003 yinit=0 fscale=1.0 fmax=2000 fmin=40`,
        `pm = 2.5·pth(n)`, `dur=2.0`, `wav=<file> raw=1` (raw float32, no header);
        set `LIPSIM` and `TMPDIR_SPIKE` to paths of your own;
+     - run `build/tools/render/tpt_f0 <raw file> 48000` (lipsim's default output rate);
      - for each row, take the nearest partial of the `tpt_f0` result and compare it with the row's `mf_partial`;
      - write `logs/S-004-yin-crosscheck.md`.
   4. Run `build/tests/tpt_unit_tests "[T-010]"` and `.venv/bin/python -m pytest tests/python/test_realism_metrics.py`.
@@ -153,7 +160,7 @@
 - On failure: f0 error > 0.5 c → check the parabolic interpolation and the 1.0 s window. A YIN octave error → lower the absolute threshold to 0.08 (a private constant; log the change).
 - Gate: none
 - Relevant decisions/claims: D-017, C-073
-- Lessons applied: L-20261008T010500Z-circular-fft-filter-fakes-onsets (zero-pad any spectral filtering)
+- Lessons applied: L-20261008T010500Z-circular-fft-filter-fakes-onsets (zero-pad any spectral filtering), L-20261008T151500Z-reasoned-expected-value-wrong
 - Exclusive resources: none
 
 ### S-005 Resonator tools (Python) and the table
@@ -272,7 +279,7 @@
 - Gate: none
 - Relevant decisions/claims: D-011, C-091, C-092
 - Lessons applied: L-20261007T150700Z-regime-selection-per-note
-- Exclusive resources: `data/trumpet_resonators.json`
+- Exclusive resources: `data/trumpet_resonators.json`, `core/src/VoiceTuning.h`
 
 ### S-010 Expression and MIDI behaviour
 - Tier: Sonnet
@@ -284,7 +291,7 @@
      - breath and velocity handling;
      - legato note stack behaviour;
      - the full `fscale_eff` of D-011: Intonation realism with `naturalDevCents`, A4 tuning, pitch bend, vibrato;
-     - all-notes-off;
+     - all-notes-off as a panic (D-014: 4 ms fade, then idle);
      - out-of-range note-ons ignored.
   2. Run `tpt_integration_tests "[T-014],[T-019]"` plus every previously green tag.
 - Outputs: `core/src/TrumpetVoice.cpp`
@@ -308,7 +315,8 @@
      - D-010 lip slurs and valve-change interpolation;
      - D-003 keyswitches and fixed-valves fscale;
      - `useAlternates`.
-  2. Run `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022]"` plus every previously green tag.
+  2. After any change to `VoiceTuning.h`, run `tpt_calibrate` and rebuild. Then run
+     `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022]"` plus every previously green tag.
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`
 - Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022
 - Done when: those pass with no regression. T-021/T-022 failures may wait for S-016 under DR-REAL; record them in the checkpoint.
@@ -317,7 +325,7 @@
 - Gate: none
 - Relevant decisions/claims: D-003, D-009, D-010, D-013
 - Lessons applied: L-20261007T150600Z-control-mapping-formulas-unverified
-- Exclusive resources: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`
+- Exclusive resources: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`, `data/trumpet_resonators.json`
 
 ### S-012 State persistence
 - Tier: Sonnet
@@ -353,6 +361,8 @@
      - **prepareToPlay:** `voice.prepare(fs, max block)` and `setLatencySamples(voice.latencySamples())`.
      - **processBlock:** `ScopedNoDenormals`; read the APVTS values into `VoiceParameters`; split the block at MIDI events and dispatch per D-014; render mono into channel 0 and copy it to every other channel.
      - **State:** per D-015.
+     - **Host rates and blocks:** clamp the sample rate passed to `voice.prepare` to [22050, 192000] (log once); prepare with
+       `max(samplesPerBlock, 512)` capped at 8192 and process larger host blocks in chunks of at most that size.
      - **`currentUiState()`:** returns `voice.uiState()`.
   2. Build with the plugin; run `xvfb-run -a build/plugin/tpt_plugin_tests` (all except the editor case).
 - Outputs: `plugin/src/PluginProcessor.cpp`
@@ -372,17 +382,18 @@
 - Inputs: D-013; `core/include/tpt/Layout.h`
 - Actions:
   1. Implement `core/src/Layout.cpp`: the layout per D-013 and `captionText` per the header. Run `tpt_unit_tests "[T-033]"`.
-  2. Implement `TrumpetView`: the drawing per D-013, and `setState` with repaint on change.
+  2. Implement `TrumpetView`: the drawing per D-013, including the caption (`captionText(state())` drawn inside
+     `layout.caption`; there is no separate caption label in the editor), and `setState` with repaint on change.
   3. Implement the editor:
      - 9 rotary knobs and 2 toggles with APVTS attachments;
-     - a caption label;
      - the 60 Hz timer and `refreshFromProcessor()`.
   4. Add `tools/render/snapshot_ui.cpp` → target `tpt_ui_snapshots` (in `plugin/CMakeLists.txt`, links TrumpetVST).
      - It does not run the voice: for each image it builds a `UiState` from `resolveNote` (soundingPartial = target
        partial, sounding = true, trigger per D-013 at realism 0) and calls `TrumpetView::setState`, then
        `createComponentSnapshot` of the editor (960×600) and writes PNGs to `renders/G-004/` (git-ignored).
      - The image list and names are in `plan/GATES.md` (G-004).
-     - Produce the bundle with the CI job `gate-evidence` (D-020), which builds the plugin, runs `tpt_ui_snapshots` under
+     - Add the CI job `gate-evidence` (D-020) to `ci.yml`. Produce the bundle by pushing an empty commit
+       `git commit --allow-empty -m "[gate-evidence G-004]"`: the job builds the plugin, runs `tpt_ui_snapshots` under
        `xvfb-run -a`, and pushes the PNGs plus `SHA256SUMS` to the orphan branch `evidence/G-004`. (With sudo locally you
        may run the same script `tools/render/push_evidence.sh G-004 renders/G-004`.) Copy only `SHA256SUMS` to
        `gates/G-004/` on the implementation branch.
@@ -410,13 +421,17 @@
        `{"seconds": 6.0, "params": {...}, "events": [{"t": 0.0, "type": "noteOn", "note": 58, "velocity": 0.6},
        {"t": 1.0, "type": "noteOff", "note": 58}, {"t": 0.5, "type": "param", "name": "overblow", "value": 0.6},
        {"t": 0.2, "type": "breath|bend|vibrato|overblowCC", "value": 0.5}, {"t": 0.0, "type": "keyswitch", "note": 29}]}`;
-       events are applied at the first sample at or after `t`, in list order;
+       events are applied at the first sample at or after `t`, in list order; units: `bend` semitones, `breath` and
+       `vibrato` 0..1, `overblowCC` −1..1 passed directly to `setOverblowControl`; booleans accept true/false/0/1;
      - writes a mono float32 WAV;
      - exits 0 on success, 2 on bad arguments or a malformed event file.
   2. Implement `tinysol.download` (Zenodo REST API, record 3685367, streamed download, md5 verify, partial extraction, idempotent) and `trumpet_notes`.
   3. Implement `compare_tinysol.main` per its docstring, using `metrics.py`.
-  4. Download to `reference-data/tinysol` (git-ignored). Record the md5 values, the note count (82) and the attribution in `data/REFERENCE_DATA.md`.
-- Outputs: `tools/render/main.cpp`, `tools/render/CMakeLists.txt`, `tools/realism/{tinysol,compare_tinysol}.py`, `data/REFERENCE_DATA.md`
+  4. Add `tools/realism/summarize.py <results.json> --out SUMMARY.md`: per-dynamic metrics against the D-017 thresholds and
+     the 10 worst notes by `harm_mad_db`, split by register using the standard fingering's partial of written = concert + 2
+     (p2–p3, p4–p6, p8+). Used by the `realism` job, the S-016 round logs and `make_g005_bundle.py`.
+  5. Download to `reference-data/tinysol` (git-ignored). Record the md5 values, the note count (82) and the attribution in `data/REFERENCE_DATA.md`.
+- Outputs: `tools/render/main.cpp`, `tools/render/CMakeLists.txt`, `tools/realism/{tinysol,compare_tinysol,summarize}.py`, `data/REFERENCE_DATA.md`
 - Evidence produced: none directly (enables T-029)
 - Done when: `TPT_RENDER=build/tools/render/tpt_render TINYSOL_DIR=reference-data/tinysol .venv/bin/python -m pytest tests/python/test_realism_vs_tinysol.py` reaches the threshold assertions (pass or fail), and `test_t029_coverage` and `test_t029_tinysol_selection` pass.
 - Checkpoint: note count.
@@ -433,13 +448,14 @@
 - Inputs: D-007, D-008, D-012, D-017, DR-REAL; `core/src/VoiceTuning.h`
 - Actions:
   1. Run T-029 (locally or in the CI `realism` job), T-021 and T-022. Write `logs/S-016-round-<k>.md` with the per-dynamic metrics and the 10 worst notes, split by register (p2–p3, p4–p6, p8+).
-  2. Adjust only the non-frozen constants listed in DR-REAL. After each round, re-run every frozen test (no regression). At most 5 rounds.
+  2. Adjust only the non-frozen constants listed in DR-REAL. After each round: run `tpt_calibrate`, rebuild, then re-run
+     every frozen test (no regression). At most 5 rounds.
   3. Build the G-005 bundle per `plan/GATES.md`:
      - `tools/realism/make_g005_bundle.py --tinysol <download dest> --render <tpt_render> --out renders/G-005`, using
        `tpt_render --events` with the event files `tools/realism/demos/*.json` (contents in `plan/GATES.md`) and the
        blind-pair recipe in `plan/GATES.md`; plus `ATTRIBUTION.txt` (copy of the TinySOL section of `ATTRIBUTION.md`);
-     - run it in the CI job `gate-evidence` (D-020), which pushes `renders/G-005` to the orphan branch
-       `evidence/G-005`, or locally with `tools/render/push_evidence.sh G-005 renders/G-005`.
+     - run it in the CI job `gate-evidence` (D-020) by pushing `git commit --allow-empty -m "[gate-evidence G-005]"`; the
+       job pushes `renders/G-005` to the orphan branch `evidence/G-005`, or locally with `tools/render/push_evidence.sh G-005 renders/G-005`.
      Write `GATE-G-005.md`.
 - Outputs: `core/src/VoiceTuning.h`, `logs/S-016-*.md`, `tools/realism/make_g005_bundle.py`, `tools/realism/demos/*.json`, `GATE-G-005.md`
 - Evidence produced: T-029, T-021, T-022
@@ -452,7 +468,7 @@
   - L-20261007T150400Z-threshold-not-checked-against-reference-spread (thresholds are frozen; never edit them);
   - L-20261007T150500Z-linear-bore-realism-ceiling;
   - L-20261007T151000Z-large-evidence-off-impl-branch.
-- Exclusive resources: `core/src/VoiceTuning.h`, CI
+- Exclusive resources: `core/src/VoiceTuning.h`, `data/trumpet_resonators.json`, CI
 
 ### S-017 Performance and plugin validation on all platforms
 - Tier: Sonnet
@@ -464,7 +480,7 @@
   2. Run `pip-audit -r tools/requirements.lock` (DR-SECURITY).
 - Outputs: fixes as needed
 - Evidence produced: T-024 (perf), T-026, T-027 on three OSes
-- Done when: the CI jobs `freeze`, `core`, `python`, `plugin` and `realism` are green on the same commit — except, when the human answered G-005 with `proceed` or `proceed-with-rescope` while T-029/T-021/T-022 were red (`GATE-G-005.RESPONSE.md`), those named tests may stay red: they are listed as accepted failures in `REPORT.md` (the frozen tests are not changed or skipped).
+- Done when: the CI jobs `freeze`, `core`, `python`, `plugin`, `build-linux` and `realism` are green on the same commit — except, when the human answered G-005 with `proceed` or `proceed-with-rescope` while T-029/T-021/T-022 were red (`GATE-G-005.RESPONSE.md`), those named tests may stay red: they are listed as accepted failures in `REPORT.md` (the frozen tests are not changed or skipped).
 - Checkpoint: CI run URL.
 - On failure: DR-PERF, DR-PLUGINVAL, DR-SECURITY.
 - Gate: none
@@ -521,14 +537,16 @@
   1. Write `GATE-G-003.md` per `plan/GATES.md` and halt at G-003.
   2. On `push-to-proposed` or `push-to: <repo>`:
      - clone the target; create it if missing (`gh repo create qualitycoding/agent-knowledge --private`) with `TAXONOMY.md`, `lessons/`, `knowledge/` and the two `INDEX.md` files;
-     - copy each lesson to `lessons/<first tech: or domain: tag>/` and each item to `knowledge/<first subject: tag>/`;
-     - add any new tags to `TAXONOMY.md`;
-     - regenerate both `INDEX.md` files (tag → IDs, titles or statements, severity);
+     - copy each lesson to `lessons/<first tech: or domain: tag, ':' replaced by '-'>/` (e.g. `lessons/domain-audio/`) and
+       each item to `knowledge/<first subject: tag, ':' → '-'>/`;
+     - add any new tags to `TAXONOMY.md` (format: one line per tag, `- <facet:value> — <meaning> (aliases: a, b)`);
+     - regenerate both `INDEX.md` files with `tools/make_index.py <store>` (written in this step: for every tag, a
+       `## <tag>` heading and one line per entry `- <ID> — <title or statement> (<severity or confidence>)`);
      - run the schema check in the target; commit; push.
      - If the push is rejected: pull, regenerate the indexes and retry, up to 3 times.
   3. On `do-not-push`: finish.
   4. If the target is unreachable or no response arrives: `git bundle create knowledge-20261007T145241Z-trumpet-vst-plan.bundle <lessons and knowledge commits>`, and report the path.
-- Outputs: the knowledge-store commit, or the bundle
+- Outputs: `tools/make_index.py`, the knowledge-store commit, or the bundle
 - Evidence produced: none
 - Done when: per protocol 3.7.2 step 4.
 - Checkpoint: the push commit or the bundle path.

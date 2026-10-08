@@ -28,7 +28,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 
 ## D-003 Fixed-valves mode and keyswitches
 - **Keyswitches** are MIDI 24–31, mapping in order to `0, 2, 1, 12, 23, 13, 123, 3`.
-  - They never sound, and they are consumed in both modes.
+  - They never sound, and they are consumed in both modes. `TrumpetVoice::noteOn` ignores notes 24–31 in every mode; only
+    `keyswitch()` acts on them (the processor and `tpt_render` route them there).
   - In normal mode they do not change anything.
   - In Fixed-valves mode they set the held valves (default open, reset by `reset()`).
 - **Resolution** (`resolveNote`, header contract):
@@ -42,7 +43,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Pedal tones** (partial 1) started directly in Fixed-valves mode are untested (R-008). They are reachable by Underblow (T-015).
 
 ## D-004 Bore model and resonator table (`data/trumpet_resonators.json`, format `tpt-resonators-1`)
-- **Bore:** own parametric geometry with 7 parameters, fitted to the Fréour 2022 Table 1 pole frequencies (C-076). Air is at 27 °C: c = 347.2 m/s, ρ = 1.176 kg/m³. Reference code is `research/spikes/bore_fit.py` and `tmm_trumpet.py`.
+- **Bore:** own parametric geometry with 7 parameters, fitted to the Fréour 2022 Table 1 pole frequencies (C-076). Air is at 27 °C: c = 347.288184 m/s (`tmm.C27`), ρ = 1.176018 kg/m³ (`tmm.RHO27`), written with 10 significant digits. Reference code is `research/spikes/bore_fit.py` and `tmm_trumpet.py`.
 - **Fit (C-099):** compare like with like. The TMM impedance is fitted with a complex modal fit (`tmm.complex_modal_fit`, 14 modes, f_max 1800 Hz). Its pole frequencies are compared with the measured poles, not with |Z| peaks.
 - **Valve loops:**
   - Cylinders of the cylinder radius, inserted at `x_valve` = leadpipe end + 0.35 × the cylinder length.
@@ -91,7 +92,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Radiation sections:** fitted by `generate_table` (least squares on log-magnitude, 1/3-octave smoothed, 80 Hz–8 kHz) to |j·ω·H/Z_rad| of the open state.
   - Use at most 4 sections, initialised as a high-pass at 1 kHz with Q 0.7, plus a peak.
   - Accept if the RMS error is ≤ 3 dB, otherwise add a section (up to 6).
-- **Embedding:** the table is embedded at configure time (`file(READ … HEX)` → a generated `.cpp` with a byte array and a terminating 0), as in saxophone-vst. `CMAKE_CONFIGURE_DEPENDS` is set on the JSON file.
+- **Embedding:** the table is embedded at configure time (`file(READ … HEX)` → a generated `.cpp` with a byte array and a terminating 0), as in saxophone-vst. The JSON is registered with `set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS <json>)` so that
+  `cmake --build` re-configures and re-embeds after every change (a plain `set(CMAKE_CONFIGURE_DEPENDS …)` does nothing).
 - **`fscale` values:** written by `tpt_calibrate` (D-011). `generate_table --keep-calibration` preserves them.
 - **Number formatting:** `generate_table` and `tpt_calibrate` write every float rounded to 10 significant digits
   (Python `float(format(x, '.10g'))`, C++ `snprintf("%.10g")`), including `air.c` and `air.rho` (unrounded otherwise,
@@ -111,12 +113,15 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - an optional per-partial trim table in `core/src/VoiceTuning.h`. These are non-frozen calibration constants, all 1.0 initially.
 
 ## D-006 Numerical scheme (real time)
-- **Internal rate** f_int = fs × os, with os = min(4, ceil(88200 / fs)): 4 at 22.05 kHz, 2 at 44.1 and 48 kHz, 1 at ≥ 88.2 kHz. The lip and modal scheme therefore always runs at ≥ 88.2 kHz, the regime of the spikes (96 kHz).
+- **Internal rate** f_int = fs × os, with os the smallest value in {1, 2, 4} such that fs × os ≥ 88 200 Hz: 4 below 44.1 kHz
+  (22.05–44.09 kHz), 2 for 44.1–88.19 kHz, 1 at ≥ 88.2 kHz. The lip and modal scheme therefore always runs at ≥ 88.2 kHz, the regime of the spikes (96 kHz).
 - **Decimation:** cascaded half-band FIR stages, 63 taps each, Kaiser β = 8, linear phase.
   - `latencySamples()` is the sum of the stage delays in output samples, rounded half away from zero (`std::lround`): 16 at os = 2 (31 internal samples = 15.5 output samples), 23 at os = 4 (7.75 + 15.5), 0 at os = 1.
   - It is reported to the host.
 - **Modes:** q[k+1] = a·q[k] + g·(u[k+1] + u[k]), with a = (1 + sT/2)/(1 − sT/2) and g = R·T/2/(1 − sT/2) (bilinear). This is the same as `lipsim.cpp`.
-- **Implicit flow:** closed form, both signs (`lipsim.cpp`, verified by R5).
+- **Implicit flow:** closed form, both signs (`lipsim.cpp`, verified by R5). The flow law uses ρ = 1.2041 kg/m³ (the
+  `lipsim` value with which every lip, pressure and regime result was obtained); only D-012 uses the table's
+  `airDensity()` and `soundSpeed()`.
 - **Lip:** semi-implicit Euler with the previous p.
 - **Control rate:** fscale, fl, h0, pm and the parameter smoothing update every 16 internal samples, on a grid counted from `prepare()`/`reset()` and independent of the host block size. Interpolation is linear within each 16-sample segment. This makes the output bitwise independent of block partitioning (T-023).
 - **Precision:** double inside the voice; float output.
@@ -205,7 +210,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - resampled to the internal grid by linear interpolation, with a 64-sample look-behind ring buffer (real-time safe).
 - **Radiation:** a cascade of the table's RBJ biquads, designed at f_int at `prepare()`.
 - **Breath noise:**
-  - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise (seed 0x7A11C0DE at `reset()`) through a 3 kHz one-pole;
+  - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise mapped to [−1, 1) as w = x/2³¹ − 1 (seed 0x7A11C0DE at
+    `reset()`), through a 3 kHz one-pole;
   - plus 0.002·breathNoise·pm/pth·w added to the output.
 - **Gain:** scale by K_out (fixed so that written C5 at ff peaks near −6 dBFS; in `VoiceTuning.h`) × dB(gain), then the decimator.
 - **Safety limiter:** after decimation, on the output sample: y = x for |x| ≤ 0.9, else sign(x)·(0.9 + 0.1·tanh((|x| − 0.9)/0.1)), so that |y| < 1; then the cast to float.
@@ -216,7 +222,10 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   20 ms, in absolute dBFS. `sounding` = a note is held, or the meter is above −60 dBFS. The partial tracker
   reports 0 when the meter is below −60 dBFS. The idle rule (D-006) uses the same meter (< −100 dBFS for 50 ms after release).
 - **`soundingPartial` tracker:**
-  - A zero-crossing period estimate on p⁺ with hysteresis, over the last 1024 internal samples.
+  - A period estimate from the lip opening h (nearly sinusoidal even when p⁺ has a weak fundamental): upward zero
+    crossings of h − mean(h), with a hysteresis of 5 % of the peak-to-peak h, over a window of max(1024 internal samples,
+    3 periods of the target partial); with fewer than two crossings in the window, the last valid estimate is kept.
+    Any other estimator is acceptable if T-012 and T-020 pass.
   - Updated every 16 control steps.
   - Maps to the nearest partial of the current state × fscale_eff on a log scale.
   - 0 if the level meter is below −60 dBFS.
@@ -248,11 +257,12 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - CC1 and channel pressure → `setVibratoControl(v/127)`, the maximum of the two;
   - pitch bend → semitones = 2·(value − 8192)/8192 (14-bit value);
   - CC16 → Overblow (D-009);
-  - CC120/CC123 → `allNotesOff()`;
+  - CC120/CC123 → `allNotesOff()`: a panic, unlike the last `noteOff` (D-007 release): the output gain fades to zero over
+    4 ms (raised cosine), then lip, mode and decimator states are zeroed and the voice is idle;
   - CC121 → reset the controllers (breath absent, bend 0, vibrato 0, overblow control released).
 - **Timing:** the processor splits each block at event sample positions.
 - **Invalid input:** non-finite floats passed to any setter are ignored (previous value kept); note numbers outside
-  0..127 are ignored; velocity is clamped to (0, 1], non-finite velocity is ignored.
+  0..127 are ignored; velocity > 1 is clamped to 1, velocity ≤ 0 is a note-off, non-finite velocity is ignored.
 - **CC1 and channel pressure:** the vibrato control is the maximum of the last CC1 value and the last channel-pressure
   value (any channel).
 
@@ -291,6 +301,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Harmonics:** levels of harmonics 1..10 relative to the strongest of the ten (`harmonic_levels_db(count=10)`); the MAD
   uses the first 8 (`harm_syn` and `harm_ref` hold 10 values each).
 - **`--tinysol`:** the download destination; `compare_tinysol` calls `tinysol.download(dest)` itself.
+- **f0 and segments:** f0 = the 12-TET frequency of the concert pitch (A4 = 440) for both sides; harmonics and centroids on
+  `steady_segment` of each signal; the synthetic onset on the full render.
 - **Frozen thresholds, per dynamic:**
 
 | Metric | Threshold |
@@ -314,7 +326,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 ## D-019 Branches
 - Plan: `gen-20261007T145241Z-trumpet-vst-plan`.
 - Implementation: `impl-20261007T145241Z-trumpet-vst-plan`, created from it in S-000 (protocol 3.7.0).
-- Gate evidence with audio: orphan branches `evidence/G-004` and `evidence/G-005` (lesson L-…151000). WAVs are never committed on the implementation branch.
+- Gate evidence with audio: orphan branches `evidence/G-004` and `evidence/G-005` (lesson L-20261007T151000Z-large-evidence-off-impl-branch). WAVs are never committed on the implementation branch.
 - CI results: branch `ci-results` (written by the realism job).
 - Merging to `main`, tags and releases: never without G-002.
 
@@ -328,9 +340,13 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Jobs:**
   - `freeze` (ubuntu): `bash tests/scripts/verify_freeze.sh`.
   - `core` (3 OSes): configure with `-DTPT_BUILD_PLUGIN=OFF`, build Release, `ctest -LE perf`, then `ctest -L perf`.
-  - `python` (ubuntu): venv from `tools/requirements.lock`, then `pytest tests/python -k "not t029"` and `pip-audit -r tools/requirements.lock`.
+  - `python` (ubuntu): venv outside the checkout (`$RUNNER_TEMP/venv`, symlinked as `.venv`) from `tools/requirements.lock`, then `pytest tests/python -k "not t029"` and `pip-audit -r tools/requirements.lock`.
   - `plugin` (3 OSes): build with the plugin, run `tpt_plugin_tests` (xvfb-run on Linux), `run_pluginval.sh`, and `auval -v aumu Tpts Qcod` on macOS.
-  - `realism` (ubuntu, needs `core`): build `tpt_render`, download TinySOL (cache key = archive md5), run T-029, and push the results (results.json + meta) to the `ci-results` branch with a commit message containing the source SHA.
+  - `build-linux` (ubuntu): Release build of `tpt_render` only; uploads it as an artifact for `realism`.
+  - `realism` (ubuntu, `needs: build-linux`): set up the venv, download TinySOL (cache path `reference-data/tinysol`, the
+    extracted subset; key `tinysol-36030a7fe389da86c3419e5ee48e3b7f`), run T-029 and `tools/realism/summarize.py`, and push
+    the results to `ci-results` with `git push --force origin HEAD:ci-results`.
+  - `gate-evidence` (added in S-014; ubuntu): see below.
 - **Write permission:** the `realism` and `gate-evidence` jobs' pushes need `permissions: contents: write` on those jobs
   only, using `GITHUB_TOKEN`.
 - **`realism` job conditions:** `needs: build-linux` (a job that only builds `tpt_render` in Release), not `core`, so it
@@ -339,7 +355,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **`ci-results`:** an orphan branch, created by the first push (`git checkout --orphan ci-results; git rm -rf .`), holding
   `results.json`, `results.meta.json`, `SUMMARY.md` and `ATTRIBUTION.txt`, overwritten on every run; commit message
   `realism results for <source sha>`.
-- **`gate-evidence` job:** ubuntu, `contents: write`, runs on `workflow_dispatch` with input `gate` (`G-004` or `G-005`):
+- **`gate-evidence` job:** ubuntu, `contents: write`, runs on push only when the head commit message contains
+  `[gate-evidence G-004]` or `[gate-evidence G-005]` (`if: contains(github.event.head_commit.message, '[gate-evidence')`;
+  `workflow_dispatch` is not used because it only works for workflows on the default branch):
   builds the plugin and tools, runs `tpt_ui_snapshots` under `xvfb-run -a` (G-004) or `make_g005_bundle.py` (G-005), and
   force-pushes the output directory with `SHA256SUMS` to the orphan branch `evidence/<gate>` via
   `tools/render/push_evidence.sh`.
@@ -372,7 +390,7 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
 - **Plugin builds:** verified in GitHub Actions (`plan-verify.yml`).
 - **Implementer:** uses `plan/ENVIRONMENT.md`.
   - If sudo is unavailable, build the plugin only in CI, and run core and Python locally.
-  - Never commit credentials (L-…150100).
+  - Never commit credentials (L-20261007T150100Z-no-credentials-in-command-lines).
 - **Workflow files:** the token used for planning can push them. Verified by the `plan-verify` run 37748754510.
 
 ## D-023 Range, extended range and blowing floors

@@ -30,7 +30,7 @@ lesson or log, and never expand it into a command line.
 ## Running the frozen suites
 ```bash
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release && cmake --build build -j4
-ctest --test-dir build -LE perf --output-on-failure      # unit, integration, operational, alloc (+ plugin if built)
+ctest --test-dir build -LE 'perf|plugin' --output-on-failure   # unit, integration, operational, alloc (headless)
 ctest --test-dir build -L perf --output-on-failure        # T-024b, Release only
 xvfb-run -a build/plugin/tpt_plugin_tests                 # T-026 (Linux)
 .venv/bin/python -m pytest tests/python                   # T-028..T-031 (T-029 needs TPT_RENDER and TINYSOL_DIR)

@@ -2,6 +2,9 @@ __pycache__/
 *.pyc
 build/
 .venv/
+.venv
 reference-data/
 renders/
 *.raw
+*.wav
+logs/*.raw

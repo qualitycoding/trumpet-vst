@@ -3,6 +3,7 @@
 | Pass | Agents (fresh context) | Items | Result |
 |---|---|---|---|
 | 1 | Sonnet dry run (interrupted twice by rate limits; 50 items recorded before the final stop) + Haiku mechanical check | 50 dry-run items (7 High, 23 Medium, 20 Low); mechanical: 8/8 checks PASS | All 50 resolved in commit 196ec49 (see below) |
+| 2 | New Sonnet dry run (report complete, 28 items, then rate-limited) + new Haiku mechanical check | 28 items (3 High, 8 Medium, 17 Low); mechanical: 0 failures | All 28 resolved (see below) |
 
 ## Pass 1 disposition (dry-run item → fix)
 - **High**
@@ -50,3 +51,36 @@
   - **9, 50:** no action needed (as the reviewer noted).
 
 Raw reports: `research/coldread/pass-1-dryrun.md`, `research/coldread/pass-1-mechanical.md`.
+
+## Pass 2 disposition
+- **High**
+  - **1:** the venv lives outside the repository, symlinked as `.venv` (ENVIRONMENT, D-020, `.gitignore`).
+  - **2:** `allNotesOff()` is a 4 ms panic (D-014); S-010 implements it.
+  - **3:** `gate-evidence` is push-triggered by a commit-message marker (D-020, S-014, S-016).
+- **Medium**
+  - **4:** job list fixed (`build-linux`; six plus one jobs).
+  - **5:** oversampling factors in {1, 2, 4}.
+  - **6:** the flow law uses ρ = 1.2041.
+  - **7:** the partial tracker works from the lip opening.
+  - **8:** `tools/realism/summarize.py` (S-015).
+  - **9:** re-calibrate after `VoiceTuning.h` changes; exclusive resources added.
+  - **10:** the caption is drawn by `TrumpetView`.
+  - **11:** `set_property(DIRECTORY … CMAKE_CONFIGURE_DEPENDS)`.
+- **Low**
+  - **12:** `--no-track` and `push -u`.
+  - **13:** release-asset hosts.
+  - **14:** scope recording.
+  - **15:** tools row.
+  - **16:** host-rate clamping and block chunking (S-013).
+  - **17:** noise normalisation.
+  - **18:** event units.
+  - **19:** compare f0 and segments.
+  - **20:** 13th lesson row; full lesson IDs.
+  - **21:** `*.wav` in `.gitignore`.
+  - **22:** store directory naming, TAXONOMY format, `make_index.py`.
+  - **23:** c and ρ values.
+  - **24:** velocity rule.
+  - **25:** `ctest -LE 'perf|plugin'`.
+  - **26:** cache path and forced push.
+  - **27:** `noteOn` ignores 24–31.
+  - **28:** `tpt_f0` rate.

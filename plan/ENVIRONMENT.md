@@ -13,6 +13,7 @@
 | nlohmann/json | v3.12.0 @ `55f93686c01528224f448c19128836e7df245f72` (C-008) | yes |
 | pluginval | v1.0.4; zip SHA-256 values in `tests/scripts/run_pluginval.sh` (C-010–C-012) | CI |
 | Python | 3.12.3 | yes |
+| Other tools | git, gh ≥ 2.x, curl, unzip, bash (present on the runners and in the planning sandbox); xvfb-run on Linux CI | yes |
 | Python packages | `tools/requirements.txt` (numpy 2.5.3, scipy 1.18.1, soundfile 0.14.0, pytest 9.1.1, pip-audit 2.10.1); lock `tools/requirements.lock` | yes |
 
 ## Credentials (implementer)
@@ -24,6 +25,8 @@
 - **CI:** no secrets are needed. The realism job pushes with `GITHUB_TOKEN` (job-level `contents: write`).
 
 ## Setup commands
+The Python venv lives **outside** the repository and is symlinked as `.venv`: scipy ships WAV test files, and T-031
+rejects WAV files inside the tree (pathlib `**` does not follow the symlink). CI does the same.
 
 ### Linux with sudo (CI and developer machines)
 ```bash
@@ -31,7 +34,7 @@ sudo apt-get update
 sudo apt-get install -y g++ libasound2-dev libjack-jackd2-dev ladspa-sdk libfreetype-dev libfontconfig1-dev \
   libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libxi-dev \
   libcurl4-openssl-dev libegl-dev libgl-dev xvfb ninja-build cmake python3-venv
-python3 -m venv .venv && . .venv/bin/activate && pip install -r tools/requirements.lock
+python3 -m venv $HOME/.venvs/trumpet-vst && ln -sfn $HOME/.venvs/trumpet-vst .venv && .venv/bin/pip install -r tools/requirements.lock
 ```
 
 ### Sandbox without sudo or pip (verified in the planning sandbox; L-20261007T150000Z)
@@ -42,14 +45,15 @@ curl -sSL -o cmake.tgz https://github.com/Kitware/CMake/releases/download/v4.4.4
 curl -sSL -o ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.13.2/ninja-linux.zip && python3 -c "import zipfile;zipfile.ZipFile('ninja.zip').extractall('.')" && chmod +x ninja
 export PATH=$T/cmake-4.4.4-linux-x86_64/bin:$T:$PATH
 cd -
-python3 -m venv --without-pip .venv && curl -sSL https://bootstrap.pypa.io/get-pip.py | .venv/bin/python - && .venv/bin/pip install -r tools/requirements.lock
+python3 -m venv --without-pip $HOME/.venvs/trumpet-vst && ln -sfn $HOME/.venvs/trumpet-vst .venv
+curl -sSL https://bootstrap.pypa.io/get-pip.py | .venv/bin/python - && .venv/bin/pip install -r tools/requirements.lock
 ```
 
 ## Build and test commands
 ```bash
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release            # add -DTPT_BUILD_PLUGIN=OFF without JUCE deps
 cmake --build build -j4
-ctest --test-dir build -LE perf --output-on-failure
+ctest --test-dir build -LE 'perf|plugin' --output-on-failure      # headless core suites
 ctest --test-dir build -L perf --output-on-failure                 # Release only (T-024b)
 xvfb-run -a build/plugin/tpt_plugin_tests                           # plugin tests (Linux)
 .venv/bin/python -m pytest tests/python -k "not t029"
