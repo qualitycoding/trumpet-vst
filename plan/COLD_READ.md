@@ -4,6 +4,7 @@
 |---|---|---|---|
 | 1 | Sonnet dry run (interrupted twice by rate limits; 50 items recorded before the final stop) + Haiku mechanical check | 50 dry-run items (7 High, 23 Medium, 20 Low); mechanical: 8/8 checks PASS | All 50 resolved in commit 196ec49 (see below) |
 | 2 | New Sonnet dry run (report complete, 28 items, then rate-limited) + new Haiku mechanical check | 28 items (3 High, 8 Medium, 17 Low); mechanical: 0 failures | All 28 resolved (see below) |
+| 3 | New Sonnet dry run + new Haiku mechanical check | 10 items (1 High, 4 Medium, 5 Low); mechanical: 0 failures | All 10 resolved (see below) |
 
 ## Pass 1 disposition (dry-run item → fix)
 - **High**
@@ -84,3 +85,18 @@ Raw reports: `research/coldread/pass-1-dryrun.md`, `research/coldread/pass-1-mec
   - **26:** cache path and forced push.
   - **27:** `noteOn` ignores 24–31.
   - **28:** `tpt_f0` rate.
+
+## Pass 3 disposition
+- **High**
+  - **1:** step-level presence guard instead of a job-level `hashFiles` (D-020).
+- **Medium**
+  - **2:** `download-artifact` pin.
+  - **3:** UI atomics are published by control calls (D-013).
+  - **4:** plugin ctest label (`plugin/CMakeLists.txt`); S-001 plugin red step.
+  - **5:** `stop` branches run the closing steps (GATES, S-RETRO).
+- **Low**
+  - **6:** `releaseOverblowControl()` additive member (D-014).
+  - **7:** build before `tpt_calibrate`.
+  - **8:** CI as an exclusive resource in S-014 and S-015.
+  - **9:** `setParameters` follows `clamped()`.
+  - **10:** reproducibility settings and the CI-regeneration fallback (S-005).

@@ -217,7 +217,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Safety limiter:** after decimation, on the output sample: y = x for |x| ≤ 0.9, else sign(x)·(0.9 + 0.1·tanh((|x| − 0.9)/0.1)), so that |y| < 1; then the cast to float.
 
 ## D-013 UI state and drawing
-- **`UiState` fields** come from atomics written once per block.
+- **`UiState` fields** come from atomics. `keyswitch()`, `noteOn`, `noteOff`, `allNotesOff`, `reset` and `setParameters`
+  publish the fields they change (valves, fixed-valves flag, target, concert/written, extended, trigger) immediately;
+  `process()` refreshes `soundingPartial` and `sounding` once per block.
 - **Level meter:** one meter for everything: RMS of the final output (after gain, decimator and limiter) over the last
   20 ms, in absolute dBFS. `sounding` = a note is held, or the meter is above −60 dBFS. The partial tracker
   reports 0 when the meter is below −60 dBFS. The idle rule (D-006) uses the same meter (< −100 dBFS for 50 ms after release).
@@ -259,9 +261,12 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - CC16 → Overblow (D-009);
   - CC120/CC123 → `allNotesOff()`: a panic, unlike the last `noteOff` (D-007 release): the output gain fades to zero over
     4 ms (raised cosine), then lip, mode and decimator states are zeroed and the voice is idle;
-  - CC121 → reset the controllers (breath absent, bend 0, vibrato 0, overblow control released).
+  - CC121 → reset the controllers (breath absent, bend 0, vibrato 0, overblow control released). Releasing needs the
+    additive member `void TrumpetVoice::releaseOverblowControl() noexcept` (add it in S-013, log it in `DEVIATIONS.md`).
 - **Timing:** the processor splits each block at event sample positions.
-- **Invalid input:** non-finite floats passed to any setter are ignored (previous value kept); note numbers outside
+- **Invalid input:** `setParameters` follows `VoiceParameters::clamped()` (a non-finite field becomes its default); for the
+  scalar setters (`setBreath`, `setPitchBend`, `setVibratoControl`, `setOverblowControl`) a non-finite value is ignored
+  (previous value kept); note numbers outside
   0..127 are ignored; velocity > 1 is clamped to 1, velocity ≤ 0 is a note-off, non-finite velocity is ignored.
 - **CC1 and channel pressure:** the vibrato control is the maximum of the last CC1 value and the last channel-pressure
   value (any channel).
@@ -336,7 +341,10 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1` (v7.0.1);
   - `actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97` (v7.0.0; no `pip-install` input);
   - `actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9` (v6.1.0);
-  - `actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9` (v7.0.2). Use it only for logs; if a newer patch exists, keep this pin.
+  - `actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9` (v7.0.2), for logs and the `tpt_render` binary;
+  - `actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333` (v8.0.2, C-021), used by `realism` to fetch
+    `tpt_render` (run `chmod +x` after download: artifacts drop the executable bit). Keep these pins even if newer
+    patches exist.
 - **Jobs:**
   - `freeze` (ubuntu): `bash tests/scripts/verify_freeze.sh`.
   - `core` (3 OSes): configure with `-DTPT_BUILD_PLUGIN=OFF`, build Release, `ctest -LE perf`, then `ctest -L perf`.
@@ -350,8 +358,10 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Write permission:** the `realism` and `gate-evidence` jobs' pushes need `permissions: contents: write` on those jobs
   only, using `GITHUB_TOKEN`.
 - **`realism` job conditions:** `needs: build-linux` (a job that only builds `tpt_render` in Release), not `core`, so it
-  runs while frozen core tests are still red; it is skipped when `tools/render/main.cpp` does not exist
-  (`if: hashFiles('tools/render/main.cpp') != ''`).
+  runs while frozen core tests are still red. Until S-015 `tools/render/main.cpp` does not exist: both `build-linux` and
+  `realism` start with a step `id: chk` running `test -f tools/render/main.cpp && echo present=1 >> "$GITHUB_OUTPUT" || true`,
+  and every later step has `if: steps.chk.outputs.present == '1'` (`hashFiles()` is not allowed in a job-level `if:`).
+  A job whose steps are all skipped this way counts as green.
 - **`ci-results`:** an orphan branch, created by the first push (`git checkout --orphan ci-results; git rm -rf .`), holding
   `results.json`, `results.meta.json`, `SUMMARY.md` and `ATTRIBUTION.txt`, overwritten on every run; commit message
   `realism results for <source sha>`.

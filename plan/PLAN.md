@@ -68,13 +68,15 @@
 - Inputs: `plan/ENVIRONMENT.md`; `research/spikes/plan_verify_ci.md`
 - Actions:
   1. `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release` (add `-DTPT_BUILD_PLUGIN=OFF` if the JUCE Linux packages are not installable), then build.
-  2. `ctest --test-dir build --output-on-failure > logs/S-001-red-ctest.txt 2>&1 || true`.
+  2. `ctest --test-dir build -LE 'perf|plugin' --output-on-failure > logs/S-001-red-ctest.txt 2>&1 || true`; if the plugin was
+     built: `xvfb-run -a build/plugin/tpt_plugin_tests > logs/S-001-red-plugin.txt 2>&1 || true` (macOS/Windows: without
+     xvfb-run). (`plugin/CMakeLists.txt` labels the test `plugin`.)
   3. `.venv/bin/python -m pytest tests/python > logs/S-001-red-pytest.txt 2>&1 || true`.
   4. Compare with the planning red run in `plan/ENVIRONMENT.md`:
      - every C++ test case in unit, integration, operational, alloc and perf fails;
      - if the plugin was built: `tpt_plugin_tests` has 1 passing case ("T-026 parameters", guard) and 4 failing;
      - Python results: 3 passed (T-031 guards), 6 skipped (T-029), the rest failing or erroring on `NotImplementedError` or missing S-002/S-005 outputs.
-- Outputs: `build/`, `.venv/`, `logs/S-001-red-ctest.txt`, `logs/S-001-red-pytest.txt`
+- Outputs: `build/`, `.venv`, `logs/S-001-red-ctest.txt`, `logs/S-001-red-plugin.txt`, `logs/S-001-red-pytest.txt`
 - Evidence produced: none (baseline)
 - Done when: the build succeeds and the red pattern matches D-018.
 - Checkpoint: red counts.
@@ -174,14 +176,17 @@
      - `peaks` as in the spike;
      - `complex_modal_fit`: poles initialised from the peaks, complex residues by linear least squares, then `scipy.optimize.least_squares` on the real and imaginary parts of Z with weights 1/|Z|, f ≤ 1.1·f_max. Enforce Re(s) < 0 and Re(R) > 0, and sort by Im.
   2. Implement `tools/resonator/bore_fit.py`: port `research/spikes/bore_fit.py`, but compare the measured poles with the poles of `complex_modal_fit` (C-099).
-  3. Implement `tools/resonator/generate_table.py` exactly per D-004: loops by bisection, 14 modes, calibration ratios, trigger states, `natural_dev_cents`, the radiation fit, deterministic output, and `--keep-calibration`. `fscale` defaults to 1.0 for new notes.
+  3. Implement `tools/resonator/generate_table.py` exactly per D-004 (reproducibility: `least_squares(..., ftol=1e-14,
+     xtol=1e-14, gtol=1e-14)`, and set `OMP_NUM_THREADS=OPENBLAS_NUM_THREADS=1` at import): loops by bisection, 14 modes, calibration ratios, trigger states, `natural_dev_cents`, the radiation fit, deterministic output, and `--keep-calibration`. `fscale` defaults to 1.0 for new notes.
   4. Run: `.venv/bin/python -m tools.resonator.generate_table --fingerings tests/fixtures/trumpet_fingerings.txt --out data/trumpet_resonators.json`.
   5. Run: `.venv/bin/python -m pytest tests/python/test_resonator_tools.py`.
 - Outputs: `tools/resonator/{tmm,bore_fit,generate_table}.py`, `data/trumpet_resonators.json`
 - Evidence produced: T-030
 - Done when: T-030 passes, and `data/trumpet_resonators.json` is committed with its SHA-256 recorded in the checkpoint.
 - Checkpoint: table SHA-256, bore-fit cents errors, loop lengths, radiation fit RMS error.
-- On failure: DR-T007. The bore fit does not reach ≤ 6 c → widen the initial parameter span (never the tolerance). The radiation fit fails at 6 sections → `BLOCKED.md` with the fit report.
+- On failure: DR-T007. If the CI `python` job's regeneration disagrees with the committed table beyond T-030's tolerance,
+  regenerate the table in that CI job (upload it as an artifact), commit the CI-generated file with `--keep-calibration`
+  preserved, and log it. The bore fit does not reach ≤ 6 c → widen the initial parameter span (never the tolerance). The radiation fit fails at 6 sections → `BLOCKED.md` with the fit report.
 - Gate: none
 - Relevant decisions/claims: D-004, C-076, C-077, C-079, C-099
 - Lessons applied: L-20261007T150300Z-hand-typed-frozen-constant, L-20261007T150700Z-regime-selection-per-note (via S-009), L-20261008T010500Z-circular-fft-filter-fakes-onsets
@@ -269,7 +274,8 @@
 - Actions:
   1. (`tools/render/CMakeLists.txt` exists from S-004.)
   2. Add `tools/render/calibrate.cpp` → target `tpt_calibrate` (links `tpt_core` and nlohmann_json). It loads the JSON, calibrates every note per D-011 (with sustain gating), and rewrites `fscale` in place, formatted with `%.10g` and otherwise preserving the file as in `generate_table` (D-004 number formatting).
-  3. Run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`; rebuild (this re-embeds the table).
+  3. Build (so `tpt_calibrate` has the current constants), run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`,
+     then build again (this re-embeds the table).
   4. Run `tpt_integration_tests "[T-012],[T-013]"` and `tpt_unit_tests "[T-007]"`.
 - Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`
 - Evidence produced: T-012, T-013
@@ -315,7 +321,7 @@
      - D-010 lip slurs and valve-change interpolation;
      - D-003 keyswitches and fixed-valves fscale;
      - `useAlternates`.
-  2. After any change to `VoiceTuning.h`, run `tpt_calibrate` and rebuild. Then run
+  2. After any change to `VoiceTuning.h`: build, run `tpt_calibrate`, build again (re-embeds the table). Then run
      `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022]"` plus every previously green tag.
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`
 - Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022
@@ -406,7 +412,7 @@
 - Gate: **G-004**
 - Relevant decisions/claims: D-002, D-013, C-061–C-065
 - Lessons applied: L-20261007T151000Z-large-evidence-off-impl-branch
-- Exclusive resources: none
+- Exclusive resources: CI (the `[gate-evidence G-004]` commit must be the head of its push)
 
 ### S-015 Offline renderer and TinySOL tooling
 - Tier: Sonnet
@@ -439,7 +445,7 @@
 - Gate: none
 - Relevant decisions/claims: D-017, C-072, C-096
 - Lessons applied: L-20261008T010500Z-circular-fft-filter-fakes-onsets
-- Exclusive resources: none
+- Exclusive resources: CI
 
 ### S-016 Realism calibration and G-005 bundle
 - Tier: Opus
@@ -448,8 +454,8 @@
 - Inputs: D-007, D-008, D-012, D-017, DR-REAL; `core/src/VoiceTuning.h`
 - Actions:
   1. Run T-029 (locally or in the CI `realism` job), T-021 and T-022. Write `logs/S-016-round-<k>.md` with the per-dynamic metrics and the 10 worst notes, split by register (p2–p3, p4–p6, p8+).
-  2. Adjust only the non-frozen constants listed in DR-REAL. After each round: run `tpt_calibrate`, rebuild, then re-run
-     every frozen test (no regression). At most 5 rounds.
+  2. Adjust only the non-frozen constants listed in DR-REAL. After each round: build, run `tpt_calibrate`, build again
+     (re-embeds the table), then re-run every frozen test (no regression). At most 5 rounds.
   3. Build the G-005 bundle per `plan/GATES.md`:
      - `tools/realism/make_g005_bundle.py --tinysol <download dest> --render <tpt_render> --out renders/G-005`, using
        `tpt_render --events` with the event files `tools/realism/demos/*.json` (contents in `plan/GATES.md`) and the
@@ -511,7 +517,7 @@
 ### S-RETRO Retrospective
 - Tier: Opus (fresh context); Haiku collects the digest
 - Profile: software
-- Depends on: S-000 … S-018 (every step before it)
+- Depends on: S-000 … S-018 (every step before it; steps marked skipped by a G-004/G-005 `stop` count as passed)
 - Inputs: `EXECUTION_LOG.md`, `git log`, `DEVIATIONS.md`, `BLOCKED.md`, `TEST_CHALLENGE.md`, `GATE-*.md`, the CI history (`gh run list`), `research/PRIOR_KNOWLEDGE.md`, `lessons/`, `knowledge/`
 - Actions:
   1. A Haiku agent collects every input into `logs/retro-digest.md` (without subagent support: do it yourself, then start a fresh section of reasoning for step 2 and log the substitution in `EXECUTION_LOG.md`).
