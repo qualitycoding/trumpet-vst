@@ -276,10 +276,11 @@
   2. Add `tools/render/calibrate.cpp` → target `tpt_calibrate` (links `tpt_core` and nlohmann_json). It loads the JSON, calibrates every note per D-011 (with sustain gating), and rewrites `fscale` in place, formatted with `%.10g` and otherwise preserving the file as in `generate_table` (D-004 number formatting).
   3. Build (so `tpt_calibrate` has the current constants), run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`,
      then build again (this re-embeds the table).
-  4. Run `tpt_integration_tests "[T-012],[T-013]"` and `tpt_unit_tests "[T-007]"`.
+  4. Run `tpt_integration_tests "[T-012],[T-013]"`, `tpt_unit_tests "[T-007]"` and `tpt_operational_tests`.
 - Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`
 - Evidence produced: T-012, T-013
-- Done when: those tags pass.
+- Done when: those tags pass, and `tpt_operational_tests` passes completely (the S-008 exception for the pitch assertion
+  has expired).
 - Checkpoint: maximum |cents| per note, and the fscale range.
 - On failure: DR-CAL, DR-REGIME.
 - Gate: none
@@ -431,7 +432,9 @@
        `vibrato` 0..1, `overblowCC` −1..1 passed directly to `setOverblowControl`; booleans accept true/false/0/1;
      - writes a mono float32 WAV;
      - exits 0 on success, 2 on bad arguments or a malformed event file.
-  2. Implement `tinysol.download` (Zenodo REST API, record 3685367, streamed download, md5 verify, partial extraction, idempotent) and `trumpet_notes`.
+  2. Implement `tinysol.download` (Zenodo REST API, record 3685367, streamed download, md5 verify, partial extraction) and
+     `trumpet_notes`. Idempotency: after a verified extraction write the marker `<dest>/.extracted-36030a7fe389da86c3419e5ee48e3b7f`
+     and delete the archive; if the marker exists, skip download and md5 (this is what the CI cache restores).
   3. Implement `compare_tinysol.main` per its docstring, using `metrics.py`.
   4. Add `tools/realism/summarize.py <results.json> --out SUMMARY.md`: per-dynamic metrics against the D-017 thresholds and
      the 10 worst notes by `harm_mad_db`, split by register using the standard fingering's partial of written = concert + 2
@@ -450,7 +453,8 @@
 ### S-016 Realism calibration and G-005 bundle
 - Tier: Opus
 - Profile: software
-- Depends on: S-014 (with G-004 answered `proceed` or `fix-drawing` resolved), S-015
+- Depends on: S-014 (with G-004 answered `proceed`, a `fix-drawing` round resolved, or a `correct-chart` amendment applied
+  and re-frozen), S-015
 - Inputs: D-007, D-008, D-012, D-017, DR-REAL; `core/src/VoiceTuning.h`
 - Actions:
   1. Run T-029 (locally or in the CI `realism` job), T-021 and T-022. Write `logs/S-016-round-<k>.md` with the per-dynamic metrics and the 10 worst notes, split by register (p2–p3, p4–p6, p8+).

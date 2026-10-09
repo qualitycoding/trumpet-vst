@@ -347,12 +347,14 @@ Signatures may be **extended** (new members, new functions) but never changed. E
     patches exist.
 - **Jobs:**
   - `freeze` (ubuntu): `bash tests/scripts/verify_freeze.sh`.
-  - `core` (3 OSes): configure with `-DTPT_BUILD_PLUGIN=OFF`, build Release, `ctest -LE perf`, then `ctest -L perf`.
+  - `core` (3 OSes): configure with `-DTPT_BUILD_PLUGIN=OFF`, build Release, `ctest -LE perf`, then `ctest -L perf` as its own
+    step with `if: ${{ !cancelled() }}` (so T-024b is evidenced even while accepted failures keep `integration` red).
   - `python` (ubuntu): venv outside the checkout (`$RUNNER_TEMP/venv`, symlinked as `.venv`) from `tools/requirements.lock`, then `pytest tests/python -k "not t029"` and `pip-audit -r tools/requirements.lock`.
   - `plugin` (3 OSes): build with the plugin, run `tpt_plugin_tests` (xvfb-run on Linux), `run_pluginval.sh`, and `auval -v aumu Tpts Qcod` on macOS.
   - `build-linux` (ubuntu): Release build of `tpt_render` only; uploads it as an artifact for `realism`.
   - `realism` (ubuntu, `needs: build-linux`): set up the venv, download TinySOL (cache path `reference-data/tinysol`, the
-    extracted subset; key `tinysol-36030a7fe389da86c3419e5ee48e3b7f`), run T-029 and `tools/realism/summarize.py`, and push
+    extracted subset; key `tinysol-36030a7fe389da86c3419e5ee48e3b7f`), run `python -m tools.realism.compare_tinysol --tinysol reference-data/tinysol --render <tpt_render> --out results.json`,
+    then `tools/realism/summarize.py results.json --out SUMMARY.md`, then T-029 (pytest), and push
     the results to `ci-results` with `git push --force origin HEAD:ci-results`.
   - `gate-evidence` (added in S-014; ubuntu): see below.
 - **Write permission:** the `realism` and `gate-evidence` jobs' pushes need `permissions: contents: write` on those jobs

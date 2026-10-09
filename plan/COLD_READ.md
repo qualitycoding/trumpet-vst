@@ -5,6 +5,7 @@
 | 1 | Sonnet dry run (interrupted twice by rate limits; 50 items recorded before the final stop) + Haiku mechanical check | 50 dry-run items (7 High, 23 Medium, 20 Low); mechanical: 8/8 checks PASS | All 50 resolved in commit 196ec49 (see below) |
 | 2 | New Sonnet dry run (report complete, 28 items, then rate-limited) + new Haiku mechanical check | 28 items (3 High, 8 Medium, 17 Low); mechanical: 0 failures | All 28 resolved (see below) |
 | 3 | New Sonnet dry run + new Haiku mechanical check | 10 items (1 High, 4 Medium, 5 Low); mechanical: 0 failures | All 10 resolved (see below) |
+| 4 | New Sonnet dry run (resumed once after a rate limit) + new Haiku mechanical check | 5 items (0 High, 0 Medium, 5 Low); mechanical: 0 failures (the agent misreported two counts; re-checked by the planner: 30 manifest files, 33 T-IDs) | All 5 resolved (see below) |
 
 ## Pass 1 disposition (dry-run item → fix)
 - **High**
@@ -100,3 +101,10 @@ Raw reports: `research/coldread/pass-1-dryrun.md`, `research/coldread/pass-1-mec
   - **8:** CI as an exclusive resource in S-014 and S-015.
   - **9:** `setParameters` follows `clamped()`.
   - **10:** reproducibility settings and the CI-regeneration fallback (S-005).
+
+## Pass 4 disposition
+- **1:** S-009 runs `tpt_operational_tests` and requires it fully green.
+- **2:** the S-016 dependency covers a `correct-chart` amendment.
+- **3:** `ctest -L perf` runs in its own `!cancelled()` step.
+- **4:** the `realism` job runs `compare_tinysol` explicitly before pytest.
+- **5:** TinySOL extraction marker for idempotency and cache hits.
