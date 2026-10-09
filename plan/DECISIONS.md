@@ -354,7 +354,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - `build-linux` (ubuntu): Release build of `tpt_render` only; uploads it as an artifact for `realism`.
   - `realism` (ubuntu, `needs: build-linux`): set up the venv, download TinySOL (cache path `reference-data/tinysol`, the
     extracted subset; key `tinysol-36030a7fe389da86c3419e5ee48e3b7f`), run `python -m tools.realism.compare_tinysol --tinysol reference-data/tinysol --render <tpt_render> --out results.json`,
-    then `tools/realism/summarize.py results.json --out SUMMARY.md`, then T-029 (pytest), and push
+    then `tools/realism/summarize.py results.json --out SUMMARY.md`, then T-029 (pytest), and push; the summarize, artifact and
+    push steps use `if: ${{ !cancelled() && steps.chk.outputs.present == '1' }}` so that results reach `ci-results` even
+    when T-029 is red (the job is then red only because of T-029);
     the results to `ci-results` with `git push --force origin HEAD:ci-results`.
   - `gate-evidence` (added in S-014; ubuntu): see below.
 - **Write permission:** the `realism` and `gate-evidence` jobs' pushes need `permissions: contents: write` on those jobs

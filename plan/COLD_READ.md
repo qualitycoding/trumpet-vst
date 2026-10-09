@@ -6,6 +6,7 @@
 | 2 | New Sonnet dry run (report complete, 28 items, then rate-limited) + new Haiku mechanical check | 28 items (3 High, 8 Medium, 17 Low); mechanical: 0 failures | All 28 resolved (see below) |
 | 3 | New Sonnet dry run + new Haiku mechanical check | 10 items (1 High, 4 Medium, 5 Low); mechanical: 0 failures | All 10 resolved (see below) |
 | 4 | New Sonnet dry run (resumed once after a rate limit) + new Haiku mechanical check | 5 items (0 High, 0 Medium, 5 Low); mechanical: 0 failures (the agent misreported two counts; re-checked by the planner: 30 manifest files, 33 T-IDs) | All 5 resolved (see below) |
+| 5 (last allowed) | New Sonnet dry run (ran frozen inputs against the spikes) | 4 items (0 High, 2 Medium, 2 Low) | All 4 resolved by amendment; no further pass allowed → R-009 (Medium), re-checked in pre-mortem round 1 |
 
 ## Pass 1 disposition (dry-run item → fix)
 - **High**
@@ -108,3 +109,12 @@ Raw reports: `research/coldread/pass-1-dryrun.md`, `research/coldread/pass-1-mec
 - **3:** `ctest -L perf` runs in its own `!cancelled()` step.
 - **4:** the `realism` job runs `compare_tinysol` explicitly before pytest.
 - **5:** TinySOL extraction marker for idempotency and cache hits.
+
+## Pass 5 disposition
+- **1:** short-frustum skip in the TMM port (S-005, `tmm.py` docstring).
+- **2:** `!cancelled()` guards on the `realism` summarize, artifact and push steps (D-020).
+- **3:** perf red run in S-001.
+- **4:** the S-017 dependency covers `override-intonation`.
+
+**Cold-read gate result:** 97 items over 5 passes, all resolved. The mechanical checks were clean in passes 2–4. The final
+pass's fixes are carried as R-009.

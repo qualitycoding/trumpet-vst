@@ -6,7 +6,8 @@ RHO27 = 1.2041 * 293.15 / (273.15 + 27.0)    # kg/m^3 at 27 degC
 
 
 def cone_matrix(f, r1, r2, length, lossless=False, c=C27, rho=RHO27):
-    """2x2xN transfer matrix (p, U) of a conical frustum (cylinder when |r2 - r1| < 1e-7)."""
+    """2x2xN transfer matrix (p, U) of a conical frustum (cylinder when |r2 - r1| < 1e-7; identity when length < 1e-8 m,
+    where the spherical-wave form is singular)."""
     raise NotImplementedError("cone_matrix")
 
 

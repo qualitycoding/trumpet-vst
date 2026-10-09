@@ -140,15 +140,15 @@
   "lessons/L-20261008T010500Z-circular-fft-filter-fakes-onsets.md": "fa207ae31148caa92f33089f2572f4a4dd0623fe82a88e6d14fe71ad512593a3",
   "lessons/L-20261008T151500Z-reasoned-expected-value-wrong.md": "0c42d0a2560a1c4f8fcb0128e7b20cc568c517b8a60824a0810f85b4c4896bda",
   "plan/ASSUMPTIONS.md": "bb7afbaf900b8e517a7a449a7e4e28e19b14c98e0cc5368039a14910b819629e",
-  "plan/COLD_READ.md": "82f2813c190ec2b39fd72962ea2ccdabc60cbbc6bc8c46bb537f4b4bf1a1853c",
-  "plan/DECISIONS.md": "b63c15ba17e327ffcb928abbe02724c279d643682ce64c899ebecc04ee77c4c1",
+  "plan/COLD_READ.md": "1b9724416090e9f32101c2b4e5fc54c15564df1d49037f927bf8786efd3d5109",
+  "plan/DECISIONS.md": "967bcfe231f28fc26215d2f34239d35a3a86d4cdbf4ff9ee3e27d9c5345a311e",
   "plan/ENVIRONMENT.md": "cd6a058fe62f7febdebd631340d59a7e0cace0a06bdf67bedda6d56f74828e16",
-  "plan/GATES.md": "df643aa83091a8d5e15bb8f5b8e9e12561793a5006e0fa4356d6f3fb46131022",
-  "plan/PLAN.md": "a937ac1b9999e580e7ef6d1fbdef0e668053418fc60e652f24ecc3fba95162dc",
+  "plan/GATES.md": "f7206507355daede48b6308139c40592ab8b91f45d4bdf46e4117e7ae97f7e3d",
+  "plan/PLAN.md": "c12f9b2b37ef783093b16a82e4bd35721fd1564fe2e1ba94bf5db301951715f2",
   "plan/PROFILE.md": "7e4bd04e40505fe5f82b15923ff150b13225c59fc36d00f3c1d570cbece72335",
   "plan/PROTOCOL_EXTRACTS.md": "ba3b7b4899161e19728b6314738ce9832c001e84d0c29c0c6190cb4bd8ee3104",
   "plan/TRACEABILITY.md": "9a0fbccc9cbf37fb883c6ec3b3642cf847ce2d15bf71b6c701c26ac0eb4bfdca",
-  "plugin/CMakeLists.txt": "8b711e46770f364ccd38795cb419d9bd50a96ddf430bd95ec4e241ef861895e8",
+  "plugin/CMakeLists.txt": "c41a36d9620025fedcc3e57ed5945a2002bd7f4a8f0dd6a2666da6c39231c00a",
   "plugin/src/Parameters.h": "bb6733007ee7d82e1869a9079fea636bbd8bc7553a50720af5b1419d62884d6c",
   "plugin/src/PluginEditor.cpp": "8bb0720eeaff46852e324188dc66e64610502816b39003bc6630bc250e20fb2f",
   "plugin/src/PluginEditor.h": "bee0173fbd120ef43a4b3f992b8795122607f32f3c3aad70fb7ab40a23e55f20",
@@ -156,7 +156,7 @@
   "plugin/src/PluginProcessor.h": "50f988aacc7526c3b6c47702ab1e6b11e2b6fa7edb6e58df98488975b7b8b8df",
   "plugin/src/TrumpetView.cpp": "2616f59ca660914c753677008ad99076426011bc3b4cdb10d748023d370f6f36",
   "plugin/src/TrumpetView.h": "45aa28d3d50d17b69256beac16b94ba874a9069720f9934ffc15d9d6c625de9c",
-  "premortem/RISK_REGISTER.md": "52fdfe391db2ef2a0ed22d9f29405841d0aabd3c293301cdcdef6b171537266a",
+  "premortem/RISK_REGISTER.md": "c76fb927cd9c554f3486601a07debcbbd98e2e256354aebbce442f7b36faf318",
   "research/PRIOR_KNOWLEDGE.md": "efbcff880db9df675c15c00f4770ebc308d5fec70090f23ed44406b95d1613de",
   "research/QUESTIONS.md": "8ea14ac1a6d2ae7d4b29641b57c2b809c01251473716293f3fcb52b220583274",
   "research/SOURCES.md": "7bb9cd8fa11d62f8d3d443a7cae8cabaf451be766d306c9442df83b9b5814777",
@@ -165,6 +165,11 @@
   "research/coldread/pass-1-mechanical.md": "f617a01f2aa44c021438815731103958256345ca73a56532d5ef169ea44bda84",
   "research/coldread/pass-2-dryrun.md": "324dd314185ca6f0d1699e72ecae5f9ed00c6b214548b96b5b0fe1f0ad3d3de4",
   "research/coldread/pass-2-mechanical.md": "537db39cde2724e19638c12145a5563b7a9081782f86054c39efa48a0f588f49",
+  "research/coldread/pass-3-dryrun.md": "711c629059db678a06c6ff357e24f83238c69ff1344f3d42cb3c6cbddfeecf73",
+  "research/coldread/pass-3-mechanical.md": "83620470bd01adb3545e6e06561eef0c9bd6e5e752949f9635a41201e5d93a0a",
+  "research/coldread/pass-4-dryrun.md": "252ca927e6fa33d88ce1a4ab5aa0bad4417d76e8aab6cc4dadffb872913c8853",
+  "research/coldread/pass-4-mechanical.md": "a6c0b661160a861c77b3c39fb7d63e1b59428ae8ad2ed9097265b40f28002ac6",
+  "research/coldread/pass-5-dryrun.md": "54f4e26fd62068ceb2d2f9794cc57e84094104f5288e9ef192935e878956adc3",
   "research/rounds/round-1.md": "18b23e6e69dd13d956204d9d964c59116e54444a2dac9aa63d4796d532d45de9",
   "research/rounds/round-2.md": "ca6a0c4605ec8aa411a6de566e100cad0a12f5a8dcbc37ba8c616b7bb5e3c4bc",
   "research/rounds/round-3-adversarial.md": "cb2596d591218d68bfb6dc77faf473e60fdbb7fff03e9bbcf70791d2e3adb4d9",
@@ -253,7 +258,7 @@
   "tools/resonator/__init__.py": "6c6ec57de9f82ef42d82760f144a4571cb16b3cd6de33aaa7aa9fd65e8ab1fa1",
   "tools/resonator/bore_fit.py": "be7b064aeda2b2a7d26ea5cb230ce7e99229816303af4a8a849d84eaa79aac3c",
   "tools/resonator/generate_table.py": "57ae69c7e046ea6f2116f40bfef29f07ddecac06d2dc7d881af1653ecec04a87",
-  "tools/resonator/tmm.py": "8604f10373de6592f3c1f1b0dd872a17d7e8ca54d4510c98d568049876d49d06"
+  "tools/resonator/tmm.py": "c67d9169a7f9a8a05ee9a2a2d8381e41d406f234a3bad17d4b36421263dead72"
  },
  "branch": "gen-20261007T145241Z-trumpet-vst-plan",
  "completed": [
@@ -270,6 +275,7 @@
   "3.3",
   "3.4",
   "3.5",
+  "3.6",
   "3.6-pass1",
   "3.6-pass2",
   "3.7",
@@ -471,7 +477,6 @@
  ],
  "open_items": [],
  "pending": [
-  "3.6-pass3",
   "4",
   "5"
  ],
@@ -485,5 +490,5 @@
  "run_id": "20261007T145241Z-trumpet-vst-plan",
  "subphase": "3.6",
  "tier_substitutions": [],
- "updated_at": "2026-10-08T22:08:27Z"
+ "updated_at": "2026-10-09T23:03:53Z"
 }

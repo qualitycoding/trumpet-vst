@@ -70,7 +70,8 @@
   1. `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release` (add `-DTPT_BUILD_PLUGIN=OFF` if the JUCE Linux packages are not installable), then build.
   2. `ctest --test-dir build -LE 'perf|plugin' --output-on-failure > logs/S-001-red-ctest.txt 2>&1 || true`; if the plugin was
      built: `xvfb-run -a build/plugin/tpt_plugin_tests > logs/S-001-red-plugin.txt 2>&1 || true` (macOS/Windows: without
-     xvfb-run). (`plugin/CMakeLists.txt` labels the test `plugin`.)
+     xvfb-run). (`plugin/CMakeLists.txt` labels the test `plugin`.) Also
+     `ctest --test-dir build -L perf --output-on-failure >> logs/S-001-red-ctest.txt 2>&1 || true`.
   3. `.venv/bin/python -m pytest tests/python > logs/S-001-red-pytest.txt 2>&1 || true`.
   4. Compare with the planning red run in `plan/ENVIRONMENT.md`:
      - every C++ test case in unit, integration, operational, alloc and perf fails;
@@ -173,6 +174,8 @@
 - Actions:
   1. Implement `tools/resonator/tmm.py`:
      - port `tmm_trumpet.py` (cone via the spherical-wave fundamental solutions; losses as in the spike; `lossless=True` → Γ = jω/c);
+       frusta with L < 1e-8 m are skipped (identity matrix): the spike's `cone()` is numerically singular for them, and
+       `test_t030_cone_vs_staircase` fails without the skip (verified by cold-read pass 5);
      - `peaks` as in the spike;
      - `complex_modal_fit`: poles initialised from the peaks, complex residues by linear least squares, then `scipy.optimize.least_squares` on the real and imaginary parts of Z with weights 1/|Z|, f ≤ 1.1·f_max. Enforce Re(s) < 0 and Re(R) > 0, and sort by Im.
   2. Implement `tools/resonator/bore_fit.py`: port `research/spikes/bore_fit.py`, but compare the measured poles with the poles of `complex_modal_fit` (C-099).
@@ -483,7 +486,8 @@
 ### S-017 Performance and plugin validation on all platforms
 - Tier: Sonnet
 - Profile: software
-- Depends on: S-016 (with G-005 answered `proceed` or `proceed-with-rescope`)
+- Depends on: S-016 (with G-005 answered `proceed` or `proceed-with-rescope`, or an `override-intonation` amendment applied
+  and re-frozen; `iterate` rounds end in one of these)
 - Inputs: CI jobs `core` and `plugin`
 - Actions:
   1. Push. Get CI `core` (including `ctest -L perf`) and `plugin` (pluginval strictness 10; auval on macOS) green on all three OSes.
