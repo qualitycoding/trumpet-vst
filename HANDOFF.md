@@ -70,7 +70,7 @@ The planning agent then runs an amendment (protocol 2E.4).
 | S-014 | Editor, drawing, G-004 bundle | **G-004** |
 | S-015 | Offline renderer and TinySOL tooling | — |
 | S-016 | Realism calibration, G-005 bundle | **G-005** |
-| S-017 | Performance and plugin validation on 3 OSes | — |
+| S-017 | Performance and plugin validation on 3 OSes | **G-006** |
 | S-018 | Final verification and report | — |
 | S-RETRO | Retrospective | — |
 | S-KNOW | Lessons & knowledge push | **G-003** |
@@ -79,9 +79,15 @@ The plan begins with **S-000** and ends with the closing steps **S-RETRO** and *
 every step in its `Depends on` list has passed. Independent steps may run concurrently unless they share an exclusive
 resource.
 
+## Open human actions
+- The two GitHub tokens pasted in chat on 2026-10-07 must be revoked by the human (A-020, R-012). Ask for the reply
+  `tokens-revoked` with the G-004 response; G-005 is not processed until it is recorded (`plan/GATES.md`).
+- Optional: branch protection on `main` (R-020).
+
 ## Human gates
 - **G-004:** fingering chart and drawing.
 - **G-005:** realism listening.
+- **G-006:** REAPER host acceptance with the CI artifact (after S-017).
 - **G-003:** lessons and knowledge push.
 - **G-002:** any release, tag, publication or merge to `main`. No step does this; never perform such an action
   without G-002 sign-off.

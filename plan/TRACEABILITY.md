@@ -7,7 +7,7 @@
 | SC-2 | For every fingering and mode, the UI state (valves, trigger, target and sounding partial, extended, fixed) is correct within one block of the voice being settled. The drawing satisfies the layout rules. The human confirms the chart and drawing (G-004). | T-020, T-026 (editor), T-033, T-003, T-005, G-004 | S-003, S-013, S-014 |
 | SC-3 | Every standard note written 54–87 is within ±10 cents of 12-TET at mf at 44.1/48/96 kHz. Written 54–84 also at pp and ff (48 kHz), and every alternate at mf. | T-013, T-018 | S-009, S-011 |
 | SC-4 | Realism against TinySOL meets the D-017 thresholds, and the human signs off the blind test (G-005). | T-029, T-021, T-022, G-005 | S-015, S-016 |
-| SC-5 | Every fingering locks to and sustains its partial at pp/mf/ff. Overblow/Underblow jump registers per D-009 (cap at partial 9) and brighten below o = 0.5. Fixed valves play natural partials. | T-012, T-015, T-017, T-009 | S-007, S-008, S-011 |
+| SC-5 | Every fingering locks to and sustains its partial at pp/mf/ff. Overblow/Underblow jump registers per D-009 (cap at partial 9) and brighten below o = 0.5. Fixed valves play natural partials. | T-012, T-015, T-017, T-009, T-034 | S-007, S-008, S-011 |
 | SC-6 | Mono legato, last-note priority. Lip slurs jump without retriggering; valve slurs settle within 150 ms. Bend ±2 st, vibrato ±25 c, breath controller. | T-016, T-019 | S-010, S-011 |
 | SC-7 | No allocation on the audio path. Real-time factor ≤ 0.05 at 48 kHz/128 on CI runners. Latency reported. | T-024, T-025, T-026 | S-008, S-017 |
 | SC-8 | Parameters and alternates/fixed-valves state round-trip. Garbage state is ignored. The table parser rejects malformed input. | T-011, T-026, T-006 | S-006, S-012, S-013 |
@@ -50,5 +50,6 @@
 | T-031 | tests/python/test_supply_chain.py | SC-10, D-020, D-021 | C-001–C-022, C-097, C-098 |
 | T-032 | tests/scripts/verify_freeze.sh | SC-10 | lesson L-20261007T150300Z |
 | T-033 | tests/core/test_layout.cpp | SC-2, D-013 | A-009 |
+| T-034 | tests/core/test_voice_ranges.cpp | SC-5, SC-3, D-011, D-012, DR-RANGE | pre-mortem R-013; lesson L-20261007T150600Z |
 
 Every test maps to at least one requirement, and every SC maps to at least one test.

@@ -367,8 +367,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   and every later step has `if: steps.chk.outputs.present == '1'` (`hashFiles()` is not allowed in a job-level `if:`).
   A job whose steps are all skipped this way counts as green.
 - **`ci-results`:** an orphan branch, created by the first push (`git checkout --orphan ci-results; git rm -rf .`), holding
-  `results.json`, `results.meta.json`, `SUMMARY.md` and `ATTRIBUTION.txt`, overwritten on every run; commit message
-  `realism results for <source sha>`.
+  `ATTRIBUTION.txt` and one directory `results/<source sha>/` per run (D-026 R-018); commit message `realism results for <source sha>`.
 - **`gate-evidence` job:** ubuntu, `contents: write`, runs on push only when the head commit message contains
   `[gate-evidence G-004]` or `[gate-evidence G-005]` (`if: contains(github.event.head_commit.message, '[gate-evidence')`;
   `workflow_dispatch` is not used because it only works for workflows on the default branch):
@@ -413,6 +412,64 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
 - **Blowing-factor floors** (C-091), applied to k_sus whatever the velocity or breath: written 86, 87 and 89 at least 2.5; written 88 at least 5.0.
 - **Range limits:** requests outside written 54–89 are ignored (normal mode).
 
+## D-024 Static MSVC runtime (R-010)
+- The root `CMakeLists.txt` sets `CMAKE_MSVC_RUNTIME_LIBRARY` to `MultiThreaded$<$<CONFIG:Debug>:Debug>` (set during
+  planning, commit after 1b60fbb), so the Windows VST3 and Standalone do not import `msvcp140`, `vcruntime140`,
+  `ucrtbase` or `api-ms-win-crt-*`.
+- The CI `plugin` job on Windows checks this with `dumpbin /dependents` on the VST3 binary (the step exists in
+  `plan-verify.yml`; copy it into `ci.yml`, S-002).
+
+## D-025 Installable builds and host acceptance (R-011)
+- **Artifacts:** the CI `plugin` job uploads `build/plugin/TrumpetVST_artefacts/Release` per OS as a workflow artifact,
+  retained 30 days. Workflow artifacts are private to the repository and are **not** a release (G-002 does not apply to
+  them).
+- **Host acceptance:** gate G-006 (after S-017) gives the owner a REAPER checklist to run on Windows 11 with the
+  artifact. S-018 waits for G-006.
+
+## D-026 Smaller hardening decisions (pre-mortem round 1)
+- **R-014, held valves:** the processor stores the Fixed-valves held valves in its state as an extra XML property
+  `heldValves` (valves name), alongside the D-015 JSON, and restores it with the additive member
+  `void TrumpetVoice::setHeldValves(Valves) noexcept` (logged in `DEVIATIONS.md`). `prepare()` and `reset()` keep the held
+  valves; only a keyswitch changes them. README documents that hosts should chase keyswitch notes or that the state
+  restores the last held valves.
+- **R-015, UI atomics:** the UI atomics live in a struct owned by `TrumpetVoice` itself, allocated once in the constructor
+  and never reallocated by `prepare()`, so a GUI read during a rate change is safe. The Linux `core` CI job also runs
+  `tpt_operational_tests` built with `-fsanitize=thread` in a separate build directory (a step; a TSan report fails the
+  job).
+- **R-016, state blobs:** `setStateInformation` converts with
+  `std::string_view(static_cast<const char*>(data), static_cast<size_t>(std::max(0, sizeInBytes)))`; it never relies on
+  NUL termination. The Linux `plugin` job runs `tpt_plugin_tests` once more under ASan
+  (`-fsanitize=address,undefined`, separate build directory).
+- **R-017, stale G-005:** `GATE-G-005.md` records the source commit of the bundle. If S-017 changes any file under
+  `core/src/`, `data/` or `tools/realism/` after that commit, re-run T-029, rebuild the bundle and re-issue G-005 before
+  S-018.
+- **R-018, traceable results:**
+  - The `ci-results` branch is append-only. Each run commits `results/<source sha>/{results.json,results.meta.json,SUMMARY.md}`
+    without force (rebase-and-retry 3 times on a push rejection), so the D-020 "force push" is replaced by this.
+  - The S-016 round logs and the `REPORT.md` realism tables are produced by `tools/realism/summarize.py` from a committed
+    `results.json` and cite its path; no number is typed by hand (Rule 9).
+- **R-019, CI upkeep:**
+  - `ci.yml` also runs on `schedule: - cron: '0 6 1 * *'` (monthly).
+  - `pip-audit` reports without failing on push (`continue-on-error: true`, `::warning::`), and fails the scheduled run.
+  - Every job logs the toolchain versions (`cmake --version`, the compiler, the runner image version).
+  - S-018 writes `MAINTENANCE.md`: what each job does, how to refresh the pins and the lock, what to do when Zenodo or a
+    runner image changes, and how to re-run calibration.
+- **R-020, supply chain:** `tools/requirements.lock` is regenerated in S-002 with hashes
+  (`pip download` + `pip hash`, or `pip-compile --generate-hashes` if available) and installed with
+  `pip install --require-hashes`. The jobs that push (`realism`, `gate-evidence`) install Python packages in a separate
+  step before checking out with write credentials (`persist-credentials: false` on checkout; the push step configures
+  `GITHUB_TOKEN` itself). Branch protection on `main` is recommended to the human in `REPORT.md` (a repository setting,
+  not changed by the implementer).
+- **R-021, floating point:** `tpt_core` compiles with `-ffp-contract=off` (GCC/Clang) and `/fp:precise` (MSVC). If T-012 or
+  T-013 fails on one OS only, run `tpt_calibrate` on that OS in CI and compare: a difference > 2 cents for any note →
+  `BLOCKED.md` with the comparison (DR-CAL).
+- **R-022, host rates:** outside [22.05, 192] kHz the processor outputs silence, sets a UI flag drawn as
+  "unsupported sample rate", and logs once. README states the range.
+- **R-023, long hold:** S-009 also renders every standard note at mf for 20 s and logs `logs/S-009-long-hold.md` (partial
+  and RMS per 1 s window). A note that changes partial or decays by more than 6 dB → DR-REGIME.
+- **R-024, CI concurrency:** `realism` and `gate-evidence` use `concurrency: { group: results-${{ github.ref }}, cancel-in-progress: false }`
+  and push only on `push` events (not `pull_request`).
+
 ## Decision rules (if → then)
 Each rule names the step(s) where it applies.
 
@@ -430,6 +487,7 @@ Each rule names the step(s) where it applies.
 | DR-ALLOC (S-008) | T-024 counts allocations | Find them with a debugger breakpoint on `operator new`. Preallocate in `prepare()`. |
 | DR-PERF (S-017) | RTF > 0.05 on a CI OS | (1) Check Release/LTO. (2) Control-rate decimation to 32 samples. (3) Reduce modes to 12 for partials ≤ 8 only if T-007/T-012 still pass. Never relax T-024. |
 | DR-REAL (S-016) | T-029 fails | Up to 5 calibration rounds on non-frozen constants only: D-007 attack, D-008 map, D-012 L_nl / K_out, D-005 trims. Log each round in `logs/S-016-round-<k>.md`. Then go to G-005 with the metrics. Thresholds are never edited. |
+| DR-RANGE (S-011) | T-034 fails for a parameter extreme | Brightness or breath noise: reduce the internal mapping (`L_nl` maximum, noise gains in `VoiceTuning.h`) so that the extreme stays on the partial; never change the parameter range (T-026). Tuning extremes: add optional per-note `fscale_415` and `fscale_466` fields to the table (additive, optional in the parser, written by `tpt_calibrate --a4 415,440,466`) and interpolate log-linearly in A4. Vibrato: limit the modulation to the control rate (16 samples) with linear interpolation. At most 5 rounds, then `TEST_CHALLENGE.md`. |
 | DR-INTON (G-005 response) | The human says the natural tendencies (r = 1) are wrong for some notes | Record the human's values as an override table `natural_dev_override` in `generate_table` input (new optional JSON field, additive). Re-run T-014 against the overridden values via a `TEST_CHALLENGE` amendment. |
 | DR-PLUGINVAL (S-017) | pluginval fails | Fix the plugin. On Windows, a path or hash issue is fixed in the workflow, never in the frozen script. |
 | DR-ZENODO (S-015, S-016) | Zenodo is unreachable locally | Run T-029 in CI only. Continue the other steps. |

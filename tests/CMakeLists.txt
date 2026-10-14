@@ -14,7 +14,7 @@ tpt_test(tpt_unit_tests
   core/test_lip_model.cpp core/test_analysis.cpp core/test_state.cpp core/test_layout.cpp)
 tpt_test(tpt_integration_tests
   core/test_reference_sim.cpp core/test_voice_pitch.cpp core/test_voice_overblow.cpp core/test_voice_midi_ui.cpp
-  core/test_voice_timbre.cpp)
+  core/test_voice_timbre.cpp core/test_voice_ranges.cpp)
 tpt_test(tpt_operational_tests core/test_voice_robustness.cpp)
 tpt_test(tpt_alloc_tests core/test_alloc.cpp)
 tpt_test(tpt_perf_tests core/test_perf.cpp)

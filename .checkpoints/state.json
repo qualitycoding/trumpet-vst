@@ -1,10 +1,10 @@
 {
  "artifacts": {
-  ".github/workflows/plan-verify.yml": "af85d1b9d877c3148fe87f2aeb7113e7ca7dc29f6ae2130d66baa8a1c4cda823",
+  ".github/workflows/plan-verify.yml": "025d2c3b386339559cd89876a53108efdd991756d900dde56210359bde57c9f3",
   ".gitignore": "ca1976224d1aaccaecb57849e8346a30873ac19274dba738fd4e8fc88ae1ddb2",
   "ATTRIBUTION.md": "b9100d11a8cb819e37b24e9724bd87dbdaadc705a6e4ba8077b8991e0db93f2c",
-  "CMakeLists.txt": "c1980303c49aef98c365b4b994eef1a3f1725368239967ee60264bb3eeaa0cc0",
-  "HANDOFF.md": "5db159b3ab440b6537ea4f1965f19ca29dd57c4cfcb802c98201596ae3e67dd9",
+  "CMakeLists.txt": "7ec54499e342267a1babe1af84496042e1789118ecde1d87dd89a5b53609c451",
+  "HANDOFF.md": "1b65c68684b1d5e9c49596fcc6002cb9b6cc47825d5090284092669180821d86",
   "core/CMakeLists.txt": "ce4e2d91761a120456f56e47c1e0ade7d4d8f7ee7d061150c54ed1fe4a5e9a63",
   "core/include/tpt/Analysis.h": "604af4199e0c98f57fc2ee9264f271a55526b22ca7ac7eab713da608f7b66d69",
   "core/include/tpt/Errors.h": "49b26fba4600bcb0157d3431ecdb87e206b75b1f754d631ac1a3824b63216c4e",
@@ -141,13 +141,13 @@
   "lessons/L-20261008T151500Z-reasoned-expected-value-wrong.md": "0c42d0a2560a1c4f8fcb0128e7b20cc568c517b8a60824a0810f85b4c4896bda",
   "plan/ASSUMPTIONS.md": "bb7afbaf900b8e517a7a449a7e4e28e19b14c98e0cc5368039a14910b819629e",
   "plan/COLD_READ.md": "1b9724416090e9f32101c2b4e5fc54c15564df1d49037f927bf8786efd3d5109",
-  "plan/DECISIONS.md": "967bcfe231f28fc26215d2f34239d35a3a86d4cdbf4ff9ee3e27d9c5345a311e",
+  "plan/DECISIONS.md": "4b14b4b1ecce44c3f404e35925a0daee12fde6dcc47412e27cea0d559a2dc219",
   "plan/ENVIRONMENT.md": "cd6a058fe62f7febdebd631340d59a7e0cace0a06bdf67bedda6d56f74828e16",
-  "plan/GATES.md": "f7206507355daede48b6308139c40592ab8b91f45d4bdf46e4117e7ae97f7e3d",
-  "plan/PLAN.md": "c12f9b2b37ef783093b16a82e4bd35721fd1564fe2e1ba94bf5db301951715f2",
+  "plan/GATES.md": "4c70c6ede27f0aab208b3ff9bdf928e4ad8613f57812ea742fd13c9320bbfb56",
+  "plan/PLAN.md": "d7214f594c6d0cba80ee19e5e0d0f50cbffc3b01f43f97161b77d379df30b536",
   "plan/PROFILE.md": "7e4bd04e40505fe5f82b15923ff150b13225c59fc36d00f3c1d570cbece72335",
   "plan/PROTOCOL_EXTRACTS.md": "ba3b7b4899161e19728b6314738ce9832c001e84d0c29c0c6190cb4bd8ee3104",
-  "plan/TRACEABILITY.md": "9a0fbccc9cbf37fb883c6ec3b3642cf847ce2d15bf71b6c701c26ac0eb4bfdca",
+  "plan/TRACEABILITY.md": "d6bc7a9f0f2f815a28812cfb3763a22de0747410f2d777c537f3811f47dcdf2b",
   "plugin/CMakeLists.txt": "c41a36d9620025fedcc3e57ed5945a2002bd7f4a8f0dd6a2666da6c39231c00a",
   "plugin/src/Parameters.h": "bb6733007ee7d82e1869a9079fea636bbd8bc7553a50720af5b1419d62884d6c",
   "plugin/src/PluginEditor.cpp": "8bb0720eeaff46852e324188dc66e64610502816b39003bc6630bc250e20fb2f",
@@ -156,7 +156,8 @@
   "plugin/src/PluginProcessor.h": "50f988aacc7526c3b6c47702ab1e6b11e2b6fa7edb6e58df98488975b7b8b8df",
   "plugin/src/TrumpetView.cpp": "2616f59ca660914c753677008ad99076426011bc3b4cdb10d748023d370f6f36",
   "plugin/src/TrumpetView.h": "45aa28d3d50d17b69256beac16b94ba874a9069720f9934ffc15d9d6c625de9c",
-  "premortem/RISK_REGISTER.md": "c76fb927cd9c554f3486601a07debcbbd98e2e256354aebbce442f7b36faf318",
+  "premortem/RISK_REGISTER.md": "6b8c61e23393ab98eca03907c6d4dc02ee98cd101105239704c5bea69a19605f",
+  "premortem/round-1.md": "0f65070cf3a1f2f72ee9bfd55bc0666408c5509e32a4f4c5404d260eed70e0a5",
   "research/PRIOR_KNOWLEDGE.md": "efbcff880db9df675c15c00f4770ebc308d5fec70090f23ed44406b95d1613de",
   "research/QUESTIONS.md": "8ea14ac1a6d2ae7d4b29641b57c2b809c01251473716293f3fcb52b220583274",
   "research/SOURCES.md": "7bb9cd8fa11d62f8d3d443a7cae8cabaf451be766d306c9442df83b9b5814777",
@@ -218,8 +219,8 @@
   "research/spikes/timbre_spike.py": "b52f79810d572a39b5df69a5c269c4ddbd999cf29de503a69f70503b28949f1b",
   "research/spikes/timbre_spike_result.json": "748c10fcbd3328bb6febb09922f2f1c6cd850e69134660a9fe10bc568f92c42a",
   "research/spikes/tmm_trumpet.py": "a292c9a1c0ebbcb4d71a15a16e8abcdb3a689534f14f28d94e3c09a882869623",
-  "tests/CMakeLists.txt": "ed7fa4e8b5b3e6ab0b08a8f7cff637b2edf2c3a3d1bc04bbb750f81ea65a5b4c",
-  "tests/FROZEN_MANIFEST.sha256": "13d3c83769595654288f6f38b840b277d32a5f639cf3d4beb9e9951ace185373",
+  "tests/CMakeLists.txt": "32bd5e45f561652e5c0f01bbde7f931a7e89b25f24762d6f277ae7709daaa589",
+  "tests/FROZEN_MANIFEST.sha256": "5a3b09e6d44ad9d471a60fc8644ab9c04e5babcbe21a352fec44f3e003027be1",
   "tests/core/TestSupport.h": "4ea691c977bfd2155ea2f748301115f3c2c839c41f4f7bbdb2898bc9d5273e97",
   "tests/core/test_alloc.cpp": "854e1cc7beef25545b26d81809cb63ebbcb818f4a6f9a1d16f5f35be7c0cf61d",
   "tests/core/test_analysis.cpp": "cd7f1de558a3682d2a0e041bfbe8c8c9909577db4f693c73bffa09ecabcacf5a",
@@ -235,6 +236,7 @@
   "tests/core/test_voice_midi_ui.cpp": "f8d572b9565c67c465105962777d77c57aea9b2019ad3398838d3ac1f8337bbc",
   "tests/core/test_voice_overblow.cpp": "163ad64b9cd3e35aae0fc4a49a74fbda5f8765e3cd59a16d334bec3dda0ae68c",
   "tests/core/test_voice_pitch.cpp": "f355343650fbf151a0c06fcda646b2e73bb83e11a0620937cbf5c2e00a6778a7",
+  "tests/core/test_voice_ranges.cpp": "efb67e06f97d4a40a4bbd21f0b990c2d804297051c8c54fb1a2992aed9e09558",
   "tests/core/test_voice_robustness.cpp": "e14fcbc42df27e199fe44b6de2a0ec0707feb5d4d1db70021df07c4bf3574a28",
   "tests/core/test_voice_timbre.cpp": "654eada210d7cc696c12d9975ed2cd3f68e435fdecdb0cfcda876c8609d1e692",
   "tests/fixtures/freour2022_open_modes.txt": "5cf24d70ba9755f4d7f2ffb1bd7d278f4161a8b9929843b9c648e3afba3ca760",
@@ -285,7 +287,8 @@
   "R3",
   "R4",
   "R5",
-  "R6"
+  "R6",
+  "premortem-1"
  ],
  "diagnostic": {
   "date": "2026-10-07",
@@ -477,18 +480,18 @@
  ],
  "open_items": [],
  "pending": [
-  "4",
+  "premortem-2",
   "5"
  ],
- "phase": "3",
- "premortem_round": 0,
+ "phase": "4",
+ "premortem_round": 1,
  "profiles": [
   "software"
  ],
  "proof_review_round": 0,
  "research_round": 4,
  "run_id": "20261007T145241Z-trumpet-vst-plan",
- "subphase": "3.6",
+ "subphase": "4.4",
  "tier_substitutions": [],
- "updated_at": "2026-10-09T23:03:53Z"
+ "updated_at": "2026-10-14T14:38:26Z"
 }

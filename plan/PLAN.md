@@ -280,6 +280,8 @@
   3. Build (so `tpt_calibrate` has the current constants), run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`,
      then build again (this re-embeds the table).
   4. Run `tpt_integration_tests "[T-012],[T-013]"`, `tpt_unit_tests "[T-007]"` and `tpt_operational_tests`.
+  5. Long hold (D-026 R-023): render every standard note at mf for 20 s with `tpt_render` (from S-015 if available, else a
+     small loop in `tools/render/calibrate.cpp --long-hold`) and write `logs/S-009-long-hold.md`.
 - Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`
 - Evidence produced: T-012, T-013
 - Done when: those tags pass, and `tpt_operational_tests` passes completely (the S-008 exception for the pitch assertion
@@ -326,12 +328,13 @@
      - D-003 keyswitches and fixed-valves fscale;
      - `useAlternates`.
   2. After any change to `VoiceTuning.h`: build, run `tpt_calibrate`, build again (re-embeds the table). Then run
-     `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022]"` plus every previously green tag.
+     `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022],[T-034]"` plus every previously green
+     tag (DR-RANGE for T-034).
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`
-- Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022
+- Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022, T-034
 - Done when: those pass with no regression. T-021/T-022 failures may wait for S-016 under DR-REAL; record them in the checkpoint.
 - Checkpoint: test status and final constants.
-- On failure: DR-OVERBLOW, DR-VALVE.
+- On failure: DR-OVERBLOW, DR-VALVE, DR-RANGE.
 - Gate: none
 - Relevant decisions/claims: D-003, D-009, D-010, D-013
 - Lessons applied: L-20261007T150600Z-control-mapping-formulas-unverified
@@ -492,27 +495,31 @@
 - Actions:
   1. Push. Get CI `core` (including `ctest -L perf`) and `plugin` (pluginval strictness 10; auval on macOS) green on all three OSes.
   2. Run `pip-audit -r tools/requirements.lock` (DR-SECURITY).
+  3. Check that the Windows `dumpbin` step (D-024) passes and the plugin artifacts are uploaded (D-025); apply D-026 R-017
+     if sound-affecting files changed since the G-005 bundle commit.
+  4. Write `GATE-G-006.md` per `plan/GATES.md` (REAPER checklist) and halt at G-006.
 - Outputs: fixes as needed
 - Evidence produced: T-024 (perf), T-026, T-027 on three OSes
 - Done when: the CI jobs `freeze`, `core`, `python`, `plugin`, `build-linux` and `realism` are green on the same commit — except, when the human answered G-005 with `proceed` or `proceed-with-rescope` while T-029/T-021/T-022 were red (`GATE-G-005.RESPONSE.md`), those named tests may stay red: they are listed as accepted failures in `REPORT.md` (the frozen tests are not changed or skipped).
 - Checkpoint: CI run URL.
 - On failure: DR-PERF, DR-PLUGINVAL, DR-SECURITY.
-- Gate: none
-- Relevant decisions/claims: D-020, C-009–C-015, C-025
+- Gate: **G-006**
+- Relevant decisions/claims: D-020, D-024, D-025, D-026, C-009–C-015, C-025
 - Lessons applied: L-20261007T150900Z-windows-sha256sum-backslash
 - Exclusive resources: CI
 
 ### S-018 Final verification and report
 - Tier: Sonnet
 - Profile: software
-- Depends on: S-017
+- Depends on: S-017 (with G-006 answered `proceed`)
 - Inputs: everything
 - Actions:
   1. `bash tests/scripts/verify_freeze.sh`; then a full local run of every suite available locally.
   2. Update the README "Status" and "Building" sections (no claims beyond the evidence).
   3. Write `REPORT.md`: tests by ID with status, the SC table, deviations, gate outcomes, open risks, and what was not verified (a real DAW host test, unless the human did one).
-  4. Push.
-- Outputs: `README.md`, `REPORT.md`
+  4. Write `MAINTENANCE.md` (D-026 R-019) and recommend branch protection on `main` in `REPORT.md` (R-020).
+  5. Push.
+- Outputs: `README.md`, `REPORT.md`, `MAINTENANCE.md`
 - Evidence produced: every T-ID green on one commit (CI link)
 - Done when: everything is green apart from the accepted failures recorded at G-005, and `REPORT.md` is pushed.
 - Checkpoint: final.

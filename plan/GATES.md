@@ -30,7 +30,7 @@ Template for `GATE-<id>.md`:
 ## G-002: external or irreversible action (release, tag, package, merge to `main`)
 | Aspect | Definition |
 |---|---|
-| Trigger | Any step or deviation that would create a tag or GitHub Release, upload binaries anywhere, publish a package, or merge or push to `main`. No step of this plan does any of these. |
+| Trigger | Any step or deviation that would create a tag or GitHub Release, upload binaries anywhere outside this repository's private workflow artifacts (D-025), publish a package, or merge or push to `main`. No step of this plan does any of these. |
 | Evidence | The exact command(s), the artefacts, their SHA-256 values, licence implications (AGPLv3 binaries, C-098), and the CI run that built them. |
 | Questions | 1. Approve this action exactly as described? |
 | Allowed responses | `approve`, `deny`, `approve-with-changes: <text>` |
@@ -51,7 +51,7 @@ Template for `GATE-<id>.md`:
 | Trigger | S-014 done: the editor works and `tpt_ui_snapshots` has written the screenshots. |
 | Evidence (branch `evidence/G-004`, orphan; built by the CI job `gate-evidence`) | Editor snapshots, 960×600 PNG, made from `UiState`s built by `resolveNote` (S-014). `written-<NN>-<name>.png` for all 36 standard fingerings, `<name>` from `noteName` with `#` replaced by `s` (e.g. `written-54-Fs3.png`). `alt-written-<NN>-<name>.png` for the 20 alternates. `overblow-<NN>.png` for written 60, 67, 72, 79, 84 with target partial n + 1 (Overblow 0.6). `fixed-valves.png`: Fixed-valves mode, valves 1-3 held, idle. `editor.png`: written 62 (1-3 p3, 3rd slide) sounding. Plus a table in `GATE-G-004.md` listing every fingering with valves, partial and trigger, with the choices made where sources differ: C♯6–E6 (C-061), slide triggers (C-064, C-065), alternate list (C-062). |
 | Questions | 1. Is every standard fingering correct? 2. Are the alternates the ones you want? 3. Are the slide triggers right (3rd slide on C♯4/D4 only; 1st slide on F5, A5, A♯5)? 4. Is anything drawn wrongly or missing in the trumpet view? |
-| Allowed responses | `proceed`, `fix-drawing: <items>`, `correct-chart: <written note>=<valves> p<n> [trigger]; ...`, `stop` |
+| Allowed responses | `proceed`, `fix-drawing: <items>`, `correct-chart: <written note>=<valves> p<n> [trigger]; ...`, `stop`; each may be followed by `tokens-revoked` (see Open human actions) |
 | Branches | `proceed` → S-016 may start once its other dependencies are met. `fix-drawing` → change the drawing code only (T-033 must still pass); re-issue G-004. `correct-chart` → the frozen fixture is wrong: write `TEST_CHALLENGE.md` (amendment, protocol 2E.4); the planning agent amends the fixture, the manifest and dependent tests (T-003, T-007, T-012); then continue. `stop` → write `REPORT.md` (as in S-018, with the gate outcome), mark S-015..S-018 as skipped in `EXECUTION_LOG.md` (S-015 may finish if already running), then run S-RETRO and S-KNOW. |
 
 ## G-005: realism listening sign-off (after S-016)
@@ -62,6 +62,21 @@ Template for `GATE-<id>.md`:
 | Questions | 1. Without the key, which file in each pair is the real trumpet? 2. Is the sound realistic enough for your use? 3. Is the Overblow / Underblow / lip-slur behaviour what you wanted (demos 02–05)? 4. Do the natural tendencies at Intonation realism 1 sound right (demo 07; low valved notes, R-005)? Note: trigger notes (C♯4, D4, F5, A5, A♯5) keep their slide correction at realism 1, so they deviate only by the harmonic-series amount. |
 | Allowed responses | `proceed`, `iterate: <notes>`, `proceed-with-rescope: <text>`, `override-intonation: <written>=<cents>; ...`, `stop` (`proceed` while T-029/T-021/T-022 are red accepts those failures: they stay red and are listed in `REPORT.md`, S-017/S-018) |
 | Branches | `proceed` → S-017. `iterate` → up to 3 more DR-REAL rounds following the notes, then re-issue G-005. `proceed-with-rescope` → record a new `A-###` and continue. `override-intonation` → apply DR-INTON (amendment), then continue. `stop` → write `REPORT.md` (as in S-018, with the gate outcome), mark S-017 and S-018 as skipped in `EXECUTION_LOG.md`, then run S-RETRO and S-KNOW. |
+
+## G-006: host acceptance in REAPER (after S-017; D-025, R-011)
+| Aspect | Definition |
+|---|---|
+| Trigger | S-017 done (CI green, apart from accepted failures). |
+| Evidence | Link to the CI run and the Windows artifact `trumpet-windows-2025` (VST3 + Standalone) and, for macOS users, the AU/VST3 artifact; install instructions (copy `Trumpet.vst3` to `C:\Program Files\Common Files\VST3`); the checklist below. |
+| Checklist (for the human) | 1. REAPER scans and loads "Trumpet" without errors. 2. A MIDI item with notes written F♯3–C6 plays at the right pitches; mod wheel gives vibrato; pitch bend works. 3. The editor shows valves, slide triggers and partials matching the notes. 4. CC16 (or the Overblow knob) jumps partials; Fixed valves with keyswitches 24–31 works. 5. Save the project, close and reopen REAPER: parameters and held valves are restored. 6. Switch the project sample rate 44.1 ↔ 48 kHz with the editor open: no crash, pitch still right. 7. Render to WAV: no clicks or dropouts at 128-sample buffers. |
+| Allowed responses | `proceed`, `issues: <numbered list>`, `stop` |
+| Branches | `proceed` → S-018. `issues` → fix them (DR-DEFAULT; a fix touching the sound re-opens G-005 per D-026 R-017), push, re-issue G-006 with the new artifact. `stop` → `REPORT.md`, then S-RETRO and S-KNOW. |
+
+## Open human actions (not gates; listed in HANDOFF)
+- **Revoke both GitHub tokens pasted in chat on 2026-10-07 (A-020, R-012).** The implementer asks for the reply
+  `tokens-revoked` in the G-004 response and records it; until it is recorded, G-005 is not processed (S-016 may run,
+  its gate waits).
+- Optional: enable branch protection on `main` (R-020).
 
 ## Gates not required
 No other gate is needed: there is no deployment and no publication, and every external action is covered by G-002.
