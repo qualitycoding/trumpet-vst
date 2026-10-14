@@ -80,7 +80,7 @@ every step in its `Depends on` list has passed. Independent steps may run concur
 resource.
 
 ## Open human actions
-- The two GitHub tokens pasted in chat on 2026-10-07 must be revoked by the human (A-020, R-012). Ask for the reply
+- The three GitHub tokens pasted in chat during planning (2026-10-07, 2026-10-14) must be revoked by the human (A-020, R-012). Ask for the reply
   `tokens-revoked` with the G-004 response; G-005 is not processed until it is recorded (`plan/GATES.md`).
 - Optional: branch protection on `main` (R-020).
 

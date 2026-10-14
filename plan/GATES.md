@@ -73,7 +73,7 @@ Template for `GATE-<id>.md`:
 | Branches | `proceed` → S-018. `issues` → fix them (DR-DEFAULT; a fix touching the sound re-opens G-005 per D-026 R-017), push, re-issue G-006 with the new artifact. `stop` → `REPORT.md`, then S-RETRO and S-KNOW. |
 
 ## Open human actions (not gates; listed in HANDOFF)
-- **Revoke both GitHub tokens pasted in chat on 2026-10-07 (A-020, R-012).** The implementer asks for the reply
+- **Revoke the three GitHub tokens pasted in chat during planning (2026-10-07, 2026-10-14; A-020, R-012).** The implementer asks for the reply
   `tokens-revoked` in the G-004 response and records it; until it is recorded, G-005 is not processed (S-016 may run,
   its gate waits).
 - Optional: enable branch protection on `main` (R-020).
