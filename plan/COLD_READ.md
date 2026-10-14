@@ -118,3 +118,15 @@ Raw reports: `research/coldread/pass-1-dryrun.md`, `research/coldread/pass-1-mec
 
 **Cold-read gate result:** 97 items over 5 passes, all resolved. The mechanical checks were clean in passes 2–4. The final
 pass's fixes are carried as R-009.
+
+## Re-run after pre-mortem round 1 hardening (pass 6, protocol 4.4)
+A fresh Sonnet dry run checked the changes since 1b60fbb: 9 items (1 High, 4 Medium, 4 Low). All were resolved:
+- **1 (High):** the hashed lock moved to `tools/requirements.hashes.txt`, so the T-031 lock form is unchanged.
+- **2:** R-022 behaviour (no clamping; flag on the processor).
+- **3:** `heldValves` as a JSON key; `setHeldValves` added in S-008 and used in S-013.
+- **4:** CI additions wired into S-002 actions, Done-when and relevant decisions.
+- **5:** artifact name and retention (D-025).
+- **6:** stale force-push sentence removed from D-020.
+- **7:** order of checkout, install and push (R-020).
+- **8:** long-hold tool, output and failure criterion, plus the DR-REGIME trigger.
+- **9:** `tokens-revoked` condition in the G-005 trigger.

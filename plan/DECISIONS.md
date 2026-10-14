@@ -357,7 +357,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
     then `tools/realism/summarize.py results.json --out SUMMARY.md`, then T-029 (pytest), and push; the summarize, artifact and
     push steps use `if: ${{ !cancelled() && steps.chk.outputs.present == '1' }}` so that results reach `ci-results` even
     when T-029 is red (the job is then red only because of T-029);
-    the results to `ci-results` with `git push --force origin HEAD:ci-results`.
+    the results to `ci-results` (append-only, D-026 R-018).
   - `gate-evidence` (added in S-014; ubuntu): see below.
 - **Write permission:** the `realism` and `gate-evidence` jobs' pushes need `permissions: contents: write` on those jobs
   only, using `GITHUB_TOKEN`.
@@ -420,17 +420,20 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   `plan-verify.yml`; copy it into `ci.yml`, S-002).
 
 ## D-025 Installable builds and host acceptance (R-011)
-- **Artifacts:** the CI `plugin` job uploads `build/plugin/TrumpetVST_artefacts/Release` per OS as a workflow artifact,
-  retained 30 days. Workflow artifacts are private to the repository and are **not** a release (G-002 does not apply to
+- **Artifacts:** the CI `plugin` job uploads `build/plugin/TrumpetVST_artefacts/Release` per OS as a workflow artifact
+  named `trumpet-${{ matrix.os }}` (e.g. `trumpet-windows-2025`), `retention-days: 30`, `if: ${{ !cancelled() }}`.
+  (`plan-verify.yml` used `trumpet-stub-…` and 7 days for the stub only.) Workflow artifacts are private to the repository and are **not** a release (G-002 does not apply to
   them).
 - **Host acceptance:** gate G-006 (after S-017) gives the owner a REAPER checklist to run on Windows 11 with the
   artifact. S-018 waits for G-006.
 
 ## D-026 Smaller hardening decisions (pre-mortem round 1)
-- **R-014, held valves:** the processor stores the Fixed-valves held valves in its state as an extra XML property
-  `heldValves` (valves name), alongside the D-015 JSON, and restores it with the additive member
-  `void TrumpetVoice::setHeldValves(Valves) noexcept` (logged in `DEVIATIONS.md`). `prepare()` and `reset()` keep the held
-  valves; only a keyswitch changes them. README documents that hosts should chase keyswitch notes or that the state
+- **R-014, held valves:** the processor writes the held valves as an optional top-level key `"heldValves":"<valvesName>"`
+  in the same `tpt-state-1` JSON (it reads the current value from `uiState().valves` while Fixed-valves mode is on;
+  `deserializeState` ignores unknown keys). On restore the processor parses it with `parseValves` (invalid → ignored) and
+  calls the additive member `void TrumpetVoice::setHeldValves(Valves) noexcept` (S-008 adds it, logged in `DEVIATIONS.md`).
+  `prepare()` and `reset()` keep the held valves (an additive refinement of the header's "resets all state", logged);
+  only a keyswitch or `setHeldValves` changes them. README documents that hosts should chase keyswitch notes or that the state
   restores the last held valves.
 - **R-015, UI atomics:** the UI atomics live in a struct owned by `TrumpetVoice` itself, allocated once in the constructor
   and never reallocated by `prepare()`, so a GUI read during a rate change is safe. The Linux `core` CI job also runs
@@ -454,19 +457,23 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   - Every job logs the toolchain versions (`cmake --version`, the compiler, the runner image version).
   - S-018 writes `MAINTENANCE.md`: what each job does, how to refresh the pins and the lock, what to do when Zenodo or a
     runner image changes, and how to re-run calibration.
-- **R-020, supply chain:** `tools/requirements.lock` is regenerated in S-002 with hashes
-  (`pip download` + `pip hash`, or `pip-compile --generate-hashes` if available) and installed with
-  `pip install --require-hashes`. The jobs that push (`realism`, `gate-evidence`) install Python packages in a separate
-  step before checking out with write credentials (`persist-credentials: false` on checkout; the push step configures
-  `GITHUB_TOKEN` itself). Branch protection on `main` is recommended to the human in `REPORT.md` (a repository setting,
+- **R-020, supply chain:** `tools/requirements.lock` stays pins-only (`name==version`, the frozen T-031 form). S-002 adds
+  `tools/requirements.hashes.txt` with the same pins plus `--hash=sha256:…` lines (from `pip download` + `pip hash`, or
+  `pip-compile --generate-hashes`), used only for `pip install --require-hashes -r tools/requirements.hashes.txt`;
+  `pip-audit` keeps using the lock. The jobs that push (`realism`, `gate-evidence`) check out with
+  `persist-credentials: false`, install the packages and run the tools, and only the final push step sets the remote
+  authentication from `GITHUB_TOKEN`. Branch protection on `main` is recommended to the human in `REPORT.md` (a repository setting,
   not changed by the implementer).
 - **R-021, floating point:** `tpt_core` compiles with `-ffp-contract=off` (GCC/Clang) and `/fp:precise` (MSVC). If T-012 or
   T-013 fails on one OS only, run `tpt_calibrate` on that OS in CI and compare: a difference > 2 cents for any note →
   `BLOCKED.md` with the comparison (DR-CAL).
-- **R-022, host rates:** outside [22.05, 192] kHz the processor outputs silence, sets a UI flag drawn as
-  "unsupported sample rate", and logs once. README states the range.
-- **R-023, long hold:** S-009 also renders every standard note at mf for 20 s and logs `logs/S-009-long-hold.md` (partial
-  and RMS per 1 s window). A note that changes partial or decays by more than 6 dB → DR-REGIME.
+- **R-022, host rates:** outside [22.05, 192] kHz the processor does not prepare the voice, outputs silence, and sets a
+  processor-side `std::atomic<bool> unsupportedRate` read by the editor, which draws "unsupported sample rate" (not part
+  of `UiState`); it logs once. README states the range. This replaces any clamping of the rate.
+- **R-023, long hold:** S-009 runs `tpt_calibrate --long-hold data/trumpet_resonators.json`, which renders every standard
+  note at mf for 20 s and writes `logs/S-009-long-hold.md`: one table row per note with the sounding partial and the RMS
+  (dBFS) of each 1 s window. A note fails if any window's partial differs from the target, or RMS(window 20) <
+  RMS(window 1) − 6 dB → DR-REGIME.
 - **R-024, CI concurrency:** `realism` and `gate-evidence` use `concurrency: { group: results-${{ github.ref }}, cancel-in-progress: false }`
   and push only on `push` events (not `pull_request`).
 
@@ -480,7 +487,7 @@ Each rule names the step(s) where it applies.
 | DR-T003 (S-003) | The fixture disagrees with a source the implementer trusts | The fixture wins. Write `TEST_CHALLENGE.md`, and the human decides at G-004. |
 | DR-T007 (S-005, S-006) | The open state misses the measured modes, or a valve's lowering is off by > 5 c | Check the like-with-like fit (C-099) and the bisection tolerance. Never widen tolerances. |
 | DR-T009 (S-007) | The Fréour reproduction is off | Compare line by line with `research/spikes/lipsim.cpp`. The port must be exact (same ρ = 1.2041, os = 2). |
-| DR-REGIME (S-008–S-011) | T-012 fails for some notes | (1) Check that sustain gating and the floors are applied. (2) Tune the per-partial trims in `VoiceTuning.h` (fl ratio ±3 %, h0 ±15 %), at most 5 rounds. (2b) For failures only at lip-stiffness extremes: narrow the h0 span of D-005 (1.15 − 0.3·s) symmetrically around 1.0, down to ±0.05 (logged). (3) If still failing, `TEST_CHALLENGE.md` with the evidence; never edit T-012. |
+| DR-REGIME (S-008–S-011) | T-012 fails for some notes, or the S-009 long-hold log shows a failure | (1) Check that sustain gating and the floors are applied. (2) Tune the per-partial trims in `VoiceTuning.h` (fl ratio ±3 %, h0 ±15 %), at most 5 rounds. (2b) For failures only at lip-stiffness extremes: narrow the h0 span of D-005 (1.15 − 0.3·s) symmetrically around 1.0, down to ±0.05 (logged). (3) If still failing, `TEST_CHALLENGE.md` with the evidence; never edit T-012. |
 | DR-CAL (S-009) | Calibration does not converge for a note, or fscale leaves [0.8, 1.25] | Apply DR-REGIME to that note first. If still failing, `BLOCKED.md`. |
 | DR-OVERBLOW (S-011) | T-015 fails | Check hysteresis and cap. Tune the ramp time (10–40 ms) and the brightening slope (0.5–1.2) in `VoiceTuning.h`, at most 5 rounds. Then `TEST_CHALLENGE.md`. |
 | DR-VALVE (S-011) | T-016 valve slurs fail (dip or no settle) | Try, in order: (a) 25 ms interpolation; (b) interpolation in log-frequency; (c) a 15 ms equal-power crossfade of two voices with shared lips (an allowed private implementation change). Log it. |

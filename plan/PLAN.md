@@ -101,15 +101,19 @@
      - the `realism` job sets `TPT_RENDER` and `TINYSOL_DIR`, uses `actions/cache` (key `tinysol-36030a7fe389da86c3419e5ee48e3b7f`), and pushes results to the `ci-results` branch;
      - `::error::` annotations for failures.
   2. Delete `.github/workflows/plan-verify.yml`.
-  3. Create `THIRD_PARTY_NOTICES.md` with one row per D-021 component: name, version, licence, URL, use, shipped yes/no.
-  4. Push, then `gh run watch` (or poll `gh run list --branch impl-20261007T145241Z-trumpet-vst-plan`).
-- Outputs: `.github/workflows/ci.yml`, `THIRD_PARTY_NOTICES.md`
+  3. Apply the CI additions of D-024, D-025 and D-026 (R-015 TSan step, R-016 ASan step, R-018 append-only `ci-results`,
+     R-019 monthly schedule and non-failing `pip-audit` on push and toolchain logging, R-020 `tools/requirements.hashes.txt`
+     and `persist-credentials: false`, R-024 concurrency).
+  4. Create `THIRD_PARTY_NOTICES.md` with one row per D-021 component: name, version, licence, URL, use, shipped yes/no.
+  5. Push, then `gh run watch` (or poll `gh run list --branch impl-20261007T145241Z-trumpet-vst-plan`).
+- Outputs: `.github/workflows/ci.yml`, `THIRD_PARTY_NOTICES.md`, `tools/requirements.hashes.txt`, `.gitignore`
 - Evidence produced: T-031 (all four cases)
-- Done when: `.venv/bin/python -m pytest tests/python/test_supply_chain.py` passes, and the CI `freeze` job is green.
+- Done when: `.venv/bin/python -m pytest tests/python/test_supply_chain.py` passes, the CI `freeze` job is green, and the
+  CI run shows the dumpbin, artifact-upload, TSan and ASan steps (they may fail on stubs only where D-018 expects red).
 - Checkpoint: CI run URL.
 - On failure: a YAML error → fix it. Never unpin an action, and never add `pull_request_target`.
 - Gate: none
-- Relevant decisions/claims: D-020, D-021, C-018–C-022, C-097, C-098
+- Relevant decisions/claims: D-020, D-021, D-024, D-025, D-026, C-018–C-022, C-097, C-098
 - Lessons applied: L-20261007T150900Z-windows-sha256sum-backslash (keep the frozen script; workflow-level fixes only)
 - Exclusive resources: CI
 
@@ -257,7 +261,9 @@
      - the UI atomics and the partial tracker (D-013);
      - idle detection and the safety reset;
      - the note stack (16 notes) with last-note priority.
-     Also implement `VoiceParameters::clamped()`, `latencySamples()` and `soundingHz()`.
+     Also implement `VoiceParameters::clamped()`, `latencySamples()` and `soundingHz()`, the additive
+     `setHeldValves()` (D-026 R-014; `prepare()`/`reset()` keep held valves), UI atomics outside the reallocated state
+     (R-015), and `-ffp-contract=off` / `/fp:precise` for `tpt_core` in `core/CMakeLists.txt` (R-021).
   3. Run `tpt_operational_tests` and `tpt_alloc_tests`.
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h` (+ private helpers in `core/src/`)
 - Evidence produced: T-023, T-024 (alloc part), T-025
@@ -265,7 +271,7 @@
 - Checkpoint: test status.
 - On failure: DR-ALLOC. Non-finite output → the D-006 safety reset; investigate the flow-solve branch.
 - Gate: none
-- Relevant decisions/claims: D-005–D-008, D-012, D-013, D-023, C-089, C-091, C-094
+- Relevant decisions/claims: D-005–D-008, D-012, D-013, D-023, D-026 (R-014, R-015, R-021), C-089, C-091, C-094
 - Lessons applied: L-20261007T150600Z-control-mapping-formulas-unverified, L-20261007T150800Z-host-facing-accessors-missing
 - Exclusive resources: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`
 
@@ -280,12 +286,12 @@
   3. Build (so `tpt_calibrate` has the current constants), run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`,
      then build again (this re-embeds the table).
   4. Run `tpt_integration_tests "[T-012],[T-013]"`, `tpt_unit_tests "[T-007]"` and `tpt_operational_tests`.
-  5. Long hold (D-026 R-023): render every standard note at mf for 20 s with `tpt_render` (from S-015 if available, else a
-     small loop in `tools/render/calibrate.cpp --long-hold`) and write `logs/S-009-long-hold.md`.
-- Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`
+  5. Long hold (D-026 R-023): `build/tools/render/tpt_calibrate --long-hold data/trumpet_resonators.json` writes
+     `logs/S-009-long-hold.md`.
+- Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`, `logs/S-009-long-hold.md`
 - Evidence produced: T-012, T-013
-- Done when: those tags pass, and `tpt_operational_tests` passes completely (the S-008 exception for the pitch assertion
-  has expired).
+- Done when: those tags pass, `tpt_operational_tests` passes completely (the S-008 exception for the pitch assertion
+  has expired), and `logs/S-009-long-hold.md` shows no failing note.
 - Checkpoint: maximum |cents| per note, and the fscale range.
 - On failure: DR-CAL, DR-REGIME.
 - Gate: none
@@ -374,8 +380,11 @@
      - **prepareToPlay:** `voice.prepare(fs, max block)` and `setLatencySamples(voice.latencySamples())`.
      - **processBlock:** `ScopedNoDenormals`; read the APVTS values into `VoiceParameters`; split the block at MIDI events and dispatch per D-014; render mono into channel 0 and copy it to every other channel.
      - **State:** per D-015.
-     - **Host rates and blocks:** clamp the sample rate passed to `voice.prepare` to [22050, 192000] (log once); prepare with
-       `max(samplesPerBlock, 512)` capped at 8192 and process larger host blocks in chunks of at most that size.
+     - **Host rates and blocks:** outside [22050, 192000] Hz follow D-026 R-022 (no voice prepare, silence, processor-side
+       `unsupportedRate` flag). Otherwise prepare with `max(samplesPerBlock, 512)` capped at 8192 and process larger host
+       blocks in chunks of at most that size.
+     - **Held valves:** write and restore `heldValves` per D-026 R-014.
+     - **State conversion:** sized `std::string_view` per D-026 R-016.
      - **`currentUiState()`:** returns `voice.uiState()`.
   2. Build with the plugin; run `xvfb-run -a build/plugin/tpt_plugin_tests` (all except the editor case).
 - Outputs: `plugin/src/PluginProcessor.cpp`
@@ -384,7 +393,7 @@
 - Checkpoint: test status and CI run URL.
 - On failure: DR-DEFAULT.
 - Gate: none
-- Relevant decisions/claims: D-013–D-016
+- Relevant decisions/claims: D-013–D-016, D-026 (R-014, R-016, R-022)
 - Lessons applied: L-20261007T150800Z-host-facing-accessors-missing
 - Exclusive resources: CI
 
@@ -479,7 +488,7 @@
 - Checkpoint: round number and metrics.
 - On failure: DR-REAL.
 - Gate: **G-005**
-- Relevant decisions/claims: D-007, D-008, D-012, D-017, C-085, C-089, C-094, C-096
+- Relevant decisions/claims: D-007, D-008, D-012, D-017, D-026 (R-017, R-018), C-085, C-089, C-094, C-096
 - Lessons applied:
   - L-20261007T150400Z-threshold-not-checked-against-reference-spread (thresholds are frozen; never edit them);
   - L-20261007T150500Z-linear-bore-realism-ceiling;
