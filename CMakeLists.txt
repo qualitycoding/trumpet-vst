@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Static MSVC runtime: the VST3 must not depend on the host's msvcp140/vcruntime140 (D-024, R-010).
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 option(TPT_BUILD_TESTS  "Build the frozen test suite"              ON)
 option(TPT_BUILD_PLUGIN "Build the JUCE VST3/AU/Standalone target" ON)
