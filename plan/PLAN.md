@@ -29,7 +29,9 @@
 - Depends on: none
 - Inputs: generation branch head; `plan/ENVIRONMENT.md`; `HANDOFF.md`
 - Actions:
-  1. Credentials: the harness provides the token in the environment variable `GH_TOKEN` (gh reads it; never echo it). Run
+  1. Credentials: the harness provides the token in the environment variable `GH_TOKEN` (gh reads it; never echo it). It
+     must be a token created for the implementation, never one of the tokens pasted in the planning chat (those are to be
+     revoked, R-027); record "credential source: harness GH_TOKEN" in `EXECUTION_LOG.md`. Any later 401/403 → DR-CRED. Run
      `gh auth setup-git`, `git config user.name qualitycoding` and
      `git config user.email qualitycoding@users.noreply.github.com` (A-024).
      Then `git fetch origin && git checkout --no-track -b impl-20261007T145241Z-trumpet-vst-plan origin/gen-20261007T145241Z-trumpet-vst-plan`
@@ -43,7 +45,9 @@
      - `gh api repos/qualitycoding/trumpet-vst/actions/runs --jq '.total_count'` (must succeed);
      - record the scopes shown by `gh auth status` (fine-grained tokens show none: the workflows permission is then first
        exercised by the S-002 push; a rejection there is a `BLOCKED.md` for the missing permission);
-     - `gh api repos/qualitycoding/agent-knowledge` (200 or 404 are both acceptable; record which).
+     - `gh api repos/qualitycoding/agent-knowledge` (200 or 404 are both acceptable; record which);
+     - `gh api repos/qualitycoding/trumpet-vst --jq .visibility` (record it; if `public`, D-025 applies as written; if
+       `private`, D-025 still applies).
   4. Check that hosts are reachable with `curl -s -o /dev/null -m 15 -w "%{http_code}" https://<host>/`. Any HTTP
      status (not `000`) counts as reachable; some hosts answer 404 at the root (files.pythonhosted.org). Hosts:
      github.com, api.github.com, codeload.github.com, objects.githubusercontent.com, release-assets.githubusercontent.com,
@@ -109,7 +113,8 @@
 - Outputs: `.github/workflows/ci.yml`, `THIRD_PARTY_NOTICES.md`, `tools/requirements.hashes.txt`, `.gitignore`
 - Evidence produced: T-031 (all four cases)
 - Done when: `.venv/bin/python -m pytest tests/python/test_supply_chain.py` passes, the CI `freeze` job is green, and the
-  CI run shows the dumpbin, artifact-upload, TSan and ASan steps (they may fail on stubs only where D-018 expects red).
+  CI run shows the dumpbin, TSan and ASan steps (they may fail on stubs only where D-018 expects red), and no job uploads
+  plugin or Standalone binaries (D-025).
 - Checkpoint: CI run URL.
 - On failure: a YAML error → fix it. Never unpin an action, and never add `pull_request_target`.
 - Gate: none
@@ -333,12 +338,17 @@
      - D-010 lip slurs and valve-change interpolation;
      - D-003 keyswitches and fixed-valves fscale;
      - `useAlternates`.
-  2. After any change to `VoiceTuning.h`: build, run `tpt_calibrate`, build again (re-embeds the table). Then run
+  2. Brightness extremes (D-012, R-028): extend `tpt_calibrate` with `--brightness-ff` (S-009 tool; the voice exposes the
+     clamp counter through a debug accessor, additive and logged). With brightness 1 at velocity 124/127 it renders every
+     normal-range standard note for 1 s at 48 kHz and at 192 kHz and writes `logs/S-011-brightness-ff.md` with the warp-clamp counter and the peak
+     output per note. Any clamp event → enlarge the ring (D-012) or reduce `L_nl` maximum (DR-RANGE).
+  3. After any change to `VoiceTuning.h`: build, run `tpt_calibrate`, build again (re-embeds the table). Then run
      `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022],[T-034]"` plus every previously green
      tag (DR-RANGE for T-034).
-- Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`
+- Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`, `tools/render/calibrate.cpp`, `logs/S-011-brightness-ff.md`
 - Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022, T-034
-- Done when: those pass with no regression. T-021/T-022 failures may wait for S-016 under DR-REAL; record them in the checkpoint.
+- Done when: those pass with no regression, and `logs/S-011-brightness-ff.md` shows no clamp event. T-021/T-022 failures
+  may wait for S-016 under DR-REAL; record them in the checkpoint.
 - Checkpoint: test status and final constants.
 - On failure: DR-OVERBLOW, DR-VALVE, DR-RANGE.
 - Gate: none
@@ -504,16 +514,20 @@
 - Actions:
   1. Push. Get CI `core` (including `ctest -L perf`) and `plugin` (pluginval strictness 10; auval on macOS) green on all three OSes.
   2. Run `pip-audit -r tools/requirements.lock` (DR-SECURITY).
-  3. Check that the Windows `dumpbin` step (D-024) passes and the plugin artifacts are uploaded (D-025); apply D-026 R-017
-     if sound-affecting files changed since the G-005 bundle commit.
-  4. Write `GATE-G-006.md` per `plan/GATES.md` (REAPER checklist) and halt at G-006.
+  3. Check that the Windows `dumpbin` step (D-024) passes; apply D-026 R-017 if sound-affecting files changed since the
+     G-005 bundle commit.
+  4. Add the `rc-artifacts` job (D-025) to `ci.yml`. Write `GATE-G-002.md` asking approval to run it for the current commit
+     and halt at G-002. On `approve`: push `git commit --allow-empty -m "[g002-approved rc <short sha>]"` and wait for the
+     artifacts. On `deny`: skip the upload.
+  5. Write `GATE-G-006.md` per `plan/GATES.md` (REAPER checklist, with the RC artifact or local build instructions) and
+     halt at G-006.
 - Outputs: fixes as needed
 - Evidence produced: T-024 (perf), T-026, T-027 on three OSes
 - Done when: the CI jobs `freeze`, `core`, `python`, `plugin`, `build-linux` and `realism` are green on the same commit — except, when the human answered G-005 with `proceed` or `proceed-with-rescope` while T-029/T-021/T-022 were red (`GATE-G-005.RESPONSE.md`), those named tests may stay red: they are listed as accepted failures in `REPORT.md` (the frozen tests are not changed or skipped).
 - Checkpoint: CI run URL.
 - On failure: DR-PERF, DR-PLUGINVAL, DR-SECURITY.
-- Gate: **G-006**
-- Relevant decisions/claims: D-020, D-024, D-025, D-026, C-009–C-015, C-025
+- Gate: **G-002** (RC artifact upload), then **G-006**
+- Relevant decisions/claims: D-020, D-024, D-025, D-026, C-009–C-015, C-025, C-100
 - Lessons applied: L-20261007T150900Z-windows-sha256sum-backslash
 - Exclusive resources: CI
 

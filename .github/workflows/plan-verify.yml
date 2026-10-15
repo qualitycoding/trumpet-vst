@@ -60,12 +60,6 @@ jobs:
           $deps = & $dumpbin.FullName /dependents $bin.FullName
           $deps
           if ($deps -match '(?i)(msvcp140|vcruntime140|ucrtbase|api-ms-win-crt)') { Write-Error "dynamic MSVC runtime dependency"; exit 1 }
-      - name: Upload plugin binaries (CI artifact, not a release; G-002 note)
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: trumpet-stub-${{ matrix.os }}
-          path: build/plugin/TrumpetVST_artefacts/Release
-          retention-days: 7
       - name: auval on the stub AU (must pass)
         if: runner.os == 'macOS'
         run: |

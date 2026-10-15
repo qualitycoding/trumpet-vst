@@ -207,7 +207,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - L_nl = nlp.length_m × 2·brightness, so 0.85 m at the default;
   - arrival time t_k = t − β·L_nl·p⁺/(ρc³);
   - monotone arrival times (`max` accumulate) resolve shocks;
-  - resampled to the internal grid by linear interpolation, with a 64-sample look-behind ring buffer (real-time safe).
+  - resampled to the internal grid by linear interpolation, with a 256-sample look-behind ring buffer (real-time safe).
+    The worst case is β·L_nl,max·p⁺_max/(ρc³)·f_int ≈ 1.2·1.7 m·30 kPa/(1.176·4.19e7)·96 kHz ≈ 119 samples (R-028). The
+    advance is clamped to 250 samples; a clamp event sets a debug counter, logged once per note.
 - **Radiation:** a cascade of the table's RBJ biquads, designed at f_int at `prepare()`.
 - **Breath noise:**
   - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise mapped to [−1, 1) as w = x/2³¹ − 1 (seed 0x7A11C0DE at
@@ -351,7 +353,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
     step with `if: ${{ !cancelled() }}` (so T-024b is evidenced even while accepted failures keep `integration` red).
   - `python` (ubuntu): venv outside the checkout (`$RUNNER_TEMP/venv`, symlinked as `.venv`) from `tools/requirements.lock`, then `pytest tests/python -k "not t029"` and `pip-audit -r tools/requirements.lock`.
   - `plugin` (3 OSes): build with the plugin, run `tpt_plugin_tests` (xvfb-run on Linux), `run_pluginval.sh`, and `auval -v aumu Tpts Qcod` on macOS.
-  - `build-linux` (ubuntu): Release build of `tpt_render` only; uploads it as an artifact for `realism`.
+  - `build-linux` (ubuntu): Release build of `tpt_render` only; uploads it as an artifact for `realism` with
+    `retention-days: 1` (an internal hand-off of an Apache-2.0 core tool without JUCE, not a product binary, D-025).
   - `realism` (ubuntu, `needs: build-linux`): set up the venv, download TinySOL (cache path `reference-data/tinysol`, the
     extracted subset; key `tinysol-36030a7fe389da86c3419e5ee48e3b7f`), run `python -m tools.realism.compare_tinysol --tinysol reference-data/tinysol --render <tpt_render> --out results.json`,
     then `tools/realism/summarize.py results.json --out SUMMARY.md`, then T-029 (pytest), and push; the summarize, artifact and
@@ -419,13 +422,23 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
 - The CI `plugin` job on Windows checks this with `dumpbin /dependents` on the VST3 binary (the step exists in
   `plan-verify.yml`; copy it into `ci.yml`, S-002).
 
-## D-025 Installable builds and host acceptance (R-011)
-- **Artifacts:** the CI `plugin` job uploads `build/plugin/TrumpetVST_artefacts/Release` per OS as a workflow artifact
-  named `trumpet-${{ matrix.os }}` (e.g. `trumpet-windows-2025`), `retention-days: 30`, `if: ${{ !cancelled() }}`.
-  (`plan-verify.yml` used `trumpet-stub-…` and 7 days for the stub only.) Workflow artifacts are private to the repository and are **not** a release (G-002 does not apply to
-  them).
-- **Host acceptance:** gate G-006 (after S-017) gives the owner a REAPER checklist to run on Windows 11 with the
-  artifact. S-018 waits for G-006.
+## D-025 Installable builds and host acceptance (R-011, R-025, R-026)
+- **The repository is public** (C-100). Workflow artifacts of a public repository are downloadable by other GitHub users,
+  so uploading built binaries is a distribution: it needs **G-002** approval (lesson L-20261015T090000Z).
+- **Routine CI** (`plugin` job) builds and validates on every push but uploads **no** binaries (logs only).
+- **Release-candidate job** `rc-artifacts` (in `ci.yml`, added in S-017): runs on push only when the head commit message
+  contains `[g002-approved rc <short sha>]`, and only after `GATE-G-002.RESPONSE.md` with `approve` is committed. It builds
+  Release on the three OSes and uploads one artifact per OS named `trumpet-rc-<short sha>-<os>`, with
+  `retention-days: 90` (the maximum). Each artifact contains:
+  - the plugin formats (`VST3`, `Standalone`, and `AU` on macOS);
+  - `LICENSE`, `NOTICE`, `THIRD_PARTY_NOTICES.md` and `ATTRIBUTION.md`;
+  - `BUILD_INFO.txt` (commit sha, UTC date, runner image, toolchain versions).
+- **Durability:** artifacts expire after 90 days, so `GATE-G-006.md` tells the owner to download and keep the artifact.
+  A durable channel (a GitHub Release) is a separate G-002 decision for the owner, outside this plan.
+- **Host acceptance:** gate G-006 (after S-017, which first asks G-002 for the RC upload) gives the owner a REAPER
+  checklist to run with the RC artifact on Windows 11. S-018 waits for G-006.
+- **Owner alternative:** if G-002 is denied, G-006 is offered with local build instructions (`plan/ENVIRONMENT.md`,
+  Windows with Visual Studio 2026) instead of an artifact.
 
 ## D-026 Smaller hardening decisions (pre-mortem round 1)
 - **R-014, held valves:** the processor writes the held valves as an optional top-level key `"heldValves":"<valvesName>"`
@@ -452,8 +465,10 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   - The S-016 round logs and the `REPORT.md` realism tables are produced by `tools/realism/summarize.py` from a committed
     `results.json` and cite its path; no number is typed by hand (Rule 9).
 - **R-019, CI upkeep:**
-  - `ci.yml` also runs on `schedule: - cron: '0 6 1 * *'` (monthly).
-  - `pip-audit` reports without failing on push (`continue-on-error: true`, `::warning::`), and fails the scheduled run.
+  - Scheduled workflows run only from the default branch (`main`), which this plan never changes (G-002), so no
+    schedule is relied on (R-026). `MAINTENANCE.md` tells the owner to push an empty commit or re-run the last workflow
+    once a month, and that a `schedule: - cron: '0 6 1 * *'` trigger becomes active only once `ci.yml` is merged to `main`.
+  - `pip-audit` reports without failing on push (`continue-on-error: true`, `::warning::`).
   - Every job logs the toolchain versions (`cmake --version`, the compiler, the runner image version).
   - S-018 writes `MAINTENANCE.md`: what each job does, how to refresh the pins and the lock, what to do when Zenodo or a
     runner image changes, and how to re-run calibration.
@@ -499,4 +514,5 @@ Each rule names the step(s) where it applies.
 | DR-PLUGINVAL (S-017) | pluginval fails | Fix the plugin. On Windows, a path or hash issue is fixed in the workflow, never in the frozen script. |
 | DR-ZENODO (S-015, S-016) | Zenodo is unreachable locally | Run T-029 in CI only. Continue the other steps. |
 | DR-SECURITY (S-002, S-017) | `pip-audit` reports a vulnerability | Upgrade within the same major version if available and regenerate the lock (log it). Otherwise record it in `DEVIATIONS.md`. Halt with `BLOCKED.md` only if it is exploitable in the shipped plugin (Python is test-only). |
+| DR-CRED (any step) | A push or API call fails with HTTP 401/403 (for example after the human revoked a pasted token, R-027) | Do not retry with any token from the chat. Write `BLOCKED.md` asking for a new credential via `GH_TOKEN`, continue local work, and resume pushing once `gh auth status` succeeds. |
 | DR-DEFAULT (any) | Anything unanticipated | Choose the most reversible option that does not expand scope, log it in `DEVIATIONS.md` with the rationale, and continue. Exception: if it touches frozen tests, security, data integrity, a public interface or research integrity, halt and write `BLOCKED.md`. |

@@ -1,10 +1,10 @@
 {
  "artifacts": {
-  ".github/workflows/plan-verify.yml": "025d2c3b386339559cd89876a53108efdd991756d900dde56210359bde57c9f3",
+  ".github/workflows/plan-verify.yml": "eac4e748c898dab42b9d6726230776c0455cb8e39a181afe53f8f702d095d71b",
   ".gitignore": "ca1976224d1aaccaecb57849e8346a30873ac19274dba738fd4e8fc88ae1ddb2",
   "ATTRIBUTION.md": "b9100d11a8cb819e37b24e9724bd87dbdaadc705a6e4ba8077b8991e0db93f2c",
   "CMakeLists.txt": "7ec54499e342267a1babe1af84496042e1789118ecde1d87dd89a5b53609c451",
-  "HANDOFF.md": "1b65c68684b1d5e9c49596fcc6002cb9b6cc47825d5090284092669180821d86",
+  "HANDOFF.md": "5036caff861f6920989b3e7c1c8c9362bc8c1fc0129d4a54a56e0e7284e242c2",
   "core/CMakeLists.txt": "ce4e2d91761a120456f56e47c1e0ade7d4d8f7ee7d061150c54ed1fe4a5e9a63",
   "core/include/tpt/Analysis.h": "604af4199e0c98f57fc2ee9264f271a55526b22ca7ac7eab713da608f7b66d69",
   "core/include/tpt/Errors.h": "49b26fba4600bcb0157d3431ecdb87e206b75b1f754d631ac1a3824b63216c4e",
@@ -126,6 +126,7 @@
   "knowledge/K-20261007T160136Z-c-097.md": "85794460efeee7f2e3a63fb81f000ec91ceecbbce30b903e6a86c963d9fc9841",
   "knowledge/K-20261007T160137Z-c-098.md": "cf149dedab1e2ec27b4e3785878247957ebb218cbc965bee1aa3699ce4813e29",
   "knowledge/K-20261007T160138Z-c-099.md": "a4462573110ca45f5fb355ad532835a3bc6543acf29e5c98c3e7294d836e8b56",
+  "knowledge/K-20261007T160139Z-c-100.md": "b75687e0b956981ad59e2036e734be18d555b49351e8749c9fa74f4e515771f5",
   "lessons/L-20261007T150000Z-sandbox-no-pip-no-sudo.md": "6a835a8cf73c385241ba6e72e7c0c0a81798ba01dd3de52c83172cc04ac126d3",
   "lessons/L-20261007T150100Z-no-credentials-in-command-lines.md": "a989db9219d16ab272eeb9fd5cddd6dc038a655d52969de48e4519010170940d",
   "lessons/L-20261007T150200Z-restart-means-fresh-state.md": "2fa6ae7e51a15cebda2c61164e3ce9f070fbf6bbb03314a7fb59e6ef7a15043e",
@@ -139,12 +140,13 @@
   "lessons/L-20261007T151000Z-large-evidence-off-impl-branch.md": "43f6204be4cabd9a34c24fcabab6bf89a7c0212dc35b6bef792d56245d73b6dc",
   "lessons/L-20261008T010500Z-circular-fft-filter-fakes-onsets.md": "fa207ae31148caa92f33089f2572f4a4dd0623fe82a88e6d14fe71ad512593a3",
   "lessons/L-20261008T151500Z-reasoned-expected-value-wrong.md": "0c42d0a2560a1c4f8fcb0128e7b20cc568c517b8a60824a0810f85b4c4896bda",
-  "plan/ASSUMPTIONS.md": "bb7afbaf900b8e517a7a449a7e4e28e19b14c98e0cc5368039a14910b819629e",
-  "plan/COLD_READ.md": "1b9724416090e9f32101c2b4e5fc54c15564df1d49037f927bf8786efd3d5109",
-  "plan/DECISIONS.md": "4b14b4b1ecce44c3f404e35925a0daee12fde6dcc47412e27cea0d559a2dc219",
+  "lessons/L-20261015T090000Z-public-repo-artifacts-are-publication.md": "e62e5a14ba9d62ce4367f56eaaffb6803c273d545dedd021c150cb41d4db707f",
+  "plan/ASSUMPTIONS.md": "57cd5054f1de6f0e6e6694d778e7561d65962a132d72edd2f1d0c6ad6f6c37dd",
+  "plan/COLD_READ.md": "da09203268f4ef4f64ffb61d319f1c87717896880f9ec59b43f35003f9f30fbb",
+  "plan/DECISIONS.md": "95fdeda32a65b90d2070c2ba05ef858d873962b543093907f652a191f15df2cd",
   "plan/ENVIRONMENT.md": "cd6a058fe62f7febdebd631340d59a7e0cace0a06bdf67bedda6d56f74828e16",
-  "plan/GATES.md": "4c70c6ede27f0aab208b3ff9bdf928e4ad8613f57812ea742fd13c9320bbfb56",
-  "plan/PLAN.md": "d7214f594c6d0cba80ee19e5e0d0f50cbffc3b01f43f97161b77d379df30b536",
+  "plan/GATES.md": "1126d197486cbc1ea7411a7f61d91baecb5d2a5e9d647d2cd602e5319f0b18d9",
+  "plan/PLAN.md": "20b9c518799bce8fa9288d443c2b6496b563f0fa6a657772e7b6c10a62ffb6ba",
   "plan/PROFILE.md": "7e4bd04e40505fe5f82b15923ff150b13225c59fc36d00f3c1d570cbece72335",
   "plan/PROTOCOL_EXTRACTS.md": "ba3b7b4899161e19728b6314738ce9832c001e84d0c29c0c6190cb4bd8ee3104",
   "plan/TRACEABILITY.md": "d6bc7a9f0f2f815a28812cfb3763a22de0747410f2d777c537f3811f47dcdf2b",
@@ -156,12 +158,13 @@
   "plugin/src/PluginProcessor.h": "50f988aacc7526c3b6c47702ab1e6b11e2b6fa7edb6e58df98488975b7b8b8df",
   "plugin/src/TrumpetView.cpp": "2616f59ca660914c753677008ad99076426011bc3b4cdb10d748023d370f6f36",
   "plugin/src/TrumpetView.h": "45aa28d3d50d17b69256beac16b94ba874a9069720f9934ffc15d9d6c625de9c",
-  "premortem/RISK_REGISTER.md": "6b8c61e23393ab98eca03907c6d4dc02ee98cd101105239704c5bea69a19605f",
+  "premortem/RISK_REGISTER.md": "fdafa5903ff7ddb1c82ec1e1a2a4c4730e0b94ea573007de64890d471312ec3e",
   "premortem/round-1.md": "0f65070cf3a1f2f72ee9bfd55bc0666408c5509e32a4f4c5404d260eed70e0a5",
+  "premortem/round-2.md": "5411375d73f6a31e010a1cc62ef3936a96d3e7bf07a7eb7dc91ab6feb6ea1f06",
   "research/PRIOR_KNOWLEDGE.md": "efbcff880db9df675c15c00f4770ebc308d5fec70090f23ed44406b95d1613de",
   "research/QUESTIONS.md": "8ea14ac1a6d2ae7d4b29641b57c2b809c01251473716293f3fcb52b220583274",
   "research/SOURCES.md": "7bb9cd8fa11d62f8d3d443a7cae8cabaf451be766d306c9442df83b9b5814777",
-  "research/claims.json": "29f72834cd9b48f97ba2be600c783a023bb5d29c3da8d541b85f924c79a1dd99",
+  "research/claims.json": "d26cc52935742e0b2d231b828a49049e4451fe901e29a797a4cf5647c252c51e",
   "research/coldread/pass-1-dryrun.md": "6f8ed9e81d7f10d5df72a64bad2f5249e5467b3870058637186830a1ae00fbf8",
   "research/coldread/pass-1-mechanical.md": "f617a01f2aa44c021438815731103958256345ca73a56532d5ef169ea44bda84",
   "research/coldread/pass-2-dryrun.md": "324dd314185ca6f0d1699e72ecae5f9ed00c6b214548b96b5b0fe1f0ad3d3de4",
@@ -171,6 +174,7 @@
   "research/coldread/pass-4-dryrun.md": "252ca927e6fa33d88ce1a4ab5aa0bad4417d76e8aab6cc4dadffb872913c8853",
   "research/coldread/pass-4-mechanical.md": "a6c0b661160a861c77b3c39fb7d63e1b59428ae8ad2ed9097265b40f28002ac6",
   "research/coldread/pass-5-dryrun.md": "54f4e26fd62068ceb2d2f9794cc57e84094104f5288e9ef192935e878956adc3",
+  "research/coldread/pass-6-dryrun.md": "6a1948fdf50335235ddcefa79c013ffe64e02c69c254e7c170c3eb55a384eeb1",
   "research/rounds/round-1.md": "18b23e6e69dd13d956204d9d964c59116e54444a2dac9aa63d4796d532d45de9",
   "research/rounds/round-2.md": "ca6a0c4605ec8aa411a6de566e100cad0a12f5a8dcbc37ba8c616b7bb5e3c4bc",
   "research/rounds/round-3-adversarial.md": "cb2596d591218d68bfb6dc77faf473e60fdbb7fff03e9bbcf70791d2e3adb4d9",
@@ -189,7 +193,7 @@
   "research/spikes/bore_fit.py": "1544247574db254310303b436d4d1d547963df7e41495b6cc3b1da8562a84629",
   "research/spikes/bore_fit_result.json": "6435b39cf2a9e5767428ff4fa6a1da7c3f1f03eb5d4d08fa5f84962e0157c168",
   "research/spikes/brighten_spike.py": "7782c4521416626463c0d02684b80205096c9de98c41ebf8d126450ff57a8fc3",
-  "research/spikes/build_claims.py": "6ff6978c415f69d7bdf4d6e81b37b2e0b0024abb791ef7cbc4bb46911a13d4cc",
+  "research/spikes/build_claims.py": "3162f60aa06e81f1b9a75d65380780ce8f893997ad099781dffb8c50af3be2cc",
   "research/spikes/checkpoint.py": "f9a8c82c0d7effd6256dc3fda31a0bb48e783f2ad108ad72e4bca512cc42ed24",
   "research/spikes/dyn_spike.py": "b17f7764c496ce9279363fe11a3018075261c02df47644326d5443197b69d685",
   "research/spikes/dyn_spike_result.txt": "f57e294534ef649010d58461540b8ebf12ec08a9662ba0b2751b2324de3cf077",
@@ -207,7 +211,7 @@
   "research/spikes/overblow_d_result.json": "092f26fd713c15e2846e58248e23074da490ddcd567d4137144eb4edc0e1b06d",
   "research/spikes/overblow_spike.py": "b35ad6ea29599edf37ac653ec58e7a9729ec2284cb316cd83aaa7866b6527aa7",
   "research/spikes/overblow_spike_result.json": "454996dcb4c8eb0ff6d3e0ad6bb6c4dbecc1697ba604bcadc0e5fd413396afa0",
-  "research/spikes/plan_verify_ci.md": "4ea2503ebda90228ffe1793b9d1efc32b24e525ead6383768ef10ced59dfc8d6",
+  "research/spikes/plan_verify_ci.md": "f0958fb3f81b81e5aacf73185c88b1c61a5e3365054a19221b656debbc81f5e4",
   "research/spikes/ref_spread.py": "79cc46efa3be2f8f3e002b24741c7712018ae9b087bea8c0a8d3ebb3965fd26a",
   "research/spikes/ref_spread_result.json": "d54e93bf7aa9db7cfe32ed58d41ccc98c39bf61a0a5c68b45f5575073c16d7ba",
   "research/spikes/regime_map.py": "4c19c8b26064cd80907bb9cc6b9171750d3935b044f9f520d9e842e2010fd874",
@@ -288,7 +292,8 @@
   "R4",
   "R5",
   "R6",
-  "premortem-1"
+  "premortem-1",
+  "premortem-2"
  ],
  "diagnostic": {
   "date": "2026-10-07",
@@ -438,7 +443,8 @@
   "K-20261007T160135Z-c-096",
   "K-20261007T160136Z-c-097",
   "K-20261007T160137Z-c-098",
-  "K-20261007T160138Z-c-099"
+  "K-20261007T160138Z-c-099",
+  "K-20261007T160139Z-c-100"
  ],
  "knowledge_store": {
   "commit_read": null,
@@ -460,7 +466,8 @@
   "L-20261007T150900Z-windows-sha256sum-backslash",
   "L-20261007T151000Z-large-evidence-off-impl-branch",
   "L-20261008T010500Z-circular-fft-filter-fakes-onsets",
-  "L-20261008T151500Z-reasoned-expected-value-wrong"
+  "L-20261008T151500Z-reasoned-expected-value-wrong",
+  "L-20261015T090000Z-public-repo-artifacts-are-publication"
  ],
  "mode_flags": {
   "software.deploys": false
@@ -480,11 +487,11 @@
  ],
  "open_items": [],
  "pending": [
-  "premortem-2",
+  "premortem-3",
   "5"
  ],
  "phase": "4",
- "premortem_round": 1,
+ "premortem_round": 2,
  "profiles": [
   "software"
  ],
@@ -493,5 +500,5 @@
  "run_id": "20261007T145241Z-trumpet-vst-plan",
  "subphase": "4.4",
  "tier_substitutions": [],
- "updated_at": "2026-10-14T14:38:26Z"
+ "updated_at": "2026-10-15T07:23:04Z"
 }

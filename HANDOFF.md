@@ -80,7 +80,8 @@ every step in its `Depends on` list has passed. Independent steps may run concur
 resource.
 
 ## Open human actions
-- The three GitHub tokens pasted in chat during planning (2026-10-07, 2026-10-14) must be revoked by the human (A-020, R-012). Ask for the reply
+- The three GitHub tokens pasted in chat during planning (2026-10-07, 2026-10-14) must be revoked by the human (A-020, R-012).
+  The implementer never uses them: its credential is a new token provided as `GH_TOKEN` (R-027, DR-CRED). Ask for the reply
   `tokens-revoked` with the G-004 response; G-005 is not processed until it is recorded (`plan/GATES.md`).
 - Optional: branch protection on `main` (R-020).
 
@@ -89,8 +90,9 @@ resource.
 - **G-005:** realism listening.
 - **G-006:** REAPER host acceptance with the CI artifact (after S-017).
 - **G-003:** lessons and knowledge push.
-- **G-002:** any release, tag, publication or merge to `main`. No step does this; never perform such an action
-  without G-002 sign-off.
+- **G-002:** any release, tag, publication, binary upload (including workflow artifacts: the repository is public) or
+  merge to `main`. Only S-017 asks for it (release-candidate artifacts); never perform such an action without G-002
+  sign-off.
 
 While halted at a gate, continue any step that does not depend on the gate's outcome. Never take an external or
 irreversible action while halted.

@@ -96,6 +96,8 @@ EXTRA = [
      "round-3-adversarial.md section 3", ["D-021", "T-031"], ["vst3-sdk"]),
     ("Q-A4", "Measured complex residues make |Z| peak frequencies differ from pole frequencies Im(s)/2pi (modes 9-11: +9/+14/+24 cents), so the resonator generator must calibrate like with like (complex modal fit of the TMM vs measured poles) and keep the measured complex residues for the open state (D-004).",
      "round-3-adversarial.md section 1 (C-044 row), defect D-5", ["D-004", "T-007", "T-030"], ["trumpet-input-impedance"]),
+    ("Q-E7", "The repository qualitycoding/trumpet-vst is public (GitHub API `visibility: public`, checked 2026-10-15); workflow artifacts of a public repository can be downloaded by other GitHub users, so uploading built binaries is a distribution (lesson L-20261015T090000Z).",
+     "gh api repos/qualitycoding/trumpet-vst --jq .visibility; premortem/round-2.md R-025", ["D-025", "G-002"], ["github-actions-pins"]),
 ]
 
 

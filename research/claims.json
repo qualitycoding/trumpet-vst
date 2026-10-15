@@ -3717,5 +3717,37 @@
    "subject:trumpet-input-impedance"
   ],
   "supersedes_claim": null
+ },
+ {
+  "id": "C-100",
+  "source_item": "R5-review",
+  "question": "",
+  "claim": "The repository qualitycoding/trumpet-vst is public (GitHub API `visibility: public`, checked 2026-10-15); workflow artifacts of a public repository can be downloaded by other GitHub users, so uploading built binaries is a distribution (lesson L-20261015T090000Z).",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/rounds/round-3-adversarial.md",
+    "title": "R5 adversarial review (fresh-context Opus)",
+    "version": "2026-10-08",
+    "locator": "gh api repos/qualitycoding/trumpet-vst --jq .visibility; premortem/round-2.md R-025",
+    "accessed": "2026-10-08",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-025",
+   "G-002"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:github-actions-pins"
+  ],
+  "supersedes_claim": null
  }
 ]
