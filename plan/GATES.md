@@ -31,7 +31,7 @@ Template for `GATE-<id>.md`:
 | Aspect | Definition |
 |---|---|
 | Trigger | Any step or deviation that would create a tag or GitHub Release, upload plugin or Standalone binaries anywhere (including workflow artifacts: the repository is public, C-100, D-025; the internal 1-day `tpt_render` hand-off between CI jobs, an Apache-2.0 core tool without JUCE, is not covered), publish a package, or merge or push to `main`. The only planned trigger is S-017's request to run the `rc-artifacts` job. |
-| Evidence | The exact command(s), the artefacts, their SHA-256 values, licence implications (AGPLv3 binaries, C-098), and the CI run that built them. |
+| Evidence | The exact command(s), the artefacts, their SHA-256 values, licence implications (AGPLv3 binaries, C-098), and the CI run that built them. For the S-017 RC request, where nothing exists before approval: the `rc-artifacts` job definition (commit and path), the sha to be built and its green CI run, and the D-025 contents list; the SHA-256 values are added to `GATE-G-002.md` after the upload. |
 | Questions | 1. Approve this action exactly as described? (For the RC artifacts: they will be downloadable by other GitHub users for 90 days, and they are AGPLv3 works, C-098.) |
 | Allowed responses | `approve`, `deny`, `approve-with-changes: <text>` |
 | Branches | `approve` → perform exactly the listed commands, then record the outcome in `GATE-G-002.md`. `deny` → do nothing; continue. `approve-with-changes` → re-issue the gate with the changes applied. |
@@ -70,7 +70,7 @@ Template for `GATE-<id>.md`:
 | Evidence | Link to the CI run and the release-candidate artifact `trumpet-rc-<sha>-windows-2025` (VST3 + Standalone, with licence notices and `BUILD_INFO.txt`), uploaded after G-002 approval, D-025. For macOS: the `-macos-15` artifact. If G-002 was denied: local build instructions instead. Install instructions (copy `Trumpet.vst3` to `C:\Program Files\Common Files\VST3`). Download and keep the artifact: it expires after 90 days. The checklist below. |
 | Checklist (for the human) | 1. REAPER scans and loads "Trumpet" without errors. 2. A MIDI item with notes written F♯3–C6 plays at the right pitches; mod wheel gives vibrato; pitch bend works. 3. The editor shows valves, slide triggers and partials matching the notes. 4. CC16 (or the Overblow knob) jumps partials; Fixed valves with keyswitches 24–31 works. 5. Save the project, close and reopen REAPER: parameters and held valves are restored. 6. Switch the project sample rate 44.1 ↔ 48 kHz with the editor open: no crash, pitch still right. 7. Render to WAV: no clicks or dropouts at 128-sample buffers. |
 | Allowed responses | `proceed`, `issues: <numbered list>`, `stop` |
-| Branches | `proceed` → S-018. `issues` → fix them (DR-DEFAULT; a fix touching the sound re-opens G-005 per D-026 R-017), push, re-issue G-006 with the new artifact. `stop` → `REPORT.md`, then S-RETRO and S-KNOW. |
+| Branches | `proceed` → S-018. `issues` → fix them (DR-DEFAULT; a fix touching the sound re-opens G-005 per D-026 R-017), push, ask G-002 for the new sha (D-025 approval scope), then re-issue G-006 with the new artifact. `stop` → `REPORT.md`, then S-RETRO and S-KNOW. |
 
 ## Open human actions (not gates; listed in HANDOFF)
 - **Revoke the three GitHub tokens pasted in chat during planning (2026-10-07, 2026-10-14; A-020, R-012).** The implementer asks for the reply

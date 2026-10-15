@@ -70,7 +70,7 @@ The planning agent then runs an amendment (protocol 2E.4).
 | S-014 | Editor, drawing, G-004 bundle | **G-004** |
 | S-015 | Offline renderer and TinySOL tooling | — |
 | S-016 | Realism calibration, G-005 bundle | **G-005** |
-| S-017 | Performance and plugin validation on 3 OSes | **G-006** |
+| S-017 | Performance and plugin validation on 3 OSes | **G-002**, **G-006** |
 | S-018 | Final verification and report | — |
 | S-RETRO | Retrospective | — |
 | S-KNOW | Lessons & knowledge push | **G-003** |

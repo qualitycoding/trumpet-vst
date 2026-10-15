@@ -130,3 +130,18 @@ A fresh Sonnet dry run checked the changes since 1b60fbb: 9 items (1 High, 4 Med
 - **7:** order of checkout, install and push (R-020).
 - **8:** long-hold tool, output and failure criterion, plus the DR-REGIME trigger.
 - **9:** `tokens-revoked` condition in the G-005 trigger.
+
+## Re-run after pre-mortem round 2 hardening (pass 7)
+A fresh Sonnet dry run checked the changes since 2892012: 12 items (0 High, 6 Medium, 6 Low). All were resolved:
+- **1:** S-017 outputs and done-when cover the G-002/G-006 flow.
+- **2:** RC marker `<short sha>` definition, regex, ancestry check and `if:` expression.
+- **3:** a G-002 approval covers one sha; re-uploads need a new request.
+- **4:** G-002 evidence for the RC request before the upload.
+- **5:** `unsupportedRate()` accessor (S-013) and editor overlay (S-014).
+- **6:** `tpt_calibrate` read-only modes, render rate, window sampling.
+- **7:** p⁺ bound 30 kPa; worst case 238 samples at 192 kHz.
+- **8:** nlohmann link and the `heldValves` mechanics.
+- **9:** HANDOFF S-017 gates.
+- **10:** S-000 credential statement.
+- **11:** RC staging, paths and `ImageVersion`.
+- **12:** S-008/S-011 outputs include the header and CMake additions.

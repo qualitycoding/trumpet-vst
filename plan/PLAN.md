@@ -31,7 +31,9 @@
 - Actions:
   1. Credentials: the harness provides the token in the environment variable `GH_TOKEN` (gh reads it; never echo it). It
      must be a token created for the implementation, never one of the tokens pasted in the planning chat (those are to be
-     revoked, R-027); record "credential source: harness GH_TOKEN" in `EXECUTION_LOG.md`. Any later 401/403 → DR-CRED. Run
+     revoked, R-027). This is a statement by the harness, not something the implementer can verify: record "credential
+     source: harness GH_TOKEN" and the token name and expiry if the harness states them (else "not stated") in
+     `EXECUTION_LOG.md`. Any later 401/403 → DR-CRED. Run
      `gh auth setup-git`, `git config user.name qualitycoding` and
      `git config user.email qualitycoding@users.noreply.github.com` (A-024).
      Then `git fetch origin && git checkout --no-track -b impl-20261007T145241Z-trumpet-vst-plan origin/gen-20261007T145241Z-trumpet-vst-plan`
@@ -270,7 +272,8 @@
      `setHeldValves()` (D-026 R-014; `prepare()`/`reset()` keep held valves), UI atomics outside the reallocated state
      (R-015), and `-ffp-contract=off` / `/fp:precise` for `tpt_core` in `core/CMakeLists.txt` (R-021).
   3. Run `tpt_operational_tests` and `tpt_alloc_tests`.
-- Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h` (+ private helpers in `core/src/`)
+- Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h` (+ private helpers in `core/src/`), `core/CMakeLists.txt`,
+  `core/include/tpt/TrumpetVoice.h` (additive members only), `DEVIATIONS.md`
 - Evidence produced: T-023, T-024 (alloc part), T-025
 - Done when: `tpt_operational_tests` and `tpt_alloc_tests` pass, except that the single pitch assertion `std::fabs(1200 * std::log2(f0 / tpt::equalTemperedHz(67))) <= 15.0` in the case "T-023 sample rates and latency (T-025)" may still fail (it needs calibration, S-009); every other assertion of that case passes (inspect the Catch2 output).
 - Checkpoint: test status.
@@ -345,7 +348,8 @@
   3. After any change to `VoiceTuning.h`: build, run `tpt_calibrate`, build again (re-embeds the table). Then run
      `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022],[T-034]"` plus every previously green
      tag (DR-RANGE for T-034).
-- Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`, `tools/render/calibrate.cpp`, `logs/S-011-brightness-ff.md`
+- Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`, `core/include/tpt/TrumpetVoice.h` (additive debug accessor),
+  `tools/render/calibrate.cpp`, `logs/S-011-brightness-ff.md`, `DEVIATIONS.md`
 - Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022, T-034
 - Done when: those pass with no regression, and `logs/S-011-brightness-ff.md` shows no clamp event. T-021/T-022 failures
   may wait for S-016 under DR-REAL; record them in the checkpoint.
@@ -391,13 +395,13 @@
      - **processBlock:** `ScopedNoDenormals`; read the APVTS values into `VoiceParameters`; split the block at MIDI events and dispatch per D-014; render mono into channel 0 and copy it to every other channel.
      - **State:** per D-015.
      - **Host rates and blocks:** outside [22050, 192000] Hz follow D-026 R-022 (no voice prepare, silence, processor-side
-       `unsupportedRate` flag). Otherwise prepare with `max(samplesPerBlock, 512)` capped at 8192 and process larger host
+       flag exposed as the additive `bool unsupportedRate() const noexcept`, logged). Otherwise prepare with `max(samplesPerBlock, 512)` capped at 8192 and process larger host
        blocks in chunks of at most that size.
-     - **Held valves:** write and restore `heldValves` per D-026 R-014.
+     - **Held valves:** write and restore `heldValves` per D-026 R-014 (`target_link_libraries(TrumpetVST PRIVATE nlohmann_json::nlohmann_json)` in `plugin/CMakeLists.txt`).
      - **State conversion:** sized `std::string_view` per D-026 R-016.
      - **`currentUiState()`:** returns `voice.uiState()`.
   2. Build with the plugin; run `xvfb-run -a build/plugin/tpt_plugin_tests` (all except the editor case).
-- Outputs: `plugin/src/PluginProcessor.cpp`
+- Outputs: `plugin/src/PluginProcessor.{h,cpp}` (additive members), `plugin/CMakeLists.txt`
 - Evidence produced: T-026 (parameters, sound, keyswitch and state cases)
 - Done when: those cases pass, locally or in the CI `plugin` job.
 - Checkpoint: test status and CI run URL.
@@ -418,7 +422,8 @@
      `layout.caption`; there is no separate caption label in the editor), and `setState` with repaint on change.
   3. Implement the editor:
      - 9 rotary knobs and 2 toggles with APVTS attachments;
-     - the 60 Hz timer and `refreshFromProcessor()`.
+     - the 60 Hz timer and `refreshFromProcessor()`, which also reads `unsupportedRate()`; `paint()` draws "unsupported
+       sample rate" over the view when it is true (D-026 R-022).
   4. Add `tools/render/snapshot_ui.cpp` → target `tpt_ui_snapshots` (in `plugin/CMakeLists.txt`, links TrumpetVST).
      - It does not run the voice: for each image it builds a `UiState` from `resolveNote` (soundingPartial = target
        partial, sounding = true, trigger per D-013 at realism 0) and calls `TrumpetView::setState`, then
@@ -521,9 +526,12 @@
      artifacts. On `deny`: skip the upload.
   5. Write `GATE-G-006.md` per `plan/GATES.md` (REAPER checklist, with the RC artifact or local build instructions) and
      halt at G-006.
-- Outputs: fixes as needed
+- Outputs: fixes as needed; `.github/workflows/ci.yml` (job `rc-artifacts`), `GATE-G-002.md`, `GATE-G-006.md`
 - Evidence produced: T-024 (perf), T-026, T-027 on three OSes
-- Done when: the CI jobs `freeze`, `core`, `python`, `plugin`, `build-linux` and `realism` are green on the same commit — except, when the human answered G-005 with `proceed` or `proceed-with-rescope` while T-029/T-021/T-022 were red (`GATE-G-005.RESPONSE.md`), those named tests may stay red: they are listed as accepted failures in `REPORT.md` (the frozen tests are not changed or skipped).
+- Done when: `GATE-G-002.md` and `GATE-G-006.md` are committed; on G-002 `approve`, the `rc-artifacts` run on the marker
+  commit is green and `gh api repos/qualitycoding/trumpet-vst/actions/runs/<id>/artifacts` lists the three
+  `trumpet-rc-*` artifacts with an expiry of about 90 days; on `deny`, the denial is in `EXECUTION_LOG.md`; and the CI jobs
+  `freeze`, `core`, `python`, `plugin`, `build-linux` and `realism` are green on the same commit — except, when the human answered G-005 with `proceed` or `proceed-with-rescope` while T-029/T-021/T-022 were red (`GATE-G-005.RESPONSE.md`), those named tests may stay red: they are listed as accepted failures in `REPORT.md` (the frozen tests are not changed or skipped).
 - Checkpoint: CI run URL.
 - On failure: DR-PERF, DR-PLUGINVAL, DR-SECURITY.
 - Gate: **G-002** (RC artifact upload), then **G-006**

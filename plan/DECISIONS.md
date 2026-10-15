@@ -208,8 +208,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - arrival time t_k = t − β·L_nl·p⁺/(ρc³);
   - monotone arrival times (`max` accumulate) resolve shocks;
   - resampled to the internal grid by linear interpolation, with a 256-sample look-behind ring buffer (real-time safe).
-    The worst case is β·L_nl,max·p⁺_max/(ρc³)·f_int ≈ 1.2·1.7 m·30 kPa/(1.176·4.19e7)·96 kHz ≈ 119 samples (R-028). The
-    advance is clamped to 250 samples; a clamp event sets a debug counter, logged once per note.
+    The warp uses min(|p⁺|, 30 kPa) (sign kept). The worst case is β·L_nl,max·30 kPa/(ρc³)·f_int ≈ 119 samples at
+    f_int = 96 kHz and ≈ 238 samples at f_int = 192 kHz (R-028), below the clamp of 250 samples; a clamp event sets a debug counter, logged once per note.
 - **Radiation:** a cascade of the table's RBJ biquads, designed at f_int at `prepare()`.
 - **Breath noise:**
   - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise mapped to [−1, 1) as w = x/2³¹ − 1 (seed 0x7A11C0DE at
@@ -426,13 +426,20 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
 - **The repository is public** (C-100). Workflow artifacts of a public repository are downloadable by other GitHub users,
   so uploading built binaries is a distribution: it needs **G-002** approval (lesson L-20261015T090000Z).
 - **Routine CI** (`plugin` job) builds and validates on every push but uploads **no** binaries (logs only).
-- **Release-candidate job** `rc-artifacts` (in `ci.yml`, added in S-017): runs on push only when the head commit message
-  contains `[g002-approved rc <short sha>]`, and only after `GATE-G-002.RESPONSE.md` with `approve` is committed. It builds
+- **Release-candidate job** `rc-artifacts` (in `ci.yml`, added in S-017): `if: github.event_name == 'push' &&
+  contains(github.event.head_commit.message, '[g002-approved rc ')`, and only after `GATE-G-002.RESPONSE.md` with `approve`
+  is committed. `<short sha>` = the first 7 characters of the commit named in `GATE-G-002.md` (the parent of the empty
+  marker commit). The job extracts it from the message with the regex `\[g002-approved rc ([0-9a-f]{7})\]`, fails unless
+  that commit is an ancestor of `HEAD`, and builds the marker commit (identical tree). It builds
   Release on the three OSes and uploads one artifact per OS named `trumpet-rc-<short sha>-<os>`, with
   `retention-days: 90` (the maximum). Each artifact contains:
   - the plugin formats (`VST3`, `Standalone`, and `AU` on macOS);
   - `LICENSE`, `NOTICE`, `THIRD_PARTY_NOTICES.md` and `ATTRIBUTION.md`;
-  - `BUILD_INFO.txt` (commit sha, UTC date, runner image, toolchain versions).
+  - `BUILD_INFO.txt` (approved sha, `GITHUB_SHA`, UTC date, runner image from `$ImageVersion`, toolchain versions).
+  Staging: copy `build/plugin/TrumpetVST_artefacts/Release/*` and the four licence files into `rc/<os>/`, write
+  `BUILD_INFO.txt` there, and upload `rc/<os>`.
+- **Approval scope:** a G-002 approval covers exactly one sha. Every new RC upload (for example after G-006 `issues`
+  fixes) needs its own G-002 request for the new sha, and G-006 is re-issued after it.
 - **Durability:** artifacts expire after 90 days, so `GATE-G-006.md` tells the owner to download and keep the artifact.
   A durable channel (a GitHub Release) is a separate G-002 decision for the owner, outside this plan.
 - **Host acceptance:** gate G-006 (after S-017, which first asks G-002 for the RC upload) gives the owner a REAPER
@@ -445,6 +452,8 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   in the same `tpt-state-1` JSON (it reads the current value from `uiState().valves` while Fixed-valves mode is on;
   `deserializeState` ignores unknown keys). On restore the processor parses it with `parseValves` (invalid → ignored) and
   calls the additive member `void TrumpetVoice::setHeldValves(Valves) noexcept` (S-008 adds it, logged in `DEVIATIONS.md`).
+  Mechanics: `TrumpetVST` links `nlohmann_json` PRIVATE (S-013); the processor parses the sized string, adds or reads
+  `heldValves`, and `dump()`s compactly.
   `prepare()` and `reset()` keep the held valves (an additive refinement of the header's "resets all state", logged);
   only a keyswitch or `setHeldValves` changes them. README documents that hosts should chase keyswitch notes or that the state
   restores the last held valves.
@@ -485,6 +494,10 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
 - **R-022, host rates:** outside [22.05, 192] kHz the processor does not prepare the voice, outputs silence, and sets a
   processor-side `std::atomic<bool> unsupportedRate` read by the editor, which draws "unsupported sample rate" (not part
   of `UiState`); it logs once. README states the range. This replaces any clamping of the rate.
+- **Calibration-tool modes:** `tpt_calibrate <json>` calibrates and rewrites `fscale`. `--long-hold <json>` (R-023) and
+  `--brightness-ff <json>` (R-028) are read-only: they never modify the JSON. Both render at 48 kHz with default
+  parameters except where stated; the sounding partial of a 1 s window is `uiState().soundingPartial` sampled at the end
+  of the window.
 - **R-023, long hold:** S-009 runs `tpt_calibrate --long-hold data/trumpet_resonators.json`, which renders every standard
   note at mf for 20 s and writes `logs/S-009-long-hold.md`: one table row per note with the sounding partial and the RMS
   (dBFS) of each 1 s window. A note fails if any window's partial differs from the target, or RMS(window 20) <
