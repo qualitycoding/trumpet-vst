@@ -314,7 +314,7 @@
 - Inputs: D-011, D-014
 - Actions:
   1. Implement in the voice:
-     - breath and velocity handling;
+     - breath (CC2, latching; cleared by `setBreath(-1)`) and velocity handling;
      - legato note stack behaviour;
      - the full `fscale_eff` of D-011: Intonation realism with `naturalDevCents`, A4 tuning, pitch bend, vibrato;
      - all-notes-off as a panic (D-014: 4 ms fade, then idle);
@@ -338,7 +338,7 @@
 - Actions:
   1. Implement in the voice:
      - the D-009 mapping (hysteresis, cap, 20 ms register ramps, brightening, CC16 precedence);
-     - D-010 lip slurs and valve-change interpolation;
+     - D-010 lip slurs, valve-change interpolation, and re-articulation (legato decided by held notes; 25 ms tongue stop);
      - D-003 keyswitches and fixed-valves fscale;
      - `useAlternates`.
   2. Brightness extremes (D-012, R-028): extend `tpt_calibrate` with `--brightness-ff` (S-009 tool; the voice exposes the
@@ -346,11 +346,11 @@
      normal-range standard note for 1 s at 48 kHz and at 192 kHz and writes `logs/S-011-brightness-ff.md` with the warp-clamp counter and the peak
      output per note. Any clamp event → enlarge the ring (D-012) or reduce `L_nl` maximum (DR-RANGE).
   3. After any change to `VoiceTuning.h`: build, run `tpt_calibrate`, build again (re-embeds the table). Then run
-     `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022],[T-034]"` plus every previously green
+     `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022],[T-034],[T-035]"` plus every previously green
      tag (DR-RANGE for T-034).
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h`, `core/include/tpt/TrumpetVoice.h` (additive debug accessor),
   `tools/render/calibrate.cpp`, `logs/S-011-brightness-ff.md`, `DEVIATIONS.md`
-- Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022, T-034
+- Evidence produced: T-015, T-016, T-017, T-018, T-020, T-021, T-022, T-034, T-035
 - Done when: those pass with no regression, and `logs/S-011-brightness-ff.md` shows no clamp event. T-021/T-022 failures
   may wait for S-016 under DR-REAL; record them in the checkpoint.
 - Checkpoint: test status and final constants.
@@ -391,6 +391,8 @@
 - Actions:
   1. Implement the processor:
      - **Voice:** create `tpt::TrumpetVoice` in the constructor from `embeddedResonatorJson()`, parsed once.
+     - **MIDI extras (D-014):** CC11 expression gain (10 ms smoothing) applied to the output; `setBreath(-1)` when the host
+       play-head changes from not playing to playing; `TPT_GIT_SHA` compile definition shown in the editor footer (D-025).
      - **prepareToPlay:** `voice.prepare(fs, max block)` and `setLatencySamples(voice.latencySamples())`.
      - **processBlock:** `ScopedNoDenormals`; read the APVTS values into `VoiceParameters`; split the block at MIDI events and dispatch per D-014; render mono into channel 0 and copy it to every other channel.
      - **State:** per D-015.

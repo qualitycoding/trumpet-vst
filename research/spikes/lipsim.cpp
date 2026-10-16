@@ -81,6 +81,8 @@ int main(int argc, char** argv) {
     const double attack = arg(kv, "attack", 0.02);
     const double t0r = arg(kv, "ramp_start", 0.0);        // parameter ramps (fl, pm, H) start here
     const double rdur = arg(kv, "ramp_dur", -1);           // ramp length (s); <0 = until the end
+    const double stop0 = arg(kv, "stop_at", -1), stopDur = arg(kv, "stop_dur", 0.0);   // tongue stop: lips held closed,
+    const double reAttack = arg(kv, "reattack", 0.003);    // pm 0, then a raised-cosine pressure re-attack
     const double yinit = arg(kv, "yinit", -1);           // initial lip opening (tongue release); <0 = H
     const double kick = arg(kv, "kick", 0);              // initial modal excitation: Pa added to the mode nearest fl
     const double fscale = arg(kv, "fscale", 1.0);       // multiplies all mode frequencies (tuning)
@@ -112,12 +114,17 @@ int main(int argc, char** argv) {
     for (long k = 0; k < N; ++k) {
         const double t = double(k) * T, frac = t < t0r ? 0.0 : std::min(1.0, (t - t0r) / (rdur > 0 ? rdur : dur - t0r));
         const double env = t < attack ? 0.5 * (1 - std::cos(M_PI * t / attack)) : 1.0;
-        const double pm = env * (pm0 + (pm1 - pm0) * frac);
+        double pm = env * (pm0 + (pm1 - pm0) * frac);
+        const bool stopped = stop0 >= 0 && t >= stop0 && t < stop0 + stopDur;
+        if (stopped) pm = 0;
+        else if (stop0 >= 0 && t >= stop0 + stopDur && t < stop0 + stopDur + reAttack)
+            pm *= 0.5 * (1 - std::cos(M_PI * (t - stop0 - stopDur) / reAttack));
         const double fl = fl0 * std::pow(fl1 / fl0, frac), wl = 2 * M_PI * fl;
         const double H = H0v + (H1v - H0v) * frac;
         // lip: semi-implicit Euler with the previous pressure
         const double acc = (pm - p) / mu - (wl / Ql) * v - wl * wl * (y - H);
         v += T * acc; y += T * v;
+        if (stopped) { y = 0; v = 0; }
         const double h = std::max(y, 0.0);
         // implicit flow: p = P0 + Z0 u, u = c sign(D) sqrt(|pm - p|)
         double P0 = 0; for (size_t n = 0; n < q.size(); ++n) P0 += 2 * (av[n] * q[n] + gv[n] * u).real();

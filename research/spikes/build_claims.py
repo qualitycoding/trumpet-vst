@@ -97,7 +97,11 @@ EXTRA = [
     ("Q-A4", "Measured complex residues make |Z| peak frequencies differ from pole frequencies Im(s)/2pi (modes 9-11: +9/+14/+24 cents), so the resonator generator must calibrate like with like (complex modal fit of the TMM vs measured poles) and keep the measured complex residues for the open state (D-004).",
      "round-3-adversarial.md section 1 (C-044 row), defect D-5", ["D-004", "T-007", "T-030"], ["trumpet-input-impedance"]),
     ("Q-E7", "The repository qualitycoding/trumpet-vst is public (GitHub API `visibility: public`, checked 2026-10-15); workflow artifacts of a public repository can be downloaded by other GitHub users, so uploading built binaries is a distribution (lesson L-20261015T090000Z).",
-     "gh api repos/qualitycoding/trumpet-vst --jq .visibility; premortem/round-2.md R-025", ["D-025", "G-002"], ["github-actions-pins"]),
+     "gh api repos/qualitycoding/trumpet-vst --jq .visibility; premortem/round-2.md R-025", ["D-025", "G-002"], ["github-repository-visibility"]),
+    ("Q-A1", "A 25 ms tongue stop (lips held closed, p_m = 0, then a 3 ms pressure re-attack) on a sustained mf note gives a 5 ms-RMS dip of 11.7-20.1 dB (median 15.9) in the radiated output of every normal-range standard note and recovery to within 3 dB of the steady level in a median 95 ms (97 % within 250 ms); 15 ms gives 7.7-16.8 dB; a 100 ms gap gives >= 29 dB.",
+     "research/spikes/tongue_spike.py; tongue_spike_result.txt", ["D-010", "T-035"], ["brass-lip-model"]),
+    ("Q-A1", "After the D-007 release (p_m to 0 over 40 ms) the radiated output of every normal-range standard note at mf falls by 16.9-56.4 dB (median 38.8) below its steady level within 100 ms of note-off; only 87 % fall by >= 20 dB.",
+     "research/spikes/release_gap_spike.py; release_gap_spike_result.txt", ["D-007", "T-035"], ["brass-lip-model"]),
 ]
 
 
@@ -129,11 +133,16 @@ def main():
             "tags": ["domain:audio", "domain:musical-acoustics", "domain:brass"] + [f"subject:{s}" for s in subj]})
     for old, claim, loc, informs, subj in CORRECTIONS + EXTRA:
         n += 1
+        src_item, title, ver = ("R5-review", "R5 adversarial review (fresh-context Opus)", "2026-10-08")
+        if "tongue stop" in claim or "D-007 release" in claim:
+            src_item, title, ver = ("planner-spike", "planner spike", "2026-10-15")
+        elif "is public" in claim:
+            src_item, title, ver = ("premortem-round-2", "pre-mortem round 2 (fresh-context Opus) + GitHub API", "2026-10-15")
         claims.append({
-            "id": f"C-{n:03d}", "source_item": "R5-review", "question": "", "claim": claim, "kind": "numerical",
+            "id": f"C-{n:03d}", "source_item": src_item, "question": "", "claim": claim, "kind": "numerical",
             "load_bearing": True,
-            "sources": [{"url": R5, "title": "R5 adversarial review (fresh-context Opus)", "version": "2026-10-08", "locator": loc,
-                         "accessed": "2026-10-08", "tier": 1}],
+            "sources": [{"url": R5 if src_item == "R5-review" else loc.split(";")[0], "title": title, "version": ver, "locator": loc,
+                         "accessed": ver, "tier": 1}],
             "confidence": "verified", "evidence_class": "n/a", "contradicted_by": [], "informs": informs,
             "tags": ["domain:audio", "domain:musical-acoustics", "domain:brass"] + [f"subject:{x}" for x in subj],
             "supersedes_claim": old if old.startswith("C-") else None})

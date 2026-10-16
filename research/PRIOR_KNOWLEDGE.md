@@ -14,6 +14,7 @@ Order: severity, then most recent.
 
 | # | Lesson | Prevention rule |
 |---|---|---|
+| −1 | High — L-20261015T090000Z-public-repo-artifacts-are-publication | Check repository visibility before uploading binaries; for a public repository, gate any upload behind the external-action gate. |
 | 0 | High — L-20261008T151500Z-reasoned-expected-value-wrong (recurrence of L-20261007T150300Z) | Produce every algorithm-derived expected value by running the reference implementation on the exact test input. |
 | 1 | High — L-20261008T010500Z-circular-fft-filter-fakes-onsets | Zero-pad spectral filtering of audio whose time structure is measured. |
 | 2 | High — L-20261007T150300Z-hand-typed-frozen-constant | Generate every numeric expected value in a frozen test with a committed script. |
@@ -31,6 +32,7 @@ Order: severity, then most recent.
 ## Application
 | Lesson | Applied as |
 |---|---|
+| L-20261015T090000Z | D-025 (no routine binary uploads; G-002-approved `rc-artifacts`), S-000 visibility check, `plan-verify.yml` upload removed, stub artifacts deleted. |
 | L-20261008T151500Z | T-028 values from `research/spikes/t028_values.py` (reference metric); `expected_values.py` names the producing script; S-004 cites it. |
 | L-20261008T010500Z | Spikes fixed and re-run (C-089). T-028 checks that a slower attack measures later. S-004 and S-005 cite the rule. |
 | L-20261007T150300Z | `research/spikes/expected_values.py`. Every float literal in frozen tests carries an `EXPECTED:` tag. T-032 runs `--check`. S-003 generates the fingering table by script. |

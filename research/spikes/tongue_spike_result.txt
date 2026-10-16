@@ -1,0 +1,4 @@
+stop 15 ms: dip dB min/median/max 7.7/13.0/16.8; recovery ms median/max 70/565; notes recovering <= 250 ms: 0.97
+stop 25 ms: dip dB min/median/max 11.7/15.9/20.1; recovery ms median/max 95/465; notes recovering <= 250 ms: 0.97
+stop 40 ms: dip dB min/median/max 14.1/19.5/27.8; recovery ms median/max 105/345; notes recovering <= 250 ms: 0.94
+stop 100 ms: dip dB min/median/max 29.2/36.7/53.5; recovery ms median/max 125/365; notes recovering <= 250 ms: 0.90

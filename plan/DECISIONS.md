@@ -29,7 +29,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 ## D-003 Fixed-valves mode and keyswitches
 - **Keyswitches** are MIDI 24–31, mapping in order to `0, 2, 1, 12, 23, 13, 123, 3`.
   - They never sound, and they are consumed in both modes. `TrumpetVoice::noteOn` ignores notes 24–31 in every mode; only
-    `keyswitch()` acts on them (the processor and `tpt_render` route them there).
+    `keyswitch()` acts on them (the processor and `tpt_render` route them there). Held valves survive `prepare()` and
+    `reset()` (D-026 R-014); only a keyswitch or `setHeldValves` changes them.
   - In normal mode they do not change anything.
   - In Fixed-valves mode they set the held valves (default open, reset by `reset()`).
 - **Resolution** (`resolveNote`, header contract):
@@ -176,8 +177,16 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Precedence:** `setOverblowControl` (CC16, (v − 64)/63 clamped) overrides the parameter until the parameter value next changes.
 - **UI:** `targetPartial` = m, and `soundingPartial` = the partial measured by the D-013 tracker.
 
-## D-010 Lip slurs and valve changes
-- **Legato,** a note-on while sounding, never re-attacks.
+## D-010 Lip slurs, valve changes and re-articulation
+- **Legato vs re-articulation (pre-mortem R-029):** a note-on is legato if and only if at least one *other* note is held
+  at that moment (the note stack, not the output level, decides). Otherwise — no note held (even if the previous note is
+  still ringing), or the same pitch as the only held note — the note is re-articulated: a **tongue stop** of 25 ms
+  (`kTongueStopS` in `VoiceTuning.h`): lips held closed (y = 0, ẏ = 0), p_m = 0, the new note's bore state, fscale and
+  lip setting are applied at the start of the stop; then the D-007 attack (pressure rise from closed lips). Spike
+  `research/spikes/tongue_spike.py` (C-101): a 25 ms stop gives a 5 ms-RMS dip of 11.7–20.1 dB on every normal-range
+  standard note (median 15.9) and recovery to within 3 dB of the steady level in a median 95 ms (97 % within 250 ms);
+  a 100 ms gap gives ≥ 29 dB.
+- **Legato,** a note-on while another note is held, never re-attacks.
 - **Same valve state (lip slur):** a register change exactly as in D-009, ramping f_l/h0/pm over 20 ms, plus an fscale ramp over 20 ms.
 - **Different valve state (valve slur):**
   - Each mode's s and R interpolate linearly from old to new over 15 ms, with coefficients updated at control rate and q states kept.
@@ -208,8 +217,10 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - arrival time t_k = t − β·L_nl·p⁺/(ρc³);
   - monotone arrival times (`max` accumulate) resolve shocks;
   - resampled to the internal grid by linear interpolation, with a 256-sample look-behind ring buffer (real-time safe).
-    The warp uses min(|p⁺|, 30 kPa) (sign kept). The worst case is β·L_nl,max·30 kPa/(ρc³)·f_int ≈ 119 samples at
-    f_int = 96 kHz and ≈ 238 samples at f_int = 192 kHz (R-028), below the clamp of 250 samples; a clamp event sets a debug counter, logged once per note.
+    The warp uses min(|p⁺|, 30 kPa) (sign kept), so the arrival offset lies in ±A with A = β·L_nl,max·30 kPa/(ρc³)·f_int
+    (≈ 119 samples at f_int = 96 kHz, ≈ 238 at 192 kHz, computed at `prepare()`). The stage runs with a fixed base delay
+    D = ceil(A) + 2 samples (≤ 1.3 ms at any rate; an unreported output delay, documented in README; `latencySamples()`
+    stays the decimator latency, T-025) and a ring of 2·D + 4 samples; offsets are clamped to ±(D − 1) on both sides a clamp event sets a debug counter, logged once per note.
 - **Radiation:** a cascade of the table's RBJ biquads, designed at f_int at `prepare()`.
 - **Breath noise:**
   - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise mapped to [−1, 1) as w = x/2³¹ − 1 (seed 0x7A11C0DE at
@@ -257,7 +268,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Note-on:** velocity 0 means note-off. Notes 24–31 go to `keyswitch()` and never sound.
 - **Out of range:** a note-on whose `resolveNote` result is nullopt is ignored.
 - **Controllers:**
-  - CC2 and CC11 → `setBreath(v/127)`;
+  - CC2 → `setBreath(v/127)` (breath controller; latches until `reset()` or the next transport start, when the processor
+    calls `setBreath(-1)`: the host play-head changes from not playing to playing, pre-mortem R-030);
+  - CC11 → expression: a smoothed output-gain multiplier v/127 (10 ms one-pole), not the blowing level;
   - CC1 and channel pressure → `setVibratoControl(v/127)`, the maximum of the two;
   - pitch bend → semitones = 2·(value − 8192)/8192 (14-bit value);
   - CC16 → Overblow (D-009);
@@ -435,7 +448,13 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   `retention-days: 90` (the maximum). Each artifact contains:
   - the plugin formats (`VST3`, `Standalone`, and `AU` on macOS);
   - `LICENSE`, `NOTICE`, `THIRD_PARTY_NOTICES.md` and `ATTRIBUTION.md`;
-  - `BUILD_INFO.txt` (approved sha, `GITHUB_SHA`, UTC date, runner image from `$ImageVersion`, toolchain versions).
+  - `BUILD_INFO.txt` (approved sha, `GITHUB_SHA`, UTC date, runner image from `$ImageVersion`, toolchain versions, and the
+    source URL `https://github.com/qualitycoding/trumpet-vst/tree/<approved sha>` required by AGPLv3);
+  - the full licence texts: JUCE's `LICENSE.md` and the AGPLv3 text it refers to (`agpl-3.0.txt` from the JUCE source
+    tree, else https://www.gnu.org/licenses/agpl-3.0.txt), the VST3 SDK `LICENSE.txt`, nlohmann/json `LICENSE.MIT`
+    (pre-mortem R-025 residual).
+  - The plugin carries its build id: `target_compile_definitions(TrumpetVST PRIVATE TPT_GIT_SHA="<sha>")`, from
+    `git rev-parse --short HEAD` at configure time ("unknown" otherwise), shown in the editor footer.
   Staging: copy `build/plugin/TrumpetVST_artefacts/Release/*` and the four licence files into `rc/<os>/`, write
   `BUILD_INFO.txt` there, and upload `rc/<os>`.
 - **Approval scope:** a G-002 approval covers exactly one sha. Every new RC upload (for example after G-006 `issues`
@@ -475,7 +494,10 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
     `results.json` and cite its path; no number is typed by hand (Rule 9).
 - **R-019, CI upkeep:**
   - Scheduled workflows run only from the default branch (`main`), which this plan never changes (G-002), so no
-    schedule is relied on (R-026). `MAINTENANCE.md` tells the owner to push an empty commit or re-run the last workflow
+    schedule is relied on (R-026). `MAINTENANCE.md` gives the owner two ways to get a new binary: (a) as the G-002
+    approver, commit `GATE-G-002.RESPONSE.md` with `approve` for a sha and push the `[g002-approved rc <sha>]` marker
+    commit (D-025), or (b) build locally on Windows with Visual Studio 2026 (`plan/ENVIRONMENT.md` commands; the
+    VST3 is under `build/plugin/TrumpetVST_artefacts/Release/VST3/`). `MAINTENANCE.md` tells the owner to push an empty commit or re-run the last workflow
     once a month, and that a `schedule: - cron: '0 6 1 * *'` trigger becomes active only once `ci.yml` is merged to `main`.
   - `pip-audit` reports without failing on push (`continue-on-error: true`, `::warning::`).
   - Every job logs the toolchain versions (`cmake --version`, the compiler, the runner image version).
@@ -527,5 +549,5 @@ Each rule names the step(s) where it applies.
 | DR-PLUGINVAL (S-017) | pluginval fails | Fix the plugin. On Windows, a path or hash issue is fixed in the workflow, never in the frozen script. |
 | DR-ZENODO (S-015, S-016) | Zenodo is unreachable locally | Run T-029 in CI only. Continue the other steps. |
 | DR-SECURITY (S-002, S-017) | `pip-audit` reports a vulnerability | Upgrade within the same major version if available and regenerate the lock (log it). Otherwise record it in `DEVIATIONS.md`. Halt with `BLOCKED.md` only if it is exploitable in the shipped plugin (Python is test-only). |
-| DR-CRED (any step) | A push or API call fails with HTTP 401/403 (for example after the human revoked a pasted token, R-027) | Do not retry with any token from the chat. Write `BLOCKED.md` asking for a new credential via `GH_TOKEN`, continue local work, and resume pushing once `gh auth status` succeeds. |
+| DR-CRED (any step) | A push or API call fails with HTTP 401/403 (for example after the human revoked a pasted token, R-027) | Do not retry with any token from the chat. Finish only the current step locally; start no new step. Write `BLOCKED.md` (asking for a new credential via `GH_TOKEN`) and end the session with a message that lists the unpushed commits (sha and subject) and the request. On restart with a working credential, push first; if the local commits are gone, re-run the steps after the last pushed commit and log it (pre-mortem R-031). |
 | DR-DEFAULT (any) | Anything unanticipated | Choose the most reversible option that does not expand scope, log it in `DEVIATIONS.md` with the rationale, and continue. Exception: if it touches frozen tests, security, data integrity, a public interface or research integrity, halt and write `BLOCKED.md`. |

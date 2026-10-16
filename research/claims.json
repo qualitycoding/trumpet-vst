@@ -3720,18 +3720,18 @@
  },
  {
   "id": "C-100",
-  "source_item": "R5-review",
+  "source_item": "premortem-round-2",
   "question": "",
   "claim": "The repository qualitycoding/trumpet-vst is public (GitHub API `visibility: public`, checked 2026-10-15); workflow artifacts of a public repository can be downloaded by other GitHub users, so uploading built binaries is a distribution (lesson L-20261015T090000Z).",
   "kind": "numerical",
   "load_bearing": true,
   "sources": [
    {
-    "url": "research/rounds/round-3-adversarial.md",
-    "title": "R5 adversarial review (fresh-context Opus)",
-    "version": "2026-10-08",
+    "url": "gh api repos/qualitycoding/trumpet-vst --jq .visibility",
+    "title": "pre-mortem round 2 (fresh-context Opus) + GitHub API",
+    "version": "2026-10-15",
     "locator": "gh api repos/qualitycoding/trumpet-vst --jq .visibility; premortem/round-2.md R-025",
-    "accessed": "2026-10-08",
+    "accessed": "2026-10-15",
     "tier": 1
    }
   ],
@@ -3746,7 +3746,71 @@
    "domain:audio",
    "domain:musical-acoustics",
    "domain:brass",
-   "subject:github-actions-pins"
+   "subject:github-repository-visibility"
+  ],
+  "supersedes_claim": null
+ },
+ {
+  "id": "C-101",
+  "source_item": "planner-spike",
+  "question": "",
+  "claim": "A 25 ms tongue stop (lips held closed, p_m = 0, then a 3 ms pressure re-attack) on a sustained mf note gives a 5 ms-RMS dip of 11.7-20.1 dB (median 15.9) in the radiated output of every normal-range standard note and recovery to within 3 dB of the steady level in a median 95 ms (97 % within 250 ms); 15 ms gives 7.7-16.8 dB; a 100 ms gap gives >= 29 dB.",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/spikes/tongue_spike.py",
+    "title": "planner spike",
+    "version": "2026-10-15",
+    "locator": "research/spikes/tongue_spike.py; tongue_spike_result.txt",
+    "accessed": "2026-10-15",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-010",
+   "T-035"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:brass-lip-model"
+  ],
+  "supersedes_claim": null
+ },
+ {
+  "id": "C-102",
+  "source_item": "planner-spike",
+  "question": "",
+  "claim": "After the D-007 release (p_m to 0 over 40 ms) the radiated output of every normal-range standard note at mf falls by 16.9-56.4 dB (median 38.8) below its steady level within 100 ms of note-off; only 87 % fall by >= 20 dB.",
+  "kind": "numerical",
+  "load_bearing": true,
+  "sources": [
+   {
+    "url": "research/spikes/release_gap_spike.py",
+    "title": "planner spike",
+    "version": "2026-10-15",
+    "locator": "research/spikes/release_gap_spike.py; release_gap_spike_result.txt",
+    "accessed": "2026-10-15",
+    "tier": 1
+   }
+  ],
+  "confidence": "verified",
+  "evidence_class": "n/a",
+  "contradicted_by": [],
+  "informs": [
+   "D-007",
+   "T-035"
+  ],
+  "tags": [
+   "domain:audio",
+   "domain:musical-acoustics",
+   "domain:brass",
+   "subject:brass-lip-model"
   ],
   "supersedes_claim": null
  }

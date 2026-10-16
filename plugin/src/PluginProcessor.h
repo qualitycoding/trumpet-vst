@@ -5,7 +5,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <memory>
 
-/// Mono trumpet instrument (D-010 .. D-016). MIDI: notes 24..31 keyswitches (D-003), CC2/CC11 breath, CC1 and
+/// Mono trumpet instrument (D-010 .. D-016). MIDI: notes 24..31 keyswitches (D-003), CC2 breath, CC11 expression, CC1 and
 /// channel pressure vibrato, CC16 Overblow, pitch bend +-2 semitones, CC120/CC123 all notes off; omni.
 class TrumpetAudioProcessor : public juce::AudioProcessor {
 public:

@@ -11,8 +11,9 @@ Carmine Emanuele Cella, Daniele Ghisi, Vincent Lostanlen, Fabien Lévy, Joshua F
 - **Used:** the 96 "Trumpet in C", ordinario notes, as a reference for automated realism tests.
 - **Changes:** the recordings are downloaded at test time and are never committed or distributed with the plugin.
   The repository contains only metrics derived from them: per-note harmonic levels, spectral centroid and onset
-  times, in `research/spikes/ref_spread_result.json` and in CI result files. Gate evidence bundles that contain
-  excerpts carry their own copy of this attribution.
+  times, in `research/spikes/ref_spread_result.json` and in CI result files. The G-005 evidence bundle contains short
+  excerpts (1.0 s steady segments, RMS-normalised to −23 dBFS with 10 ms fades) on the branch `evidence/G-005`, with its
+  own copy of this attribution.
 
 ## Fréour et al. 2022, Table 1
 Vincent Fréour, Louis Guillot, Hideyuki Masuda, Christophe Vergez, Bruno Cochelin. *Parameter identification of a
