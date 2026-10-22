@@ -314,7 +314,8 @@
 - Inputs: D-011, D-014
 - Actions:
   1. Implement in the voice:
-     - breath (CC2, latching; cleared by `setBreath(-1)`) and velocity handling;
+     - breath (CC2, latching; cleared by `setBreath(-1)`) and velocity handling; correct the `setBreath` doc comment in
+       `TrumpetVoice.h` to "(CC2)" (comment-only edit);
      - legato note stack behaviour;
      - the full `fscale_eff` of D-011: Intonation realism with `naturalDevCents`, A4 tuning, pitch bend, vibrato;
      - all-notes-off as a panic (D-014: 4 ms fade, then idle);
@@ -344,7 +345,8 @@
   2. Brightness extremes (D-012, R-028): extend `tpt_calibrate` with `--brightness-ff` (S-009 tool; the voice exposes the
      clamp counter through a debug accessor, additive and logged). With brightness 1 at velocity 124/127 it renders every
      normal-range standard note for 1 s at 48 kHz and at 192 kHz and writes `logs/S-011-brightness-ff.md` with the warp-clamp counter and the peak
-     output per note. Any clamp event → enlarge the ring (D-012) or reduce `L_nl` maximum (DR-RANGE).
+     output per note. Any clamp event is a defect (the offset is bounded by A): check the 30 kPa bound and the A formula,
+     else reduce the `L_nl` maximum (DR-RANGE).
   3. After any change to `VoiceTuning.h`: build, run `tpt_calibrate`, build again (re-embeds the table). Then run
      `tpt_integration_tests "[T-015],[T-016],[T-017],[T-018],[T-020],[T-021],[T-022],[T-034],[T-035]"` plus every previously green
      tag (DR-RANGE for T-034).
@@ -354,7 +356,7 @@
 - Done when: those pass with no regression, and `logs/S-011-brightness-ff.md` shows no clamp event. T-021/T-022 failures
   may wait for S-016 under DR-REAL; record them in the checkpoint.
 - Checkpoint: test status and final constants.
-- On failure: DR-OVERBLOW, DR-VALVE, DR-RANGE.
+- On failure: DR-OVERBLOW, DR-VALVE, DR-RANGE, DR-ARTIC.
 - Gate: none
 - Relevant decisions/claims: D-003, D-009, D-010, D-013
 - Lessons applied: L-20261007T150600Z-control-mapping-formulas-unverified
@@ -392,7 +394,7 @@
   1. Implement the processor:
      - **Voice:** create `tpt::TrumpetVoice` in the constructor from `embeddedResonatorJson()`, parsed once.
      - **MIDI extras (D-014):** CC11 expression gain (10 ms smoothing) applied to the output; `setBreath(-1)` when the host
-       play-head changes from not playing to playing; `TPT_GIT_SHA` compile definition shown in the editor footer (D-025).
+       play-head changes from not playing to playing; `TPT_GIT_SHA` compile definition (D-025), drawn by the editor in S-014.
      - **prepareToPlay:** `voice.prepare(fs, max block)` and `setLatencySamples(voice.latencySamples())`.
      - **processBlock:** `ScopedNoDenormals`; read the APVTS values into `VoiceParameters`; split the block at MIDI events and dispatch per D-014; render mono into channel 0 and copy it to every other channel.
      - **State:** per D-015.
@@ -424,6 +426,7 @@
      `layout.caption`; there is no separate caption label in the editor), and `setState` with repaint on change.
   3. Implement the editor:
      - 9 rotary knobs and 2 toggles with APVTS attachments;
+     - the build-id text "Build <TPT_GIT_SHA>" (D-025);
      - the 60 Hz timer and `refreshFromProcessor()`, which also reads `unsupportedRate()`; `paint()` draws "unsupported
        sample rate" over the view when it is true (D-026 R-022).
   4. Add `tools/render/snapshot_ui.cpp` → target `tpt_ui_snapshots` (in `plugin/CMakeLists.txt`, links TrumpetVST).
@@ -548,7 +551,9 @@
 - Inputs: everything
 - Actions:
   1. `bash tests/scripts/verify_freeze.sh`; then a full local run of every suite available locally.
-  2. Update the README "Status" and "Building" sections (no claims beyond the evidence).
+  2. Update the README "Status" and "Building" sections (no claims beyond the evidence), and add a "MIDI and latency"
+     section: CC2 breath, CC11 expression, CC121, keyswitches 24–31, the ≤ 1.3 ms unreported warp delay (D-012) and the
+     supported sample-rate range (D-026 R-022).
   3. Write `REPORT.md`: tests by ID with status, the SC table, deviations, gate outcomes, open risks, and what was not verified (a real DAW host test, unless the human did one).
   4. Write `MAINTENANCE.md` (D-026 R-019) and recommend branch protection on `main` in `REPORT.md` (R-020).
   5. Push.

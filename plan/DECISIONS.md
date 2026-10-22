@@ -32,7 +32,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
     `keyswitch()` acts on them (the processor and `tpt_render` route them there). Held valves survive `prepare()` and
     `reset()` (D-026 R-014); only a keyswitch or `setHeldValves` changes them.
   - In normal mode they do not change anything.
-  - In Fixed-valves mode they set the held valves (default open, reset by `reset()`).
+  - In Fixed-valves mode they set the held valves (default open; kept by `prepare()` and `reset()`, D-026 R-014).
 - **Resolution** (`resolveNote`, header contract):
   - Choose the partial n in 1..13 whose nominal written pitch `48 + 12·log2 n − lowering` is nearest to the request (ties → lower n).
   - The sounding note is that partial's natural pitch.
@@ -182,7 +182,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   at that moment (the note stack, not the output level, decides). Otherwise — no note held (even if the previous note is
   still ringing), or the same pitch as the only held note — the note is re-articulated: a **tongue stop** of 25 ms
   (`kTongueStopS` in `VoiceTuning.h`): lips held closed (y = 0, ẏ = 0), p_m = 0, the new note's bore state, fscale and
-  lip setting are applied at the start of the stop; then the D-007 attack (pressure rise from closed lips). Spike
+  lip setting are applied at the start of the stop; then the **re-attack**: p_m rises from 0 to pm_sus over 3 ms
+  (raised cosine, `kReattackS`), no accent (k_acc = 1), lips starting closed — exactly the shape of the spike (the D-007
+  attack applies only to notes started from silence). Spike
   `research/spikes/tongue_spike.py` (C-101): a 25 ms stop gives a 5 ms-RMS dip of 11.7–20.1 dB on every normal-range
   standard note (median 15.9) and recovery to within 3 dB of the steady level in a median 95 ms (97 % within 250 ms);
   a 100 ms gap gives ≥ 29 dB.
@@ -192,7 +194,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - Each mode's s and R interpolate linearly from old to new over 15 ms, with coefficients updated at control rate and q states kept.
   - The mode count is the same for every state (14).
   - The lip setting ramps over 20 ms as above.
-- **Note stack:** 16 held notes, fixed array, last-note priority (D-014).
+- **Note stack:** up to 16 held pitches, fixed array, last-note priority (D-014), one entry per pitch with a count: a
+  note-on of a held pitch increments its count (and re-articulates if it is the only held pitch); a note-off decrements;
+  the pitch leaves the stack at zero, so the first note-off of two overlapping same-pitch notes does not end the second.
 
 ## D-011 Tuning, Intonation realism, bend, vibrato
 - **Effective scale:** fscale_eff = fscale_note · 2^(r·naturalDevCents/1200) · (A4/440) · 2^(bend/12) · 2^(vib/1200).
@@ -216,11 +220,11 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - L_nl = nlp.length_m × 2·brightness, so 0.85 m at the default;
   - arrival time t_k = t − β·L_nl·p⁺/(ρc³);
   - monotone arrival times (`max` accumulate) resolve shocks;
-  - resampled to the internal grid by linear interpolation, with a 256-sample look-behind ring buffer (real-time safe).
+  - resampled to the internal grid by linear interpolation, with a look-behind ring buffer sized below (real-time safe).
     The warp uses min(|p⁺|, 30 kPa) (sign kept), so the arrival offset lies in ±A with A = β·L_nl,max·30 kPa/(ρc³)·f_int
     (≈ 119 samples at f_int = 96 kHz, ≈ 238 at 192 kHz, computed at `prepare()`). The stage runs with a fixed base delay
     D = ceil(A) + 2 samples (≤ 1.3 ms at any rate; an unreported output delay, documented in README; `latencySamples()`
-    stays the decimator latency, T-025) and a ring of 2·D + 4 samples; offsets are clamped to ±(D − 1) on both sides a clamp event sets a debug counter, logged once per note.
+    stays the decimator latency, T-025) and a ring of 2·D + 4 samples; offsets are clamped to ±(D − 1) on both sides. a clamp event sets a debug counter, logged once per note.
 - **Radiation:** a cascade of the table's RBJ biquads, designed at f_int at `prepare()`.
 - **Breath noise:**
   - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise mapped to [−1, 1) as w = x/2³¹ − 1 (seed 0x7A11C0DE at
@@ -270,7 +274,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Controllers:**
   - CC2 → `setBreath(v/127)` (breath controller; latches until `reset()` or the next transport start, when the processor
     calls `setBreath(-1)`: the host play-head changes from not playing to playing, pre-mortem R-030);
-  - CC11 → expression: a smoothed output-gain multiplier v/127 (10 ms one-pole), not the blowing level;
+  - CC11 → expression: a smoothed output-gain multiplier v/127 (one-pole, 10 ms time constant, per sample at the host
+    rate), not the blowing level; it starts at 1, CC121 restores 1, a transport start leaves it unchanged;
   - CC1 and channel pressure → `setVibratoControl(v/127)`, the maximum of the two;
   - pitch bend → semitones = 2·(value − 8192)/8192 (14-bit value);
   - CC16 → Overblow (D-009);
@@ -453,9 +458,14 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   - the full licence texts: JUCE's `LICENSE.md` and the AGPLv3 text it refers to (`agpl-3.0.txt` from the JUCE source
     tree, else https://www.gnu.org/licenses/agpl-3.0.txt), the VST3 SDK `LICENSE.txt`, nlohmann/json `LICENSE.MIT`
     (pre-mortem R-025 residual).
-  - The plugin carries its build id: `target_compile_definitions(TrumpetVST PRIVATE TPT_GIT_SHA="<sha>")`, from
-    `git rev-parse --short HEAD` at configure time ("unknown" otherwise), shown in the editor footer.
-  Staging: copy `build/plugin/TrumpetVST_artefacts/Release/*` and the four licence files into `rc/<os>/`, write
+  - The plugin carries its build id: `target_compile_definitions(TrumpetVST PRIVATE TPT_GIT_SHA="<sha>")` from the CMake
+    cache variable `TPT_GIT_SHA_OVERRIDE` if set (the `rc-artifacts` job sets it to the approved sha), else
+    `git rev-parse --short=7 HEAD` at configure time, else "unknown". The editor draws "Build <sha>" in 11 px grey text
+    at the bottom-right corner of the editor, outside the T-033 view rectangles (S-014), matching `BUILD_INFO.txt`.
+  Staging: copy `build/plugin/TrumpetVST_artefacts/Release/*`, the four notice files and the four full licence texts
+  (`${juce_SOURCE_DIR}/LICENSE.md`; the VST3 SDK `LICENSE.txt` found with `find ${juce_SOURCE_DIR} -path '*VST3_SDK*' -name
+  LICENSE.txt`; `${nlohmann_json_SOURCE_DIR}/LICENSE.MIT`; the AGPLv3 text from the JUCE tree if present, else downloaded
+  from https://www.gnu.org/licenses/agpl-3.0.txt) into `rc/<os>/`, write
   `BUILD_INFO.txt` there, and upload `rc/<os>`.
 - **Approval scope:** a G-002 approval covers exactly one sha. Every new RC upload (for example after G-006 `issues`
   fixes) needs its own G-002 request for the new sha, and G-006 is re-issued after it.
@@ -545,6 +555,7 @@ Each rule names the step(s) where it applies.
 | DR-PERF (S-017) | RTF > 0.05 on a CI OS | (1) Check Release/LTO. (2) Control-rate decimation to 32 samples. (3) Reduce modes to 12 for partials ≤ 8 only if T-007/T-012 still pass. Never relax T-024. |
 | DR-REAL (S-016) | T-029 fails | Up to 5 calibration rounds on non-frozen constants only: D-007 attack, D-008 map, D-012 L_nl / K_out, D-005 trims. Log each round in `logs/S-016-round-<k>.md`. Then go to G-005 with the metrics. Thresholds are never edited. |
 | DR-RANGE (S-011) | T-034 fails for a parameter extreme | Brightness or breath noise: reduce the internal mapping (`L_nl` maximum, noise gains in `VoiceTuning.h`) so that the extreme stays on the partial; never change the parameter range (T-026). Tuning extremes: add optional per-note `fscale_415` and `fscale_466` fields to the table (additive, optional in the parser, written by `tpt_calibrate --a4 415,440,466`) and interpolate log-linearly in A4. Vibrato: limit the modulation to the control rate (16 samples) with linear interpolation. At most 5 rounds, then `TEST_CHALLENGE.md`. |
+| DR-ARTIC (S-011) | T-035 fails | Tune only `kTongueStopS` within 20–40 ms and `kReattackS` within 2–8 ms (spike range, C-101), at most 5 rounds; then `TEST_CHALLENGE.md`. |
 | DR-INTON (G-005 response) | The human says the natural tendencies (r = 1) are wrong for some notes | Record the human's values as an override table `natural_dev_override` in `generate_table` input (new optional JSON field, additive). Re-run T-014 against the overridden values via a `TEST_CHALLENGE` amendment. |
 | DR-PLUGINVAL (S-017) | pluginval fails | Fix the plugin. On Windows, a path or hash issue is fixed in the workflow, never in the frozen script. |
 | DR-ZENODO (S-015, S-016) | Zenodo is unreachable locally | Run T-029 in CI only. Continue the other steps. |

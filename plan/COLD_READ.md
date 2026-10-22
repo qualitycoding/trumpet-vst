@@ -145,3 +145,16 @@ A fresh Sonnet dry run checked the changes since 2892012: 12 items (0 High, 6 Me
 - **10:** S-000 credential statement.
 - **11:** RC staging, paths and `ImageVersion`.
 - **12:** S-008/S-011 outputs include the header and CMake additions.
+
+## Re-run after pre-mortem round 3 hardening (pass 8)
+A fresh Sonnet dry run checked the changes since f7c98ab: 10 items (0 High, 5 Medium, 5 Low). All were resolved:
+- **1:** counted note stack (D-010).
+- **2:** the re-attack is specified exactly as spiked (3 ms, no accent, closed lips), so C-101 applies to T-035.
+- **3:** DR-ARTIC.
+- **4:** D-012 ring wording; S-011 clamp remedy.
+- **5:** `TPT_GIT_SHA` override from the RC job; footer drawn in S-014.
+- **6:** D-003 stale clause.
+- **7:** `setBreath` header comment (S-010).
+- **8:** demo 10 timing.
+- **9:** CC11 semantics and the G-006 item 9 wording.
+- **10:** licence-text paths and the README "MIDI and latency" section (S-018).
