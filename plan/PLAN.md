@@ -1,4 +1,40 @@
-<!-- STATUS: see the header written in Phase 5 below this comment. -->
+<!-- STATUS: READY -->
+# Status: READY (planning protocol v3.2, Phase 5, 2026-10-22)
+
+- **Profiles:** `software` only (`software.deploys = false`).
+- **Branch:** `gen-20261007T145241Z-trumpet-vst-plan`.
+- **Claims:** 102, of which 80 are load-bearing and 7 are superseded.
+
+  | Confidence | Count |
+  |---|---|
+  | verified | 83 |
+  | corroborated | 14 |
+  | inferred | 3 (none load-bearing) |
+  | single-source | 2 (none load-bearing) |
+
+- **Tests (frozen, 35 IDs T-001..T-035, 32 manifest files):**
+
+  | Category | Count |
+  |---|---|
+  | C++ unit cases | 22 |
+  | C++ integration cases | 22 |
+  | C++ operational cases | 5 |
+  | C++ alloc cases | 1 |
+  | C++ perf cases | 1 |
+  | plugin cases | 5 |
+  | Python test functions | 18 |
+  | frozen scripts | 2 (freeze, pluginval) |
+
+  Red-verified locally and in CI on three OSes; the D-018 guards pass by design.
+- **Steps:** 21 (S-000 … S-018, S-RETRO, S-KNOW).
+- **Gates:** G-002, G-003, G-004, G-005, G-006. G-001 is not applicable.
+- **Risks:** 37 (Critical 1, High 6, Medium 19, Low 11). Every Critical and High risk is mitigated; the last pre-mortem
+  round (4) found 0 Critical and 0 High. Residual Medium/Low risks are listed in `premortem/RISK_REGISTER.md`.
+- **Research:** 4 rounds, saturated; R5 adversarial review included.
+- **Cold read:** 9 passes, 132 items, all resolved; the last pass's fixes are carried as R-037 (Low).
+- **Lessons and knowledge:** 14 lessons and 102 knowledge items on this branch, to be pushed at G-003
+  (`qualitycoding/agent-knowledge`, which does not exist yet).
+
 # Execution plan — trumpet-vst v1
 
 ## Conventions

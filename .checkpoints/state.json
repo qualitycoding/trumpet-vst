@@ -144,11 +144,11 @@
   "lessons/L-20261008T151500Z-reasoned-expected-value-wrong.md": "0c42d0a2560a1c4f8fcb0128e7b20cc568c517b8a60824a0810f85b4c4896bda",
   "lessons/L-20261015T090000Z-public-repo-artifacts-are-publication.md": "e62e5a14ba9d62ce4367f56eaaffb6803c273d545dedd021c150cb41d4db707f",
   "plan/ASSUMPTIONS.md": "57cd5054f1de6f0e6e6694d778e7561d65962a132d72edd2f1d0c6ad6f6c37dd",
-  "plan/COLD_READ.md": "6eea26f54f349ee639eb8e0fef284347a2290470d87528ffc45f6ae71d8b5ed1",
-  "plan/DECISIONS.md": "e6847688ced1eb451ac0a30841c81492e0d1dfffdfa59b7a7335ca965a7435e0",
-  "plan/ENVIRONMENT.md": "3e749fa7dfc44b5055ccf80de3b644f5a6bff23dace021a543f70aaae1ff5384",
+  "plan/COLD_READ.md": "659f4150eb89ad5944238ca4de96dfbccdff6373eafce9300b8ac400357b57be",
+  "plan/DECISIONS.md": "810b3e01769d61aba6a5bb073dc94e3eec46b279b3394998fd6d8309c98b9686",
+  "plan/ENVIRONMENT.md": "c3aaa2c9154dd3e427cca5ffdb457dd3f436bb6b7adbddbb51bfcf402cef352d",
   "plan/GATES.md": "e14baab016bcfb12e3e282c102b54b4fe6583cd434a000e96a6c9c19fce92d96",
-  "plan/PLAN.md": "f4b1e9a99f4bff12f5f58e2edcac8bb86b852c940963e3ac95bafabbc7880509",
+  "plan/PLAN.md": "ea9638f7299e6d4bfb0ec40eef6038ed6da5faa4e3991244c33802e3d5a38b58",
   "plan/PROFILE.md": "7e4bd04e40505fe5f82b15923ff150b13225c59fc36d00f3c1d570cbece72335",
   "plan/PROTOCOL_EXTRACTS.md": "ba3b7b4899161e19728b6314738ce9832c001e84d0c29c0c6190cb4bd8ee3104",
   "plan/TRACEABILITY.md": "a0454b7a72783591c0c6bae29a0fa07bac1fc856ac802b268a02576bd239a8a7",
@@ -160,7 +160,7 @@
   "plugin/src/PluginProcessor.h": "d48bd3a3bdd8e8f703d41a089525ce084ba79f53499c29907f2a7d722172c69f",
   "plugin/src/TrumpetView.cpp": "2616f59ca660914c753677008ad99076426011bc3b4cdb10d748023d370f6f36",
   "plugin/src/TrumpetView.h": "45aa28d3d50d17b69256beac16b94ba874a9069720f9934ffc15d9d6c625de9c",
-  "premortem/RISK_REGISTER.md": "5e94d5a506c6353441d40d148f96f8ecdb899a1d87dc2d968584cfce1579398e",
+  "premortem/RISK_REGISTER.md": "aa56489d0d5077d8c254d0b096af3b876fe249818dfdba50bfc56e977e9bcf51",
   "premortem/round-1.md": "0f65070cf3a1f2f72ee9bfd55bc0666408c5509e32a4f4c5404d260eed70e0a5",
   "premortem/round-2.md": "5411375d73f6a31e010a1cc62ef3936a96d3e7bf07a7eb7dc91ab6feb6ea1f06",
   "premortem/round-3.md": "feac720ac1bf371fac59574dbda0c4042d477137d839c46d09fb616fd951b629",
@@ -181,6 +181,7 @@
   "research/coldread/pass-6-dryrun.md": "6a1948fdf50335235ddcefa79c013ffe64e02c69c254e7c170c3eb55a384eeb1",
   "research/coldread/pass-7-dryrun.md": "1fd6bc06588b43c858e9b5b6ab935cd88a7ab5d26f4cc25496e6d1e5b28bfa61",
   "research/coldread/pass-8-dryrun.md": "4cd18b57d842ccf10ee7867aeee56d31000c3d84e707ba768fb6088bf73925e9",
+  "research/coldread/pass-9-dryrun.md": "f710c9c2461153092b144e1f1a533406af6708793147d4b8acfa5a560bd56b02",
   "research/rounds/round-1.md": "18b23e6e69dd13d956204d9d964c59116e54444a2dac9aa63d4796d532d45de9",
   "research/rounds/round-2.md": "ca6a0c4605ec8aa411a6de566e100cad0a12f5a8dcbc37ba8c616b7bb5e3c4bc",
   "research/rounds/round-3-adversarial.md": "cb2596d591218d68bfb6dc77faf473e60fdbb7fff03e9bbcf70791d2e3adb4d9",
@@ -295,7 +296,11 @@
   "3.6",
   "3.6-pass1",
   "3.6-pass2",
+  "3.6-recheck",
   "3.7",
+  "5.1",
+  "5.2",
+  "5.3",
   "R0",
   "R1",
   "R2",
@@ -468,7 +473,9 @@
   "note": "does not exist (HTTP 404, 2026-10-07)",
   "readable": false
  },
- "lessons_loaded": [],
+ "lessons_loaded": [
+  "(store absent; 11 backfilled planner lessons, A-019)"
+ ],
  "lessons_recorded": [
   "L-20261007T150000Z-sandbox-no-pip-no-sudo",
   "L-20261007T150100Z-no-credentials-in-command-lines",
@@ -502,11 +509,8 @@
   "G-001"
  ],
  "open_items": [],
- "pending": [
-  "3.6-recheck",
-  "5"
- ],
- "phase": "4",
+ "pending": [],
+ "phase": "5",
  "premortem_round": 4,
  "profiles": [
   "software"
@@ -514,7 +518,11 @@
  "proof_review_round": 0,
  "research_round": 4,
  "run_id": "20261007T145241Z-trumpet-vst-plan",
- "subphase": "4.5",
- "tier_substitutions": [],
- "updated_at": "2026-10-22T12:26:03Z"
+ "subphase": "5.3",
+ "tier_substitutions": [
+  "R5, cold reads, pre-mortems: subagents (Opus/Sonnet/Haiku) used; several resumed after rate limits",
+  "Phase 5 final consistency check run by the planner as a script instead of a Haiku agent",
+  "Fable tier not used: Opus used for adversarial and pre-mortem roles"
+ ],
+ "updated_at": "2026-10-22T12:48:11Z"
 }
