@@ -3723,7 +3723,7 @@
   "source_item": "premortem-round-2",
   "question": "",
   "claim": "The repository qualitycoding/trumpet-vst is public (GitHub API `visibility: public`, checked 2026-10-15); workflow artifacts of a public repository can be downloaded by other GitHub users, so uploading built binaries is a distribution (lesson L-20261015T090000Z).",
-  "kind": "numerical",
+  "kind": "software",
   "load_bearing": true,
   "sources": [
    {
@@ -3743,9 +3743,7 @@
    "G-002"
   ],
   "tags": [
-   "domain:audio",
-   "domain:musical-acoustics",
-   "domain:brass",
+   "tech:github-actions",
    "subject:github-repository-visibility"
   ],
   "supersedes_claim": null

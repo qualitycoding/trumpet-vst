@@ -49,6 +49,14 @@ python3 -m venv --without-pip $HOME/.venvs/trumpet-vst && ln -sfn $HOME/.venvs/t
 curl -sSL https://bootstrap.pypa.io/get-pip.py | .venv/bin/python - && .venv/bin/pip install -r tools/requirements.lock
 ```
 
+## Windows (owner build, Visual Studio 2026 with the "Desktop development with C++" workload, Git, CMake ≥ 3.22)
+```powershell
+git clone https://github.com/qualitycoding/trumpet-vst; cd trumpet-vst; git checkout <branch or sha>
+cmake -S . -B build -G "Visual Studio 18 2026" -A x64 -DTPT_BUILD_TESTS=OFF
+cmake --build build --config Release
+# result: build\plugin\TrumpetVST_artefacts\Release\VST3\Trumpet.vst3 -> copy to C:\Program Files\Common Files\VST3
+```
+
 ## Build and test commands
 ```bash
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release            # add -DTPT_BUILD_PLUGIN=OFF without JUCE deps

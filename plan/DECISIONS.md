@@ -275,10 +275,14 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - CC2 → `setBreath(v/127)` (breath controller; latches until `reset()` or the next transport start, when the processor
     calls `setBreath(-1)`: the host play-head changes from not playing to playing, pre-mortem R-030);
   - CC11 → expression: a smoothed output-gain multiplier v/127 (one-pole, 10 ms time constant, per sample at the host
-    rate), not the blowing level; it starts at 1, CC121 restores 1, a transport start leaves it unchanged;
+    rate), not the blowing level; it starts at 1, and CC121 and every transport start (play-head not playing → playing) restore 1 (pre-mortem R-033);
   - CC1 and channel pressure → `setVibratoControl(v/127)`, the maximum of the two;
   - pitch bend → semitones = 2·(value − 8192)/8192 (14-bit value);
   - CC16 → Overblow (D-009);
+  - CC68 (legato pedal, ≥ 64 = on) → while on, a note-on that arrives within 20 ms after the last note-off of a note that
+    was still sounding is played legato (D-010) instead of tongued; touching notes in notation exports and REAPER's legato
+    command then slur (pre-mortem R-035). Events at the same sample are processed in buffer order (note-off before
+    note-on as hosts send them), so without CC68 touching notes are tongued. README documents this;
   - CC120/CC123 → `allNotesOff()`: a panic, unlike the last `noteOff` (D-007 release): the output gain fades to zero over
     4 ms (raised cosine), then lip, mode and decimator states are zeroed and the voice is idle;
   - CC121 → reset the controllers (breath absent, bend 0, vibrato 0, overblow control released). Releasing needs the
@@ -446,9 +450,10 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
 - **Routine CI** (`plugin` job) builds and validates on every push but uploads **no** binaries (logs only).
 - **Release-candidate job** `rc-artifacts` (in `ci.yml`, added in S-017): `if: github.event_name == 'push' &&
   contains(github.event.head_commit.message, '[g002-approved rc ')`, and only after `GATE-G-002.RESPONSE.md` with `approve`
-  is committed. `<short sha>` = the first 7 characters of the commit named in `GATE-G-002.md` (the parent of the empty
-  marker commit). The job extracts it from the message with the regex `\[g002-approved rc ([0-9a-f]{7})\]`, fails unless
-  that commit is an ancestor of `HEAD`, and builds the marker commit (identical tree). It builds
+  is committed. `<short sha>` = the first 7 characters of the commit named in `GATE-G-002.md` ; the empty marker commit is pushed
+  directly on top of it, so it is the marker's parent. The job checks out with `fetch-depth: 0` (the default depth 1
+  cannot answer ancestry, pre-mortem R-034), extracts the sha with the regex `\[g002-approved rc ([0-9a-f]{7})\]`, fails
+  unless `git rev-parse HEAD^` starts with it, and builds the marker commit (identical tree). It builds
   Release on the three OSes and uploads one artifact per OS named `trumpet-rc-<short sha>-<os>`, with
   `retention-days: 90` (the maximum). Each artifact contains:
   - the plugin formats (`VST3`, `Standalone`, and `AU` on macOS);
@@ -506,8 +511,8 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   - Scheduled workflows run only from the default branch (`main`), which this plan never changes (G-002), so no
     schedule is relied on (R-026). `MAINTENANCE.md` gives the owner two ways to get a new binary: (a) as the G-002
     approver, commit `GATE-G-002.RESPONSE.md` with `approve` for a sha and push the `[g002-approved rc <sha>]` marker
-    commit (D-025), or (b) build locally on Windows with Visual Studio 2026 (`plan/ENVIRONMENT.md` commands; the
-    VST3 is under `build/plugin/TrumpetVST_artefacts/Release/VST3/`). `MAINTENANCE.md` tells the owner to push an empty commit or re-run the last workflow
+    commit (D-025), or (b) build locally on Windows with Visual Studio 2026 (`plan/ENVIRONMENT.md` "Windows" commands;
+    the VST3 is under `build/plugin/TrumpetVST_artefacts/Release/VST3/`). `MAINTENANCE.md` tells the owner to push an empty commit or re-run the last workflow
     once a month, and that a `schedule: - cron: '0 6 1 * *'` trigger becomes active only once `ci.yml` is merged to `main`.
   - `pip-audit` reports without failing on push (`continue-on-error: true`, `::warning::`).
   - Every job logs the toolchain versions (`cmake --version`, the compiler, the runner image version).
@@ -555,7 +560,7 @@ Each rule names the step(s) where it applies.
 | DR-PERF (S-017) | RTF > 0.05 on a CI OS | (1) Check Release/LTO. (2) Control-rate decimation to 32 samples. (3) Reduce modes to 12 for partials ≤ 8 only if T-007/T-012 still pass. Never relax T-024. |
 | DR-REAL (S-016) | T-029 fails | Up to 5 calibration rounds on non-frozen constants only: D-007 attack, D-008 map, D-012 L_nl / K_out, D-005 trims. Log each round in `logs/S-016-round-<k>.md`. Then go to G-005 with the metrics. Thresholds are never edited. |
 | DR-RANGE (S-011) | T-034 fails for a parameter extreme | Brightness or breath noise: reduce the internal mapping (`L_nl` maximum, noise gains in `VoiceTuning.h`) so that the extreme stays on the partial; never change the parameter range (T-026). Tuning extremes: add optional per-note `fscale_415` and `fscale_466` fields to the table (additive, optional in the parser, written by `tpt_calibrate --a4 415,440,466`) and interpolate log-linearly in A4. Vibrato: limit the modulation to the control rate (16 samples) with linear interpolation. At most 5 rounds, then `TEST_CHALLENGE.md`. |
-| DR-ARTIC (S-011) | T-035 fails | Tune only `kTongueStopS` within 20–40 ms and `kReattackS` within 2–8 ms (spike range, C-101), at most 5 rounds; then `TEST_CHALLENGE.md`. |
+| DR-ARTIC (S-011) | T-035 fails | Tune only `kTongueStopS` within 20–40 ms (the spiked range is 15–40 ms, C-101); `kReattackS` stays 3 ms (the only spiked value). At most 5 rounds; then `TEST_CHALLENGE.md`. |
 | DR-INTON (G-005 response) | The human says the natural tendencies (r = 1) are wrong for some notes | Record the human's values as an override table `natural_dev_override` in `generate_table` input (new optional JSON field, additive). Re-run T-014 against the overridden values via a `TEST_CHALLENGE` amendment. |
 | DR-PLUGINVAL (S-017) | pluginval fails | Fix the plugin. On Windows, a path or hash issue is fixed in the workflow, never in the frozen script. |
 | DR-ZENODO (S-015, S-016) | Zenodo is unreachable locally | Run T-029 in CI only. Continue the other steps. |

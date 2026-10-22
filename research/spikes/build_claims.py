@@ -146,6 +146,9 @@ def main():
             "confidence": "verified", "evidence_class": "n/a", "contradicted_by": [], "informs": informs,
             "tags": ["domain:audio", "domain:musical-acoustics", "domain:brass"] + [f"subject:{x}" for x in subj],
             "supersedes_claim": old if old.startswith("C-") else None})
+        if "is public" in claim:
+            claims[-1]["kind"] = "software"
+            claims[-1]["tags"] = ["tech:github-actions", "subject:github-repository-visibility"]
     byid = {c["id"]: c for c in claims}
     for c in claims:
         if c.get("supersedes_claim"):
