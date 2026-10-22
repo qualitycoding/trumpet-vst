@@ -40,10 +40,10 @@ Template for `GATE-<id>.md`:
 | Aspect | Definition |
 |---|---|
 | Trigger | S-RETRO done. |
-| Evidence | The list of every `lessons/L-*.md` and `knowledge/K-*.md` (ID, title or statement, tags), the schema-check output, and the proposed target `qualitycoding/agent-knowledge` (A-018) and whether it exists. |
+| Evidence | The list of every `lessons/L-*.md` and `knowledge/K-*.md` (ID, title or statement, tags), the schema-check output, and the proposed targets: knowledge items to `qualitycoding/knowledge`, lessons and `RETROSPECTIVE.md` to `qualitycoding/Lessons` (A-018). |
 | Questions | Where should the run's lessons and knowledge go? |
 | Allowed responses | `push-to-proposed`, `push-to: <owner/repo>`, `do-not-push` |
-| Branches | Push to the target in the protocol Appendix C layout; regenerate the indexes; create the target if missing (`gh repo create --private`, else the bundle fallback). `do-not-push` → finish. No response within the session → write the bundle fallback `knowledge-<run_id>.bundle` and report its path. |
+| Branches | Push to the targets in their own layouts (S-KNOW); regenerate the indexes with each repository's `scripts/build_index.py`. `push-to: <repo>` replaces the proposed target(s) named in the response. `do-not-push` → finish. No response within the session → write the bundle fallback `knowledge-<run_id>.bundle` and report its path. |
 
 ## G-004: fingering chart and trumpet drawing check (after S-014)
 | Aspect | Definition |

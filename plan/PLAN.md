@@ -1,5 +1,11 @@
-<!-- STATUS: READY -->
-# Status: READY (planning protocol v3.2, Phase 5, 2026-10-22)
+<!-- STATUS: IN REVISION -->
+# Status: IN REVISION — do not implement yet (2026-10-22)
+
+The human identified the knowledge store (`qualitycoding/knowledge` + `qualitycoding/Lessons`, A-018) after the plan was
+marked READY. R0 is being re-run against it (179 lessons, 134 knowledge items) and the plan amended; the status returns
+to READY when that is done. The figures below are those of the 2026-10-22 READY version.
+
+## Previous status: READY (planning protocol v3.2, Phase 5, 2026-10-22)
 
 - **Profiles:** `software` only (`software.deploys = false`).
 - **Branch:** `gen-20261007T145241Z-trumpet-vst-plan`.
@@ -32,8 +38,7 @@
   round (4) found 0 Critical and 0 High. Residual Medium/Low risks are listed in `premortem/RISK_REGISTER.md`.
 - **Research:** 4 rounds, saturated; R5 adversarial review included.
 - **Cold read:** 9 passes, 132 items, all resolved; the last pass's fixes are carried as R-037 (Low).
-- **Lessons and knowledge:** 14 lessons and 102 knowledge items on this branch, to be pushed at G-003
-  (`qualitycoding/agent-knowledge`, which does not exist yet).
+- **Lessons and knowledge:** see the Phase 5 header refresh after R0 (2026-10-22).
 
 # Execution plan — trumpet-vst v1
 
@@ -83,7 +88,8 @@
      - `gh api repos/qualitycoding/trumpet-vst/actions/runs --jq '.total_count'` (must succeed);
      - record the scopes shown by `gh auth status` (fine-grained tokens show none: the workflows permission is then first
        exercised by the S-002 push; a rejection there is a `BLOCKED.md` for the missing permission);
-     - `gh api repos/qualitycoding/agent-knowledge` (200 or 404 are both acceptable; record which);
+     - `gh api repos/qualitycoding/knowledge --jq .permissions.push` and the same for `qualitycoding/Lessons` (both must be
+       `true` before S-KNOW; record them);
      - `gh api repos/qualitycoding/trumpet-vst --jq .visibility` (record it; if `public`, D-025 applies as written; if
        `private`, D-025 still applies).
   4. Check that hosts are reachable with `curl -s -o /dev/null -m 15 -w "%{http_code}" https://<host>/`. Any HTTP
@@ -628,24 +634,30 @@
 - Tier: Haiku
 - Profile: software
 - Depends on: S-RETRO
-- Inputs: `lessons/`, `knowledge/`; A-018; `plan/PROTOCOL_EXTRACTS.md` (3.7.2, Appendix A–C)
+- Inputs: `lessons/`, `knowledge/`, `RETROSPECTIVE.md`; A-018; `plan/PROTOCOL_EXTRACTS.md` (3.7.2); the READMEs of
+  `qualitycoding/knowledge` and `qualitycoding/Lessons`
 - Actions:
   1. Write `GATE-G-003.md` per `plan/GATES.md` and halt at G-003.
-  2. On `push-to-proposed` or `push-to: <repo>`:
-     - clone the target; create it if missing (`gh repo create qualitycoding/agent-knowledge --private`) with `TAXONOMY.md`, `lessons/`, `knowledge/` and the two `INDEX.md` files;
-     - copy each lesson to `lessons/<first tech: or domain: tag, ':' replaced by '-'>/` (e.g. `lessons/domain-audio/`) and
-       each item to `knowledge/<first subject: tag, ':' → '-'>/`;
-     - add any new tags to `TAXONOMY.md` (format: one line per tag, `- <facet:value> — <meaning> (aliases: a, b)`);
-     - regenerate both `INDEX.md` files with `tools/make_index.py <store>` (written in this step: for every tag, a
-       `## <tag>` heading and one line per entry `- <ID> — <title or statement> (<severity or confidence>)`);
-     - run the schema check in the target; commit; push.
-     - If the push is rejected: pull, regenerate the indexes and retry, up to 3 times.
+  2. On `push-to-proposed` (or `push-to: <repo>` for either target):
+     - clone `qualitycoding/knowledge` and `qualitycoding/Lessons` (outside the repository directory);
+     - copy each knowledge item to `knowledge/<first subject: value>/` in `qualitycoding/knowledge`;
+     - copy each lesson to `lessons/<first tech: or domain: tag, ':' replaced by '-'>/` in `qualitycoding/Lessons`
+       (`general` if none);
+     - copy `RETROSPECTIVE.md` to `retrospectives/trumpet-vst/RETROSPECTIVE.md` in `qualitycoding/Lessons`;
+     - add every new tag (at least `domain:musical-acoustics`, `domain:brass` and the new `subject:` tags) to
+       `TAXONOMY.md` in **both** repositories, in the existing format (`` - `<facet>:<value>`: <meaning> ``, under its
+       facet heading), in the same commit as the entries that use it;
+     - in each repository run `python scripts/build_index.py`, then `python scripts/check_knowledge_schema.py` (must print
+       `all entries valid`), commit, and push.
+     - If a push is rejected: pull, re-run `build_index.py` and retry, up to 3 times.
   3. On `do-not-push`: finish.
-  4. If the target is unreachable or no response arrives: `git bundle create knowledge-20261007T145241Z-trumpet-vst-plan.bundle <lessons and knowledge commits>`, and report the path.
-- Outputs: `tools/make_index.py`, the knowledge-store commit, or the bundle
+  4. If a target is unreachable or no response arrives: `git bundle create knowledge-20261007T145241Z-trumpet-vst-plan.bundle
+     <lessons and knowledge commits>`, and report its path.
+- Outputs: the commits in `qualitycoding/knowledge` and `qualitycoding/Lessons`, or the bundle
 - Evidence produced: none
-- Done when: per protocol 3.7.2 step 4.
-- Checkpoint: the push commit or the bundle path.
+- Done when: both pushes succeeded and both `INDEX.md` files list every pushed ID; or the response was `do-not-push`; or
+  the bundle was written and reported.
+- Checkpoint: the push commits (both repositories) or the bundle path.
 - On failure: the bundle fallback.
 - Gate: **G-003**
 - Relevant decisions/claims: A-018

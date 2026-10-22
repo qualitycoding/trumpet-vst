@@ -468,10 +468,13 @@
   "K-20261007T160141Z-c-102"
  ],
  "knowledge_store": {
-  "commit_read": null,
-  "location": "qualitycoding/agent-knowledge",
-  "note": "does not exist (HTTP 404, 2026-10-07)",
-  "readable": false
+  "commit_read": {
+   "qualitycoding/Lessons": "ac028c7",
+   "qualitycoding/knowledge": "09f34582dfb50f876834a42b85ba19efac5a3129"
+  },
+  "location": "qualitycoding/knowledge (knowledge) + qualitycoding/Lessons (lessons)",
+  "note": "identified by the human on 2026-10-22; earlier default qualitycoding/agent-knowledge withdrawn",
+  "readable": true
  },
  "lessons_loaded": [
   "(store absent; 11 backfilled planner lessons, A-019)"
