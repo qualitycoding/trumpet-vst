@@ -49,7 +49,8 @@ python3 -m venv --without-pip $HOME/.venvs/trumpet-vst && ln -sfn $HOME/.venvs/t
 curl -sSL https://bootstrap.pypa.io/get-pip.py | .venv/bin/python - && .venv/bin/pip install -r tools/requirements.lock
 ```
 
-## Windows (owner build, Visual Studio 2026 with the "Desktop development with C++" workload, Git, CMake ≥ 3.22)
+## Windows (owner build, Visual Studio 2026 with the "Desktop development with C++" workload, Git, CMake ≥ 4.2 — the
+## "Visual Studio 18 2026" generator needs CMake 4.2 or later; the CMake bundled with Visual Studio 2026 qualifies)
 ```powershell
 git clone https://github.com/qualitycoding/trumpet-vst; cd trumpet-vst; git checkout <branch or sha>
 cmake -S . -B build -G "Visual Studio 18 2026" -A x64 -DTPT_BUILD_TESTS=OFF

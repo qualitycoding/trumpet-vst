@@ -158,3 +158,14 @@ A fresh Sonnet dry run checked the changes since f7c98ab: 10 items (0 High, 5 Me
 - **8:** demo 10 timing.
 - **9:** CC11 semantics and the G-006 item 9 wording.
 - **10:** licence-text paths and the README "MIDI and latency" section (S-018).
+
+## Re-run after pre-mortem round 4 changes (pass 9)
+A fresh Sonnet dry run checked the changes since 257d87d: 5 items (1 High, 2 Medium, 2 Low). All were resolved:
+- **1 (High):** the RC sha check is an ancestry check plus a "records only" diff check, replacing `HEAD^`, which the gate
+  commits made impossible.
+- **2:** CC68 reaches the voice through the additive `setLegatoPedal`; D-010 states the pedal rule; S-010 and S-013 own it.
+- **3:** the Windows build needs CMake ≥ 4.2.
+- **4:** CC11 and breath reset timing at transport start.
+- **5:** README section lists CC68.
+
+No frozen test contradicts CC11 or CC68 (checked by the reviewer: T-016, T-019, T-026, T-035).

@@ -314,6 +314,7 @@
 - Inputs: D-011, D-014
 - Actions:
   1. Implement in the voice:
+     - the additive `setLegatoPedal(bool)` (D-010, D-014 CC68), logged in `DEVIATIONS.md`;
      - breath (CC2, latching; cleared by `setBreath(-1)`) and velocity handling; correct the `setBreath` doc comment in
        `TrumpetVoice.h` to "(CC2)" (comment-only edit);
      - legato note stack behaviour;
@@ -393,7 +394,7 @@
 - Actions:
   1. Implement the processor:
      - **Voice:** create `tpt::TrumpetVoice` in the constructor from `embeddedResonatorJson()`, parsed once.
-     - **MIDI extras (D-014):** CC11 expression gain (10 ms smoothing) applied to the output; `setBreath(-1)` when the host
+     - **MIDI extras (D-014):** CC68 → `setLegatoPedal`; CC11 expression gain (10 ms smoothing) applied to the output; `setBreath(-1)` when the host
        play-head changes from not playing to playing; `TPT_GIT_SHA` compile definition (D-025), drawn by the editor in S-014.
      - **prepareToPlay:** `voice.prepare(fs, max block)` and `setLatencySamples(voice.latencySamples())`.
      - **processBlock:** `ScopedNoDenormals`; read the APVTS values into `VoiceParameters`; split the block at MIDI events and dispatch per D-014; render mono into channel 0 and copy it to every other channel.
@@ -552,7 +553,7 @@
 - Actions:
   1. `bash tests/scripts/verify_freeze.sh`; then a full local run of every suite available locally.
   2. Update the README "Status" and "Building" sections (no claims beyond the evidence), and add a "MIDI and latency"
-     section: CC2 breath, CC11 expression, CC121, keyswitches 24–31, the ≤ 1.3 ms unreported warp delay (D-012) and the
+     section: CC2 breath, CC11 expression, CC68 legato pedal (touching notes), CC121, keyswitches 24–31, the ≤ 1.3 ms unreported warp delay (D-012) and the
      supported sample-rate range (D-026 R-022).
   3. Write `REPORT.md`: tests by ID with status, the SC table, deviations, gate outcomes, open risks, and what was not verified (a real DAW host test, unless the human did one).
   4. Write `MAINTENANCE.md` (D-026 R-019) and recommend branch protection on `main` in `REPORT.md` (R-020).

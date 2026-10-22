@@ -179,7 +179,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 
 ## D-010 Lip slurs, valve changes and re-articulation
 - **Legato vs re-articulation (pre-mortem R-029):** a note-on is legato if and only if at least one *other* note is held
-  at that moment (the note stack, not the output level, decides). Otherwise — no note held (even if the previous note is
+  at that moment (the note stack, not the output level, decides), or the legato pedal is on (CC68 ≥ 64, D-014) and the
+  note-on arrives within 20 ms after the last note-off while the voice is still sounding. The pedal reaches the voice
+  through the additive `void TrumpetVoice::setLegatoPedal(bool on) noexcept` (S-010 adds it, logged in `DEVIATIONS.md`). Otherwise — no note held (even if the previous note is
   still ringing), or the same pitch as the only held note — the note is re-articulated: a **tongue stop** of 25 ms
   (`kTongueStopS` in `VoiceTuning.h`): lips held closed (y = 0, ẏ = 0), p_m = 0, the new note's bore state, fscale and
   lip setting are applied at the start of the stop; then the **re-attack**: p_m rises from 0 to pm_sus over 3 ms
@@ -275,7 +277,9 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - CC2 → `setBreath(v/127)` (breath controller; latches until `reset()` or the next transport start, when the processor
     calls `setBreath(-1)`: the host play-head changes from not playing to playing, pre-mortem R-030);
   - CC11 → expression: a smoothed output-gain multiplier v/127 (one-pole, 10 ms time constant, per sample at the host
-    rate), not the blowing level; it starts at 1, and CC121 and every transport start (play-head not playing → playing) restore 1 (pre-mortem R-033);
+    rate), not the blowing level; it starts at 1, and CC121 and every transport start restore 1 (pre-mortem R-033). A transport start is detected in
+  `processBlock` when the play-head reports playing and the previous block reported not playing; the reset (CC11 gain to 1,
+  `setBreath(-1)`) happens before that block's MIDI events are processed;
   - CC1 and channel pressure → `setVibratoControl(v/127)`, the maximum of the two;
   - pitch bend → semitones = 2·(value − 8192)/8192 (14-bit value);
   - CC16 → Overblow (D-009);
@@ -450,10 +454,12 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
 - **Routine CI** (`plugin` job) builds and validates on every push but uploads **no** binaries (logs only).
 - **Release-candidate job** `rc-artifacts` (in `ci.yml`, added in S-017): `if: github.event_name == 'push' &&
   contains(github.event.head_commit.message, '[g002-approved rc ')`, and only after `GATE-G-002.RESPONSE.md` with `approve`
-  is committed. `<short sha>` = the first 7 characters of the commit named in `GATE-G-002.md` ; the empty marker commit is pushed
-  directly on top of it, so it is the marker's parent. The job checks out with `fetch-depth: 0` (the default depth 1
-  cannot answer ancestry, pre-mortem R-034), extracts the sha with the regex `\[g002-approved rc ([0-9a-f]{7})\]`, fails
-  unless `git rev-parse HEAD^` starts with it, and builds the marker commit (identical tree). It builds
+  is committed. `<short sha>` = the first 7 characters of the commit named in `GATE-G-002.md` . The job checks out with `fetch-depth: 0` (the default depth 1 cannot
+  answer ancestry, pre-mortem R-034), extracts the sha with the regex `\[g002-approved rc ([0-9a-f]{7})\]`, and fails
+  unless (1) `git merge-base --is-ancestor <sha> HEAD` succeeds and (2) every path in
+  `git diff --name-only <sha> HEAD` matches `GATE-*.md`, `EXECUTION_LOG.md`, `.checkpoints/*` or `logs/*` (the gate and
+  record commits that lie between the approved commit and the marker). It then builds `HEAD`, whose code equals the
+  approved commit's. It builds
   Release on the three OSes and uploads one artifact per OS named `trumpet-rc-<short sha>-<os>`, with
   `retention-days: 90` (the maximum). Each artifact contains:
   - the plugin formats (`VST3`, `Standalone`, and `AU` on macOS);
