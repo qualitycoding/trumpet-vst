@@ -4,7 +4,7 @@
   ".gitignore": "ca1976224d1aaccaecb57849e8346a30873ac19274dba738fd4e8fc88ae1ddb2",
   "ATTRIBUTION.md": "4a2538ae29fc00d1ee70a458f4d06a6bfcfd6bcf12b0b05cec2a7a65e3f49abb",
   "CMakeLists.txt": "7ec54499e342267a1babe1af84496042e1789118ecde1d87dd89a5b53609c451",
-  "HANDOFF.md": "66700975016888b704fd434bca28370d29bf1395ab36f89084492f64809a2e6f",
+  "HANDOFF.md": "7205506f27e8328e21701dd22545e669d32147f0e7cc8bdab78d58c0bad98aa9",
   "core/CMakeLists.txt": "ce4e2d91761a120456f56e47c1e0ade7d4d8f7ee7d061150c54ed1fe4a5e9a63",
   "core/include/tpt/Analysis.h": "604af4199e0c98f57fc2ee9264f271a55526b22ca7ac7eab713da608f7b66d69",
   "core/include/tpt/Errors.h": "49b26fba4600bcb0157d3431ecdb87e206b75b1f754d631ac1a3824b63216c4e",
@@ -144,12 +144,13 @@
   "lessons/L-20261008T151500Z-reasoned-expected-value-wrong.md": "0c42d0a2560a1c4f8fcb0128e7b20cc568c517b8a60824a0810f85b4c4896bda",
   "lessons/L-20261015T090000Z-public-repo-artifacts-are-publication.md": "e62e5a14ba9d62ce4367f56eaaffb6803c273d545dedd021c150cb41d4db707f",
   "lessons/L-20261022T120000Z-store-not-found-ask-human.md": "bf5460b877e256f6a0ce2abc90580402b00625286593b8d4a0248b9bf9e99ebd",
+  "lessons/L-20261023T223300Z-r0-table-quoted-proposals-not-adopted-text.md": "2052a0f44ae6d9836357b4c3f16c3ea83eda3790edab753c896308c7736b02fd",
   "plan/ASSUMPTIONS.md": "5f1f3b6ed13703dd67e716bfbc861ab50f795797fef93c9aef3a46b42b3d70ca",
-  "plan/COLD_READ.md": "659f4150eb89ad5944238ca4de96dfbccdff6373eafce9300b8ac400357b57be",
-  "plan/DECISIONS.md": "c1e00d4ab06fc7e53efe73ab3036eb7023360aeb23c7298edf76858b2bb67c77",
+  "plan/COLD_READ.md": "7330e4cace1c4de01a1c32886e8985fadef4816cd446e1ef81c21e35088d3034",
+  "plan/DECISIONS.md": "e80a4dcb2e19010b5027b1622d6a09cc43a9a7f1a49b7c5e1721b76803ac0641",
   "plan/ENVIRONMENT.md": "f6b916ef0aa09a1508a4d5836690de9c14a0fdec4c2a76a6c82b6b369f02f209",
-  "plan/GATES.md": "467304ebc417dccaee9d0a8dd684b52aea3570c1320b65f454049004e5f45d52",
-  "plan/PLAN.md": "2333fadb02e187175d2ce9c33b546d227626e640a7d6296f9a3eabbc4ece4f67",
+  "plan/GATES.md": "987665609dc5dbd04cd4e51b47360bea0a4e9040e6dd5878f0e02e8461e3fbf2",
+  "plan/PLAN.md": "fb2a12fd83b986a93dc632f26a4c7e6c30bd9243f71c85b5e579eec228e4fa49",
   "plan/PROFILE.md": "7e4bd04e40505fe5f82b15923ff150b13225c59fc36d00f3c1d570cbece72335",
   "plan/PROTOCOL_EXTRACTS.md": "ba3b7b4899161e19728b6314738ce9832c001e84d0c29c0c6190cb4bd8ee3104",
   "plan/TRACEABILITY.md": "79c07be15a2bb1d1bfbdd2691f5c28b06fed38b46a0e708d080454b20e556026",
@@ -161,17 +162,20 @@
   "plugin/src/PluginProcessor.h": "d48bd3a3bdd8e8f703d41a089525ce084ba79f53499c29907f2a7d722172c69f",
   "plugin/src/TrumpetView.cpp": "2616f59ca660914c753677008ad99076426011bc3b4cdb10d748023d370f6f36",
   "plugin/src/TrumpetView.h": "45aa28d3d50d17b69256beac16b94ba874a9069720f9934ffc15d9d6c625de9c",
-  "premortem/RISK_REGISTER.md": "aa56489d0d5077d8c254d0b096af3b876fe249818dfdba50bfc56e977e9bcf51",
+  "premortem/RISK_REGISTER.md": "2d9baea4dfa27464bf0a697176e853719d1cf547405f397ed62a96e4b2a3c905",
   "premortem/round-1.md": "0f65070cf3a1f2f72ee9bfd55bc0666408c5509e32a4f4c5404d260eed70e0a5",
   "premortem/round-2.md": "5411375d73f6a31e010a1cc62ef3936a96d3e7bf07a7eb7dc91ab6feb6ea1f06",
   "premortem/round-3.md": "feac720ac1bf371fac59574dbda0c4042d477137d839c46d09fb616fd951b629",
   "premortem/round-4.md": "d4d0653bfde48c2fb3b1dae692d986975dc507b63a8116505667f3a9c80036c0",
-  "research/PRIOR_KNOWLEDGE.md": "53202f9b61ff340217671ea54c9129478741f2a3adf7523cc3e3a2d88c9f3aef",
+  "premortem/round-5.md": "bb27e6b45f81d85c20ec02b2ea0f267f613c9db3c5354841b7a32a2395fd131b",
+  "research/PRIOR_KNOWLEDGE.md": "13c757474978a4569f8e0ec759f14f4a78fff0fef5c08698542eb612e4e8bf97",
   "research/QUESTIONS.md": "8ea14ac1a6d2ae7d4b29641b57c2b809c01251473716293f3fcb52b220583274",
   "research/SOURCES.md": "7bb9cd8fa11d62f8d3d443a7cae8cabaf451be766d306c9442df83b9b5814777",
   "research/claims.json": "c77d3724ce64715f198a8727358564eadabf19fc4ecac2af6235d431a0636c44",
   "research/coldread/pass-1-dryrun.md": "6f8ed9e81d7f10d5df72a64bad2f5249e5467b3870058637186830a1ae00fbf8",
   "research/coldread/pass-1-mechanical.md": "f617a01f2aa44c021438815731103958256345ca73a56532d5ef169ea44bda84",
+  "research/coldread/pass-10.md": "9720bbb7eec0ff5ec1d2e6e9770dd4704a7b064443c7ed9e1257a74d1b1dcd74",
+  "research/coldread/pass-11.md": "a918b73b817758137cce5c6579029e6dfc0dddf5804c9a32a991a025aa493ee9",
   "research/coldread/pass-2-dryrun.md": "324dd314185ca6f0d1699e72ecae5f9ed00c6b214548b96b5b0fe1f0ad3d3de4",
   "research/coldread/pass-2-mechanical.md": "537db39cde2724e19638c12145a5563b7a9081782f86054c39efa48a0f588f49",
   "research/coldread/pass-3-dryrun.md": "711c629059db678a06c6ff357e24f83238c69ff1344f3d42cb3c6cbddfeecf73",
@@ -208,7 +212,7 @@
   "research/spikes/bore_fit_result.json": "6435b39cf2a9e5767428ff4fa6a1da7c3f1f03eb5d4d08fa5f84962e0157c168",
   "research/spikes/brighten_spike.py": "7782c4521416626463c0d02684b80205096c9de98c41ebf8d126450ff57a8fc3",
   "research/spikes/build_claims.py": "67ca86289ce3efc269afaa741e286cf70e638caf32584e5d4f86b1f46f9a8c0d",
-  "research/spikes/build_prior_knowledge.py": "caf3c9c9fd7c41f81d021eeda3acfaa1d9b605630b1a8a0ceae735c5d8d7bcf1",
+  "research/spikes/build_prior_knowledge.py": "f72ad033e9e0f7a09cd063f33f39b350d4ee273393f96e1da307f9ed47df453b",
   "research/spikes/checkpoint.py": "f9a8c82c0d7effd6256dc3fda31a0bb48e783f2ad108ad72e4bca512cc42ed24",
   "research/spikes/dyn_spike.py": "b17f7764c496ce9279363fe11a3018075261c02df47644326d5443197b69d685",
   "research/spikes/dyn_spike_result.txt": "f57e294534ef649010d58461540b8ebf12ec08a9662ba0b2751b2324de3cf077",
@@ -317,11 +321,15 @@
   "R4",
   "R5",
   "R6",
+  "coldread-10",
+  "coldread-11",
   "phase-4",
+  "phase5-consistency",
   "premortem-1",
   "premortem-2",
   "premortem-3",
-  "premortem-4"
+  "premortem-4",
+  "premortem-5"
  ],
  "diagnostic": {
   "date": "2026-10-07",
@@ -817,7 +825,8 @@
   "L-20261008T010500Z-circular-fft-filter-fakes-onsets",
   "L-20261008T151500Z-reasoned-expected-value-wrong",
   "L-20261015T090000Z-public-repo-artifacts-are-publication",
-  "L-20261022T120000Z-store-not-found-ask-human"
+  "L-20261022T120000Z-store-not-found-ask-human",
+  "L-20261023T223300Z-r0-table-quoted-proposals-not-adopted-text"
  ],
  "mode_flags": {
   "software.deploys": false
@@ -836,24 +845,20 @@
   "G-001"
  ],
  "open_items": [],
- "pending": [
-  "3.6-R0",
-  "4-R0",
-  "5"
- ],
- "phase": "1",
- "premortem_round": 4,
+ "pending": [],
+ "phase": "5",
+ "premortem_round": 5,
  "profiles": [
   "software"
  ],
  "proof_review_round": 0,
  "research_round": 4,
  "run_id": "20261007T145241Z-trumpet-vst-plan",
- "subphase": "R0-rerun",
+ "subphase": "ready",
  "tier_substitutions": [
   "R5, cold reads, pre-mortems: subagents (Opus/Sonnet/Haiku) used; several resumed after rate limits",
   "Phase 5 final consistency check run by the planner as a script instead of a Haiku agent",
   "Fable tier not used: Opus used for adversarial and pre-mortem roles"
  ],
- "updated_at": "2026-10-23T18:23:57Z"
+ "updated_at": "2026-10-23T22:34:26Z"
 }

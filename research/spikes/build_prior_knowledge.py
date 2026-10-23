@@ -25,6 +25,11 @@ OVERRIDES = {
     "L-20261004T150400Z-interface-gap-found-only-by-implementing": "partly applied: PLAN.md Conventions 'Interfaces' (additive members, only a signature change halts); no planner-side walk of every declared function was done",
     "L-20261009T193617Z-manual-upload-bundle-hygiene": "applied: DECISIONS.md 'DR-CRED procedure' step 3 (UPLOAD.md, tree comparison)",
     "L-20261009T193604Z-zip-exclude-dotfiles-dropped-checkpoints": "applied: DECISIONS.md 'DR-CRED procedure' step 3 (zip from name-status, dot-directories included)",
+    "L-20261009T120012Z-residual-noise-level-41-db-low-found-only-by-spectrogram": "amended: PLAN.md S-008 action 5 (`extras/core/test_noise_power.cpp`, `core/src/BreathNoise.h`) and D-012 Breath noise",
+    "L-20261009T193612Z-frozen-test-silent-fallback-single-seed": "amended: PLAN.md S-001 action 3b (`extras/core/test_support_selftest.cpp`)",
+    "L-20261009T161200Z-edocontrol-differs-from-plan-3-3-and-nothing-logged": "amended: PLAN.md S-014 action 5, Outputs and Done-when (`logs/S-014/ui-checklist.md`)",
+    "L-20261009T140011Z-test-category-counts-in-the-traceability-report-were-estimat": "amended: PLAN.md S-018 action 3b (`tools/report/make_report.py`, generated blocks)",
+    "L-20261009T140009Z-the-red-verification-classifier-mis-read-junit-failure-and-e": "amended: PLAN.md S-001 action 3c (`logs/S-001/red-summary.md`)",
 }
 
 
@@ -48,7 +53,7 @@ def main():
              "  `research/r0/result_*.json`. Every gap was turned into a plan amendment (commits 9a713cb and later).",
              "- **Reading the application table:** for gaps it quotes the triage *proposal* (truncated); the adopted text is in the",
              "  plan files and may differ (for example paths under `extras/`). Where a row and the plan differ, the plan wins.",
-             "- **This run's own lessons:** 15 lessons in `lessons/`. Eight were backfilled from sibling runs (A-019); the",
+             "- **This run's own lessons:** " + str(len(own)) + " lessons in `lessons/`. Eight were backfilled from sibling runs (A-019); the",
              "  planner recorded the rest during this run.",
              "- **Aliases:** \"R5\" and \"R5 review\" refer to `research/rounds/round-3-adversarial.md`.", "",
              "## Prevention-rule checklist",

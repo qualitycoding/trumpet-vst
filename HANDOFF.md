@@ -94,8 +94,9 @@ resource.
 - Early, non-blocking: in the first session message after S-000, send the owner the fingering table
   (`tests/fixtures/trumpet_fingerings.txt` rows: written note, valves, partial, trigger), the normal/extended range and
   the trigger rules, and ask for corrections. Record the answer as "owner reply" in `EXECUTION_LOG.md` (the planning documents are not edited by the implementer).
-  A correction → write `TEST_CHALLENGE.md` at once (fixture rows affected, the reply verbatim) and continue with the steps
-  that do not use the fingering table (S-004–S-007, S-015) until the amendment lands (lesson L-20261009T160700Z).
+  A correction → write `TEST_CHALLENGE.md` at once (fixture rows affected, the reply verbatim) and continue only with steps
+  whose `Depends on` chain includes neither S-003 nor S-005 (both use the fingering fixture; for example S-002) until the
+  amendment lands (lesson L-20261009T160700Z).
 
 ## Human gates
 - **G-004:** fingering chart and drawing.

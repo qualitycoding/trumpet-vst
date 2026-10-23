@@ -385,7 +385,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - `core` (3 OSes): configure with `-DTPT_BUILD_PLUGIN=OFF`, build Release, `ctest -LE perf`, then `ctest -L perf` as its own
     step with `if: ${{ !cancelled() }}` (so T-024b is evidenced even while accepted failures keep `integration` red).
   - `python` (ubuntu): venv outside the checkout (`$RUNNER_TEMP/venv`, symlinked as `.venv`) from `tools/requirements.lock`, then `pytest tests/python -k "not t029"` and `pip-audit -r tools/requirements.lock`.
-  - `plugin` (3 OSes): build with the plugin, run `tpt_plugin_tests` and `ctest -L extra -L plugin` (the S-013 variant tests; xvfb-run on Linux), `run_pluginval.sh`, and `auval -v aumu Tpts Qcod` on macOS.
+  - `plugin` (3 OSes): build with the plugin, run `tpt_plugin_tests` and `ctest --test-dir build -C Release -L extra -L plugin --no-tests=error` (the S-013 variant tests; xvfb-run on Linux), `run_pluginval.sh`, and `auval -v aumu Tpts Qcod` on macOS.
   - `build-linux` (ubuntu): Release build of `tpt_render` only; uploads it as an artifact for `realism` with
     `retention-days: 1` (an internal hand-off of an Apache-2.0 core tool without JUCE, not a product binary, D-025).
   - `realism` (ubuntu, `needs: build-linux`): set up the venv, download TinySOL (cache path `reference-data/tinysol`, the
@@ -514,7 +514,7 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   job).
 - **R-016, state blobs:** `setStateInformation` converts with
   `std::string_view(static_cast<const char*>(data), static_cast<size_t>(std::max(0, sizeInBytes)))`; it never relies on
-  NUL termination. The Linux `plugin` job runs `tpt_plugin_tests` once more under ASan
+  NUL termination. The Linux `plugin` job runs `tpt_plugin_tests` and the `extra;plugin` variant tests once more under ASan
   (`-fsanitize=address,undefined`, separate build directory).
 - **R-017, stale G-005:** `GATE-G-005.md` records the source commit of the bundle. If S-017 changes any file under
   `core/src/`, `data/` or `tools/realism/` after that commit, re-run T-029, rebuild the bundle and re-issue G-005 before
@@ -604,10 +604,12 @@ Each rule names the step(s) where it applies.
    exposing it. Never pass a header or token in argv, a URL or a file.
 3. If the error text names the proxy, "authorized repository set" or "not enabled for this session", the cause is
    repository authorisation, not the token: ask the human to attach the repository to the session, or accept a manual
-   upload, and do not ask for a token. Manual upload: build the zip from `git diff --name-status <last pushed sha>..HEAD`
-   (dot-directories such as `.checkpoints/` and `.github/` included); `unzip -l` must list exactly those paths; `UPLOAD.md`
-   names the repository, the branch and each path with add/overwrite/delete; after the human uploads, `git fetch` and
-   require `git rev-parse origin/<branch>^{tree}` = `git rev-parse HEAD^{tree}` (lessons L-20261009T193617Z,
+   upload, and do not ask for a token. Manual upload: from `git diff --name-status <last pushed sha>..HEAD`, zip the added, modified
+   and renamed-to paths (dot-directories such as `.checkpoints/` and `.github/` included; `unzip -l` must list exactly
+   those); `UPLOAD.md` names the repository, the branch and each path with add/overwrite/delete (deleted and renamed-from
+   paths are deletes, not in the zip). While waiting, finish only the current step locally and start no new step. After
+   the human uploads, `git fetch` and require `git rev-parse origin/<branch>^{tree}` = `git rev-parse HEAD^{tree}`, then
+   `git reset --hard origin/<branch>` and log old → new shas in `EXECUTION_LOG.md` (as for DR-PUSH) (lessons L-20261009T193617Z,
    L-20261009T193604Z).
 4. On a reproducible server-side `index-pack`/`unpack` error, follow DR-PUSH.
 5. Only when all this fails is the token treated as bad. Do not retry with any token from the chat. Finish only the

@@ -183,3 +183,16 @@ A fresh dry run checked the R0 amendments (diff 104d893..HEAD): 20 items (2 High
   `git log` once the branch exists; `python3` from the clone root; evidence under `logs/**`; `ui-checklist` in S-014;
   S-RETRO `/tmp/` check; G-006 optional `cmake --version` request; `GIT_CONFIG_*` unset loop and `evidence/push-probe`;
   early fingering reply logged in `EXECUTION_LOG.md`; the READY header replaces IN REVISION (Phase 5).
+
+## Re-run after pre-mortem round 5 mitigations (pass 11)
+A fresh Sonnet dry run checked 7e28319..731b4f2: 13 items (2 High, 3 Medium, 8 Low). All were resolved:
+- **1 (High):** after an early fingering correction the implementer continues only with steps whose dependency chain
+  avoids S-003 and S-005 (HANDOFF).
+- **2 (High):** the tuning table goes to a sidecar `<out>.tuning.json`, never into `results.json` (frozen T-029 reads a list).
+- **3–4 (Medium):** `extras/plugin` is added only if it exists; plugin extras carry `extra;plugin`; ctest runs with
+  `--no-tests=error` (multiple `-L` are ANDed, checked on CMake 3.28).
+- **5–13 (Low):** S-013 confirms the D-020 step instead of duplicating it, the ASan paragraph names the variant tests;
+  register rows escaped (9 cells each) and header updated; manual upload covers deletions, waiting and the resync; store
+  probes stay non-blocking under DR-CRED; amendment merge is a fenced command with `git add`/`git rm`/`git commit --no-edit`;
+  canonical `tpt::tuning::toJson()`; every allowed response payload is acted on; five more PRIOR_KNOWLEDGE rows point to the
+  adopted text.

@@ -1,11 +1,9 @@
-<!-- STATUS: IN REVISION -->
-# Status: IN REVISION — do not implement yet (2026-10-22)
+<!-- STATUS: READY -->
+# Status: READY (planning protocol v3.2, Phase 5, 2026-10-23)
 
-The human identified the knowledge store (`qualitycoding/knowledge` + `qualitycoding/Lessons`, A-018) after the plan was
-marked READY. R0 is being re-run against it (179 lessons, 134 knowledge items) and the plan amended; the status returns
-to READY when that is done. The figures below are those of the 2026-10-22 READY version.
-
-## Previous status: READY (planning protocol v3.2, Phase 5, 2026-10-22)
+Re-issued after the human named the knowledge store (`qualitycoding/knowledge` for knowledge items,
+`qualitycoding/Lessons` for lessons; A-018). R0 was re-run against it and the plan amended, cold-read (passes 10–11) and
+pre-mortem-reviewed (round 5). Every count below was taken from a command on this commit.
 
 - **Profiles:** `software` only (`software.deploys = false`).
 - **Branch:** `gen-20261007T145241Z-trumpet-vst-plan`.
@@ -13,8 +11,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 
   | Confidence | Count |
   |---|---|
-  | verified | 83 |
-  | corroborated | 14 |
+  | verified | 86 |
+  | corroborated | 11 |
   | inferred | 3 (none load-bearing) |
   | single-source | 2 (none load-bearing) |
 
@@ -34,11 +32,15 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   Red-verified locally and in CI on three OSes; the D-018 guards pass by design.
 - **Steps:** 21 (S-000 … S-018, S-RETRO, S-KNOW).
 - **Gates:** G-002, G-003, G-004, G-005, G-006. G-001 is not applicable.
-- **Risks:** 37 (Critical 1, High 6, Medium 19, Low 11). Every Critical and High risk is mitigated; the last pre-mortem
-  round (4) found 0 Critical and 0 High. Residual Medium/Low risks are listed in `premortem/RISK_REGISTER.md`.
+- **Risks:** 56 (Critical 1, High 6, Medium 28, Low 21). Every Critical and High risk is mitigated; the last pre-mortem
+  round (5 of 5) found 0 Critical and 0 High. Open or partly mitigated risks (7, all Medium or Low) are listed in
+  `premortem/RISK_REGISTER.md`.
 - **Research:** 4 rounds, saturated; R5 adversarial review included.
-- **Cold read:** 9 passes, 132 items, all resolved; the last pass's fixes are carried as R-037 (Low).
-- **Lessons and knowledge:** see the Phase 5 header refresh after R0 (2026-10-22).
+- **Cold read:** 11 passes, 166 items (97 in passes 1–5, 36 in passes 6–9, 33 in passes 10–11), all resolved.
+- **Lessons and knowledge:** R0 loaded 179 store lessons (63 applied, 60 not applicable, 56 gaps, all amended or
+  partly applied as recorded) and 134 store knowledge items (0 conflicts, 13 new facts applied); see
+  `research/PRIOR_KNOWLEDGE.md`. This run records 16 lessons (`lessons/`) and 102 knowledge items (`knowledge/`), to be
+  pushed at S-KNOW (G-003) to `qualitycoding/Lessons` and `qualitycoding/knowledge`.
 
 # Execution plan — trumpet-vst v1
 
@@ -61,10 +63,13 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - **Freeze check:** run `bash tests/scripts/verify_freeze.sh` before and after every step; it must print `freeze OK`. Also
   `git diff --exit-code origin/gen-20261007T145241Z-trumpet-vst-plan -- tests research/spikes/expected_values.py` must be
   empty (until a planning amendment moves the generation branch). **Taking in an amendment:** when `TEST_CHALLENGE.md` is
-  answered or a gate amendment is announced, run `git fetch origin && git merge --no-ff origin/gen-20261007T145241Z-trumpet-vst-plan
-  -m 'merge planning amendment D-0xx'` (never rebase, never copy files by hand); on a conflict in `tests/`,
-  `tests/FROZEN_MANIFEST.sha256` or `research/spikes/expected_values.py` take the generation-branch side
-  (`git checkout --theirs <path>`); then run `verify_freeze.sh` and the diff check, log the merge in `EXECUTION_LOG.md`, and
+  answered or a gate amendment is announced, run (never rebase, never copy files by hand):
+  ```bash
+  git fetch origin && git merge --no-ff origin/gen-20261007T145241Z-trumpet-vst-plan -m 'merge planning amendment D-0xx'
+  ```
+  On a conflict in `tests/`, `tests/FROZEN_MANIFEST.sha256` or `research/spikes/expected_values.py` take the
+  generation-branch side (`git checkout --theirs <path> && git add <path>`, or `git rm <path>` for a path the generation
+  branch deleted), resolve any other conflict, then `git commit --no-edit`. Then run `verify_freeze.sh` and the diff check, log the merge in `EXECUTION_LOG.md`, and
   re-run the steps named by the amendment's `plan/TRACEABILITY.md` rows.
 - **Session start and pushes:** at the start of every session and after any gate wait, run
   `git fetch origin && git status -sb` and, once the branch exists on origin,
@@ -91,8 +96,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - **Extra (non-frozen) tests:** live under `extras/` (never under `tests/`, which is frozen and diffed), are wired from
   the root `CMakeLists.txt` with `add_subdirectory(extras)` when `TPT_BUILD_TESTS` is on, define
   `TPT_FIXTURE_DIR="${CMAKE_SOURCE_DIR}/tests/fixtures"`, include `tests/core` for `TestSupport.h`, and carry the CTest
-  label `extra`; red-run comparisons exclude them (`-LE 'perf|plugin|extra'`). `add_subdirectory(extras)` comes after
-  `add_subdirectory(plugin)`; `extras/CMakeLists.txt` adds `extras/plugin` only `if(TPT_BUILD_PLUGIN)`. Core extras link
+  label `extra` (plugin extras: `LABELS "extra;plugin"`); red-run comparisons exclude them (`-LE 'perf|plugin|extra'`).
+  The root adds `add_subdirectory(extras)` in its own `if(TPT_BUILD_TESTS)` block after the plugin block; `extras/CMakeLists.txt`
+  adds `core` and adds `plugin` only `if(TPT_BUILD_PLUGIN AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/plugin/CMakeLists.txt)`. Core extras link
   `tpt_core Catch2::Catch2WithMain` and add `${CMAKE_SOURCE_DIR}/core/src` to their include path; plugin extras link
   `TrumpetVST Catch2::Catch2` and provide a `main` with JUCE initialisation like `tests/plugin/test_plugin.cpp`.
 - **Interfaces:** if a declared function cannot be implemented as specified from its header alone, add the missing
@@ -158,7 +164,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   4b. Push probes for all three repositories: `git push --dry-run` to `qualitycoding/trumpet-vst` and
      `git ls-remote` + `gh api repos/<r> --jq .permissions.push` for `qualitycoding/knowledge` and `qualitycoding/Lessons`; a
      refusal naming the session's authorised repository set is handled by DR-CRED (repository authorisation). The two
-     store probes are recorded, not blocking at S-000.
+     store probes are recorded, not blocking at S-000: for them only DR-CRED's diagnosis and its attach-repository
+     request apply (no `BLOCKED.md`, no session end), then work continues.
   5. `bash tests/scripts/verify_freeze.sh`.
   6. Create `EXECUTION_LOG.md` with its header line, and `.checkpoints/impl-state.json` containing `[]`.
 - Outputs: `EXECUTION_LOG.md`, `.checkpoints/impl-state.json`, `tools/bootstrap_env.sh`, `logs/`
@@ -386,7 +393,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - Depends on: S-007
 - Inputs: `core/include/tpt/TrumpetVoice.h`; D-005–D-008, D-012, D-013, D-023
 - Actions:
-  1. Create `core/src/VoiceTuning.h` holding every non-frozen constant of D-005, D-007, D-008, D-009, D-012 and D-023, each with a comment citing its decision, and a function `tpt::tuning::table()` returning all of them as (name, value) pairs (used by `tpt_render --print-tuning`, S-016).
+  1. Create `core/src/VoiceTuning.h` holding every non-frozen constant of D-005, D-007, D-008, D-009, D-012 and D-023, each with a comment citing its decision, and a function `tpt::tuning::table()` returning all of them as (name, value) pairs, and `tpt::tuning::toJson()` serialising them canonically (one JSON object,
+     keys sorted, numbers as `%.10g`, no whitespace) for `tpt_calibrate` and `tpt_render --print-tuning`.
   2. Implement `TrumpetVoice::Impl`:
      - oversampling and decimators (D-006);
      - the control-rate grid;
@@ -435,7 +443,7 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      tool calls: calibration rewrites only those notes' `fscale` (formatting as D-004) and appends one row per note to
      `logs/S-009/calibrate.log`; `--long-hold` appends rows to `logs/S-009-long-hold.md` (header written once). Done-when
      is judged over all notes: every standard note appears in both logs at least once, and the latest row per note counts.
-     Each run's section of `calibrate.log` starts with `# tuning <sha256 of the tpt::tuning::table() JSON>`.
+     Each run's section of `calibrate.log` starts with the line `# tuning <tpt::tuning::toJson()>`.
   3. Build (so `tpt_calibrate` has the current constants), run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`,
      then build again (this re-embeds the table).
   4. Run `tpt_integration_tests "[T-012],[T-013]"`, `tpt_unit_tests "[T-007]"` and `tpt_operational_tests`.
@@ -557,14 +565,14 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
        S-013's Done-when.
      - **`currentUiState()`:** returns `voice.uiState()`.
   2. Build with the plugin; run `xvfb-run -a build/plugin/tpt_plugin_tests` (all except the editor case) and
-     `ctest --test-dir build -L extra -L plugin --output-on-failure`.
-  3. Add to the CI `plugin` job (D-020) a step `ctest --test-dir build -L extra -L plugin --output-on-failure` (xvfb-run on
-     Linux; `-C Release` on Windows), also run in the Linux ASan step.
+     `xvfb-run -a ctest --test-dir build -L extra -L plugin --no-tests=error --output-on-failure` (multiple `-L` are ANDed).
+  3. Confirm that the CI `plugin` job has the D-020 step for these tests (S-002 wrote it) and that the Linux ASan step runs
+     them too (D-026 R-016); add whichever is missing.
 - Outputs: `plugin/src/PluginProcessor.{h,cpp}` (additive members), `plugin/CMakeLists.txt`,
-  `extras/plugin/{CMakeLists.txt,test_plugin_variants.cpp}`, `.github/workflows/ci.yml`
+  `extras/CMakeLists.txt`, `extras/plugin/{CMakeLists.txt,test_plugin_variants.cpp}`, `.github/workflows/ci.yml`
 - Evidence produced: T-026 (parameters, sound, keyswitch and state cases)
-- Done when: those cases pass and `tpt_plugin_variant_tests` (from `extras/plugin/test_plugin_variants.cpp`, label
-  `extra`) passes, locally or in the CI `plugin` job.
+- Done when: those cases pass and `tpt_plugin_variant_tests` (from `extras/plugin/test_plugin_variants.cpp`, labels
+  `extra;plugin`) passes, locally or in the CI `plugin` job.
 - Checkpoint: test status and CI run URL.
 - On failure: DR-DEFAULT.
 - Gate: none
@@ -617,7 +625,7 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - Inputs: D-017; `tools/realism/{tinysol,compare_tinysol}.py` stubs; C-072, C-096
 - Actions:
   1. Add `tools/render/main.cpp` → target `tpt_render` (core only):
-     - `tpt_render --print-tuning` prints `tpt::tuning::table()` as a JSON object name → value and exits 0;
+     - `tpt_render --print-tuning` prints `tpt::tuning::toJson()` and exits 0;
      - `tpt_render --note <concert> --velocity <0..1> --seconds <s> --fs <hz> --out <file.wav> [--param <name>=<value> ...]`
        renders one held note (`<name>` = a `VoiceParameters` field name);
      - `tpt_render --events <file.json> --fs <hz> --out <file.wav>` renders a timed event list:
@@ -659,8 +667,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   1. Every round log, `tpt_calibrate` log and `compare_tinysol` run starts with a table of the effective `VoiceTuning.h`
      constants (name, value) and the values changed this round, printed by the tool itself, not typed: `VoiceTuning.h`
      exposes `tpt::tuning::table()` (name/value pairs, added in S-008), `tpt_render --print-tuning` writes it as JSON to
-     `logs/S-016/tuning-round-<k>.json`, and the round log diffs it against round k − 1; `compare_tinysol` stores the output of `<render> --print-tuning` under
-     the key `tuning` in `results.json`, and `tpt_calibrate` writes the `# tuning <sha256>` line of S-009 2b. Run T-029 (locally
+     `logs/S-016/tuning-round-<k>.json`, and the round log diffs it against round k − 1; `compare_tinysol` writes the output of `<--render argument> --print-tuning`
+     to a sidecar `<--out without .json>.tuning.json` (never into `results.json`, which frozen T-029 reads as a list of rows),
+     and `tpt_calibrate` writes the `# tuning` line of S-009 2b. Run T-029 (locally
      or in the CI `realism` job), T-021 and T-022. Write `logs/S-016-round-<k>.md` with the per-dynamic metrics and the 10 worst notes, split by register (p2–p3, p4–p6, p8+).
   2. Adjust only the non-frozen constants listed in DR-REAL. After each round: build, run `tpt_calibrate`, build again
      (re-embeds the table), then re-run every frozen test (no regression). At most 5 rounds.
