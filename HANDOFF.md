@@ -52,7 +52,9 @@ frozen test or fixture is wrong:
 2. write `TEST_CHALLENGE.md` (item ID, evidence, proposed fix);
 3. continue only with steps that do not depend on it.
 
-The planning agent then runs an amendment (protocol 2E.4).
+The planning agent then runs an amendment (protocol 2E.4). An amendment that supersedes a test removes it from
+`tests/CMakeLists.txt` and the manifest (or marks it `RETIRED - not built`) and updates `plan/TRACEABILITY.md` in the same
+commit.
 
 ## Steps at a glance
 | Step | Title | Gate |

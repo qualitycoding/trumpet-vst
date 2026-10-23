@@ -1,0 +1,1464 @@
+[
+ {
+  "path": "knowledge/github-pr-draft-state/K-20261009T160123Z-pr-draft.md",
+  "id": "K-20261009T160123Z-pr-draft",
+  "tags": [
+   "phase:release",
+   "subject:github-pr-draft-state",
+   "tech:github"
+  ],
+  "applies_to_version": "\"GitHub API, observed 2026-09-27\""
+ },
+ {
+  "path": "knowledge/juce-linux-dependencies/K-20261008T173542Z-juce-linux-build-dependencies-8-0-15.md",
+  "id": "K-20261008T173542Z-juce-linux-build-dependencies-8-0-15",
+  "tags": [
+   "phase:implementation",
+   "subject:juce-linux-dependencies",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"JUCE 8.0.15\""
+ },
+ {
+  "path": "knowledge/juce-linux-dependencies/K-20261008T223321Z-juce-vst3-linux-build-14-packages.md",
+  "id": "K-20261008T223321Z-juce-vst3-linux-build-14-packages",
+  "tags": [
+   "phase:implementation",
+   "subject:juce-linux-dependencies",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"JUCE 7.0.12 and 8.0.15; Ubuntu 24.04 container\""
+ },
+ {
+  "path": "knowledge/codeberg-access-from-sandbox/K-20261009T193009Z-codeberg-allowlist-live-proxy-can-be-stale.md",
+  "id": "K-20261009T193009Z-codeberg-allowlist-live-proxy-can-be-stale",
+  "tags": [
+   "kind:environment",
+   "subject:codeberg-access-from-sandbox",
+   "tech:codeberg",
+   "tech:git"
+  ],
+  "applies_to_version": "\"Claude Code cloud sandbox, 2026-10-09\""
+ },
+ {
+  "path": "knowledge/ableton-computer-midi-keyboard/K-20261009T092104Z-ableton-computer-midi-keyboard-layout.md",
+  "id": "K-20261009T092104Z-ableton-computer-midi-keyboard-layout",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:ableton-computer-midi-keyboard",
+   "tech:ableton-live"
+  ],
+  "applies_to_version": "\"Live 11 and 12 (sources dated 2019-2025)\""
+ },
+ {
+  "path": "knowledge/lead-rhythm-guitar-separation/K-20261009T193016Z-lead-and-rhythm-guitar-have-no-open-model.md",
+  "id": "K-20261009T193016Z-lead-and-rhythm-guitar-have-no-open-model",
+  "tags": [
+   "domain:audio",
+   "domain:source-separation",
+   "phase:research",
+   "subject:lead-rhythm-guitar-separation"
+  ],
+  "applies_to_version": "\"state of the field at 2026-09-28\""
+ },
+ {
+  "path": "knowledge/curvilinear-grid-generation/K-20261009T193002Z-var-grid-generation-ttm-monitor-poisson.md",
+  "id": "K-20261009T193002Z-var-grid-generation-ttm-monitor-poisson",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "phase:implementation",
+   "subject:curvilinear-grid-generation",
+   "tech:scipy"
+  ],
+  "applies_to_version": "\"var-simulation commit 819736a\""
+ },
+ {
+  "path": "knowledge/github-access-from-sandbox/K-20261009T193504Z-proxy-injected-git-config.md",
+  "id": "K-20261009T193504Z-proxy-injected-git-config",
+  "tags": [
+   "phase:verification",
+   "subject:github-access-from-sandbox",
+   "tech:git",
+   "tech:github"
+  ],
+  "applies_to_version": "\"sandbox as of 2026-09\""
+ },
+ {
+  "path": "knowledge/github-access-from-sandbox/K-20261004T102023Z-github-access-from-sandbox.md",
+  "id": "K-20261004T102023Z-github-access-from-sandbox",
+  "tags": [
+   "phase:implementation",
+   "subject:github-access-from-sandbox",
+   "tech:git",
+   "tech:github"
+  ],
+  "applies_to_version": "\"sandbox observed 2026-09-19 to 2026-10-04\""
+ },
+ {
+  "path": "knowledge/github-access-from-sandbox/K-20261004T162306Z-git-push-and-contents-api-worked.md",
+  "id": "K-20261004T162306Z-git-push-and-contents-api-worked",
+  "tags": [
+   "phase:release",
+   "subject:github-access-from-sandbox",
+   "tech:git",
+   "tech:github"
+  ],
+  "applies_to_version": "\"sandbox and GitHub, observed 2026-10-04\""
+ },
+ {
+  "path": "knowledge/github-access-from-sandbox/K-20261004T162305Z-github-io-unreachable-from-sandbox.md",
+  "id": "K-20261004T162305Z-github-io-unreachable-from-sandbox",
+  "tags": [
+   "phase:release",
+   "subject:github-access-from-sandbox",
+   "tech:github"
+  ],
+  "applies_to_version": "\"sandbox observed 2026-10-04\""
+ },
+ {
+  "path": "knowledge/github-access-from-sandbox/K-20261009T193502Z-git-proxy-repo-authorization.md",
+  "id": "K-20261009T193502Z-git-proxy-repo-authorization",
+  "tags": [
+   "phase:release",
+   "subject:github-access-from-sandbox",
+   "tech:git",
+   "tech:github"
+  ],
+  "applies_to_version": "\"sandbox as of 2026-10-09\""
+ },
+ {
+  "path": "knowledge/github-access-from-sandbox/K-20261009T120115Z-github-repo-access-is-per-session.md",
+  "id": "K-20261009T120115Z-github-repo-access-is-per-session",
+  "tags": [
+   "phase:release",
+   "subject:github-access-from-sandbox",
+   "tech:git",
+   "tech:github"
+  ],
+  "applies_to_version": "\"observed 2026-10-09\""
+ },
+ {
+  "path": "knowledge/github-access-from-sandbox/K-20261004T151600Z-github-rest-api-bypasses-broken-pack-transport.md",
+  "id": "K-20261004T151600Z-github-rest-api-bypasses-broken-pack-transport",
+  "tags": [
+   "phase:implementation",
+   "subject:github-access-from-sandbox",
+   "tech:git",
+   "tech:github"
+  ],
+  "applies_to_version": "\"observed 2026-10-04, GitHub REST API v3 (application/vnd.github+json)\""
+ },
+ {
+  "path": "knowledge/github-access-from-sandbox/K-20261009T160120Z-actions-blob-unreachable.md",
+  "id": "K-20261009T160120Z-actions-blob-unreachable",
+  "tags": [
+   "kind:environment",
+   "phase:verification",
+   "subject:github-access-from-sandbox",
+   "tech:github",
+   "tech:github-actions"
+  ],
+  "applies_to_version": "\"sandbox and GitHub, observed 2026-09-26\""
+ },
+ {
+  "path": "knowledge/sparse-direct-solve-cost/K-20261009T193006Z-var-sparse-direct-solve-cost-on-one-core.md",
+  "id": "K-20261009T193006Z-var-sparse-direct-solve-cost-on-one-core",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:environment",
+   "subject:sparse-direct-solve-cost",
+   "tech:scipy"
+  ],
+  "applies_to_version": "\"scipy SuperLU as installed in the sandbox, 2026-10\""
+ },
+ {
+  "path": "knowledge/void-choir-reference-recording/K-20261004T162309Z-reference-recording-facts.md",
+  "id": "K-20261004T162309Z-reference-recording-facts",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:void-choir-reference-recording"
+  ],
+  "applies_to_version": "\"the file as uploaded 2026-09-19 (2,822,518 bytes)\""
+ },
+ {
+  "path": "knowledge/numpy-ufunc-precision/K-20261004T151300Z-numpy-array-vs-scalar-ufunc-rounding-differs.md",
+  "id": "K-20261004T151300Z-numpy-array-vs-scalar-ufunc-rounding-differs",
+  "tags": [
+   "phase:implementation",
+   "subject:numpy-ufunc-precision",
+   "tech:cpp",
+   "tech:numpy"
+  ],
+  "applies_to_version": "\"numpy 2.4.4\""
+ },
+ {
+  "path": "knowledge/orchestral-strings-separation/K-20261009T193018Z-orchestral-strings-separate-as-a-section.md",
+  "id": "K-20261009T193018Z-orchestral-strings-separate-as-a-section",
+  "tags": [
+   "domain:audio",
+   "domain:source-separation",
+   "phase:research",
+   "subject:orchestral-strings-separation"
+  ],
+  "applies_to_version": "\"as reported in research/EXTENDED_STEMS.md, 2026-09-28\""
+ },
+ {
+  "path": "knowledge/tent-vertex-operator/K-20261009T193510Z-t036-gauge-components.md",
+  "id": "K-20261009T193510Z-t036-gauge-components",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:verification",
+   "subject:tent-vertex-operator",
+   "tech:pytest"
+  ],
+  "applies_to_version": "\"tvtorus @ 88bb74d\""
+ },
+ {
+  "path": "knowledge/composite-consonance-model/K-20261004T102022Z-composite-score-attainable-range.md",
+  "id": "K-20261004T102022Z-composite-score-attainable-range",
+  "tags": [
+   "domain:music-perception",
+   "phase:verification",
+   "subject:composite-consonance-model",
+   "tech:numpy",
+   "tech:python"
+  ],
+  "applies_to_version": "\"consonance 0.1.0, default Weights, harmonic_timbre(11, 1.0)\""
+ },
+ {
+  "path": "knowledge/harmonic-level-measurement/K-20261004T162313Z-beat-period-window-for-detuned-sources.md",
+  "id": "K-20261004T162313Z-beat-period-window-for-detuned-sources",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:harmonic-level-measurement"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/general-midi-drum-map/K-20261008T173540Z-general-midi-drum-key-map-subset.md",
+  "id": "K-20261008T173540Z-general-midi-drum-key-map-subset",
+  "tags": [
+   "domain:audio",
+   "phase:specification",
+   "subject:general-midi-drum-map"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/pip-tools-hash-locking-build-backend/K-20261009T140031Z-pip-tools-hash-locking-build-backend.md",
+  "id": "K-20261009T140031Z-pip-tools-hash-locking-build-backend",
+  "tags": [
+   "phase:implementation",
+   "subject:pip-tools-hash-locking-build-backend",
+   "tech:pip-tools",
+   "tech:python"
+  ],
+  "applies_to_version": "\"pip-tools 7.5.1; setuptools 84.0.0\""
+ },
+ {
+  "path": "knowledge/juce-combobox-editable/K-20261009T164300Z-juce-8-0-15-combobox-has-no-gettext-editor-accessor.md",
+  "id": "K-20261009T164300Z-juce-8-0-15-combobox-has-no-gettext-editor-accessor",
+  "tags": [
+   "phase:implementation",
+   "subject:juce-combobox-editable",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"JUCE 8.0.15\""
+ },
+ {
+  "path": "knowledge/github-token-scopes/K-20261009T160122Z-token-scopes.md",
+  "id": "K-20261009T160122Z-token-scopes",
+  "tags": [
+   "kind:environment",
+   "phase:release",
+   "subject:github-token-scopes",
+   "tech:github"
+  ],
+  "applies_to_version": "\"GitHub fine-grained PATs, observed 2026-09-26 to 2026-09-27\""
+ },
+ {
+  "path": "knowledge/github-pages/K-20261004T162304Z-github-pages-index-entry-file.md",
+  "id": "K-20261004T162304Z-github-pages-index-entry-file",
+  "tags": [
+   "phase:release",
+   "subject:github-pages",
+   "tech:github"
+  ],
+  "applies_to_version": "\"GitHub Docs, accessed 2026-10-04\""
+ },
+ {
+  "path": "knowledge/ups-and-downs-notation/K-20261009T163800Z-ups-and-downs-xen-wiki-permalink-is-a-redirect.md",
+  "id": "K-20261009T163800Z-ups-and-downs-xen-wiki-permalink-is-a-redirect",
+  "tags": [
+   "phase:research",
+   "subject:ups-and-downs-notation",
+   "tech:github"
+  ],
+  "applies_to_version": "\"oldid 237152 as fetched on 2026-10-09\""
+ },
+ {
+  "path": "knowledge/vcv-voltage-standards/K-20261009T234208Z-rack-voltage-standards-triggers-and-levels.md",
+  "id": "K-20261009T234208Z-rack-voltage-standards-triggers-and-levels",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:vcv-voltage-standards",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/vcv-voltage-standards/K-20261009T234210Z-rack-schmitt-trigger-states-and-first-sample.md",
+  "id": "K-20261009T234210Z-rack-schmitt-trigger-states-and-first-sample",
+  "tags": [
+   "phase:research",
+   "subject:vcv-voltage-standards",
+   "tech:cpp",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/mvsep-mega-53/K-20261009T193013Z-mvsep-mega-53-release-and-resource-needs.md",
+  "id": "K-20261009T193013Z-mvsep-mega-53-release-and-resource-needs",
+  "tags": [
+   "domain:audio",
+   "domain:source-separation",
+   "phase:research",
+   "subject:mvsep-mega-53"
+  ],
+  "applies_to_version": "\"MSST release v1.0.21 (20 April, year not shown on the page; the research note gives 2026)\""
+ },
+ {
+  "path": "knowledge/steel-damping/K-20261009T120114Z-engine-damping-law-parameters-are-estimates.md",
+  "id": "K-20261009T120114Z-engine-damping-law-parameters-are-estimates",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:drum-synthesis",
+   "subject:steel-damping"
+  ],
+  "applies_to_version": "\"oildrumkit docs/PLAN.md A4 at 35fbfea\""
+ },
+ {
+  "path": "knowledge/steel-damping/K-20261009T120112Z-steel-loss-factors-in-patents.md",
+  "id": "K-20261009T120112Z-steel-loss-factors-in-patents",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:steel-damping"
+  ],
+  "applies_to_version": "\"US 9,546,296\""
+ },
+ {
+  "path": "knowledge/sparse-projector-memory/K-20261009T193506Z-sparse-projector-memory-limit.md",
+  "id": "K-20261009T193506Z-sparse-projector-memory-limit",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:implementation",
+   "subject:sparse-projector-memory",
+   "tech:python",
+   "tech:scipy"
+  ],
+  "applies_to_version": "\"tvtorus @ 4c8003b; container memory limit of 2026-09-22\""
+ },
+ {
+  "path": "knowledge/juce-versioning/K-20261009T164400Z-juce-fontoptions-exists-on-master-without-stated-introduction-version.md",
+  "id": "K-20261009T164400Z-juce-fontoptions-exists-on-master-without-stated-introduction-version",
+  "tags": [
+   "phase:implementation",
+   "subject:juce-versioning",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"JUCE master documentation, read 2026-10-09\""
+ },
+ {
+  "path": "knowledge/juce-versioning/K-20261004T151500Z-juce-8-vs-9-vst3-breaking-change.md",
+  "id": "K-20261004T151500Z-juce-8-vs-9-vst3-breaking-change",
+  "tags": [
+   "phase:specification",
+   "subject:juce-versioning",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"JUCE 8.0.15 and 9.0.0-9.0.2\""
+ },
+ {
+  "path": "knowledge/web-audio-dynamics-compressor/K-20261004T162301Z-dynamics-compressor-latency.md",
+  "id": "K-20261004T162301Z-dynamics-compressor-latency",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:web-audio-dynamics-compressor",
+   "tech:web-audio"
+  ],
+  "applies_to_version": "\"node-web-audio-api 2.2.0, OfflineAudioContext at 44100 Hz\""
+ },
+ {
+  "path": "knowledge/web-audio-dynamics-compressor/K-20261004T162302Z-dynamics-compressor-not-a-brickwall.md",
+  "id": "K-20261004T162302Z-dynamics-compressor-not-a-brickwall",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:web-audio-dynamics-compressor",
+   "tech:web-audio"
+  ],
+  "applies_to_version": "\"node-web-audio-api 2.2.0\""
+ },
+ {
+  "path": "knowledge/impact-contact-mechanics/K-20261009T120106Z-hertz-contact-pulse-and-duration.md",
+  "id": "K-20261009T120106Z-hertz-contact-pulse-and-duration",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:impact-contact-mechanics"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/impact-contact-mechanics/K-20261009T120111Z-infinite-plate-impedance-steel.md",
+  "id": "K-20261009T120111Z-infinite-plate-impedance-steel",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:impact-contact-mechanics",
+   "subject:modal-plate-physics"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/conservative-convection-scheme/K-20261009T193004Z-var-flux-form-convection-and-van-leer-order.md",
+  "id": "K-20261009T193004Z-var-flux-form-convection-and-van-leer-order",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "phase:verification",
+   "subject:conservative-convection-scheme",
+   "tech:python"
+  ],
+  "applies_to_version": "\"var-simulation commit 819736a\""
+ },
+ {
+  "path": "knowledge/r-data-in-python/K-20261004T102025Z-rdata-reads-rda-in-python.md",
+  "id": "K-20261004T102025Z-rdata-reads-rda-in-python",
+  "tags": [
+   "phase:implementation",
+   "subject:r-data-in-python",
+   "tech:python",
+   "tech:rdata"
+  ],
+  "applies_to_version": "\"rdata 1.1.0\""
+ },
+ {
+  "path": "knowledge/htdemucs-onnx-models/K-20261009T193005Z-htdemucs-onnx-io-contract-and-overlap-add.md",
+  "id": "K-20261009T193005Z-htdemucs-onnx-io-contract-and-overlap-add",
+  "tags": [
+   "domain:audio",
+   "domain:source-separation",
+   "phase:specification",
+   "subject:htdemucs-onnx-models",
+   "tech:demucs"
+  ],
+  "applies_to_version": "\"demucs-onnx 0.3.4\""
+ },
+ {
+  "path": "knowledge/bass-guitar-tuning/K-20261009T163900Z-bass-guitar-tunings-four-to-seven-strings.md",
+  "id": "K-20261009T163900Z-bass-guitar-tunings-four-to-seven-strings",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:bass-guitar-tuning"
+  ],
+  "applies_to_version": "\"Wikipedia as fetched 2026-10-09\""
+ },
+ {
+  "path": "knowledge/vcv-sample-rate-menu/K-20261009T234248Z-rack-engine-sample-rate-menu-values.md",
+  "id": "K-20261009T234248Z-rack-engine-sample-rate-menu-values",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:vcv-sample-rate-menu",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/pitch-tracking/K-20261009T160108Z-mpm-sub-a0.md",
+  "id": "K-20261009T160108Z-mpm-sub-a0",
+  "tags": [
+   "domain:audio",
+   "domain:music-transcription",
+   "phase:research",
+   "subject:pitch-tracking",
+   "tech:pitchy"
+  ],
+  "applies_to_version": "\"pitchy 4.1.0\""
+ },
+ {
+  "path": "knowledge/pitch-tracking/K-20261004T162312Z-comb-occupancy-pitch-tracking.md",
+  "id": "K-20261004T162312Z-comb-occupancy-pitch-tracking",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:pitch-tracking"
+  ],
+  "applies_to_version": "\"verified on power-synth-guitar-buzz_G_.wav only\""
+ },
+ {
+  "path": "knowledge/vcv-module-lifecycle/K-20261009T234246Z-rack-api-signatures-used-by-the-wrapper.md",
+  "id": "K-20261009T234246Z-rack-api-signatures-used-by-the-wrapper",
+  "tags": [
+   "phase:verification",
+   "subject:vcv-module-lifecycle",
+   "tech:cpp",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/vcv-module-lifecycle/K-20261009T234232Z-rack-enables-ftz-and-daz-on-engine-threads.md",
+  "id": "K-20261009T234232Z-rack-enables-ftz-and-daz-on-engine-threads",
+  "tags": [
+   "phase:research",
+   "subject:vcv-module-lifecycle",
+   "tech:cpp",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/vcv-module-lifecycle/K-20261009T234212Z-rack-onsamplerate-change-and-onreset-calls.md",
+  "id": "K-20261009T234212Z-rack-onsamplerate-change-and-onreset-calls",
+  "tags": [
+   "phase:research",
+   "subject:vcv-module-lifecycle",
+   "tech:cpp",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/tremolo-picking-synthesis/K-20261009T090900Z-tremolo-picked-lead-pitch-clock-and-pick-envelope.md",
+  "id": "K-20261009T090900Z-tremolo-picked-lead-pitch-clock-and-pick-envelope",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:tremolo-picking-synthesis",
+   "tech:web-audio"
+  ],
+  "applies_to_version": "\"void-choir.html delivered 2026-10-09 (not in a repository)\""
+ },
+ {
+  "path": "knowledge/audacity-scripting/K-20261004T161603Z-audacity-pipe-protocol.md",
+  "id": "K-20261004T161603Z-audacity-pipe-protocol",
+  "tags": [
+   "phase:implementation",
+   "subject:audacity-scripting",
+   "tech:audacity",
+   "tech:python"
+  ],
+  "applies_to_version": "\"Audacity 3.x (pipe_test.py on master and release-3.7.1)\""
+ },
+ {
+  "path": "knowledge/guitar-amp-simulation/K-20261004T162311Z-minimum-phase-cabinet-ir-from-table.md",
+  "id": "K-20261004T162311Z-minimum-phase-cabinet-ir-from-table",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:guitar-amp-simulation",
+   "tech:web-audio"
+  ],
+  "applies_to_version": "\"atmospheric-javascript main 1602634 (makeCabIR)\""
+ },
+ {
+  "path": "knowledge/guitar-amp-simulation/K-20261004T162310Z-cabinet-structure-and-invariant-excitation.md",
+  "id": "K-20261004T162310Z-cabinet-structure-and-invariant-excitation",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:guitar-amp-simulation",
+   "tech:web-audio"
+  ],
+  "applies_to_version": "\"atmospheric-javascript main 1602634\""
+ },
+ {
+  "path": "knowledge/standard-guitar-tuning/K-20261009T092108Z-standard-guitar-tuning-midi-and-hz.md",
+  "id": "K-20261009T092108Z-standard-guitar-tuning-midi-and-hz",
+  "tags": [
+   "domain:audio",
+   "phase:specification",
+   "subject:standard-guitar-tuning",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/string-instrument-tunings/K-20261009T164000Z-violin-family-mandolin-and-seven-string-guitar-tunings.md",
+  "id": "K-20261009T164000Z-violin-family-mandolin-and-seven-string-guitar-tunings",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:string-instrument-tunings"
+  ],
+  "applies_to_version": "\"Wikipedia as fetched 2026-10-09\""
+ },
+ {
+  "path": "knowledge/string-instrument-tunings/K-20261009T164100Z-eight-string-guitar-standard-tuning-f-sharp-b-e-a-d-g-b-e.md",
+  "id": "K-20261009T164100Z-eight-string-guitar-standard-tuning-f-sharp-b-e-a-d-g-b-e",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:string-instrument-tunings"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/juce-parameter-attachments/K-20261009T164200Z-juce-combobox-attachment-spaces-items-linearly-over-the-parameter-range.md",
+  "id": "K-20261009T164200Z-juce-combobox-attachment-spaces-items-linearly-over-the-parameter-range",
+  "tags": [
+   "domain:audio",
+   "phase:specification",
+   "subject:juce-parameter-attachments",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"JUCE master documentation, read 2026-10-09\""
+ },
+ {
+  "path": "knowledge/msvc-ninja-environment/K-20261009T092107Z-msvc-ninja-needs-vcvars-environment.md",
+  "id": "K-20261009T092107Z-msvc-ninja-needs-vcvars-environment",
+  "tags": [
+   "phase:implementation",
+   "subject:msvc-ninja-environment",
+   "tech:cmake",
+   "tech:msvc"
+  ],
+  "applies_to_version": "\"Visual Studio 18 Community, MSVC 19.50.35729.0, toolset 14.50.35717 (observed 2026-10-09)\""
+ },
+ {
+  "path": "knowledge/juce-standalone-compiles-vst3-client/K-20261009T092102Z-juce-standalone-target-compiles-vst3-client.md",
+  "id": "K-20261009T092102Z-juce-standalone-target-compiles-vst3-client",
+  "tags": [
+   "phase:implementation",
+   "subject:juce-standalone-compiles-vst3-client",
+   "tech:cmake",
+   "tech:juce",
+   "tech:vst3"
+  ],
+  "applies_to_version": "\"observed with the JUCE checkout at D:/JUCE (has juce_audio_processors_headless), CMake with Ninja, 2026-10-09\""
+ },
+ {
+  "path": "knowledge/modal-resonator-implementation/K-20261009T120109Z-two-pole-resonator-with-input-zero-gives-cosine-start.md",
+  "id": "K-20261009T120109Z-two-pole-resonator-with-input-zero-gives-cosine-start",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:modal-resonator-implementation",
+   "tech:cpp",
+   "tech:python"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/pcg64-bit-generator/K-20261004T151200Z-numpy-seedsequence-reconstructed.md",
+  "id": "K-20261004T151200Z-numpy-seedsequence-reconstructed",
+  "tags": [
+   "phase:implementation",
+   "subject:pcg64-bit-generator",
+   "tech:cpp",
+   "tech:numpy"
+  ],
+  "applies_to_version": "\"numpy 2.4.4\""
+ },
+ {
+  "path": "knowledge/pcg64-bit-generator/K-20261004T151100Z-pcg64-xsl-rr-advance-then-output.md",
+  "id": "K-20261004T151100Z-pcg64-xsl-rr-advance-then-output",
+  "tags": [
+   "phase:implementation",
+   "subject:pcg64-bit-generator",
+   "tech:cpp",
+   "tech:numpy"
+  ],
+  "applies_to_version": "\"numpy 2.4.4\""
+ },
+ {
+  "path": "knowledge/audacity-silence-trimming/K-20261004T161600Z-audacity-trim-silence-plugin.md",
+  "id": "K-20261004T161600Z-audacity-trim-silence-plugin",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:audacity-silence-trimming",
+   "tech:audacity"
+  ],
+  "applies_to_version": "\"Trim Silence plug-in as posted on the Audacity forum (Audacity 2.x to 3.x)\""
+ },
+ {
+  "path": "knowledge/sandbox-egress-allowlist/K-20261009T234254Z-vcvrack-com-blocked-github-rack-reachable.md",
+  "id": "K-20261009T234254Z-vcvrack-com-blocked-github-rack-reachable",
+  "tags": [
+   "phase:implementation",
+   "subject:sandbox-egress-allowlist",
+   "tech:github",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"sandbox as of 2026-09-28\""
+ },
+ {
+  "path": "knowledge/sandbox-egress-allowlist/K-20261009T193501Z-sandbox-egress-policy.md",
+  "id": "K-20261009T193501Z-sandbox-egress-policy",
+  "tags": [
+   "phase:planning",
+   "subject:sandbox-egress-allowlist",
+   "tech:github",
+   "tech:zenodo"
+  ],
+  "applies_to_version": "\"sandbox as of 2026-10-09 (organisation egress policy)\""
+ },
+ {
+  "path": "knowledge/legacy-code-audit/K-20261009T194014Z-legacy-6j-table-k4-errors.md",
+  "id": "K-20261009T194014Z-legacy-6j-table-k4-errors",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:research",
+   "subject:legacy-code-audit",
+   "tech:python"
+  ],
+  "applies_to_version": "\"legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28\""
+ },
+ {
+  "path": "knowledge/legacy-code-audit/K-20261009T194012Z-legacy-exponent-fit.md",
+  "id": "K-20261009T194012Z-legacy-exponent-fit",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:research",
+   "subject:legacy-code-audit",
+   "tech:python"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/legacy-code-audit/K-20261009T194013Z-legacy-gamma-convention-dependence.md",
+  "id": "K-20261009T194013Z-legacy-gamma-convention-dependence",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:research",
+   "subject:legacy-code-audit",
+   "tech:python"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/legacy-code-audit/K-20261009T194020Z-legacy-k16-different-hamiltonian.md",
+  "id": "K-20261009T194020Z-legacy-k16-different-hamiltonian",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:research",
+   "subject:legacy-code-audit",
+   "tech:python"
+  ],
+  "applies_to_version": "\"legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28\""
+ },
+ {
+  "path": "knowledge/legacy-code-audit/K-20261009T194007Z-legacy-table-iii-reproduced.md",
+  "id": "K-20261009T194007Z-legacy-table-iii-reproduced",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:research",
+   "subject:legacy-code-audit",
+   "tech:python"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/legacy-code-audit/K-20261009T194004Z-legacy-6j-half-power-bug.md",
+  "id": "K-20261009T194004Z-legacy-6j-half-power-bug",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:research",
+   "subject:legacy-code-audit",
+   "tech:python"
+  ],
+  "applies_to_version": "\"legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28\""
+ },
+ {
+  "path": "knowledge/legacy-code-audit/K-20261009T194005Z-legacy-operator-not-idempotent.md",
+  "id": "K-20261009T194005Z-legacy-operator-not-idempotent",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:research",
+   "subject:legacy-code-audit",
+   "tech:python"
+  ],
+  "applies_to_version": "\"legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28\""
+ },
+ {
+  "path": "knowledge/legacy-code-audit/K-20261009T194006Z-legacy-table-i-unreproducible.md",
+  "id": "K-20261009T194006Z-legacy-table-i-unreproducible",
+  "tags": [
+   "domain:quantum-gravity",
+   "phase:research",
+   "subject:legacy-code-audit",
+   "tech:python"
+  ],
+  "applies_to_version": "\"legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28\""
+ },
+ {
+  "path": "knowledge/basic-pitch-model-range/K-20261009T160103Z-basic-pitch-range.md",
+  "id": "K-20261009T160103Z-basic-pitch-range",
+  "tags": [
+   "domain:audio",
+   "domain:music-transcription",
+   "phase:research",
+   "subject:basic-pitch-model-range",
+   "tech:basic-pitch"
+  ],
+  "applies_to_version": "\"@spotify/basic-pitch 1.0.1\""
+ },
+ {
+  "path": "knowledge/enthalpy-porosity-mushy-zone/K-20261009T193003Z-var-mushy-zone-cell-width-band-and-c2-profile.md",
+  "id": "K-20261009T193003Z-var-mushy-zone-cell-width-band-and-c2-profile",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "phase:implementation",
+   "subject:enthalpy-porosity-mushy-zone",
+   "tech:python"
+  ],
+  "applies_to_version": "\"var-simulation commit 819736a\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-segmentation/K-20261009T234230Z-oildrumkit-engine-bit-identical-across-translation-units.md",
+  "id": "K-20261009T234230Z-oildrumkit-engine-bit-identical-across-translation-units",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-segmentation",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h); g++ 13.3\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-segmentation/K-20261009T234244Z-oildrumkit-engine-worst-case-trigger-cost.md",
+  "id": "K-20261009T234244Z-oildrumkit-engine-worst-case-trigger-cost",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-segmentation",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h); 1 vCPU sandbox\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-segmentation/K-20261009T234258Z-kitcore-fixed-128-frame-latency-matches-512-sample-host.md",
+  "id": "K-20261009T234258Z-kitcore-fixed-128-frame-latency-matches-512-sample-host",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-segmentation",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-segmentation/K-20261009T234226Z-oildrumkit-engine-limiter-saturates-at-352khz-and-above.md",
+  "id": "K-20261009T234226Z-oildrumkit-engine-limiter-saturates-at-352khz-and-above",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-segmentation",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-segmentation/K-20261009T234228Z-oildrumkit-engine-cpu-by-block-size.md",
+  "id": "K-20261009T234228Z-oildrumkit-engine-cpu-by-block-size",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-segmentation",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h); 1 vCPU sandbox\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-segmentation/K-20261009T234224Z-oildrumkit-engine-output-depends-on-process-segmentation.md",
+  "id": "K-20261009T234224Z-oildrumkit-engine-output-depends-on-process-segmentation",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-segmentation",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261008T173537Z-oildrum-engine-v1-peak-levels.md",
+  "id": "K-20261008T173537Z-oildrum-engine-v1-peak-levels",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:drum-synthesis",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"DrumEngine.h in OilDrumKit_VST_Source.zip delivered 2026-10-08 (zip 13931 bytes)\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261008T173538Z-oildrum-engine-v1-cymbal-spectrum.md",
+  "id": "K-20261008T173538Z-oildrum-engine-v1-cymbal-spectrum",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:drum-synthesis",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"DrumEngine.h in OilDrumKit_VST_Source.zip delivered 2026-10-08 (zip 13931 bytes)\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261009T120101Z-oildrum-legacy-main-engine-clips.md",
+  "id": "K-20261009T120101Z-oildrum-legacy-main-engine-clips",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:drum-synthesis",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit main before commit 35fbfea (legacy engine kept in Tools/legacy)\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261008T223321Z-oildrum-engine-v2-peak-levels.md",
+  "id": "K-20261008T223321Z-oildrum-engine-v2-peak-levels",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:drum-synthesis",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"DrumEngine.h at qualitycoding/oildrumkit branch archive/additive-v1-fixed, additive-v1/Source\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261008T223321Z-oildrum-engine-v2-cymbal-spectrum.md",
+  "id": "K-20261008T223321Z-oildrum-engine-v2-cymbal-spectrum",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:drum-synthesis",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"DrumEngine.h at qualitycoding/oildrumkit branch archive/additive-v1-fixed, additive-v1/Source\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261009T120102Z-oildrum-legacy-pitch-smoothing-bug.md",
+  "id": "K-20261009T120102Z-oildrum-legacy-pitch-smoothing-bug",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:drum-synthesis",
+   "tech:cpp",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"oildrumkit Tools/legacy/DrumEngine_legacy.h\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261009T120110Z-oildrum-modal-engine-measured-results.md",
+  "id": "K-20261009T120110Z-oildrum-modal-engine-measured-results",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:drum-synthesis"
+  ],
+  "applies_to_version": "\"oildrumkit main 35fbfea, Tools/metrics.py and Tools/compare.py\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261009T120117Z-uniform-noise-needs-sqrt3-for-unit-variance.md",
+  "id": "K-20261009T120117Z-uniform-noise-needs-sqrt3-for-unit-variance",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:drum-synthesis",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit Source/DrumEngine.h at 35fbfea\""
+ },
+ {
+  "path": "knowledge/drum-synthesis/K-20261004T162314Z-inharmonic-square-cymbal-density.md",
+  "id": "K-20261004T162314Z-inharmonic-square-cymbal-density",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:drum-synthesis",
+   "tech:web-audio"
+  ],
+  "applies_to_version": "\"atmospheric-javascript main 1602634 (cymbal())\""
+ },
+ {
+  "path": "knowledge/github-license-detection/K-20261004T161606Z-github-license-api-and-detection.md",
+  "id": "K-20261004T161606Z-github-license-api-and-detection",
+  "tags": [
+   "phase:release",
+   "subject:github-license-detection",
+   "tech:github"
+  ],
+  "applies_to_version": "\"GitHub REST API, observed 2026-10-04\""
+ },
+ {
+  "path": "knowledge/python-can-slcan-listen-only/K-20261009T123022Z-python-can-slcan-listen-only.md",
+  "id": "K-20261009T123022Z-python-can-slcan-listen-only",
+  "tags": [
+   "domain:automotive",
+   "phase:research",
+   "subject:python-can-slcan-listen-only",
+   "tech:python",
+   "tech:python-can"
+  ],
+  "applies_to_version": "\"python-can 4.6.1\""
+ },
+ {
+  "path": "knowledge/github-web-upload/K-20261009T193503Z-github-web-upload-tree-hash.md",
+  "id": "K-20261009T193503Z-github-web-upload-tree-hash",
+  "tags": [
+   "phase:verification",
+   "subject:github-web-upload",
+   "tech:git",
+   "tech:github"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-api/K-20261009T234222Z-oildrumkit-engine-trigger-sounds-on-the-same-sample.md",
+  "id": "K-20261009T234222Z-oildrumkit-engine-trigger-sounds-on-the-same-sample",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-api",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-api/K-20261009T234220Z-oildrumkit-engine-reset-gives-exact-silence.md",
+  "id": "K-20261009T234220Z-oildrumkit-engine-reset-gives-exact-silence",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-api",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-api/K-20261009T234250Z-oildrumkit-engine-implements-hi-hat-choke.md",
+  "id": "K-20261009T234250Z-oildrumkit-engine-implements-hi-hat-choke",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-api",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-api/K-20261009T234240Z-oildrumkit-engine-api-and-instrument-list.md",
+  "id": "K-20261009T234240Z-oildrumkit-engine-api-and-instrument-list",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:oildrumkit-engine-api",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-api/K-20261009T234216Z-oildrumkit-engine-has-no-mutable-static-state.md",
+  "id": "K-20261009T234216Z-oildrumkit-engine-has-no-mutable-static-state",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:oildrumkit-engine-api",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/oildrumkit-engine-api/K-20261009T234218Z-oildrumkit-engine-setsamplerate-allocates.md",
+  "id": "K-20261009T234218Z-oildrumkit-engine-setsamplerate-allocates",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:oildrumkit-engine-api",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"oildrumkit@35fbfea (DrumEngine.h)\""
+ },
+ {
+  "path": "knowledge/transcription-synthetic-fixture-bias/K-20261009T160105Z-transcription-synthetic-bias.md",
+  "id": "K-20261009T160105Z-transcription-synthetic-bias",
+  "tags": [
+   "domain:audio",
+   "domain:music-transcription",
+   "phase:research",
+   "subject:transcription-synthetic-fixture-bias"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/github-pages-headers/K-20261009T160118Z-pages-headers.md",
+  "id": "K-20261009T160118Z-pages-headers",
+  "tags": [
+   "phase:research",
+   "subject:github-pages-headers",
+   "tech:github"
+  ],
+  "applies_to_version": "\"GitHub Pages, as reported 2026-09-26\""
+ },
+ {
+  "path": "knowledge/bs-roformer-sw/K-20261009T193014Z-bs-roformer-sw-has-no-clear-weights-licence.md",
+  "id": "K-20261009T193014Z-bs-roformer-sw-has-no-clear-weights-licence",
+  "tags": [
+   "domain:audio",
+   "domain:source-separation",
+   "phase:research",
+   "subject:bs-roformer-sw"
+  ],
+  "applies_to_version": "\"as reported in research/EXTENDED_STEMS.md, 2026-09-28\""
+ },
+ {
+  "path": "knowledge/pitch-class-harmonicity/K-20261004T151400Z-circular-correlation-shift-linearity.md",
+  "id": "K-20261004T151400Z-circular-correlation-shift-linearity",
+  "tags": [
+   "phase:implementation",
+   "subject:pitch-class-harmonicity",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"version-independent (a DSP identity)\""
+ },
+ {
+  "path": "knowledge/github-actions-dispatch/K-20261009T160121Z-dispatch-default-branch.md",
+  "id": "K-20261009T160121Z-dispatch-default-branch",
+  "tags": [
+   "phase:release",
+   "subject:github-actions-dispatch",
+   "tech:github",
+   "tech:github-actions"
+  ],
+  "applies_to_version": "\"GitHub Actions, observed 2026-09-27\""
+ },
+ {
+  "path": "knowledge/vcv-plugin-build/K-20261009T234204Z-rack-plugin-links-libRack-via-plugin-mk-stub-suffices.md",
+  "id": "K-20261009T234204Z-rack-plugin-links-libRack-via-plugin-mk-stub-suffices",
+  "tags": [
+   "phase:verification",
+   "subject:vcv-plugin-build",
+   "tech:cpp",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/vcv-plugin-build/K-20261009T234242Z-rack-windows-build-needs-msys2-mingw64-packages.md",
+  "id": "K-20261009T234242Z-rack-windows-build-needs-msys2-mingw64-packages",
+  "tags": [
+   "phase:research",
+   "subject:vcv-plugin-build",
+   "tech:msvc",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/vcv-plugin-build/K-20261009T234214Z-rack-compile-mk-flags-and-cpp17.md",
+  "id": "K-20261009T234214Z-rack-compile-mk-flags-and-cpp17",
+  "tags": [
+   "phase:verification",
+   "subject:vcv-plugin-build",
+   "tech:cpp",
+   "tech:vcv-rack"
+  ],
+  "applies_to_version": "\"Rack 2.6.6\""
+ },
+ {
+  "path": "knowledge/modal-plate-physics/K-20261009T120104Z-lid-axisymmetric-ratio-in-the-patent.md",
+  "id": "K-20261009T120104Z-lid-axisymmetric-ratio-in-the-patent",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:modal-plate-physics"
+  ],
+  "applies_to_version": "\"US 6,339,960 B1\""
+ },
+ {
+  "path": "knowledge/modal-plate-physics/K-20261009T120113Z-bessel-ive-not-needed-below-lambda-700.md",
+  "id": "K-20261009T120113Z-bessel-ive-not-needed-below-lambda-700",
+  "tags": [
+   "phase:verification",
+   "subject:modal-plate-physics",
+   "tech:python",
+   "tech:scipy"
+  ],
+  "applies_to_version": "\"scipy.special as installed in the sandbox on 2026-10-09\""
+ },
+ {
+  "path": "knowledge/modal-plate-physics/K-20261009T120103Z-clamped-circular-plate-eigenvalues.md",
+  "id": "K-20261009T120103Z-clamped-circular-plate-eigenvalues",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:modal-plate-physics",
+   "tech:python",
+   "tech:scipy"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/modal-plate-physics/K-20261009T120119Z-donnell-shell-mode-example.md",
+  "id": "K-20261009T120119Z-donnell-shell-mode-example",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:modal-plate-physics",
+   "tech:python"
+  ],
+  "applies_to_version": "\"oildrumkit Tools/modes.py at 35fbfea (default shell parameters)\""
+ },
+ {
+  "path": "knowledge/modal-plate-physics/K-20261009T120105Z-plate-stretch-default-is-a-chosen-value.md",
+  "id": "K-20261009T120105Z-plate-stretch-default-is-a-chosen-value",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:drum-synthesis",
+   "subject:modal-plate-physics"
+  ],
+  "applies_to_version": "\"oildrumkit Tools/voicing.json plateStretch 0.8\""
+ },
+ {
+  "path": "knowledge/modal-plate-physics/K-20261009T120118Z-radiation-efficiency-law-ignores-net-volume.md",
+  "id": "K-20261009T120118Z-radiation-efficiency-law-ignores-net-volume",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:drum-synthesis",
+   "subject:modal-plate-physics"
+  ],
+  "applies_to_version": "\"oildrumkit main 35fbfea; US 6,339,960 B1\""
+ },
+ {
+  "path": "knowledge/modal-plate-physics/K-20261009T120107Z-ansys-clamped-plate-benchmark-vm-lsdyna-solve-051.md",
+  "id": "K-20261009T120107Z-ansys-clamped-plate-benchmark-vm-lsdyna-solve-051",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:modal-plate-physics",
+   "tech:python"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/modal-plate-physics/K-20261009T120108Z-plate-modal-density-weyl-check.md",
+  "id": "K-20261009T120108Z-plate-modal-density-weyl-check",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:modal-plate-physics",
+   "tech:python"
+  ],
+  "applies_to_version": "\"oildrumkit Tools/modes.py at 35fbfea\""
+ },
+ {
+  "path": "knowledge/fretboard-fret-geometry/K-20261009T092106Z-fret-position-from-pitch-ratio.md",
+  "id": "K-20261009T092106Z-fret-position-from-pitch-ratio",
+  "tags": [
+   "domain:audio",
+   "domain:microtonal-tuning",
+   "phase:specification",
+   "subject:fretboard-fret-geometry",
+   "tech:cpp"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/dsp-port-parity/K-20261008T223321Z-c-to-js-engine-port-needs-float32-state.md",
+  "id": "K-20261008T223321Z-c-to-js-engine-port-needs-float32-state",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:dsp-port-parity",
+   "tech:cpp",
+   "tech:javascript"
+  ],
+  "applies_to_version": "\"additive-v1/web/engine.js against additive-v1/Source/DrumEngine.h, g++ 13.3 -O2, node 2026-10-08\""
+ },
+ {
+  "path": "knowledge/web-audio-param-automation/K-20261008T173539Z-web-audio-exponential-ramp-time-constant.md",
+  "id": "K-20261008T173539Z-web-audio-exponential-ramp-time-constant",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:web-audio-param-automation",
+   "tech:web-audio"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/newton-krylov-anderson-acceleration/K-20261009T193007Z-var-picard-and-acceleration-negative-results.md",
+  "id": "K-20261009T193007Z-var-picard-and-acceleration-negative-results",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "phase:verification",
+   "subject:newton-krylov-anderson-acceleration",
+   "tech:scipy"
+  ],
+  "applies_to_version": "\"var-simulation commit 819736a (pre-flux-form measurement)\""
+ },
+ {
+  "path": "knowledge/juce-mpe-voice-allocation/K-20261009T092105Z-juce-mpesynthesiser-voice-allocation-and-default-zone.md",
+  "id": "K-20261009T092105Z-juce-mpesynthesiser-voice-allocation-and-default-zone",
+  "tags": [
+   "domain:audio",
+   "phase:implementation",
+   "subject:juce-mpe-voice-allocation",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"JUCE 8.0.9 documentation mirror\""
+ },
+ {
+  "path": "knowledge/juce-sandbox-build-time/K-20261009T164500Z-juce-module-build-on-one-cpu-core-exceeds-a-300-second-tool-call.md",
+  "id": "K-20261009T164500Z-juce-module-build-on-one-cpu-core-exceeds-a-300-second-tool-call",
+  "tags": [
+   "phase:implementation",
+   "subject:juce-sandbox-build-time",
+   "tech:cmake",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"JUCE 8.0.15\""
+ },
+ {
+  "path": "knowledge/vst3-install-locations-windows/K-20261009T092103Z-vst3-system-folder-needs-write-access-windows.md",
+  "id": "K-20261009T092103Z-vst3-system-folder-needs-write-access-windows",
+  "tags": [
+   "phase:release",
+   "subject:vst3-install-locations-windows",
+   "tech:ableton-live",
+   "tech:juce",
+   "tech:vst3"
+  ],
+  "applies_to_version": "\"Ableton Live help article (undated, current 2026-10-09); JUCE forum thread; observed with a JUCE 8 checkout\""
+ },
+ {
+  "path": "knowledge/sandbox-environment/K-20261009T234256Z-dash-lacks-pipestatus-and-time-keyword.md",
+  "id": "K-20261009T234256Z-dash-lacks-pipestatus-and-time-keyword",
+  "tags": [
+   "phase:implementation",
+   "subject:sandbox-environment",
+   "tech:bash"
+  ],
+  "applies_to_version": "\"sandbox observed 2026-09-29\""
+ },
+ {
+  "path": "knowledge/sandbox-environment/K-20261008T173543Z-sandbox-working-directory-resets-corroborated.md",
+  "id": "K-20261008T173543Z-sandbox-working-directory-resets-corroborated",
+  "tags": [
+   "phase:implementation",
+   "subject:sandbox-environment",
+   "tech:git"
+  ],
+  "applies_to_version": "\"sandbox observed 2026-10-04 and 2026-10-08\""
+ },
+ {
+  "path": "knowledge/sandbox-environment/K-20261004T162307Z-sandbox-shell-is-dash.md",
+  "id": "K-20261004T162307Z-sandbox-shell-is-dash",
+  "tags": [
+   "phase:implementation",
+   "subject:sandbox-environment",
+   "tech:bash"
+  ],
+  "applies_to_version": "\"sandbox observed 2026-10-04\""
+ },
+ {
+  "path": "knowledge/sandbox-environment/K-20261009T120116Z-sandbox-background-jobs-and-git-proxy-limits.md",
+  "id": "K-20261009T120116Z-sandbox-background-jobs-and-git-proxy-limits",
+  "tags": [
+   "phase:implementation",
+   "subject:sandbox-environment",
+   "tech:bash",
+   "tech:git"
+  ],
+  "applies_to_version": "\"sandbox observed 2026-10-04 to 2026-10-09\""
+ },
+ {
+  "path": "knowledge/sandbox-environment/K-20261008T173541Z-sandbox-build-tools-and-juce-tags-2026-10-08.md",
+  "id": "K-20261008T173541Z-sandbox-build-tools-and-juce-tags-2026-10-08",
+  "tags": [
+   "phase:implementation",
+   "subject:juce-versioning",
+   "subject:sandbox-environment",
+   "tech:cpp",
+   "tech:juce"
+  ],
+  "applies_to_version": "\"sandbox observed 2026-10-08; JUCE tags 7.0.12 and 8.0.15\""
+ },
+ {
+  "path": "knowledge/juce-vst3-parameter-id-conflict/K-20261009T092101Z-juce-vst3-can-replace-vst2-default-and-error.md",
+  "id": "K-20261009T092101Z-juce-vst3-can-replace-vst2-default-and-error",
+  "tags": [
+   "phase:implementation",
+   "subject:juce-vst3-parameter-id-conflict",
+   "tech:cmake",
+   "tech:juce",
+   "tech:vst3"
+  ],
+  "applies_to_version": "\"JUCE 7.0+ and 8.x macro names as in the forum thread (undated); error observed with a JUCE 8 checkout that has the juce_audio_processors_headless module\""
+ },
+ {
+  "path": "knowledge/coi-serviceworker/K-20261009T193008Z-coi-serviceworker-adds-coop-and-coep-by-reload.md",
+  "id": "K-20261009T193008Z-coi-serviceworker-adds-coop-and-coep-by-reload",
+  "tags": [
+   "phase:research",
+   "subject:coi-serviceworker",
+   "tech:github",
+   "tech:javascript"
+  ],
+  "applies_to_version": "\"coi-serviceworker 0.1.7\""
+ },
+ {
+  "path": "knowledge/musicxml-tablature/K-20261009T160113Z-musicxml-xsd-local.md",
+  "id": "K-20261009T160113Z-musicxml-xsd-local",
+  "tags": [
+   "phase:verification",
+   "subject:musicxml-tablature",
+   "tech:bash",
+   "tech:musicxml"
+  ],
+  "applies_to_version": "\"MusicXML 4.0 XSD\""
+ },
+ {
+  "path": "knowledge/open-licence-texts-in-sandbox/K-20261009T233105Z-licence-texts-offline-in-sandbox.md",
+  "id": "K-20261009T233105Z-licence-texts-offline-in-sandbox",
+  "tags": [
+   "phase:implementation",
+   "subject:open-licence-texts-in-sandbox",
+   "tech:git"
+  ],
+  "applies_to_version": "\"sandbox observed 2026-09-30\""
+ },
+ {
+  "path": "knowledge/vinyl-side-detection/K-20261004T161601Z-vinyl-lead-out-click-period.md",
+  "id": "K-20261004T161601Z-vinyl-lead-out-click-period",
+  "tags": [
+   "domain:audio",
+   "phase:research",
+   "subject:vinyl-side-detection"
+  ],
+  "applies_to_version": "\"version-independent\""
+ },
+ {
+  "path": "knowledge/vinyl-side-detection/K-20261004T161602Z-vinyl-three-level-side-detector.md",
+  "id": "K-20261004T161602Z-vinyl-three-level-side-detector",
+  "tags": [
+   "domain:audio",
+   "phase:verification",
+   "subject:vinyl-side-detection",
+   "tech:python"
+  ],
+  "applies_to_version": "\"qualitycoding/side-splitter vinyl_trim.py at c1e8525\""
+ }
+]

@@ -1,0 +1,723 @@
+[
+ {
+  "id": "L-20261009T161100Z-audio-thread-takes-mutex-and-copies-vectors-not-in-premortem",
+  "severity": "Medium",
+  "prevention_rule": "Pre-mortem lens 'what does the audio thread lock, allocate or wait on'; mitigate with lock-free reads of a preallocated snapshot.",
+  "verdict": "applied",
+  "plan_refs": [
+   "A-012",
+   "D-013",
+   "D-026 R-015",
+   "core/include/tpt/TrumpetVoice.h:26,41",
+   "T-024"
+  ],
+  "rationale": "The only audio/UI shared state is the UiState published through atomics owned by TrumpetVoice and read lock-free (D-013, D-026 R-015); A-012 states 'no locks on the audio thread' and T-024 proves zero allocation. No mutex-guarded engine exists in the design."
+ },
+ {
+  "id": "L-20261009T161000Z-ji-labels-computed-with-12-tet-maths-in-the-editor",
+  "severity": "Medium",
+  "prevention_rule": "Compute every displayed pitch by calling the same engine function that produces the sound; test label frequency equals engine frequency within 0.01 cent.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The editor shows note names, valve states and partial numbers only (D-013, A-009); there is no tuning-mode fret label or frequency/cents readout, and names come from the shared noteName/resolveNote (D-001)."
+ },
+ {
+  "id": "L-20261009T160900Z-juce-api-assumed-from-memory-compile-caught-and-version-floor-unchecked",
+  "severity": "Medium",
+  "prevention_rule": "Grep the checked-out JUCE headers before using a JUCE API; add a version floor when a newer API is used.",
+  "verdict": "gap",
+  "plan_refs": [
+   "CMakeLists.txt (JUCE pinned by SHA, 9.0.3)",
+   "T-031",
+   "S-013",
+   "S-014"
+  ],
+  "rationale": "Version-floor half is covered: JUCE is fetched at a 40-hex SHA (9.0.3) and T-031 checks the pin. But no step tells the implementer to consult the JUCE 9.0.3 headers before writing PluginProcessor/PluginEditor/TrumpetView code, and S-001 allows -DTPT_BUILD_PLUGIN=OFF, in which case JUCE sources are not even present locally; API mistakes would surface only as CI compile failures (one push at a time, shared CI).",
+  "amendment": "PLAN.md S-013 and S-014 Actions, new step 0: 'Get the JUCE source at the pinned SHA be29c81... outside the repo (git clone + checkout, or the codeload tarball; or build/_deps/juce-src when configured with the plugin). Before using any JUCE class or method not already present in the stub files, grep its declaration under modules/ and note the header in the step checkpoint. Do not write JUCE calls from memory (JUCE 9 differs from 8).' Add to ENVIRONMENT.md no-sudo block a one-line JUCE source fetch.",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261009T160700Z-layout-rules-frozen-before-owner-confirmed-three-resets",
+  "severity": "Medium",
+  "prevention_rule": "Before freezing tests that encode a domain table, show the owner the full table and limits in one question and record the confirmed table.",
+  "verdict": "gap",
+  "plan_refs": [
+   "tests/fixtures/trumpet_fingerings.txt",
+   "D-002",
+   "D-023",
+   "G-004",
+   "A-002",
+   "ASSUMPTIONS.md"
+  ],
+  "rationale": "The frozen fixture (36 standard + 20 alternate fingerings, written range 54-89, extended range, trigger rules) and T-003/T-007/T-012 were frozen on the intake default 'Use the defaults'; the owner first sees the full chart only at G-004 after S-014. A correct-chart answer then forces an amendment, re-freeze of T-003/T-007/T-012, table regeneration (S-005) and recalibration (S-009) - the same reset pattern as the lesson. G-004 correct-chart limits damage but is not the pre-freeze confirmation.",
+  "amendment": "Before S-003 (e.g. a new first action of S-000 or an early non-blocking confirmation in HANDOFF 'Open human actions'): present the full fingering table (fixture rows with valves, partial, trigger), the normal/extended range limits and the trigger rules in a single message to the owner, record the reply as a new A-0xx in ASSUMPTIONS.md; S-003 to S-009 proceed on the default meanwhile, and a correction goes through the existing correct-chart amendment path.",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261009T160600Z-protocol-records-not-kept-one-implementation-commit",
+  "severity": "Medium",
+  "prevention_rule": "Commit once per plan step with state rewritten in that commit; open DEVIATIONS.md at the first departure and list every changed assertion, dropped test or unbuilt behaviour.",
+  "verdict": "applied",
+  "plan_refs": [
+   "PLAN.md Conventions 'After every step attempt' (items 1-5)",
+   "HANDOFF.md 'Halt and deviation protocol'",
+   "D-026 (additive members logged in DEVIATIONS.md)",
+   "S-008 outputs DEVIATIONS.md"
+  ],
+  "rationale": "Each step attempt requires its own 'S-0xx: title' commit, an EXECUTION_LOG.md line, an append to .checkpoints/impl-state.json, an 'S-0xx: record' commit and a push; every deviation goes to DEVIATIONS.md. Frozen tests cannot be changed at all (verify_freeze.sh), so 'changed assertion' cannot occur silently."
+ },
+ {
+  "id": "L-20261009T160500Z-lessons-addendum-adopted-after-implementation-again",
+  "severity": "Medium",
+  "prevention_rule": "At Phase 0, ask once for the knowledge store if not named in intake and load the default store before research starts.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "A-018",
+   "A-025",
+   "PRIOR_KNOWLEDGE.md"
+  ],
+  "rationale": "This is a Phase-0 planning-run process rule with no executable plan step to attach to; the store is now named (A-018, corrected 2026-10-22) and R0 is being run (A-025), and the implementer's HANDOFF names the store and lists PRIOR_KNOWLEDGE.md in the reading order."
+ },
+ {
+  "id": "L-20261009T160400Z-pasted-token-rejected-401-add-repo-not-tried-first",
+  "severity": "Medium",
+  "prevention_rule": "Use the harness-granted repo access (add_repo, push) before any user-pasted token; never write a pasted token anywhere and treat it as exposed.",
+  "verdict": "applied",
+  "plan_refs": [
+   "HANDOFF.md:27 and 82-85",
+   "S-000 action 1 and 3",
+   "DR-CRED",
+   "R-012",
+   "R-027",
+   "A-020"
+  ],
+  "rationale": "The implementer's credential is a fresh harness-provided GH_TOKEN, never a pasted one (S-000, R-027); a 401/403 triggers DR-CRED which forbids retrying with chat tokens; pasted tokens are treated as exposed and the human must revoke them (HANDOFF open actions, G-005 precondition); S-000 verifies push with --dry-run and the permissions API, and S-KNOW does a secret scan."
+ },
+ {
+  "id": "L-20261009T160200Z-ui-compiled-but-never-run-and-smoke-test-abandoned",
+  "severity": "Medium",
+  "prevention_rule": "List unrunnable UI behaviours as unverified mapped to tests; move computable UI decisions into pure unit-tested functions.",
+  "verdict": "applied",
+  "plan_refs": [
+   "D-013 (trumpetLayout, captionText in core)",
+   "T-033",
+   "S-014 actions 1-5",
+   "T-026 editor case",
+   "G-004",
+   "S-018 action 3"
+  ],
+  "rationale": "UI geometry and caption are pure core functions with a frozen unit test (T-033); the editor is instantiated and snapshotted under xvfb in CI (S-014, T-026 editor case) so the no-display sandbox does not leave it unrun; remaining unverified items are reported in REPORT.md (S-018 action 3) and judged by the human at G-004/G-006."
+ },
+ {
+  "id": "L-20261009T151301Z-workflow-files-were-pushed-straight-to-main-which-diverged-h",
+  "severity": "Medium",
+  "prevention_rule": "When a file must exist on main early, commit identical content in both places and diff before choosing a merge strategy.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "D-019",
+   "G-002"
+  ],
+  "rationale": "The plan never pushes or merges to main (G-002 gate, D-019); all workflows live on the impl branch and nothing depends on a workflow existing on the default branch (D-020 avoids workflow_dispatch and schedule reliance)."
+ },
+ {
+  "id": "L-20261009T151201Z-a-permission-probe-overwrote-the-body-of-pr-1",
+  "severity": "Medium",
+  "prevention_rule": "Probe token scopes with read endpoints or throwaway objects; never write to a live object to test.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-000 action 3"
+  ],
+  "rationale": "S-000 probes with gh auth status, git push --dry-run, and GET calls (repos permissions.push, actions/runs, visibility); there is no write probe against a live object."
+ },
+ {
+  "id": "L-20261009T151001Z-the-plan-s-mitigation-for-workflow-dispatch-needing-the-defa",
+  "severity": "Medium",
+  "prevention_rule": "Put a dispatchable workflow on the default branch or avoid manual dispatch; state the exact UI path and branch for each human-run trigger.",
+  "verdict": "applied",
+  "plan_refs": [
+   "D-020 (gate-evidence on push marker, workflow_dispatch not used)",
+   "D-025 (marker commit)",
+   "GATES.md (responses are files on the impl branch)"
+  ],
+  "rationale": "The plan avoids workflow_dispatch entirely: evidence jobs are triggered by marker commits pushed by the implementer, and the human acts only by committing/answering GATE files on the impl branch, so no human has to find an Actions button."
+ },
+ {
+  "id": "L-20261009T150901Z-the-deploy-workflow-broke-on-an-empty-ref-input-and-its-depl",
+  "severity": "Medium",
+  "prevention_rule": "Dry-run the release workflow on a throwaway ref before the release gate; give every input a non-empty default.",
+  "verdict": "gap",
+  "plan_refs": [
+   "D-025",
+   "R-034",
+   "S-017",
+   "G-002"
+  ],
+  "rationale": "No workflow_dispatch input exists, so the empty-ref trigger cannot arise, but the underlying risk does: the rc-artifacts release-like job (marker regex, ancestry check, 3-OS packaging) first runs only after G-002 approval. R-034 recorded that a first-run failure costs a second G-002 cycle and proposed an [rc-dryrun <sha7>] marker, but D-025 and S-017 as written contain no dry run.",
+  "amendment": "D-025 and PLAN.md S-017 action 4: add a no-upload dry-run mode to rc-artifacts, triggered by a marker '[rc-dryrun <sha7>]', that runs the sha extraction, ancestry/records-only diff checks and the staging step without upload-artifact; require one green dry run (record the run URL) before writing GATE-G-002.md.",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261009T150601Z-browser-tests-could-not-run-in-the-sandbox-so-four-defects-i",
+  "severity": "Medium",
+  "prevention_rule": "When the sandbox cannot run UI/browser tests, push and trigger CI after the first UI step, report 'implemented, unverified' until CI is green; no step done without a CI run id.",
+  "verdict": "applied",
+  "plan_refs": [
+   "PLAN.md Conventions (push after every step)",
+   "S-002 (CI exists before any code)",
+   "S-013 Done when / Checkpoint 'CI run URL'",
+   "S-014 gate-evidence",
+   "D-020 plugin job"
+  ],
+  "rationale": "The only things the no-sudo sandbox cannot run (plugin and editor) are built and run in the CI `plugin` job from S-002 on, every step ends in a push, and S-013 (first plugin step) is done only when T-026 passes 'locally or in the CI plugin job' with the CI run URL as checkpoint; S-014 and S-017 likewise. CI is exercised long before the last UI step."
+ },
+ {
+  "id": "L-20261009T150301Z-zoom-cost-was-measured-with-inter-raf-deltas-which-headless-",
+  "severity": "Medium",
+  "prevention_rule": "Time the work itself for cost budgets, not frame deltas; check the metric can exceed its pacing floor.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No browser or requestAnimationFrame measurement exists; the performance budget (T-024b, RTF <= 0.05) times the render work itself in test_perf.cpp."
+ },
+ {
+  "id": "L-20261009T140015Z-the-lessons-and-knowledge-addendum-was-adopted-after-plannin",
+  "severity": "Medium",
+  "prevention_rule": "Load relevant lessons at intake of every task and note which were loaded in the intake file.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "A-018",
+   "A-025",
+   "PRIOR_KNOWLEDGE.md",
+   "HANDOFF.md reading order 8"
+  ],
+  "rationale": "Planning-run intake rule; R0 is now being run against the identified store (A-018, A-025) and the implementer's intake (HANDOFF reading order) includes PRIOR_KNOWLEDGE.md. The post-R0 refresh of PRIOR_KNOWLEDGE.md should list the loaded lesson IDs, but no plan step can change the past ordering."
+ },
+ {
+  "id": "L-20261009T140013Z-a-token-pasted-in-chat-was-needed-three-times-in-one-run-eac",
+  "severity": "Medium",
+  "prevention_rule": "Ask at intake whether the session has push access and plan pushes together so a credential is used once.",
+  "verdict": "applied",
+  "plan_refs": [
+   "HANDOFF.md:27",
+   "ENVIRONMENT.md 'Credentials (implementer)'",
+   "S-000 actions 1 and 3",
+   "R-027",
+   "DR-CRED"
+  ],
+  "rationale": "The implementer's credential is a session-level GH_TOKEN (gh auth setup-git), verified for push, Actions and the two store repos in S-000, so no token is pasted or re-used per push; the permissions needed (incl. knowledge/Lessons for S-KNOW) are enumerated up front and a loss of access is handled by DR-CRED."
+ },
+ {
+  "id": "L-20261009T140003Z-the-hash-locked-environment-omitted-the-build-backend-and-th",
+  "severity": "Medium",
+  "prevention_rule": "Include the build backend in the lock inputs, and run a clean-room --require-hashes install plus pip-audit on the final lock before treating the environment as done.",
+  "verdict": "gap",
+  "plan_refs": [
+   "S-002 action 3",
+   "D-026 R-020",
+   "D-020 python job",
+   "S-017 action 2",
+   "T-031"
+  ],
+  "rationale": "No editable install or pyproject exists, so the build-backend failure itself cannot occur. But the generic rule applies to the new tools/requirements.hashes.txt that S-002 generates: the CI `python` job installs from tools/requirements.lock, so the hashed file is first exercised only in the push jobs (gate-evidence S-014, realism S-015/S-016), where an incomplete hash set (missing transitive dep or a wheel without a published hash on one OS) would block gate evidence late. pip-audit runs on the lock only in CI (non-blocking) and at S-017.",
+  "amendment": "PLAN.md S-002 action 3 and Done when: add 'prove tools/requirements.hashes.txt in a clean venv (`python -m venv $RUNNER_TEMP/x && $RUNNER_TEMP/x/bin/pip install --require-hashes -r tools/requirements.hashes.txt`) locally and make the CI `python` job install from the hashed file instead of the lock; run `pip-audit -r tools/requirements.lock` once in S-002 and log the result'.",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261009T123015Z-addendum-adopted-after-run-again",
+  "severity": "Medium",
+  "prevention_rule": "At intake ask whether lessons/knowledge repositories exist and attach them before any research.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "A-018",
+   "A-025"
+  ],
+  "rationale": "Planning-run Phase-0 rule; the store is identified (A-018) and R0 is being run now; the executable plan has no step where this trigger can recur."
+ },
+ {
+  "id": "L-20261009T123014Z-pat-purged-before-push-needed-again",
+  "severity": "Medium",
+  "prevention_rule": "For runs with several pushes use the harness repo access; if a PAT is used, say at once it will be needed again and ask for revocation at the end.",
+  "verdict": "applied",
+  "plan_refs": [
+   "HANDOFF.md:27 and 82-85",
+   "S-000 action 1",
+   "DR-CRED",
+   "R-012",
+   "R-027"
+  ],
+  "rationale": "The implementer's GH_TOKEN persists in the environment for the whole run (never scrubbed mid-run), pushes occur after every step, the plan states the revocation request for the pasted tokens (HANDOFF open actions, G-004 response, G-005 precondition) and DR-CRED covers loss of access."
+ },
+ {
+  "id": "L-20261009T123010Z-build-backend-pin-and-pyproject-order",
+  "severity": "Medium",
+  "prevention_rule": "Create pyproject.toml, list the build backend, run pip-audit and a clean-room install before any code is written.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The Python tooling is not an installed package (no pyproject.toml; tools run via `python -m` from the repo root with a pinned requirements.lock), so there is no editable install or build backend; the pip-audit/clean-room aspect is covered under the hashed-lock lesson."
+ },
+ {
+  "id": "L-20261009T123004Z-checkpoints-back-filled-no-execution-log",
+  "severity": "Medium",
+  "prevention_rule": "Write the checkpoint at checkpoint time and append to a log as each step finishes; after a reset add a dated note, do not rewrite.",
+  "verdict": "applied",
+  "plan_refs": [
+   "PLAN.md Conventions 'After every step attempt' items 2-4",
+   "HANDOFF.md 'Execution log'"
+  ],
+  "rationale": "EXECUTION_LOG.md and .checkpoints/impl-state.json are append-only, written and committed ('S-0xx: record') after every step attempt, and a restart uses the remote repository only, so records are produced at the time and not reconstructed."
+ },
+ {
+  "id": "L-20261009T123002Z-unguarded-first-element-indexing",
+  "severity": "Medium",
+  "prevention_rule": "Define and test what an empty hardware/adapter reply means.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No hardware or command-reply adapter exists in this plugin; the external inputs (MIDI events, host state blobs, resonator JSON) are range-checked/validated (D-014, D-015, D-004)."
+ },
+ {
+  "id": "L-20261009T123001Z-non-ascii-vin-uncaught",
+  "severity": "Medium",
+  "prevention_rule": "Treat device bytes as untrusted: catch decode errors at the parser boundary and test with non-ASCII input.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-012 action 1 ('catch everything and return nullopt')",
+   "S-006 action 1 ('wrap every exception as ParseError')",
+   "D-026 R-016",
+   "T-011 (\"\\xff\\xfe\" case)",
+   "T-026 garbage case"
+  ],
+  "rationale": "The analogous untrusted byte inputs are host state blobs and the embedded table: both parsers use parse(...,false) with catch-all handling, convert via a sized string_view, and frozen tests feed non-UTF-8 bytes (T-011 includes \\xff\\xfe) expecting nullopt/ParseError."
+ },
+ {
+  "id": "L-20261009T123000Z-transcript-log-never-closed",
+  "severity": "Medium",
+  "prevention_rule": "Release every opened resource in the same finally/context manager and test it is closed on normal and raising runs.",
+  "verdict": "gap",
+  "plan_refs": [
+   "S-015 actions 1-2 (tpt_render WAV output, tinysol.download streamed file and archive delete)"
+  ],
+  "rationale": "The new tooling opens files and streams (tpt_render output WAV on error exits 2, streamed Zenodo download then 'delete the archive', extraction) but the plan does not require context-managed handles; a handle left open on a failed download blocks archive deletion on Windows and leaves partial files that the idempotency marker logic could mistake for finished work.",
+  "amendment": "PLAN.md S-015 actions 1-2: add 'open every file, socket and archive in a `with` block (Python) or RAII scope (C++); write the download to a temporary name, rename it only after the md5 check, write the `.extracted-...` marker last, and delete the archive after the with-block has closed; tpt_render must not leave a partial WAV on exit code 2.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T120019Z-protocol-adopted-mid-run-without-before-run-step",
+  "severity": "Medium",
+  "prevention_rule": "Load lessons whose domain:/tech: tags match the task before planning, even without a protocol requirement.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "A-018",
+   "A-025",
+   "PRIOR_KNOWLEDGE.md"
+  ],
+  "rationale": "Planning-run intake rule; R0 with the identified store and tag set (A-025) is being run now, and no step of the executable plan can recreate the trigger."
+ },
+ {
+  "id": "L-20261009T120014Z-chained-sed-edit-skipped-after-timed-out-call",
+  "severity": "Medium",
+  "prevention_rule": "Run each edit as its own call and confirm it with grep/diff before starting the slow step.",
+  "verdict": "gap",
+  "plan_refs": [
+   "PLAN.md Conventions",
+   "S-009 action 3",
+   "S-011 action 3",
+   "S-016 action 2"
+  ],
+  "rationale": "The plan repeatedly instructs 'build, run tpt_calibrate, build again' and similar slow sequences in a sandbox with per-call tool timeouts (the FetchContent configure alone took 61 s), but gives no rule against chaining edits after slow commands, so a timed-out call can silently skip a chained edit (e.g. a VoiceTuning.h change before re-embedding the table). The failure shows up late as a wrong calibration or stale embedded table.",
+  "amendment": "PLAN.md Conventions, new bullet: 'Make each source edit its own call and confirm it (git diff --stat or grep) before starting a build, calibration or other slow command; never chain an edit after a slow command with && or ;. Run commands that may exceed the tool timeout in the background and poll their log.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T120010Z-calibration-nonlinearity-from-plan-did-not-converge",
+  "severity": "Medium",
+  "prevention_rule": "Check the calibration target lies on the sloped part of the transfer curve and cap iterations with an explicit failure message.",
+  "verdict": "applied",
+  "plan_refs": [
+   "D-011 (tpt_calibrate: secant, <= 8 iterations, sustain gate, reject table)",
+   "DR-CAL",
+   "S-009 Checkpoint",
+   "D-026 R-021"
+  ],
+  "rationale": "The only calibration loop is the per-note fscale pitch calibration; fscale is an exact frequency scale (monotone, slope fixed by construction), iterations are capped at 8, non-sustaining or non-converging notes reject the table and route to DR-CAL (BLOCKED.md if unresolved). There is no loudness-gain calibration through a saturating nonlinearity (K_out is a fixed constant tuned by DR-REAL rounds)."
+ },
+ {
+  "id": "L-20261009T120009Z-plate-stretch-direction-taken-from-plan",
+  "severity": "Medium",
+  "prevention_rule": "Re-derive any plan constant from the cited measurement and check its sign/direction before coding it.",
+  "verdict": "applied",
+  "plan_refs": [
+   "D-005 (constants cited to C-036, C-053)",
+   "S-007 action 1-2 (exact port of spike lipsim.cpp)",
+   "T-008",
+   "T-009",
+   "T-012",
+   "research/claims.json (verified/corroborated)"
+  ],
+  "rationale": "Model constants are not free planner numbers: the Fréour/Doc 2023 values are cited to claims and the spikes that produced the results, S-007 requires a line-by-line port, and frozen tests T-008/T-009 reproduce the published Fréour behaviour, so a wrong sign or direction fails immediately; planner extrapolations (n >= 7 rows) are covered by T-012/T-034 with DR-REGIME. No step asks the implementer to re-derive each constant, but the verification is carried by frozen tests rather than by the implementer's judgement."
+ },
+ {
+  "id": "L-20261009T120008Z-analyser-hann-window-erased-fast-decaying-modes",
+  "severity": "Medium",
+  "prevention_rule": "Use an analysis window full at t = 0 for decay measurements of impact sounds and test it on a known-T60 synthetic.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No decay or T60 measurement of impact sounds exists; the realism metrics are steady-segment harmonic levels, centroid and onset of sustained trumpet notes (D-017), and resonator modes come from a fit to impedance, not from decay analysis."
+ },
+ {
+  "id": "L-20261009T120007Z-emitted-float-literals-invalid-or-subnormal",
+  "severity": "Medium",
+  "prevention_rule": "A code generator formats every number through one function guaranteeing a valid literal and is tested by compiling.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "S-003",
+   "D-004 (embedding as a hex byte array)"
+  ],
+  "rationale": "The two generators emit no float literals into C++: gen_fingering_table.py writes integer/valve-mask rows and the resonator JSON is embedded as a hex byte array parsed at run time; JSON numbers are written with one 10-significant-digit rule (D-004) and verified by T-006/T-007/T-030."
+ },
+ {
+  "id": "L-20261009T120004Z-published-table-orientation-misread",
+  "severity": "Medium",
+  "prevention_rule": "When a check against a published table fails by a large factor but some cells match, check the table orientation first.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "tests/fixtures/freour2022_open_modes.txt"
+  ],
+  "rationale": "The reference table is the frozen fixture with an explicit header (columns Re(s), Im(s), Re(C), Im(C), one row per mode) already used by the verified spike, so no transposed paper-table orientation can arise."
+ },
+ {
+  "id": "L-20261009T120003Z-roll-correlation-metric-passed-on-legacy-engine",
+  "severity": "Medium",
+  "prevention_rule": "Run every new acceptance test against the old implementation first; a test the old code passes proves no improvement.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-001 action 4",
+   "D-018 (guards listed)",
+   "ENVIRONMENT.md verification log (red run)",
+   "T-029 docstring feasibility"
+  ],
+  "rationale": "There is no legacy engine; the equivalent baseline is the stub build, and S-001 requires every frozen C++ and Python test to fail against it except the enumerated guards (D-018), verified locally and in CI on three OSes, so no frozen test passes vacuously."
+ },
+ {
+  "id": "L-20261009T120002Z-partial-counter-counted-noise-floor",
+  "severity": "Medium",
+  "prevention_rule": "Define a peak counter against a local noise floor and validate it on a known-N sinusoid set and white noise.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No resolved-partials count metric is used; realism uses harmonic levels of harmonics 1..10 at the known f0 (D-017), validated on synthetic signals by T-010 and T-028."
+ },
+ {
+  "id": "L-20261009T092006Z-juce-code-delivered-uncompiled-again",
+  "severity": "Medium",
+  "prevention_rule": "Syntax-check JUCE code against the pinned headers before sending, or label it NOT COMPILED.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-013 Done when",
+   "S-014",
+   "D-020 plugin job",
+   "HANDOFF.md Environment (plugin builds in CI)",
+   "T-026",
+   "T-027"
+  ],
+  "rationale": "JUCE code is never handed over as chat text: it is committed and compiled by the CI plugin job on three OSes (pinned JUCE SHA) with T-026 and pluginval; in the no-sudo variant the plan states the plugin builds only in CI and S-013 is done only when those cases pass."
+ },
+ {
+  "id": "L-20261009T092004Z-claims-attributed-to-sources-not-read",
+  "severity": "Medium",
+  "prevention_rule": "Do not claim to have read a source unless fetched in the same turn; mark other framework/platform claims UNVERIFIED.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-018 actions 2-3 ('no claims beyond the evidence', 'what was not verified')",
+   "HANDOFF.md Rule 12 (knowledge items carry source, locator, confidence)",
+   "HANDOFF.md Rule 9",
+   "research/claims.json confidence"
+  ],
+  "rationale": "Every fact the implementer learns must be recorded with source, locator and confidence (Rule 12), README/REPORT may not claim beyond evidence and must list what was not verified, and the 102 planning claims carry a confidence grade with non-verified ones excluded from load-bearing use. The plan does not literally require the word UNVERIFIED, but the confidence field serves the same purpose."
+ },
+ {
+  "id": "L-20261009T092003Z-multi-file-patch-sent-as-snippets-partly-applied",
+  "severity": "Medium",
+  "prevention_rule": "After a multi-file change delivered as snippets, grep for each new write before building on it; prefer whole files.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The implementer edits the repository directly with build and frozen tests after every step (S-013 wiring is checked by T-026 parameter/state cases); changes are never delivered as snippets for a human to apply."
+ },
+ {
+  "id": "L-20261009T090805Z-generative-audio-claims-made-without-listening-or-rendering",
+  "severity": "Medium",
+  "prevention_rule": "Do not claim by-ear qualities ('never repeats', 'genuine', 'sounds like') without rendering/listening; state what was run and mark by-ear behaviour UNVERIFIED.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-018 actions 2-3",
+   "Rule 9 (HANDOFF)",
+   "T-029",
+   "G-005",
+   "G-006",
+   "A-009 (no generative imagery)"
+  ],
+  "rationale": "The instrument is a deterministic physical model (not generative), realism claims are backed by T-029 metrics from committed results (D-026 R-018) and by the human blind-listening gate G-005; S-018 forbids README claims beyond the evidence and requires REPORT.md to list what was not verified (e.g. real DAW host)."
+ },
+ {
+  "id": "L-20261009T090804Z-master-compressor-without-ceiling-in-void-choir-app",
+  "severity": "Medium",
+  "prevention_rule": "A master chain ending in a DynamicsCompressorNode needs a clipper after it, with a measured true peak <= -1 dBFS.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "D-012"
+  ],
+  "rationale": "There is no Web Audio graph or compressor; the plugin output ends in a deterministic soft safety limiter (D-012, |y| < 1) and gain is calibrated by K_out, with peaks logged in S-011."
+ },
+ {
+  "id": "L-20261009T090803Z-waveshaper-curve-reassigned-again-in-void-choir-app",
+  "severity": "Medium",
+  "prevention_rule": "Never assign WaveShaperNode.curve twice; build a new node and swap.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No Web Audio code exists in this C++/JUCE plugin."
+ },
+ {
+  "id": "L-20261009T090802Z-guitars-too-clean-overdrive-not-measured",
+  "severity": "Medium",
+  "prevention_rule": "Measure harmonic levels of a voice offline against a reference recording before calling it overdriven.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "D-017",
+   "T-029",
+   "T-022"
+  ],
+  "rationale": "There is no guitar or overdrive voice; the analogous brass-timbre claim is already measured against TinySOL harmonic levels (T-029) and ff-versus-pp harmonic gain (T-022)."
+ },
+ {
+  "id": "L-20261009T090801Z-tremolo-lead-arpeggiated-every-pick-sounded-like-synth",
+  "severity": "Medium",
+  "prevention_rule": "Keep riff clock and pick clock separate for tremolo-picked guitar synthesis, with tests on pitch changes and pick envelopes.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No guitar, pick clock or riff scheduler exists in the plan."
+ },
+ {
+  "id": "L-20261008T223321Z-fixed-a-snapshot-without-checking-the-project-repo",
+  "severity": "Medium",
+  "prevention_rule": "Before fixing a project with a named repository, clone it and compare with the files being fixed.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "S-000 action 1",
+   "HANDOFF.md restart rule"
+  ],
+  "rationale": "The implementer works only from the repository (S-000 checks out origin/gen-... into the impl branch) and never from chat-delivered snapshots, so a repo/snapshot mismatch cannot arise."
+ },
+ {
+  "id": "L-20261008T173535Z-cymbals-checked-against-own-recipe-not-realism",
+  "severity": "Medium",
+  "prevention_rule": "Check metallic/percussion voices with energy above 2 kHz and f95 against a reference recording, not by partial positions alone.",
+  "verdict": "applied",
+  "plan_refs": [
+   "D-017",
+   "T-029",
+   "T-022",
+   "D-004 (radiation fit)"
+  ],
+  "rationale": "The trumpet voice's brassiness is judged by harmonic MAD, spectral centroid ratio and pp<mf<ff ordering against real TinySOL recordings (T-029) and by ff-vs-pp high-harmonic gain (T-022), not by whether the recipe puts partials where designed."
+ },
+ {
+  "id": "L-20261008T173534Z-build-directory-vanished-between-turns",
+  "severity": "Medium",
+  "prevention_rule": "git init the work dir early, commit and keep an off-box copy after each milestone, check HEAD at the start of every turn.",
+  "verdict": "applied",
+  "plan_refs": [
+   "PLAN.md Conventions (commit and push after every step attempt)",
+   "HANDOFF.md restart rule",
+   "S-000 (idempotent; re-creates from origin)",
+   "DR-CRED (unpushed commits reported)"
+  ],
+  "rationale": "Everything including tools and scripts is committed and pushed to the remote after each step attempt; regenerated artefacts (build/, .venv, reference-data) are rebuilt by idempotent steps S-000/S-001/S-015, and a restart uses only the remote."
+ },
+ {
+  "id": "L-20261008T173531Z-editor-note-labels-diverged-from-midi-map",
+  "severity": "Medium",
+  "prevention_rule": "Define every user-visible table once and generate/test the second copy against it.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-003 (fingering table generated from fixture)",
+   "D-013 (editor draws core UiState/Layout)",
+   "D-016 and plugin/src/Parameters.h",
+   "T-026 parameters",
+   "T-011",
+   "T-033"
+  ],
+  "rationale": "The fingering table is generated from the fixture, note names/valves/partials come from core resolveNote/noteName into UiState and Layout (no editor-side note array), parameter ranges/defaults are fixed by D-016 and checked against literals by T-026 and T-011 (clamped), and the APVTS-to-field mapping is round-trip tested (T-026, T-011)."
+ },
+ {
+  "id": "L-20261007T150832Z-analysis-windows-overlapped-dropout-and-contaminated-profile",
+  "severity": "Medium",
+  "prevention_rule": "Subtract excluded intervals from every analysis window and assert no window intersects an excluded interval.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "D-017"
+  ],
+  "rationale": "Reference analysis uses single isolated TinySOL notes with one steady_segment each (the 4 resampled files are excluded whole, C-096); there are no tracker-built windows with excluded dropout intervals."
+ },
+ {
+  "id": "L-20261004T162222Z-multi-branch-edit-loop-ran-on-wrong-branch",
+  "severity": "Medium",
+  "prevention_rule": "Confirm git branch --show-current and use set -e before each branch's edits in multi-branch scripts.",
+  "verdict": "gap",
+  "plan_refs": [
+   "D-020 (ci-results orphan creation: git checkout --orphan; git rm -rf .)",
+   "S-014 action 4 (push_evidence.sh)",
+   "D-019"
+  ],
+  "rationale": "Plan scripts switch between the impl branch and the orphan branches evidence/G-004, evidence/G-005 and ci-results (push_evidence.sh, CI steps with 'git checkout --orphan ci-results; git rm -rf .'). Nothing requires set -e or a branch check, so a failed checkout followed by 'git rm -rf .' would delete or rewrite files on the wrong branch (D-020 does mandate worktrees outside the repo for evidence branches, which reduces but does not remove the risk).",
+  "amendment": "PLAN.md S-014 action 4 and D-020 (ci-results/gate-evidence): require `set -euo pipefail` in push_evidence.sh and the CI push steps, assert `[ \"$(git branch --show-current)\" = \"<target>\" ]` (or use `git -C <worktree>`) before any `git rm`/commit, and require `git status --short` empty before every checkout.",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T162220Z-beat-phase-biased-harmonic-levels",
+  "severity": "Medium",
+  "prevention_rule": "Average over an integer number of beat periods (or disable the detuned layer) before comparing harmonic levels of detuned-oscillator sources.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The voice has no detuned second oscillator; harmonic levels are measured on steady, vibrato-free renders (D-017, default vibratoDepth 0)."
+ },
+ {
+  "id": "L-20261004T162219Z-pitch-tracker-octave-errors",
+  "severity": "Medium",
+  "prevention_rule": "Validate a pitch tracker on hand-checked real material and treat isolated octave/fifth jumps as tracker errors.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-004 action 3 and Done when (YIN cross-check on 57 rows, octave error = YIN defect)",
+   "T-010 (weak-fundamental case)",
+   "D-013 (soundingPartial tracker, validated by T-012/T-020)"
+  ],
+  "rationale": "The shipped C++ YIN estimator is cross-checked against the reference simulator on every fingering row at mf, where weak-fundamental spectra occur, with an explicit rule that any octave error is a defect to fix; T-010 includes a weak-fundamental synthetic; the UI partial tracker is verified by T-012/T-020."
+ },
+ {
+  "id": "L-20261004T162218Z-unmeasured-claims-stated-as-fact",
+  "severity": "Medium",
+  "prevention_rule": "Every number, causal claim or behaviour claim in code, docs or replies cites its measurement/test/location or carries UNVERIFIED.",
+  "verdict": "applied",
+  "plan_refs": [
+   "S-008 action 1 (each VoiceTuning.h constant cites its decision)",
+   "S-018 actions 2-3",
+   "D-026 R-018 (no hand-typed numbers)",
+   "Rule 9",
+   "T-032 / EXPECTED tags"
+  ],
+  "rationale": "Constants carry decision citations, README/REPORT claims must not exceed the evidence and REPORT numbers are generated from committed results (R-018), frozen literals carry EXPECTED tags checked by T-032, and unverified items go in REPORT.md."
+ },
+ {
+  "id": "L-20261004T162216Z-dynamics-compressor-assumed-ideal",
+  "severity": "Medium",
+  "prevention_rule": "Do not use a DynamicsCompressorNode as a peak ceiling or on a subset of parallel paths; measure path latency.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No Web Audio compressor or parallel mix paths; latency is the decimator's, reported and tested by T-025."
+ },
+ {
+  "id": "L-20261004T162215Z-waveshaper-curve-reassigned",
+  "severity": "Medium",
+  "prevention_rule": "Never assign WaveShaperNode.curve twice.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No Web Audio code in this plugin."
+ },
+ {
+  "id": "L-20261004T162214Z-dsp-test-measured-wrong-quantity",
+  "severity": "Medium",
+  "prevention_rule": "Validate each DSP measurement helper on a synthetic signal with a known answer before use.",
+  "verdict": "applied",
+  "plan_refs": [
+   "T-010 (Analysis.h utilities on synthetics)",
+   "T-028 (metrics.py incl. onset ramp case)",
+   "S-004 action 3 (YIN cross-check)",
+   "T-025 (latency measurement)"
+  ],
+  "rationale": "The measurement helpers behind the frozen tests (YIN, harmonic levels, centroid, RMS, onset) have frozen synthetic known-answer tests whose expected values come from expected_values.py, and the estimator is cross-checked in S-004; the implementer's extra log tools (long-hold windows, clamp counter) are simple RMS/partial reads built on those validated helpers."
+ },
+ {
+  "id": "L-20261004T162212Z-unsatisfiable-frozen-assertions",
+  "severity": "Medium",
+  "prevention_rule": "Evaluate each assertion on a known-good reference or analytic case before freezing.",
+  "verdict": "applied",
+  "plan_refs": [
+   "tests/core/test_voice_timbre.cpp:3-4 (thresholds below reference spread)",
+   "tests/core/test_voice_articulation.cpp:4-6 (spike-derived)",
+   "T-029 docstring feasibility",
+   "research/spikes/expected_values.py",
+   "D-018 (red run)",
+   "HANDOFF.md Freeze / TEST_CHALLENGE.md"
+  ],
+  "rationale": "Frozen tests cite spike or analytic evidence for their thresholds (tongue/release spikes, reference spread, feasibility in the T-029 docstring), expected literals are generated, the suite is red-verified against stubs, and the TEST_CHALLENGE amendment path exists for a test that proves unsatisfiable."
+ },
+ {
+  "id": "L-20261004T162210Z-user-premise-dismissed-instead-of-asked",
+  "severity": "Medium",
+  "prevention_rule": "When a user's description conflicts with the code, state what the code does and ask which meaning is intended before calling the premise wrong.",
+  "verdict": "gap",
+  "plan_refs": [
+   "GATES.md (allowed responses)",
+   "DR-DEFAULT",
+   "G-004",
+   "G-005",
+   "G-006"
+  ],
+  "rationale": "At G-004/G-005/G-006 the human gives free-text replies (`issues: <list>`, `iterate: <notes>`, `proceed-with-rescope: <text>`) that may describe the system in terms that conflict with what the code does; the plan lists only allowed response forms and DR-DEFAULT tells the implementer to pick a reversible option and continue, with no instruction to ask for clarification or not to contradict the human.",
+  "amendment": "GATES.md preamble, after the 'response is accepted in either of two forms' list: 'A response that is not one of the allowed forms, or that describes the instrument in a way that conflicts with what the code does, is not acted on. Restate in the next GATE file what the code does and ask which meaning is intended; never record that the human is wrong.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T161503Z-audacity-commands-coded-from-memory",
+  "severity": "Medium",
+  "prevention_rule": "Before shipping code calling an external API you cannot execute, fetch its reference, record each command as a K item and mark unconfirmed ones UNVERIFIED.",
+  "verdict": "applied",
+  "plan_refs": [
+   "research/claims.json C-009..C-025, C-097 (pluginval, runners, action inputs)",
+   "knowledge/K-*.md (generated from claims)",
+   "D-020 (pinned actions)",
+   "plan/ENVIRONMENT.md verification log (plan-verify run 37748754510)",
+   "HANDOFF.md Rule 12"
+  ],
+  "rationale": "The external command sets (pluginval, auval, dumpbin, action inputs, Zenodo API, runner images) are recorded as claims with sources and confidence and were exercised in the plan-verify CI run; new CI facts learned during implementation must be recorded as knowledge items with locator and confidence (Rule 12). The one flow that cannot run before approval, rc-artifacts, is covered separately under the dry-run lesson."
+ },
+ {
+  "id": "L-20261004T161500Z-fade-in-onset-clipped-by-single-threshold",
+  "severity": "Medium",
+  "prevention_rule": "Use two thresholds (confirm and extend) for onset/offset detectors and test on a slow-fade synthetic.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "T-028",
+   "D-017"
+  ],
+  "rationale": "onset_ms measures the rise from the first -40 dBFS frame to within 6 dB of the peak on isolated notes (a note-attack time, not a side/track boundary finder) and T-028 already includes a slower-ramp synthetic; no fades of seconds or boundary detection exist."
+ },
+ {
+  "id": "L-20261004T153000Z-index-regen-skipped-after-crash-fix",
+  "severity": "Medium",
+  "prevention_rule": "After fixing a script crash re-run it to completion and verify the generated file's invariant on a fresh clone of the pushed repository.",
+  "verdict": "gap",
+  "plan_refs": [
+   "S-KNOW actions 2 and Done when",
+   "G-003"
+  ],
+  "rationale": "S-KNOW runs build_index.py and check_knowledge_schema.py in the working clone and its Done-when only says both INDEX.md files list every pushed ID; it never asks to verify that on a fresh clone of the pushed repositories, so an index that was not regenerated after a crash/retry (the push-rejected retry loop) could go unnoticed.",
+  "amendment": "PLAN.md S-KNOW action 2, new last bullet: 'After pushing, `git clone` each target repository into a new directory and check there that every pushed L-/K- ID appears in INDEX.md and that the number of entry files equals the INDEX.md \"Entries:\" figure; if a script crashed or a push was retried, re-run it to completion first.' Mirror it in Done when.",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T150900Z-local-head-diverged-from-api-pushed-remote",
+  "severity": "Medium",
+  "prevention_rule": "After a push by a non-git mechanism, fetch and reset to the remote tip before further commits.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "PLAN.md Conventions",
+   "D-020"
+  ],
+  "rationale": "All pushes are ordinary `git push` (CI jobs push only to separate ci-results/evidence branches and the implementer never builds on them), so no API/bundle push can leave the local impl branch diverged."
+ },
+ {
+  "id": "L-20261004T150800Z-bulk-delete-removed-tracked-file",
+  "severity": "Medium",
+  "prevention_rule": "Run git status --short on a path before bulk-deleting it and delete only untracked entries.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No step instructs bulk deletion of a mixed tracked/untracked directory; the only removals are regenerable build outputs, the downloaded archive, and the intended `git rm -rf .` in a fresh orphan branch (covered by the branch-check lesson)."
+ }
+]

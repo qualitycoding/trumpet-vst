@@ -1,0 +1,716 @@
+[
+ {
+  "id": "L-20261004T150700Z-scripted-str-replace-silently-no-opped",
+  "severity": "Medium",
+  "prevention_rule": "After any scripted search-and-replace edit, diff/grep the file to confirm the change landed; prefer a loud-failing replace primitive.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md:57-65 (Conventions)",
+   "S-009 action 2 (tpt_calibrate rewrites data/trumpet_resonators.json in place)"
+  ],
+  "rationale": "Scripted edits will occur (tpt_calibrate/generate_table rewriting JSON, appending status notes, editing ci.yml/README via bash). No plan item requires a post-edit diff/grep; the Conventions only require commit, log, push and the freeze check, none of which detects a no-op edit. (Judged against the committed plan; an uncommitted PLAN.md Conventions bullet 'Edits and slow commands' from a sibling amendment now partly covers it.)",
+  "amendment": "PLAN.md Conventions, 'After every step attempt': add item 0 'Before committing, run `git diff --stat` and confirm every file the step was meant to change appears; for any scripted search-and-replace, assert the pattern matched (count >= 1) or use the Edit tool; never trust a script's own success message.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T150600Z-git-push-pack-transport-failed-reproducibly",
+  "severity": "Medium",
+  "prevention_rule": "If git push fails with a server-side unpack/index-pack error across varied retries, stop retrying and push through the GitHub REST Git Data API.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md S-000 action 3 (git push --dry-run)",
+   "plan/DECISIONS.md DR-CRED, DR-DEFAULT"
+  ],
+  "rationale": "Every step ends with a push and the sandbox is the same kind of proxied no-sudo environment. S-000's `git push --dry-run` does not exercise pack transport, DR-CRED covers only 401/403, and no rule covers a persistent unpack failure, so the implementer must improvise (DR-DEFAULT would apply, but nothing names the REST fallback).",
+  "amendment": "DECISIONS.md decision-rules table: add `DR-PUSH (any step) | git push fails with 'remote unpack failed' / 'index-pack failed' / 'did not receive expected object' on 2 retries with different content | Do not keep retrying. Confirm a few-KB test push to a scratch branch works, then push the commits through `gh api` Git Data (blobs, trees, commits, PATCH refs/heads/<branch>), verify with `git ls-remote`, log in DEVIATIONS.md.` Reference it from S-000 'On failure'.",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261004T102010Z-plan-controls-not-traced-to-delivery",
+  "severity": "Medium",
+  "prevention_rule": "Before closing implementation, map every plan step and pre-mortem control to a file or test that delivers it and list unmapped ones in DEVIATIONS.md.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md S-018 action 3",
+   "plan/TRACEABILITY.md",
+   "premortem/RISK_REGISTER.md"
+  ],
+  "rationale": "TRACEABILITY maps SC to tests to steps, and S-018's REPORT lists tests, SC table, deviations and 'open risks'. Nothing requires mapping each mitigated risk/D-026 control (R-014..R-037: TSan/ASan steps, append-only ci-results, persist-credentials:false, MAINTENANCE.md, tokens-revoked, etc.) to the file or CI step that delivers it, nor listing unmapped ones in DEVIATIONS.md. S-002's Done-when checks only some of them.",
+  "amendment": "PLAN.md S-018 action 3: add 'Control-delivery table in REPORT.md: for every R-### with status mitigated/partly mitigated and every D-026 item, the file:line, CI step or test that delivers it (verified by grep/ls .github/workflows); each unmapped control gets a section in DEVIATIONS.md.' Add to Done when.",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261004T102009Z-stale-test-counts-in-reports",
+  "severity": "Medium",
+  "prevention_rule": "Produce every test count in a report from pytest --collect-only (and ctest -N) in the same turn; never carry counts over.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md S-018 action 2-3",
+   "plan/PLAN.md:21-34 (typed counts)",
+   "plan/DECISIONS.md D-026 R-018"
+  ],
+  "rationale": "R-018 generates only realism tables from summarize.py. S-018 writes README Status and REPORT 'tests by ID with status' with no rule that counts come from a collect-only/ctest -N run in that step (HANDOFF restates Rule 9 only for [computational, publication], not the software profile). The plan's own typed counts (PLAN.md header, ENVIRONMENT red counts) are the pattern the lesson warns about.",
+  "amendment": "PLAN.md S-018 action 2/3 and Conventions: 'Every test count in README.md, REPORT.md, EXECUTION_LOG.md and checkpoint notes is pasted from `ctest --test-dir build -N`, `pytest --collect-only -q | tail -1` and `git rev-list --count` run in the same step; do not copy counts from plan/ENVIRONMENT.md or earlier text.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T102008Z-duplicate-pitch-modules-shipped",
+  "severity": "Medium",
+  "prevention_rule": "Before adding a module, grep the package for one with the same responsibility and extend it; name any unused duplicate in DEVIATIONS.md.",
+  "verdict": "gap",
+  "plan_refs": [
+   "core/include/tpt/*.h (frozen one-header-per-responsibility)",
+   "plan/PLAN.md S-004, S-009, S-015 (new tools/render targets)"
+  ],
+  "rationale": "Frozen headers and stubs assign each responsibility a file, which makes duplicates unlikely for core, but the plan adds new files (tools/render/f0.cpp, calibrate.cpp, main.cpp, snapshot_ui.cpp, tools/realism/summarize.py, private helpers in core/src) with no grep-before-add rule or unused-module check at S-018.",
+  "amendment": "PLAN.md Conventions: 'Before creating a new source file or Python module, grep core/, plugin/ and tools/ for an existing one with the same responsibility and extend it. At S-018 list any module not referenced by another file or target in DEVIATIONS.md.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T102007Z-sandbox-reset-lost-working-tree",
+  "severity": "Medium",
+  "prevention_rule": "At the start of each turn continuing a run, verify the working tree with git rev-parse HEAD, restore from the remote if it fails, and refresh any exported bundle after each push.",
+  "verdict": "gap",
+  "plan_refs": [
+   "HANDOFF.md:107-108 (restart rule)",
+   "plan/PLAN.md Conventions step 5 (push after every step)",
+   "plan/PLAN.md S-000 action 1"
+  ],
+  "rationale": "Pushing after every step and the restart rule ('use only the remote repository') cover the data. But no instruction says to verify the tree at the start of a continuing session or how to restore it (clone, checkout impl branch, reinstall cmake/ninja/venv which live outside the repo under $HOME); S-000 assumes the repo is already present. (Judged against the committed plan; an uncommitted PLAN.md 'Session start and pushes' bullet now covers most of it.)",
+  "amendment": "HANDOFF.md 'Restart' bullet and PLAN.md S-000: 'At the start of every session that continues a run, run `git -C <repo> rev-parse HEAD`; if it fails or the tools in $HOME/tools or the .venv are missing, clone origin, check out the impl branch, re-run S-000 steps 2 and 5, then `git ls-remote origin` and compare with the last logged commit.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T102004Z-checkpoint-rotated-corrupt-file",
+  "severity": "Medium",
+  "prevention_rule": "In any rotate-to-backup routine, validate the file being rotated and test a save that follows a corrupted current file.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The plan contains no save routine that rotates current to .bak; tpt_calibrate/generate_table rewrite the table in place under git, and the plugin state is host-owned (D-015), so the trigger cannot arise."
+ },
+ {
+  "id": "L-20261004T102002Z-perf-test-budget-not-derived",
+  "severity": "Medium",
+  "prevention_rule": "Derive every performance budget from a measured reference or a stated requirement, and time only the public API meant to serve that workload.",
+  "verdict": "applied",
+  "plan_refs": [
+   "tests/core/test_perf.cpp:1-3",
+   "A-012",
+   "plan/TRACEABILITY.md SC-7",
+   "DR-PERF"
+  ],
+  "rationale": "Frozen T-024b's 0.05 RTF budget is the stated requirement A-012 (cited in the file header) and it times only the public TrumpetVoice::process at 48 kHz/128; DR-PERF forbids relaxing it."
+ },
+ {
+  "id": "L-20261004T102001Z-recalled-literature-facts-wrong",
+  "severity": "Medium",
+  "prevention_rule": "Retrieve any citation year, venue, constant or default from the primary source in the same turn and record its locator; otherwise label UNVERIFIED.",
+  "verdict": "applied",
+  "plan_refs": [
+   "research/claims.json (102 claims with confidence levels)",
+   "plan/PLAN.md S-008 action 1 (each constant cites its decision)",
+   "D-021",
+   "plan/PLAN.md S-RETRO action 3"
+  ],
+  "rationale": "Facts and constants are held as claims with sources and verified/corroborated/inferred status (inferred and single-source ones are non-load-bearing). VoiceTuning.h constants cite decisions; THIRD_PARTY_NOTICES versions and URLs come from pinned ENVIRONMENT/D-021 entries; new K-items require source and locator via Appendix B."
+ },
+ {
+  "id": "L-20261009T234122Z-checkpoint-state-stale-after-implementation-and-main-not-default",
+  "severity": "Low",
+  "prevention_rule": "At the last implementation step update state.json and verify `git ls-remote --symref origin HEAD` names the branch released.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/PLAN.md Conventions step 3 (.checkpoints/impl-state.json after every step)",
+   "D-019",
+   "G-002"
+  ],
+  "rationale": "The implementer's own checkpoint file is appended after every step, so it cannot go stale; a new main is never published (merge/default-branch change needs G-002, D-019), so the symref half cannot arise."
+ },
+ {
+  "id": "L-20261009T234110Z-test-script-make-clean-deleted-the-log-directory",
+  "severity": "Low",
+  "prevention_rule": "Write evidence logs outside any directory the run cleans, and say where the file survives.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/PLAN.md Conventions 'Directories' (logs/ committed)",
+   "S-001 actions 2-3 (logs/S-001-red-*.txt)",
+   "S-009 (logs/S-009-long-hold.md)"
+  ],
+  "rationale": "All step evidence goes to the committed top-level logs/ directory, not under build/; no plan step runs make clean or rm -rf on build/ or logs/."
+ },
+ {
+  "id": "L-20261009T234106Z-dash-has-no-brace-expansion-pipestatus-or-time-keyword",
+  "severity": "Low",
+  "prevention_rule": "Run any command using braces, arrays, PIPESTATUS, time, [[ ]] or process substitution via bash -c or a bash-shebang script.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/ENVIRONMENT.md (no-sudo setup, POSIX only)",
+   "plan/PLAN.md Conventions"
+  ],
+  "rationale": "The plan's own shell lines are POSIX (verified by grep for {a,b}, [[, <(, PIPESTATUS), but nothing tells the implementer, who types many ad-hoc commands in the sandbox tool, that /bin/sh may be dash. Only frozen scripts have a bash shebang.",
+  "amendment": "PLAN.md Conventions: add 'The sandbox /bin/sh is dash: run any command with brace expansion, arrays, PIPESTATUS, `time`, [[ ]] or <( ) as `bash -c '...'`, or put it in a script with a #!/usr/bin/env bash shebang; list a directory tree after creating it with mkdir.' (Already being added to the working tree by a sibling amendment.)",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T232011Z-licence-text-not-obtainable-offline-pointer-left",
+  "severity": "Low",
+  "prevention_rule": "At intake list every licence file the plan needs and confirm its full text is obtainable in the sandbox; otherwise ask the owner before S-001.",
+  "verdict": "applied",
+  "plan_refs": [
+   "LICENSE (11357 bytes, Apache-2.0 committed)",
+   "plan/DECISIONS.md D-025 staging (licence texts from the JUCE source tree, fallback download, in CI)",
+   "D-021"
+  ],
+  "rationale": "The only licence file the sandbox must create (LICENSE) already exists in full; THIRD_PARTY_NOTICES.md is a table; the full third-party texts are staged by the CI rc-artifacts job from the fetched JUCE/nlohmann trees with a CI-side download fallback, where network is available."
+ },
+ {
+  "id": "L-20261009T232010Z-built-binaries-committed-no-gitignore",
+  "severity": "Low",
+  "prevention_rule": "Before a commit that adds a new directory, read git status --short and add files by name or ignore build output first.",
+  "verdict": "gap",
+  "plan_refs": [
+   ".gitignore (build/, renders/, *.wav, *.raw, __pycache__)",
+   "plan/PLAN.md Conventions item 1 ('commit the work')",
+   "S-004/S-009/S-015 (new tools/render targets)"
+  ],
+  "rationale": ".gitignore already covers build/, so out-of-tree CMake builds are safe, but the plan says only 'commit the work' and never requires staging by name or reading git status/diff --cached; a in-place build of a tool (g++ in S-004 yin_crosscheck, a helper compiled with `g++ -O2`) can still land binaries or logs.",
+  "amendment": "PLAN.md Conventions 'After every step attempt' item 1: 'stage by explicit file list (`git add <paths>`), never `git add -A`/`.`; read `git status --short` and `git diff --cached --stat` and confirm no *.log, *.o, *.elf, build/, dist/ or other-run file is staged; after editing .gitignore run `git check-ignore -v` on every file a test or manifest reads.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T232009Z-checkpoint-state-stale-after-implementation",
+  "severity": "Low",
+  "prevention_rule": "After each implementation step regenerate the checkpoint state and append a line to EXECUTION_LOG.md, ideally with one command.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/PLAN.md Conventions 'After every step attempt' items 2-3",
+   "HANDOFF.md 'Execution log'"
+  ],
+  "rationale": "Every step attempt appends to EXECUTION_LOG.md and .checkpoints/impl-state.json in a separate 'S-0xx: record' commit, so the checkpoint cannot lag the commits."
+ },
+ {
+  "id": "L-20261009T193605Z-premature-checkpoint-subphase",
+  "severity": "Low",
+  "prevention_rule": "Change 'subphase' only in the checkpoint call made at the start of the step it names.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The implementer's checkpoint .checkpoints/impl-state.json is an append-only array of {step,status,commit,utc} records with no subphase field and no tools/checkpoint.py; the trigger cannot arise."
+ },
+ {
+  "id": "L-20261009T192614Z-newton-krylov-with-loose-forcing-and-anderson-did-not-help",
+  "severity": "Low",
+  "prevention_rule": "Record an acceleration attempt on a stalled Picard iteration as a negative result and do not claim existence/non-existence from its failure.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No step uses a Picard iteration: the flow solve is closed form (D-006), loop lengths use bisection and calibration uses a secant iteration capped at 8 steps with DR-CAL as the failure path."
+ },
+ {
+  "id": "L-20261009T192611Z-tracked-file-count-typed-in-a-prompt-was-wrong",
+  "severity": "Low",
+  "prevention_rule": "Compute every count quoted in a report or prompt from the repository at that moment; never type one.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md:21-34 (typed counts)",
+   "S-018 action 2-3",
+   "S-RETRO checkpoint 'counts of lessons and knowledge items'",
+   "S-001 action 4 (counts compared with ENVIRONMENT.md)"
+  ],
+  "rationale": "Counts appear in README/REPORT.md (tests, deviations), the S-RETRO/G-003 evidence (number of lessons/knowledge items) and gate messages; no plan item requires generating them from git ls-files / ctest -N / pytest --collect-only at write time.",
+  "amendment": "PLAN.md Conventions: 'Any number of files, commits, tests, lessons or knowledge items in a report, gate file, checkpoint or session message is pasted from a command run in the same step (`git ls-files | wc -l`, `git rev-list --count`, `ctest -N`, `pytest --collect-only -q`), never typed.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T192610Z-gitignore-log-pattern-left-manifest-logs-untracked",
+  "severity": "Low",
+  "prevention_rule": "After editing .gitignore, run git ls-files against every file a manifest names and fail on any missing one.",
+  "verdict": "gap",
+  "plan_refs": [
+   ".gitignore (*.wav, *.raw, logs/*.raw, reference-data/, renders/)",
+   "plan/PLAN.md S-002 action 1",
+   "D-020 freeze job (fresh checkout)"
+  ],
+  "rationale": "S-002 edits .gitignore with extension patterns and the plan relies on manifests (FROZEN_MANIFEST, gates/G-004/SHA256SUMS, REFERENCE_DATA.md, logs named in REPORT.md). The CI freeze job on a fresh checkout would catch a missing frozen file, but not a missing log or non-frozen file named by a report; no check compares named files with git ls-files.",
+  "amendment": "PLAN.md S-002 action 1 and S-018 action 1: 'After editing .gitignore and before S-018 closes, run `git check-ignore -v` on every path named in tests/FROZEN_MANIFEST.sha256, gates/*/SHA256SUMS, REPORT.md and EXECUTION_LOG.md; it must print nothing, and each named file must appear in `git ls-files`.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T192607Z-patch-assumed-applied-mushy-width-default-was-0-02",
+  "severity": "Low",
+  "prevention_rule": "Print the effective parameter values at the start of every study run and compare with the intended values.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md S-009, S-011 checkpoint 'final constants', S-016 actions 1-2 (logs/S-016-round-<k>.md)",
+   "DR-REAL (max 5 rounds)"
+  ],
+  "rationale": "S-016 allows at most 5 calibration rounds, each changing non-frozen constants in VoiceTuning.h and then running T-029; round logs record metrics and worst notes but not the effective constants, and no step prints them at run start, so a not-applied edit wastes a bounded round or mis-attributes results.",
+  "amendment": "PLAN.md S-009/S-011/S-016: 'tpt_calibrate, tpt_render and compare_tinysol print the effective VoiceTuning constants (or their SHA-256 and the values changed this round) as the first lines of each log; each logs/S-016-round-<k>.md starts with a table of the constants changed and their effective values, checked against the intended values before the run proceeds.'",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261009T192200Z-verified-label-on-a-claim-whose-cited-sources-covered-only-half",
+  "severity": "Low",
+  "prevention_rule": "Give every sentence-level assertion its own entry and status; mark verified only when the cited source contains the assertion.",
+  "verdict": "gap",
+  "plan_refs": [
+   "research/claims.json (102 short single-assertion claims, reviewed in R5)",
+   "plan/PLAN.md S-RETRO action 3",
+   "plan/PROTOCOL_EXTRACTS.md:77 (confidence field)"
+  ],
+  "rationale": "The planning claims are short (none over 300 characters) and were adversarially reviewed, so the research side is acceptable, but the implementer writes new knowledge items in S-RETRO and the plan gives no one-assertion-per-item / verified-only-if-source-states-it rule; S-RETRO's Done-when checks links and schema only.",
+  "amendment": "PLAN.md S-RETRO action 3 (and the Conventions 'Lessons and knowledge' bullet): 'One K-item per factual assertion; confidence `verified` only if the cited source (with locator) contains that assertion; a limitation and its workaround are two items.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T192100Z-tool-call-came-back-not-run-and-the-turn-ended-with-no-response-requested",
+  "severity": "Low",
+  "prevention_rule": "When a tool result says NOT RUN or is empty, re-issue once or tell the person; never end a turn with 'No response requested' while a request is open.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/GATES.md:15-17 (session ends with a status message at a gate)",
+   "HANDOFF.md 'Halt and deviation protocol'"
+  ],
+  "rationale": "The implementer runs long autonomous sessions; the plan defines what the closing message must say only when halted at a gate. A not-run or empty tool result is not addressed, so a session could end silently mid-step.",
+  "amendment": "HANDOFF.md 'Halt and deviation protocol': 'If a tool result says it did not run or is empty, re-issue the call once; if it still fails, log it in EXECUTION_LOG.md and tell the human what did not run. Every session ends with a message naming the current step, its status and the next action, never an empty reply.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T191500Z-gitignore-model-pattern-excluded-the-tiny-test-fixtures",
+  "severity": "Low",
+  "prevention_rule": "After editing .gitignore, run git check-ignore -v on every fixture path the tests read.",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "tests/fixtures/*.txt|json (tracked)",
+   "plan/DECISIONS.md D-020 (T-031 bans WAV in tree)"
+  ],
+  "rationale": "Fixtures are frozen, already tracked and are .txt/.json; the ignore patterns (*.wav, *.raw, reference-data/, renders/) match none, and T-031 forbids audio files in the tree, so no test-read fixture can be swallowed by an extension rule."
+ },
+ {
+  "id": "L-20261009T161500Z-work-and-build-directories-vanished-between-turns",
+  "severity": "Low",
+  "prevention_rule": "Commit a bootstrap script that clones pinned deps and configures the test targets; run it first in every turn needing a build.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/ENVIRONMENT.md 'Sandbox without sudo or pip' (commands in markdown only)",
+   "plan/PLAN.md S-000 action 2, S-001 action 1",
+   "HANDOFF.md restart rule"
+  ],
+  "rationale": "Setup exists only as copy-paste commands in ENVIRONMENT.md and is re-done through S-000/S-001; there is no committed idempotent script, and nothing says to run it at the start of each build turn. FetchContent pins make rebuilds reproducible, so the cost is repeated manual work, not a blocker.",
+  "amendment": "PLAN.md S-000 action 2: 'Create tools/bootstrap_env.sh (bash shebang, idempotent) containing the plan/ENVIRONMENT.md install commands for the detected variant plus `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release` with -DTPT_BUILD_PLUGIN=OFF if needed; run it as the first command of every session that needs a build.' Add the file to S-000 Outputs.",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T161300Z-stale-compile-unverified-statements-and-frozen-headers-on-retired-tests",
+  "severity": "Low",
+  "prevention_rule": "When a status changes edit every row that states it; mark a retired test 'RETIRED - not built' and note it in FROZEN.md in the same commit.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/GATES.md G-004 'correct-chart', G-005 'override-intonation' (amendment 2E.4)",
+   "plan/TRACEABILITY.md",
+   "tests/FROZEN_MANIFEST.sha256"
+  ],
+  "rationale": "The plan expects amendments that replace frozen tests (T-003/T-007/T-012, T-014, T-012b/T-026 additions) and keeps status tables in PLAN.md header, ENVIRONMENT verification log and TRACEABILITY, but gives no convention for retired tests or for updating every status row; there is no tests/FROZEN.md.",
+  "amendment": "HANDOFF.md 'Freeze' and GATES.md G-004/G-005 amendment branches: 'An amendment that supersedes a test removes it from tests/CMakeLists.txt and FROZEN_MANIFEST.sha256 or replaces its FROZEN header with `RETIRED - not built`, and in the same commit updates plan/TRACEABILITY.md, the PLAN.md status counts and the ENVIRONMENT.md red-run figures; afterwards `grep -rn FROZEN tests/` lists only live files.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T160800Z-naming-rule-first-draft-failed-14-of-217-oracle-cells",
+  "severity": "Low",
+  "prevention_rule": "Validate any derived naming or tuning rule against every cell of the published table, in a committed script, before it enters the plan or a frozen test.",
+  "verdict": "applied",
+  "plan_refs": [
+   "D-002 partial rule (C-056)",
+   "T-003 (tests/core/test_fingering.cpp, every fixture row)",
+   "research/spikes/expected_values.py",
+   "research/spikes/fingerings_draft.txt"
+  ],
+  "rationale": "The one derived fingering rule (round(48 + 12*log2 n - lowering) == written) is checked on every row of the 56-row fixture by T-003 and by the committed generator/--check script, and the table is generated rather than hand-typed (S-003); noteName and equal-temperament values are likewise produced by expected_values.py."
+ },
+ {
+  "id": "L-20261009T160300Z-single-core-sandbox-builds-exceeded-tool-limit-background-jobs-died",
+  "severity": "Low",
+  "prevention_rule": "Start any build that may exceed 250 s with setsid nohup ... < /dev/null & and poll the log, or build one target per call with timeout 280.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/ENVIRONMENT.md 'Build and test commands'",
+   "plan/PLAN.md S-001 action 1, S-002 (TSan/ASan are CI-only)",
+   "plan/DECISIONS.md D-022"
+  ],
+  "rationale": "Plugin and sanitizer builds are CI-only in the no-sudo sandbox, which limits exposure, but S-001 builds Catch2/json/core in the sandbox and a sudo-enabled run may build JUCE locally; the plan never tells the implementer how to run builds that exceed the tool timeout, so a killed foreground build is possible (an incremental rebuild is the workaround).",
+  "amendment": "PLAN.md Conventions 'Build': 'A build or ctest run that may exceed the tool timeout is started as `setsid nohup <cmd> > logs/<step>/<name>.log 2>&1 < /dev/null &` and its log polled; otherwise build one target per call under `timeout 280`.' (A sibling amendment already adds this to the working tree.)",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T152201Z-the-checkpoint-state-was-never-updated-after-planning-and-th",
+  "severity": "Low",
+  "prevention_rule": "Update state.json at the end of every implementation step and append to an execution log with step, commit, time and run id.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/PLAN.md Conventions 'After every step attempt' items 2-4",
+   "HANDOFF.md 'Execution log'"
+  ],
+  "rationale": "Each step attempt appends to EXECUTION_LOG.md (UTC, step, attempt, status, commit, note) and to .checkpoints/impl-state.json in its own 'S-0xx: record' commit, then pushes; the log carries the commit, so the final state is always current."
+ },
+ {
+  "id": "L-20261009T151401Z-a-draft-pr-could-not-be-marked-ready-through-the-rest-api",
+  "severity": "Low",
+  "prevention_rule": "Check the returned PR object's draft field after any state-change request and use the GraphQL mutation for draft changes.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The plan creates no pull requests; work goes to the impl-* branch and any merge to main is the human's decision under G-002 (D-019)."
+ },
+ {
+  "id": "L-20261009T150801Z-the-plan-s-ci-workflow-template-failed-to-parse-because-gha-",
+  "severity": "Low",
+  "prevention_rule": "Parse delivered workflow files with a YAML loader and, if available, actionlint; prefer block-style mappings for lines containing ${{ }}.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md S-002 actions 1-5 and 'On failure'",
+   "plan/DECISIONS.md D-020 (if: ${{ !cancelled() }} ... conditions)",
+   "tests/python/test_supply_chain.py (text checks only)"
+  ],
+  "rationale": "ci.yml is authored in S-002 with many `${{ }}` expressions in `if:` and `with:` lines (D-020) and is first parsed by GitHub after the push; T-031 only does substring/regex checks. A parse error costs a CI round trip and, since CI is shared, blocks pushes (one commit at a time).",
+  "amendment": "PLAN.md S-002 action 5, before the push: 'Parse every .github/workflows/*.yml locally (`.venv/bin/python -c \"import yaml,sys; [yaml.safe_load(open(f)) for f in sys.argv[1:]]\" .github/workflows/*.yml`, installing pyyaml in the venv without adding it to the lock, and actionlint from its release binary if reachable); quote or block-style any value containing `${{ }}` together with a colon.' Repeat at S-014 and S-017 when jobs are added.",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T150701Z-actions-logs-and-artifacts-were-unreachable-from-the-sandbox",
+  "severity": "Low",
+  "prevention_rule": "Check log reachability in the environment spike; if blocked, scope write permission to a diagnostics step only and run it only on a named branch.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/DECISIONS.md D-020 'Failure reporting' (::error:: annotations readable through the checks API)",
+   "research/spikes/plan_verify_ci.md:16 (logs readable via gh run view --log)",
+   "D-020 permissions (contents: read top level, write only on realism and gate-evidence jobs)",
+   "plan/PLAN.md S-002 action 1"
+  ],
+  "rationale": "Reachability was checked in the plan-verify spike (logs readable) and the plan still builds in a fallback: every job emits ::error:: annotations retrievable through api.github.com, and write scopes are confined to the two jobs that push; no workflow is granted broad write for diagnostics."
+ },
+ {
+  "id": "L-20261009T140014Z-the-addendum-s-gate-id-g-003-collided-with-the-plan-s-own-g-",
+  "severity": "Low",
+  "prevention_rule": "Namespace gate IDs by source or allocate the next free number; the ID checker covers gates.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/GATES.md (G-001 not applicable, G-002..G-006 distinct)",
+   "plan/PROTOCOL_EXTRACTS.md (G-003 = lessons push)"
+  ],
+  "rationale": "The protocol's G-003 keeps its protocol meaning (S-KNOW), and the plan's own gates were allocated as the next free numbers G-004, G-005, G-006 with G-002 for external actions; no ID has two meanings."
+ },
+ {
+  "id": "L-20261009T140011Z-test-category-counts-in-the-traceability-report-were-estimat",
+  "severity": "Low",
+  "prevention_rule": "Generate every count in a report from the test run and never type it.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md:21-34 (category counts table)",
+   "plan/TRACEABILITY.md",
+   "S-018 action 3 (REPORT.md tests by ID)"
+  ],
+  "rationale": "Category counts (22/22/5/1/1/5/18) are typed in the plan header and ENVIRONMENT.md; S-018's REPORT lists 'tests by ID with status' without requiring the table and totals to be generated from ctest/pytest output.",
+  "amendment": "PLAN.md S-018 action 3: 'Generate the REPORT.md test table and category counts with a script (`tools/report_tests.py`) from `ctest --test-dir build -N`, JUnit output (`ctest --output-junit`, `pytest --junitxml`) and the T-IDs; the script exits non-zero if a count in README.md/REPORT.md differs from the generated data.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T140010Z-parsing-slips-found-only-by-the-implementation-compact-frame",
+  "severity": "Low",
+  "prevention_rule": "When a spec cites a rule with variants (padding, compact, optional, may), add a test for each variant at the freeze.",
+  "verdict": "gap",
+  "plan_refs": [
+   "premortem/RISK_REGISTER.md R-014, R-016, R-022, R-033, R-035 (claim 'T-026 amendment')",
+   "plan/DECISIONS.md D-026, D-014",
+   "tests/plugin/test_plugin.cpp:89-104",
+   "tests/core/test_state.cpp"
+  ],
+  "rationale": "The risk register records 'mitigated' controls whose tests were promised as frozen amendments (heldValves present/absent/invalid in the state blob, non-NUL-terminated blob under ASan, CC11 stale-value/transport-start reset, CC68 legato, unsupported host rate), but tests/plugin/test_plugin.cpp and test_state.cpp contain none of these cases (the junk blob is NUL-terminated, the exact R-016 root cause). The implementer builds these behaviours with no frozen check, and the ASan step re-runs only the existing cases.",
+  "amendment": "Either (a) a planning amendment (protocol 2E.4) adds the cases to tests/plugin/test_plugin.cpp and test_state.cpp (heldValves round trip + invalid value ignored, sized non-terminated blob, CC11=0 then transport start restores level, CC68 within 20 ms legato, rate 8000/384000 Hz silence + unsupportedRate) and re-freezes the manifest; or (b) PLAN.md S-013 Done-when: 'the implementer adds non-frozen tests in tests/impl/ (own CMake target, run by the plugin job and ASan step) for each D-026/D-014 variant listed in R-014, R-016, R-022, R-033, R-035'.",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261009T140009Z-the-red-verification-classifier-mis-read-junit-failure-and-e",
+  "severity": "Low",
+  "prevention_rule": "Check that classified counts sum to the collected total and reason-code each test in red verification.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md S-001 action 4",
+   "plan/DECISIONS.md D-018",
+   "plan/ENVIRONMENT.md 'Verification log'"
+  ],
+  "rationale": "S-001 compares the red run with recorded counts and states the expected reasons in prose, but does not require that failed + errored + skipped + passed equals the collected total or that each non-guard test is reason-coded (NotImplemented vs other); a mis-classified junit file would pass the step.",
+  "amendment": "PLAN.md S-001 action 4: 'Produce logs/S-001-red-summary.md from `ctest -N`, `ctest --output-junit` and `pytest --junitxml`: per test its status and reason code (NotImplemented, missing output, skipped T-029, guard pass); the script exits non-zero if classified != collected or any non-guard test is red for another reason.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T140008Z-a-blanket-git-add-a-committed-emulator-log-files-again",
+  "severity": "Low",
+  "prevention_rule": "Stage by explicit file list and read git diff --cached --stat before every commit; add .gitignore entries when a tool first writes a log.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md Conventions item 1 ('commit the work')",
+   "plan/PLAN.md S-001 (logs/ committed), S-009/S-011/S-016 (tools writing logs)"
+  ],
+  "rationale": "The plan prescribes the commit message but not how files are staged; calibration, render and TSan/ASan runs write logs and raw files into the tree, and logs/ is deliberately committed, so a blanket add can sweep in unwanted files (only *.wav, *.raw and build/ are ignored).",
+  "amendment": "PLAN.md Conventions 'After every step attempt' item 1: 'stage by explicit file list (`git add <paths>`), never `git add -A`/`.`; read `git status --short` and `git diff --cached --stat` and confirm no *.log, *.o, build/, dist/ or other-run file is staged; add a .gitignore entry the first time a tool writes a log into the tree.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T140001Z-the-emulator-s-cli-batch-mode-does-not-print-the-pty-path-so",
+  "severity": "Low",
+  "prevention_rule": "For a third-party tool driven from tests, check at the first spike that its interface exposes every handle needed, and prefer in-process APIs.",
+  "verdict": "applied",
+  "plan_refs": [
+   "research/spikes/plan_verify_ci.md (pluginval strictness 10 and auval run end to end on 3 OSes)",
+   "tests/scripts/run_pluginval.sh",
+   "plan/DECISIONS.md D-020 plugin job"
+  ],
+  "rationale": "The only third-party tools driven by script are pluginval and auval; both were exercised end to end in the plan-verify spike with exit-code results, and the plugin's own host-facing handles (UiState, parameters, state) are in-process APIs tested directly by T-026."
+ },
+ {
+  "id": "L-20261009T123012Z-status-counts-typed-and-commit-count-misreported",
+  "severity": "Low",
+  "prevention_rule": "Generate every count in a report from a command and paste its output; do not type numbers from memory.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md S-018 action 2-3, S-RETRO checkpoint, EXECUTION_LOG.md",
+   "plan/PLAN.md:21-34"
+  ],
+  "rationale": "README Status, REPORT.md and gate files will state test, commit and deviation counts; no plan item requires them to be pasted from `git rev-list --count`, `ctest -N` or `pytest --collect-only -q` run in the same step.",
+  "amendment": "PLAN.md Conventions: 'Any count in README.md, REPORT.md, GATE-*.md, checkpoints or session messages (tests, commits, files, deviations, lessons) is the pasted output of a command run in the same step (`git rev-list --count origin/gen-20261007T145241Z-trumpet-vst-plan..HEAD`, `ctest -N`, `pytest --collect-only -q | tail -1`), never typed or carried over.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T123011Z-red-verification-matched-wrong-exception",
+  "severity": "Low",
+  "prevention_rule": "In red verification treat any passing test as a defect; use dedicated exception classes, never builtins a stub may raise.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/DECISIONS.md D-018 (stubs throw tpt::NotImplemented; guards enumerated)",
+   "core/include/tpt/Errors.h:9-10",
+   "plan/ENVIRONMENT.md 'Verification log' (48/48 red)",
+   "plan/PLAN.md S-001 action 4"
+  ],
+  "rationale": "Stubs throw a dedicated tpt::NotImplemented (a std::logic_error, sibling of std::invalid_argument, so CHECK_THROWS_AS on std::invalid_argument/ParseError cannot be satisfied by a stub), the red run was verified on all suites with every pass listed as a deliberate guard (D-018), and S-001 re-checks the pattern."
+ },
+ {
+  "id": "L-20261009T123009Z-dash-brace-expansion-created-literal-directory",
+  "severity": "Low",
+  "prevention_rule": "In the sandbox use a for loop or bash -c instead of brace expansion and list the tree after creating it.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md Conventions 'Directories' (mkdir -p logs)",
+   "S-014 (renders/G-004), S-016 (renders/G-005)"
+  ],
+  "rationale": "The plan creates several directories (logs/, renders/G-004, renders/G-005, gates/G-004, ../trumpet-evidence) and the implementer will script more; there is no instruction to avoid brace expansion under dash or to list the tree afterwards.",
+  "amendment": "PLAN.md Conventions (same bullet as the dash rule): 'Create directory trees with a for loop or `bash -c 'mkdir -p ...{a,b}'`; run `ls` afterwards and confirm no name contains a brace or comma.' (A sibling amendment already adds the dash note to the working tree.)",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T123008Z-oracle-spike-assumed-library-api",
+  "severity": "Low",
+  "prevention_rule": "Before writing an oracle spike, print dir() of the module and the signature of the call to be used.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No spike or test uses a third-party library as an oracle for expected values: expected values come from the project's own reference code (lipsim.cpp, tmm_trumpet.py, expected_values.py) and the S-004 cross-check compares against that code."
+ },
+ {
+  "id": "L-20261009T123006Z-performance-budget-docstring-wrong-multiple",
+  "severity": "Low",
+  "prevention_rule": "State the real derivation or multiple of a budget in the test, computed from the measurement in the same script.",
+  "verdict": "applied",
+  "plan_refs": [
+   "tests/python/test_realism_vs_tinysol.py:4-13 (T-029 docstring cites the measured value behind each threshold)",
+   "tests/core/test_perf.cpp:3 (T-024b budget = A-012)"
+  ],
+  "rationale": "No frozen test claims a safety multiple that is untrue: each T-029 threshold cites measured ranges (C-073, C-085, C-094, C-089, C-096) and the only perf budget is the stated requirement A-012, with DR-PERF forbidding its relaxation."
+ },
+ {
+  "id": "L-20261009T120006Z-plate-table-too-short-for-mode-budget",
+  "severity": "Low",
+  "prevention_rule": "Choose a search bound from the required count and assert the row count after generation.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/DECISIONS.md D-004 (14 modes per state, f_max 1800 Hz)",
+   "tests/python/test_resonator_tools.py:89 (>= 13 modes)",
+   "tests/core/test_resonator_table.cpp T-007 (embedded table >= 13 modes)"
+  ],
+  "rationale": "The one generated table whose size depends on a frequency bound (14 modes per state from a 1800 Hz fit) is checked by frozen assertions on the generated JSON (T-030 open state >= 13 modes, T-007 on the embedded table, parser limits in D-004), so a short table fails S-005/S-006 rather than passing silently."
+ },
+ {
+  "id": "L-20261009T092005Z-assumed-visual-studio-2022-log-said-18",
+  "severity": "Low",
+  "prevention_rule": "Read the compiler path and version from the person's log before naming a Visual Studio version or generator.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/ENVIRONMENT.md 'Windows (owner build ...)'",
+   "plan/GATES.md G-006 'If G-002 was denied: local build instructions'",
+   "D-025 owner alternative"
+  ],
+  "rationale": "ENVIRONMENT.md and G-006 give the owner Visual Studio 2026 / generator 'Visual Studio 18 2026' commands as the local build path. VS 2026 is verified only on the CI runner (windows-2025); the owner's installed Visual Studio is never established (A-014 says only Windows 11 + REAPER), and nothing tells the implementer to read it from the owner's output.",
+  "amendment": "GATES.md G-006 evidence and PLAN.md S-018 (MAINTENANCE.md): 'When pointing the owner to a local Windows build, first ask them to paste `cmake --version` and the generator list (`cmake --help`, section Generators) or their configure log; name the Visual Studio version and generator from that output, and quote it in the reply.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T090806Z-built-new-app-without-checking-the-named-project-repo",
+  "severity": "Low",
+  "prevention_rule": "When the user's notes list a project repository matching the request, clone it first and say whether the work is for it.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The plan targets one named repository, qualitycoding/trumpet-vst, which S-000 checks out; the implementer starts from the pinned generation branch rather than choosing a project from memory notes."
+ },
+ {
+  "id": "L-20261009T120018Z-pat-in-chat-did-not-grant-repo-access-in-session",
+  "severity": "Low",
+  "prevention_rule": "Try add_repo first; never use or store a pasted token when that works, and tell the person to revoke tokens pasted in chat.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/PLAN.md S-000 action 1 (GH_TOKEN from harness, never a pasted token)",
+   "HANDOFF.md 'Credentials' and 'Open human actions'",
+   "R-012, R-027",
+   "DR-CRED",
+   "plan/ASSUMPTIONS.md A-020"
+  ],
+  "rationale": "The implementer's credential is a separate harness-provided GH_TOKEN, pasted tokens are explicitly excluded and the human is asked to revoke them (tokens-revoked reply required before G-005); the schema check's secret scan covers lessons and knowledge items."
+ },
+ {
+  "id": "L-20261009T120016Z-blanket-git-add-swept-in-foreign-file",
+  "severity": "Low",
+  "prevention_rule": "Stage by explicit file list and read git diff --cached --stat before every commit.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md Conventions item 1",
+   "plan/PLAN.md S-RETRO/S-KNOW (copy into clones outside the repo)"
+  ],
+  "rationale": "The branch holds planning artefacts, spikes and other agents' files; the plan prescribes commit messages only, so a blanket add can stage foreign or generated files.",
+  "amendment": "PLAN.md Conventions 'After every step attempt' item 1: 'stage by explicit file list (`git add <paths>`), never `git add -A`/`.`; read `git status --short` and `git diff --cached --stat` before every commit and confirm every staged path is one this step wrote.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261009T120013Z-background-builds-killed-when-shell-call-ended",
+  "severity": "Low",
+  "prevention_rule": "Start long jobs with setsid nohup and redirected stdin, poll the log, and wrap bash-only syntax in bash -c.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/ENVIRONMENT.md 'Build and test commands'",
+   "plan/PLAN.md S-001, S-009 (tpt_calibrate over every note, 20 s long hold), S-016"
+  ],
+  "rationale": "Besides builds, tpt_calibrate (secant iterations over ~56 notes at 96 kHz), --long-hold (20 s per note) and the T-029 realism run are minutes-long local jobs; the plan gives no instruction for running them detached, so a tool timeout can kill them mid-run (rerun is possible, but a killed calibrate may leave a half-written table).",
+  "amendment": "PLAN.md Conventions (slow-command bullet): 'Start calibration, long-hold, T-029 and any build over about 4 minutes as `setsid nohup <cmd> > logs/<step>/<name>.log 2>&1 < /dev/null &`, poll the log; tpt_calibrate writes to a temporary name and renames after success.' (A sibling amendment adds the setsid rule to the working tree.)",
+  "gap_severity": "Medium"
+ },
+ {
+  "id": "L-20261008T223321Z-git-add-all-committed-build-directories",
+  "severity": "Low",
+  "prevention_rule": "Create the .gitignore before the first git add -A in a directory where a build will run, and read git status --short before committing.",
+  "verdict": "applied",
+  "plan_refs": [
+   ".gitignore (build/, .venv, reference-data/, renders/, *.wav, *.raw)",
+   "plan/PLAN.md S-002 action 1 (.gitignore additions)"
+  ],
+  "rationale": "The .gitignore already exists on the plan branch with build/ and the other generated paths before any implementation commit, so the 'no .gitignore yet' trigger cannot arise; the remaining staging-by-name discipline is covered by the sibling gap L-20261009T140008Z."
+ },
+ {
+  "id": "L-20261008T173533Z-readme-names-files-not-in-the-zip",
+  "severity": "Low",
+  "prevention_rule": "Before sending an archive, check every file name a packaged document mentions against the archive listing and delivered files.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The plan delivers no zip/archive with a packaged README: outputs are git branches, CI artifacts that contain notices (no README) and the fallback git bundle; README.md lives in the repository and S-018 checks its claims."
+ },
+ {
+  "id": "L-20261004T162223Z-bash-only-syntax-in-dash",
+  "severity": "Low",
+  "prevention_rule": "In the sandbox bash tool avoid bash-only syntax or wrap the command in bash -c; write intermediate results to temporary files.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md Conventions",
+   "plan/ENVIRONMENT.md"
+  ],
+  "rationale": "The plan's own commands are POSIX-safe, but it never tells the implementer that the tool's /bin/sh may be dash, and the steps involve piping test output with exit-status handling (`|| true`, tee/PIPESTATUS) that tempts bash-only forms.",
+  "amendment": "Same amendment as L-20261009T234106Z: PLAN.md Conventions 'The sandbox /bin/sh is dash: run process substitution, [[ ]], arrays, PIPESTATUS, brace expansion and `time` via `bash -c`.' (A sibling amendment already adds it to the working tree.)",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T162221Z-fit-range-chosen-before-reference-bandwidth",
+  "severity": "Low",
+  "prevention_rule": "Measure the reference's spectral centroid and band-energy distribution before choosing a fitting range; fit up to the frequency below which about 95% of its energy lies.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No model or filter is fitted to a reference recording: the bore is fitted to measured impedance poles (data limit f_max 1800 Hz, D-004), the radiation filter to an analytic transfer function, and the TinySOL comparison uses harmonic/centroid metrics whose reference spread was measured before freezing (C-073)."
+ },
+ {
+  "id": "L-20261004T161505Z-guessed-raw-github-path-404",
+  "severity": "Low",
+  "prevention_rule": "Locate a file in a third-party repository (tree listing, code search or pinned tag) before fetching it by raw path; prefer the user's version tag.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/ENVIRONMENT.md 'Toolchain' (pinned release URLs, JUCE @ be29c81, verified)",
+   "plan/DECISIONS.md DR-DEP (codeload.github.com/<repo>/tar.gz/<sha>)",
+   "D-025 (VST3 licence located with `find` in the fetched tree)",
+   "S-015 (Zenodo record 3685367)"
+  ],
+  "rationale": "Every third-party fetch is by a pinned release asset, commit SHA or record ID that the planner already exercised, and a file inside a fetched tree (licence texts) is found with find rather than guessed."
+ },
+ {
+  "id": "L-20261004T161504Z-new-repo-pushed-without-license",
+  "severity": "Low",
+  "prevention_rule": "On the first push to a new repository include a LICENSE (owner's standard licence).",
+  "verdict": "not-applicable",
+  "plan_refs": [
+   "LICENSE (Apache-2.0), NOTICE, plan/ASSUMPTIONS.md A-016"
+  ],
+  "rationale": "The implementer pushes to the existing qualitycoding/trumpet-vst, which already has LICENSE and NOTICE on main; the knowledge and Lessons repositories also exist, so no first push to a new repository occurs."
+ },
+ {
+  "id": "L-20261004T161502Z-unauthenticated-github-api-call",
+  "severity": "Low",
+  "prevention_rule": "Send every api.github.com request with the task's token and check the HTTP status before parsing JSON.",
+  "verdict": "applied",
+  "plan_refs": [
+   "plan/PLAN.md S-000 action 3 (gh api / gh auth status with GH_TOKEN)",
+   "HANDOFF.md 'Credentials'",
+   "plan/PLAN.md S-017 (gh api .../artifacts)"
+  ],
+  "rationale": "All GitHub API calls use `gh api`, which authenticates from GH_TOKEN and fails on non-2xx; the only unauthenticated curl calls (S-000 step 4) just print an HTTP status for reachability and parse no JSON."
+ },
+ {
+  "id": "L-20261004T161501Z-synthetic-ground-truth-misprinted",
+  "severity": "Low",
+  "prevention_rule": "Compare detector output with ground truth numerically in code with a tolerance, and format times with divmod.",
+  "verdict": "applied",
+  "plan_refs": [
+   "tests/core/test_analysis.cpp (T-010)",
+   "tests/python/test_realism_metrics.py (T-028)",
+   "plan/PLAN.md S-004 action 3 (yin_crosscheck.py compares nearest partial with mf_partial in code)",
+   "research/spikes/expected_values.py"
+  ],
+  "rationale": "Detector and metric checks are assertions with tolerances against generated expected values, and the S-004 cross-check is a script that computes the agreement count and writes the log, not an eyeballed table."
+ },
+ {
+  "id": "L-20261004T151000Z-parameter-range-set-without-attainable-range-check",
+  "severity": "Low",
+  "prevention_rule": "Before setting a user-facing range for a target fed to a directed sampler, check the attainable range for the actual configuration.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "The plan has no directed or weighted sampler fed by a user-facing target; the analogous question for the physical model (do parameter extremes stay on the partial) is covered by T-034 and DR-RANGE."
+ },
+ {
+  "id": "L-20261004T102006Z-placeholder-arithmetic-left-in-code",
+  "severity": "Low",
+  "prevention_rule": "Write the intended expression directly and grep the staged diff for multiply-by-zero, TODO and FIXME before committing.",
+  "verdict": "gap",
+  "plan_refs": [
+   "plan/PLAN.md Conventions (commit procedure)",
+   "S-007/S-008 (ported formulas, trims all 1.0)"
+  ],
+  "rationale": "DSP code will contain provisional expressions (per-partial trims initialised to 1.0, placeholder gains) and the plan has no pre-commit scan for `* 0`, TODO or FIXME; only schema_check.py runs before commits, and only on lessons and knowledge.",
+  "amendment": "PLAN.md Conventions 'After every step attempt', before the commit: 'Run `git diff --cached | grep -nE \"^\\+.*(\\* ?0\\b|TODO|FIXME)\"`; every hit is either removed or justified in DEVIATIONS.md.'",
+  "gap_severity": "Low"
+ },
+ {
+  "id": "L-20261004T102005Z-calibration-targets-before-attainable-range",
+  "severity": "Low",
+  "prevention_rule": "Estimate the attainable score range for each configuration before choosing calibration targets and print it beside the targets.",
+  "verdict": "not-applicable",
+  "plan_refs": [],
+  "rationale": "No generator with an unknown reachable score range exists; calibration targets are fixed (0.5 cent tuning, sustain gate) and the realism thresholds were checked against the reference spread and the spikes before freezing (T-029 docstring, lesson L-20261007T150400Z)."
+ }
+]

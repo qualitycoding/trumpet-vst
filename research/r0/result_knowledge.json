@@ -1,0 +1,1340 @@
+[
+ {
+  "id": "K-20261009T160123Z-pr-draft",
+  "statement": "A draft pull request was taken out of draft with the GraphQL mutation markPullRequestReadyForReview; the REST API did not convert it.",
+  "verdict": "irrelevant",
+  "applies_to_version": "GitHub API, observed 2026-09-27",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "GitHub draft-PR conversion; plan opens no pull requests (merge to main is the human's, G-002)."
+ },
+ {
+  "id": "K-20261008T173542Z-juce-linux-build-dependencies-8-0-15",
+  "statement": "JUCE 8.0.15's Linux dependency page lists 16 Ubuntu packages for building: libasound2-dev, libjack-jackd2-dev, ladspa-sdk, libcurl4-openssl-dev, libfreetype-dev, libfontconfig1-dev, libx11-dev, libxco",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "JUCE 8.0.15",
+  "version_match": false,
+  "plan_refs": [
+   "ENVIRONMENT.md Setup commands (Linux apt list)",
+   "C-006",
+   "D-022"
+  ],
+  "rationale": "JUCE 8.0.15 Linux dependency list is the superset the plan's apt list is derived from (plan drops webkit via JUCE_WEB_BROWSER=0 and glu/mesa-common-dev, adds libegl-dev/libgl-dev/libxi-dev from the 9.0.3 doc, C-006). Agrees; but applies to 8.0.15, not 9.0.3, so it is not a source for the pin."
+ },
+ {
+  "id": "K-20261008T223321Z-juce-vst3-linux-build-14-packages",
+  "statement": "On Ubuntu 24.04 x86-64 (g++ 13.3, CMake 3.28.3) the VST3 target of a JUCE plugin built and linked with JUCE 7.0.12 and with JUCE 8.0.15 after installing these 14 packages (libasound2-dev, libfontconfi",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "JUCE 7.0.12 and 8.0.15; Ubuntu 24.04 container",
+  "version_match": false,
+  "plan_refs": [
+   "ENVIRONMENT.md Setup commands",
+   "plugin/CMakeLists.txt JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0",
+   "D-022"
+  ],
+  "rationale": "Confirms that webkit/curl packages are unnecessary when JUCE_WEB_BROWSER=0 and JUCE_USE_CURL=0, as the plan sets (plugin/CMakeLists.txt). Plan list is a superset (jack-dev, ladspa, curl-dev, egl, gl, xi, still needed/harmless; CI verified on 9.0.3). Version 7.0.12/8.0.15 on Ubuntu 24.04, not 9.0.3 (9.x needs libegl-dev, K-2 predates that), so not a source."
+ },
+ {
+  "id": "K-20261009T193009Z-codeberg-allowlist-live-proxy-can-be-stale",
+  "statement": "Adding a host (codeberg.org) to the user's network egress allowlist did not reach an already-running sandbox: the configuration listed it but the container's live proxy still denied it until a fresh c",
+  "verdict": "relevant-new",
+  "applies_to_version": "Claude Code cloud sandbox, 2026-10-09",
+  "version_match": null,
+  "plan_refs": [
+   "S-000 step 4 (host reachability)",
+   "DR-DEP"
+  ],
+  "rationale": "An egress allowlist change does not reach a running sandbox; the live proxy keeps denying until a fresh container/session is started.",
+  "amendment": "S-000 on-failure text: if a needed host is denied, say that allowlist changes take effect only in a new session and that the proxy status endpoint shows live state.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261009T092104Z-ableton-computer-midi-keyboard-layout",
+  "statement": "Ableton Live's Computer MIDI Keyboard (toggle with M, or the keyboard icon at the top right) maps A S D F G H J K L to white keys and W E T Y U O P to black keys, Z and X shift the octave down and up,",
+  "verdict": "irrelevant",
+  "applies_to_version": "Live 11 and 12 (sources dated 2019-2025)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Ableton Live computer keyboard; plan's test host is REAPER (A-014)."
+ },
+ {
+  "id": "K-20261009T193016Z-lead-and-rhythm-guitar-have-no-open-model",
+  "statement": "As of the 2026-09-28 research note, lead and rhythm guitar separation exists only in server-side commercial products (Moises, 2024; MVSep, March 2026) and no open-weight model was found, so the propos",
+  "verdict": "irrelevant",
+  "applies_to_version": "state of the field at 2026-09-28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193002Z-var-grid-generation-ttm-monitor-poisson",
+  "statement": "The rebuilt solver generates its adaptive grid with Thompson-Thames-Mastin Poisson control driven by a monitor function, solved as a Picard iteration with frozen metrics and a direct sparse solve, not",
+  "verdict": "irrelevant",
+  "applies_to_version": "var-simulation commit 819736a",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193504Z-proxy-injected-git-config",
+  "statement": "The sandbox injects GIT_CONFIG_* variables and GH_TOKEN/GITHUB_TOKEN; with these set, git fetch can report 'Invalid username or token' for a valid personal token until they are unset and an explicit a",
+  "verdict": "relevant-new",
+  "applies_to_version": "sandbox as of 2026-09",
+  "version_match": null,
+  "plan_refs": [
+   "S-000 step 1 (gh auth setup-git)",
+   "ENVIRONMENT.md Credentials",
+   "DR-CRED"
+  ],
+  "rationale": "The sandbox injects GIT_CONFIG_* and GH_TOKEN/GITHUB_TOKEN; git fetch/push can then fail with 'Invalid username or token' for a valid token, which DR-CRED would misread as a revoked token.",
+  "amendment": "Add to S-000/DR-CRED: before declaring a credential failure, retry once with GIT_CONFIG_COUNT/GIT_CONFIG_* unset and an explicit credential helper/askpass (never printing or writing the token); record the result.",
+  "severity": "Medium"
+ },
+ {
+  "id": "K-20261004T102023Z-github-access-from-sandbox",
+  "statement": "In this Claude sandbox, unauthenticated api.github.com returned HTTP 403, but github.com pages, raw.githubusercontent.com and anonymous git clone or ls-remote of public repositories worked; a personal",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "sandbox observed 2026-09-19 to 2026-10-04",
+  "version_match": null,
+  "plan_refs": [
+   "S-000 step 4",
+   "DR-DEP (codeload mirror)",
+   "ENVIRONMENT.md Credentials"
+  ],
+  "rationale": "Unauthenticated api.github.com blocked while github.com, raw and codeload clone work: consistent with S-000 host probes and DR-DEP; plan uses gh auth setup-git rather than extraheader. Environmental observation."
+ },
+ {
+  "id": "K-20261004T162306Z-git-push-and-contents-api-worked",
+  "statement": "On 2026-10-04, git push over smart HTTP with a token supplied per command (git -c http.extraheader with a Basic x-access-token header) succeeded from the sandbox on four pushes to qualitycoding/atmosp",
+  "verdict": "relevant-new",
+  "applies_to_version": "sandbox and GitHub, observed 2026-10-04",
+  "version_match": null,
+  "plan_refs": [
+   "S-000",
+   "DR-DEFAULT"
+  ],
+  "rationale": "Per-command git -c http.extraheader token push worked and the contents API created single-file commits; shows a working fallback when credential helpers fail. Observed on another repo, 2026-10-04.",
+  "amendment": "Optionally note in ENVIRONMENT.md credentials: if the credential helper fails, a per-command http.extraheader (token from the env, never expanded on the command line or written to .git/config) is an accepted fallback.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261004T162305Z-github-io-unreachable-from-sandbox",
+  "statement": "From the Claude sandbox, *.github.io (GitHub Pages sites) is blocked: requests return HTTP 403 with x-deny-reason: host_not_allowed. A Pages site cannot be loaded or checked from the sandbox; its buil",
+  "verdict": "irrelevant",
+  "applies_to_version": "sandbox observed 2026-10-04",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "GitHub Pages hosts; plan uses no Pages."
+ },
+ {
+  "id": "K-20261009T193502Z-git-proxy-repo-authorization",
+  "statement": "The git proxy refuses git push, and the gh api client refuses requests, for repositories not in the session's authorized repository set, regardless of the token supplied.",
+  "verdict": "relevant-new",
+  "applies_to_version": "sandbox as of 2026-10-09",
+  "version_match": null,
+  "plan_refs": [
+   "S-000 step 3",
+   "DR-CRED",
+   "S-KNOW"
+  ],
+  "rationale": "The git proxy and gh api refuse repositories outside the session's authorized set regardless of token; fetch may work while push is refused. Same gap as K-12: DR-CRED's remedy (new credential) does not address it.",
+  "amendment": "Same amendment as K-12: DR-CRED distinguishes proxy repository-authorisation refusals (push dry-run in S-000 for each repo) from token errors; remedy is attaching the repo or delivering files for manual upload.",
+  "severity": "Medium"
+ },
+ {
+  "id": "K-20261009T120115Z-github-repo-access-is-per-session",
+  "statement": "In this Claude Code environment, GitHub repositories are reachable only after the session attaches them with the add_repo tool (access 'push' for pushes); direct API calls with a user-supplied persona",
+  "verdict": "relevant-new",
+  "applies_to_version": "observed 2026-10-09",
+  "version_match": null,
+  "plan_refs": [
+   "S-000 step 3",
+   "DR-CRED",
+   "ENVIRONMENT.md Credentials",
+   "S-KNOW"
+  ],
+  "rationale": "In this Claude Code environment repos are reachable only after the session attaches them (add_repo); a 403 'GitHub access to this repository is not enabled for this session' is not a token problem. DR-CRED asks for a new credential, which would be the wrong remedy; also relevant for qualitycoding/knowledge and Lessons in S-KNOW.",
+  "amendment": "In S-000/DR-CRED add: if the error text says repository access is not enabled for the session, write BLOCKED.md asking for the repository to be attached (trumpet-vst, knowledge, Lessons) instead of a new token; probe all three repos at S-000.",
+  "severity": "Medium"
+ },
+ {
+  "id": "K-20261004T151600Z-github-rest-api-bypasses-broken-pack-transport",
+  "statement": "When git push (smart-HTTP pack transfer) to a GitHub repository fails reproducibly with a server-side index-pack/unpack error regardless of branch, content size, or credential, GitHub's REST Git Data ",
+  "verdict": "relevant-new",
+  "applies_to_version": "observed 2026-10-04, GitHub REST API v3 (application/vnd.github+json)",
+  "version_match": null,
+  "plan_refs": [
+   "S-000",
+   "DR-DEFAULT",
+   "D-019"
+  ],
+  "rationale": "When git push fails reproducibly with a server-side index-pack/unpack error, the REST Git Data API (blobs/trees/commits/refs) can create commits. The plan has no fallback for transport failures other than DR-CRED (401/403).",
+  "amendment": "Add a one-line rule next to DR-CRED: on reproducible unpack/index-pack push errors, try the Git Data API (skip git-ignored files); try plain git push first.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261009T160120Z-actions-blob-unreachable",
+  "statement": "From the cloud sandbox, GitHub Actions job logs and artifacts (served from an Azure blob host) were not reachable, while api.github.com and the Contents API were; the workaround used was a CI step tha",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "sandbox and GitHub, observed 2026-09-26",
+  "version_match": null,
+  "plan_refs": [
+   "D-020 Failure reporting (::error:: annotations)",
+   "D-020 ci-results branch"
+  ],
+  "rationale": "Job logs/artifacts being unreachable from the sandbox while api.github.com works is exactly why D-020 requires per-job ::error:: annotations (readable through the checks API) and pushes realism results to ci-results. Plan already applies the workaround (annotations plus branch). Environmental observation (sandbox, 2026-09-26), no software version."
+ },
+ {
+  "id": "K-20261009T193006Z-var-sparse-direct-solve-cost-on-one-core",
+  "statement": "On a 1-core, 3 GB sandbox the SuperLU direct solve of the coupled (omega, psi) block costs about N^2.9 per sweep, and N = 601 does not fit in memory because of the LU fill.",
+  "verdict": "irrelevant",
+  "applies_to_version": "scipy SuperLU as installed in the sandbox, 2026-10",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T162309Z-reference-recording-facts",
+  "statement": "power-synth-guitar-buzz_G_.wav (the Void Choir guitar reference) is a 16 s, 44.1 kHz, 16-bit stereo riff spanning B-flat 1 to D-sharp 3 (58-155 Hz), not a single G note. Its first 2 s are a stable E2 ",
+  "verdict": "irrelevant",
+  "applies_to_version": "the file as uploaded 2026-09-19 (2,822,518 bytes)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Guitar reference recording facts."
+ },
+ {
+  "id": "K-20261004T151300Z-numpy-array-vs-scalar-ufunc-rounding-differs",
+  "statement": "On the same numpy version and machine, numpy's array-vectorized (SIMD-dispatched) log2/power ufuncs round the last bit differently from numpy's own scalar-path evaluation of the mathematically identic",
+  "verdict": "relevant-new",
+  "applies_to_version": "numpy 2.4.4",
+  "version_match": false,
+  "plan_refs": [
+   "T-009 reference sim",
+   "T-007",
+   "tests/python",
+   "D-026 R-021 (cross-OS tolerance 2 cents)"
+  ],
+  "rationale": "numpy array-path and scalar-path log2/pow can differ in the last bit, so numpy-generated reference data cannot be reproduced bit-for-bit by C++/libm near thresholds. Plan compares with tolerances (Approx margins, 2-cent cross-OS rule), so risk is only for any new exact-equality or rounding-threshold comparison (e.g. round(12*log2 n) on the Python side vs C++). Item is for numpy 2.4.4; plan pins 2.5.3.",
+  "amendment": "Add to DEVIATIONS/S-005/S-006 guidance: never assert bitwise equality between numpy-generated values and C++ values; avoid rounding-boundary inputs (use exact fixture integers).",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261009T193018Z-orchestral-strings-separate-as-a-section",
+  "statement": "Orchestral strings separate as a section rather than as individual instruments (MVSep Strings is reported at SDR 5.41 dB on MVSep's set); the largest orchestral training set, SynthSOD (47 h rendered w",
+  "verdict": "irrelevant",
+  "applies_to_version": "as reported in research/EXTENDED_STEMS.md, 2026-09-28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193510Z-t036-gauge-components",
+  "statement": "For k=1, Lx=2, Ly=2 (N=32) the support graph linking the staircase projector and the TV-normalised tent product has 4 connected components of 8 states each, so any sign-gauge search must seed every co",
+  "verdict": "irrelevant",
+  "applies_to_version": "tvtorus @ 88bb74d",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T102022Z-composite-score-attainable-range",
+  "statement": "With a harmonic 11-partial 1/h timbre and default weights, 1500 random chords per size gave composite scores (median, p95, max) of 1.88/2.29/3.06 for 2 notes, 1.28/1.80/2.98 for 3 notes and 0.81/1.29/",
+  "verdict": "irrelevant",
+  "applies_to_version": "consonance 0.1.0, default Weights, harmonic_timbre(11, 1.0)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T162313Z-beat-period-window-for-detuned-sources",
+  "statement": "To compare harmonic levels of a voice with two oscillators detuned by c cents, analyse exactly one beat period, 1/(f0*(2^(c/1200)-1)), with a rectangular window, so every beat phase is weighted equall",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Detuned-oscillator harmonic analysis."
+ },
+ {
+  "id": "K-20261008T173540Z-general-midi-drum-key-map-subset",
+  "statement": "General MIDI channel-10 key map, as listed on Wikipedia: 37 Side Stick, 38 Acoustic Snare, 40 Electric Snare (or Rimshot), 41 Low Floor Tom, 42 Closed Hi-hat, 43 High Floor Tom, 45 Low Tom, 46 Open Hi",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T140031Z-pip-tools-hash-locking-build-backend",
+  "statement": "pip-tools 7.5.1 produces hash-locked requirements that install with `pip --require-hashes` on Python 3.12.3. The build backend (setuptools) is not in the lock unless listed: without it `pip install -e",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "pip-tools 7.5.1; setuptools 84.0.0",
+  "version_match": false,
+  "plan_refs": [
+   "D-026 R-020 requirements.hashes.txt",
+   "ENVIRONMENT.md Python 3.12.3",
+   "tools/requirements.lock"
+  ],
+  "rationale": "pip-tools hash-locking with pip --require-hashes works on Python 3.12.3 (same as plan); the lock is a full transitive pin set so no setuptools/build backend is needed because no editable install is used. Plan does not pin pip-tools or setuptools, so only the Python version matches."
+ },
+ {
+  "id": "K-20261009T164300Z-juce-8-0-15-combobox-has-no-gettext-editor-accessor",
+  "statement": "In JUCE 8.0.15, juce::ComboBox has no getCurrentTextEditor member; compile error in EdoControl.h was resolved by testing combo.hasKeyboardFocus (true) to detect that the editable text field has focus.",
+  "verdict": "irrelevant",
+  "applies_to_version": "JUCE 8.0.15",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "juce::ComboBox editor accessor; the plan's editor has 9 rotary knobs and 2 toggles, no ComboBox (D-013/D-016)."
+ },
+ {
+  "id": "K-20261009T160122Z-token-scopes",
+  "statement": "With fine-grained personal access tokens, repository Contents, Pull requests, Actions, Pages, Workflows and environment administration are separate permissions, and pushing any file under .github/work",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "GitHub fine-grained PATs, observed 2026-09-26 to 2026-09-27",
+  "version_match": null,
+  "plan_refs": [
+   "ENVIRONMENT.md Credentials",
+   "S-000 step 3",
+   "S-002"
+  ],
+  "rationale": "Fine-grained PAT needs separate Workflows permission to push .github/workflows/*; plan's credential list already requires Contents + Workflows read/write and S-000 notes a S-002 rejection means missing Workflows permission. GitHub behaviour observed 2026-09, no version."
+ },
+ {
+  "id": "K-20261004T162304Z-github-pages-index-entry-file",
+  "statement": "GitHub Pages uses index.html as a site's entry file: it must sit at the top level of the publishing source (branch and folder), and the name is case-sensitive. With the source set to main and /, index",
+  "verdict": "irrelevant",
+  "applies_to_version": "GitHub Docs, accessed 2026-10-04",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "GitHub Pages entry file; no Pages in plan."
+ },
+ {
+  "id": "K-20261009T163800Z-ups-and-downs-xen-wiki-permalink-is-a-redirect",
+  "statement": "The Xenharmonic Wiki permalink index.php?title=Kite%27s_ups_and_downs_notation&oldid=237152 fetched on 2026-10-09 returned a redirect page titled 'Ups and downs notation' that points to 'Kite's ups an",
+  "verdict": "irrelevant",
+  "applies_to_version": "oldid 237152 as fetched on 2026-10-09",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234208Z-rack-voltage-standards-triggers-and-levels",
+  "statement": "Voltage standards: audio \\u00b15 V; triggers 10 V/1 ms; trigger inputs use a Schmitt trigger with low \\u22480.1 V and high \\u22481\\u20132 V (current page: process(x, 0.1f, 1.f)); 1 V/oct; non-finite o",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234210Z-rack-schmitt-trigger-states-and-first-sample",
+  "statement": "rack::dsp::TSchmittTrigger<float>::process(in, low=0, high=1) has states LOW/HIGH/UNINITIALIZED, starts UNINITIALIZED, fires only on LOW\\u2192HIGH.",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193013Z-mvsep-mega-53-release-and-resource-needs",
+  "statement": "MVSep Mega 53 is ZFTurbo's BS-RoFormer that separates 53 stems, including mandolin, banjo, violin, viola, cello and strings, published as a release asset of Music-Source-Separation-Training v1.0.21; t",
+  "verdict": "irrelevant",
+  "applies_to_version": "MSST release v1.0.21 (20 April, year not shown on the page; the research note gives 2026)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120114Z-engine-damping-law-parameters-are-estimates",
+  "statement": "The oildrumkit modal engine damps mode f with sigma(f) = sigma0 + pi eta f + sigma2 f^2 (nepers per second, amplitude e^(-sigma t), T60 = 6.91 / sigma) using sigma0 = 0.5, eta = 0.0035 and sigma2 = 1e",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit docs/PLAN.md A4 at 35fbfea",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120112Z-steel-loss-factors-in-patents",
+  "statement": "US 9,546,296 gives loss factors of 0.001 for 1 mm uncoated steel (the 'clang') and 0.01 for the 'bong' case, measured by the Oberst method (ASTM E756-05); it contains no figures for welded or bolted j",
+  "verdict": "irrelevant",
+  "applies_to_version": "US 9,546,296",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193506Z-sparse-projector-memory-limit",
+  "statement": "In the container used, constructing the sparse vertex-projector product for k=4, Lx=2, Ly=2 (N=42065) failed with a 3.29 GiB MemoryError after 1297 CPU-s, and N=8256 (k=2, 3x2) needed about 4.3 GB res",
+  "verdict": "irrelevant",
+  "applies_to_version": "tvtorus @ 4c8003b; container memory limit of 2026-09-22",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T164400Z-juce-fontoptions-exists-on-master-without-stated-introduction-version",
+  "statement": "juce::FontOptions is documented on the JUCE master reference as 'Options that describe a particular font', used to construct Font instances in a fluent style, and the page does not say which JUCE vers",
+  "verdict": "relevant-new",
+  "applies_to_version": "JUCE master documentation, read 2026-10-09",
+  "version_match": null,
+  "plan_refs": [
+   "D-013 Editor (Build <sha> text, caption)",
+   "S-014",
+   "PluginEditor"
+  ],
+  "rationale": "juce::FontOptions is the JUCE 8+ way to construct fonts; the editor draws text (caption, 'Build <sha>' 11 px grey) and legacy Font(float) constructors are deprecated in JUCE 8+. Introduction version is unknown from the page; plan pins 9.0.3 and has no font code yet.",
+  "amendment": "S-014: construct fonts with juce::Font(juce::FontOptions(size)) and check the 9.0.3 headers; do not rely on deprecated Font(float) constructors.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261004T151500Z-juce-8-vs-9-vst3-breaking-change",
+  "statement": "JUCE's 8.x line runs through tag 8.0.15; the 9.x line (9.0.0, 2026-07-21, through 9.0.2, 2026-09-07) restructures the VST3 client extension API, moving functionality out of VST3ClientExtensions into a",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "JUCE 8.0.15 and 9.0.0-9.0.2",
+  "version_match": false,
+  "plan_refs": [
+   "ENVIRONMENT.md JUCE 9.0.3 pin",
+   "C-001/C-002",
+   "C-030",
+   "C-032"
+  ],
+  "rationale": "Supports the plan's decision to pin one exact JUCE commit and not float versions: 9.x restructures VST3 client extension APIs (VST3Interface). Plan pins 9.0.3 (commit be29c81...), has no VST3ClientExtensions use. Item covers 9.0.0-9.0.2 only, not 9.0.3, so it is context rather than a source."
+ },
+ {
+  "id": "K-20261004T162301Z-dynamics-compressor-latency",
+  "statement": "On node-web-audio-api 2.2.0, a DynamicsCompressorNode delays an impulse by 8.71 ms at 44.1 kHz, both at default settings and at threshold -6 dB, ratio 20, attack 1 ms; a GainNode adds 0 ms. A compress",
+  "verdict": "irrelevant",
+  "applies_to_version": "node-web-audio-api 2.2.0, OfflineAudioContext at 44100 Hz",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T162302Z-dynamics-compressor-not-a-brickwall",
+  "statement": "A DynamicsCompressorNode at threshold -6 dB, ratio 20, attack 1 ms, knee 0 is not a peak ceiling: a sine at +6 dBFS came out at +0.09 dBFS on node-web-audio-api 2.2.0. A bounded ceiling needs a clippe",
+  "verdict": "irrelevant",
+  "applies_to_version": "node-web-audio-api 2.2.0",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120106Z-hertz-contact-pulse-and-duration",
+  "statement": "A Hertzian impact force pulse is a half-sine to the power 3/2, sin^(3/2), with duration T = 2.943 delta_max / v (delta_max the peak indentation, v the impact speed); with delta_max = (5 m v^2 / (4 k))",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120111Z-infinite-plate-impedance-steel",
+  "statement": "The driving-point impedance of an infinite thin plate is Z = 8 sqrt(D rho h), about 138 N s/m for 1.2 mm steel (E 200 GPa, nu 0.3, rho 7850 kg/m^3), independent of frequency; the arithmetic gives 138.",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193004Z-var-flux-form-convection-and-van-leer-order",
+  "statement": "In axisymmetric stream-function/vorticity form, conservative flux-form convection with face fluxes from corner stream-function differences supplies the vortex-stretching term -U*omega/R through planar",
+  "verdict": "irrelevant",
+  "applies_to_version": "var-simulation commit 819736a",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T102025Z-rdata-reads-rda-in-python",
+  "statement": "The Python package rdata 1.1.0 reads R .rda files: rdata.read_rda(path)['popular_1_pc_chord_type'] returned a pandas DataFrame with a 'count' column of 2048 integers.",
+  "verdict": "irrelevant",
+  "applies_to_version": "rdata 1.1.0",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193005Z-htdemucs-onnx-io-contract-and-overlap-add",
+  "statement": "The demucs-onnx htdemucs export takes input 'mix' (1, 2, 343980) float32 at 44.1 kHz and returns 'stems' (1, 4, 2, 343980) in the order drums, bass, other, vocals; it is run on chunks of 343,980 sampl",
+  "verdict": "irrelevant",
+  "applies_to_version": "demucs-onnx 0.3.4",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T163900Z-bass-guitar-tunings-four-to-seven-strings",
+  "statement": "Wikipedia's Bass guitar tuning gives 4-string E1 A1 D2 G2, 5-string B0 E1 A1 D2 G2 (usual), 6-string B0 E1 A1 D2 G2 C3 (usual), and for 7 strings B0 E1 A1 D2 G2 C3 F3 (Tobias 1987) or F#0 B0 E1 A1 D2 ",
+  "verdict": "irrelevant",
+  "applies_to_version": "Wikipedia as fetched 2026-10-09",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234248Z-rack-engine-sample-rate-menu-values",
+  "statement": "Rack's engine sample-rate menu offers 44.1/48 kHz x 2^i for i=-2..4 (11.025 kHz .. 768 kHz).",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T160108Z-mpm-sub-a0",
+  "statement": "pitchy 4.1.0 (McLeod pitch method) with a 4096-sample window at 44.1 kHz resolved synthetic plucks from MIDI 18 to 40 to within about 0.02 semitone (11 of 11 correct), which covers the 7-string bass n",
+  "verdict": "irrelevant",
+  "applies_to_version": "pitchy 4.1.0",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Pitch tracking for bass."
+ },
+ {
+  "id": "K-20261004T162312Z-comb-occupancy-pitch-tracking",
+  "statement": "On distorted guitar material where partials 2-3 are stronger than the fundamental, autocorrelation and harmonic-sum salience pitch trackers make octave and fifth errors. Scoring each candidate f0 by (",
+  "verdict": "irrelevant",
+  "applies_to_version": "verified on power-synth-guitar-buzz_G_.wav only",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Guitar pitch tracking."
+ },
+ {
+  "id": "K-20261009T234246Z-rack-api-signatures-used-by-the-wrapper",
+  "statement": "Rack 2.6.6 API used by D-011 exists with these signatures: config, configParam, configSwitch, configInput, configOutput (Module.hpp 118-197), Port::getVoltage/isConnected (Port.hpp 50, 182), createPar",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234232Z-rack-enables-ftz-and-daz-on-engine-threads",
+  "statement": "Rack enables FTZ and DAZ (MXCSR |= 0x8040) on engine threads.",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Rack FTZ/DAZ; plan uses juce::ScopedNoDenormals in processBlock, not Rack."
+ },
+ {
+  "id": "K-20261009T234212Z-rack-onsamplerate-change-and-onreset-calls",
+  "statement": "Module::onSampleRateChange(e) is called when the module is added and on every engine rate change, under the engine's exclusive lock; onReset(e) is called under the lock and the base implementation res",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T090900Z-tremolo-picked-lead-pitch-clock-and-pick-envelope",
+  "statement": "In the single-file Void Choir prototype, a tremolo-picked lead was heard as a 'plonky synth' when pitch advanced on every pick with a decaying envelope, and as 'much better' once pitch changed only on",
+  "verdict": "irrelevant",
+  "applies_to_version": "void-choir.html delivered 2026-10-09 (not in a repository)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T161603Z-audacity-pipe-protocol",
+  "statement": "Audacity's mod-script-pipe on Windows uses the named pipes ToSrvPipe (write) and FromSrvPipe (read) with commands terminated by CR LF NUL; on Linux/macOS /tmp/audacity_script_pipe.to.<uid> and .from.<",
+  "verdict": "irrelevant",
+  "applies_to_version": "Audacity 3.x (pipe_test.py on master and release-3.7.1)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T162311Z-minimum-phase-cabinet-ir-from-table",
+  "statement": "A cabinet response tabulated as dB against log frequency can be turned into a minimum-phase FIR at the AudioContext's own sample rate with the real-cepstrum method (log magnitude -> inverse FFT -> fol",
+  "verdict": "irrelevant",
+  "applies_to_version": "atmospheric-javascript main 1602634 (makeCabIR)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T162310Z-cabinet-structure-and-invariant-excitation",
+  "statement": "In the Void Choir reference recording, harmonic levels are tied to absolute frequency (a fixed cabinet), not harmonic number: the RMS level difference between pitches is 5.9 dB aligned by Hz versus 10",
+  "verdict": "irrelevant",
+  "applies_to_version": "atmospheric-javascript main 1602634",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T092108Z-standard-guitar-tuning-midi-and-hz",
+  "statement": "Standard guitar open strings E2 A2 D3 G3 B3 E4 are MIDI 40, 45, 50, 55, 59, 64 and 82.41, 110.00, 146.83, 196.00, 246.94, 329.63 Hz at A4 = 440, and the G-to-B gap is 4 semitones, so a uniform 5-semit",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T164000Z-violin-family-mandolin-and-seven-string-guitar-tunings",
+  "statement": "Wikipedia's Standard tuning lists violin and mandolin G3 D4 A4 E5, viola and mandola C3 G3 D4 A4, cello C2 G2 D3 A3, standard guitar E2 A2 D3 G3 B3 E4 and 7-string guitar B1 E2 A2 D3 G3 B3 E4.",
+  "verdict": "irrelevant",
+  "applies_to_version": "Wikipedia as fetched 2026-10-09",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T164100Z-eight-string-guitar-standard-tuning-f-sharp-b-e-a-d-g-b-e",
+  "statement": "Standard tuning on an 8-string guitar is F# B E A D G B E (low F#1 under the 7-string's low B1).",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T164200Z-juce-combobox-attachment-spaces-items-linearly-over-the-parameter-range",
+  "statement": "JUCE's AudioProcessorValueTreeState::ComboBoxAttachment spaces combo box items linearly across the parameter's range, so each item maps to a fixed value and a typed number that is not an item has no r",
+  "verdict": "irrelevant",
+  "applies_to_version": "JUCE master documentation, read 2026-10-09",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "ComboBoxAttachment; plan has no choice parameter or ComboBox (Parameters.h: floats and bools)."
+ },
+ {
+  "id": "K-20261009T092107Z-msvc-ninja-needs-vcvars-environment",
+  "statement": "Configuring CMake with the Ninja generator from a shell that has not run vcvars64 finds cl.exe but fails with C1083 on standard headers (cstring, algorithm, vector, array) and windows.h because INCLUD",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "Visual Studio 18 Community, MSVC 19.50.35729.0, toolset 14.50.35717 (observed 2026-10-09)",
+  "version_match": true,
+  "plan_refs": [
+   "ENVIRONMENT.md Windows (owner build)",
+   "D-020 Windows multi-config generator",
+   "plan-verify.yml"
+  ],
+  "rationale": "Plan never uses Ninja on Windows: CI uses the default (Visual Studio) multi-config generator and the owner build uses 'Visual Studio 18 2026' with --config Release, so the vcvars/INCLUDE-LIB failure is avoided; Ninja -DCMAKE_BUILD_TYPE=Release is only used on Linux/sandbox. VS 18 / MSVC 19.50 is the plan's VS 2026 / MSVC 19.5x."
+ },
+ {
+  "id": "K-20261009T092102Z-juce-standalone-target-compiles-vst3-client",
+  "statement": "In a JUCE CMake plugin built with FORMATS VST3 Standalone, the Standalone target also compiles juce_audio_plugin_client_VST3.cpp, so a macro that file needs must reach both targets; an add_compile_def",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "observed with the JUCE checkout at D:/JUCE (has juce_audio_processors_headless), CMake with Ninja, 2026-10-09",
+  "version_match": false,
+  "plan_refs": [
+   "plugin/CMakeLists.txt target_compile_definitions(TrumpetVST PUBLIC ...)",
+   "D-024",
+   "S-013"
+  ],
+  "rationale": "Plan puts JUCE_* definitions PUBLIC on the shared TrumpetVST target, which propagates to both the VST3 and Standalone targets (the case K-59 warns about); CI plan-verify built both on 3 OSes. Observed with a JUCE 8-era checkout, not 9.0.3, so not a source."
+ },
+ {
+  "id": "K-20261009T120109Z-two-pole-resonator-with-input-zero-gives-cosine-start",
+  "statement": "A two-pole resonator y[n] = 2 r cos(w) y[n-1] - r^2 y[n-2] + x[n] - r cos(w) x[n-1] has the impulse response r^n cos(w n), so a modal synthesiser that wants cosine-start modes after an impulsive force",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Per-mode filter structure of another engine; plan's modes use the bilinear scheme of D-006."
+ },
+ {
+  "id": "K-20261004T151200Z-numpy-seedsequence-reconstructed",
+  "statement": "numpy's SeedSequence entropy-mixing algorithm (hashmix/mix functions over a 4-word uint32 pool, generate_state producing 8 uint32 words = 4 uint64 for PCG64's initstate/initseq) was reverse-engineered",
+  "verdict": "irrelevant",
+  "applies_to_version": "numpy 2.4.4",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "numpy SeedSequence for another project; G-005 recipe uses Python's random.Random, no numpy RNG."
+ },
+ {
+  "id": "K-20261004T151100Z-pcg64-xsl-rr-advance-then-output",
+  "statement": "numpy default_rng's bit generator (PCG64, XSL-RR 128/64) advances its 128-bit LCG state before producing output from the new state, not output-then-advance; verified bit-exact against np.random.defaul",
+  "verdict": "irrelevant",
+  "applies_to_version": "numpy 2.4.4",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "numpy PCG64 internals; not used."
+ },
+ {
+  "id": "K-20261004T161600Z-audacity-trim-silence-plugin",
+  "statement": "Steve Daulton's Trim Silence Nyquist plug-in removes below-threshold audio only at the start and end of the selection, can be used in Chains/Macros, and loads the selection into RAM with a 1 GB cap (a",
+  "verdict": "irrelevant",
+  "applies_to_version": "Trim Silence plug-in as posted on the Audacity forum (Audacity 2.x to 3.x)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234254Z-vcvrack-com-blocked-github-rack-reachable",
+  "statement": "In the sandbox the host vcvrack.com (manual pages and SDK zips) is refused by the proxy with host_not_allowed, while github.com/VCVRack/Rack (git, raw files, tags) is reachable, so Rack headers and pl",
+  "verdict": "irrelevant",
+  "applies_to_version": "sandbox as of 2026-09-28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193501Z-sandbox-egress-policy",
+  "statement": "In this agent sandbox the egress proxy returns 'CONNECT tunnel failed, response 403' for api.github.com, zenodo.org, sandbox.zenodo.org, api.crossref.org and api.datacite.org, while pypi.org, files.py",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "sandbox as of 2026-10-09 (organisation egress policy)",
+  "version_match": null,
+  "plan_refs": [
+   "S-000 step 4 reachability hosts",
+   "DR-ZENODO",
+   "DR-CRED"
+  ],
+  "rationale": "Confirms the proxy answers zenodo.org and api.github.com with CONNECT 403 (curl status 000) while pypi.org/files.pythonhosted.org work; plan's S-000 check treats 000 as unreachable and DR-ZENODO already routes T-029 to CI. Environmental, no software version."
+ },
+ {
+  "id": "K-20261009T194014Z-legacy-6j-table-k4-errors",
+  "statement": "Legacy 6j_table_k4.json: entries 1-3 are wrong in magnitude/admissibility ({0 0 0;1 1 1}=0.7071 not 0.5; {1 1 1;1 1 1}=0 not 0.5; all-1/2 entry inadmissible); entry 4 has the wrong sign in the Racah-W",
+  "verdict": "irrelevant",
+  "applies_to_version": "legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T194012Z-legacy-exponent-fit",
+  "statement": "Fitting A+B k^-beta to legacy Table I gives beta=0.41+-0.03, A=-0.21+-0.04; the published beta=0.79 comes from a pure power law (A=0).",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T194013Z-legacy-gamma-convention-dependence",
+  "statement": "The legacy 'physical exponent' gamma=(1+beta)/2 depends on the assumed Lambda(k) convention: 0.77-1.19 for k vs k+2 choices.",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T194020Z-legacy-k16-different-hamiltonian",
+  "statement": "Legacy calc-for-k-16.py uses a different Hamiltonian (H=3I-sum of three single-edge 'flip' operators) and its reported gap 0.0101 at k=16 contradicts the Table I power law (predicts ~0.114). The repo ",
+  "verdict": "irrelevant",
+  "applies_to_version": "legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T194007Z-legacy-table-iii-reproduced",
+  "statement": "Legacy Table III probabilities are reproduced exactly (4 d.p.) by figure_4_breathing_mode.py (average of the 5 lowest eigenvectors of the non-PSD H_leg); the printed sign column agrees only up to the ",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T194004Z-legacy-6j-half-power-bug",
+  "statement": "generate_6j_symbols.py uses half powers q^(n/2) with q=exp(i pi/(k+2)), giving [n]=sin(n pi/(2k+4))/sin(pi/(2k+4)) (wrong level; [k+2]!=0).",
+  "verdict": "irrelevant",
+  "applies_to_version": "legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T194005Z-legacy-operator-not-idempotent",
+  "statement": "The legacy operator P_leg (paper Sec. II.B single-6j matrix element, code figure_4_breathing_mode.py) is not idempotent, and H_leg=I-P_leg has negative eigenvalues and no zero modes for every k=3..12.",
+  "verdict": "irrelevant",
+  "applies_to_version": "legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T194006Z-legacy-table-i-unreproducible",
+  "statement": "The published Table I values are not produced by any code in the legacy repo; figure_4_breathing_mode.py gives E[5]=-0.47383703 at k=4 vs published 0.34115610; spectra_data.csv holds exactly 2x Table ",
+  "verdict": "irrelevant",
+  "applies_to_version": "legacy repo codeberg.org/ghsc-research/hamil-3-qg-pos-cosmo @ 3d5890d0be619a4ccccbb0b7a00733a7fdd3cf28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T160103Z-basic-pitch-range",
+  "statement": "basic-pitch covers MIDI 21 to 108 (A0 at 27.5 Hz up to C8, 88 semitones) on mono input at 22050 Hz, so notes below A0, such as F#0 (MIDI 18, 23.1247 Hz at A4=440) on a 7-string bass, cannot be detecte",
+  "verdict": "irrelevant",
+  "applies_to_version": "@spotify/basic-pitch 1.0.1",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "basic-pitch model range."
+ },
+ {
+  "id": "K-20261009T193003Z-var-mushy-zone-cell-width-band-and-c2-profile",
+  "statement": "For the enthalpy-porosity liquid fraction, a band a fixed number of cells wide with a C2 smootherstep profile s^3(6s^2-15s+10) gives converged iterations on every mesh tried (N = 51 to 301); a clipped",
+  "verdict": "irrelevant",
+  "applies_to_version": "var-simulation commit 819736a",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234230Z-oildrumkit-engine-bit-identical-across-translation-units",
+  "statement": "With identical segmentation and flags, engine output is bit-identical across translation units (g++ 13.3, -funsafe-math-optimizations).",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h); g++ 13.3",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "oildrumkit engine; D-006/T-023 already cover block independence for this plan's own voice."
+ },
+ {
+  "id": "K-20261009T234244Z-oildrumkit-engine-worst-case-trigger-cost",
+  "statement": "Worst case of 15 simultaneous triggers costs <= 149 us of computation on the sandbox core.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h); 1 vCPU sandbox",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234258Z-kitcore-fixed-128-frame-latency-matches-512-sample-host",
+  "statement": "Rendering the engine in fixed 128-frame blocks (KitCore) reproduces single hits rendered VST-style in 512-sample host blocks to within +-0.05 dB tail energy and +-1 % of the -60 dB duration (observed ",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234226Z-oildrumkit-engine-limiter-saturates-at-352khz-and-above",
+  "statement": "All Rack engine rates are numerically stable (finite); at >=352.8 kHz the engine output reaches the limiter ceiling 0.944; the soft limiter bounds output to 0.944.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234228Z-oildrumkit-engine-cpu-by-block-size",
+  "statement": "CPU (1 vCPU sandbox): dense roll (15 hits/50 ms) per-sample 1.47x real time vs 3.0-3.2x for blocks >= 16; moderate 20.6x vs 37x.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h); 1 vCPU sandbox",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234224Z-oildrumkit-engine-output-depends-on-process-segmentation",
+  "statement": "Engine output depends on how process() calls are segmented: (a) overlapping voices share one PRNG, so draw order changes with segmentation; (b) modes are pruned once per process() call, so segments sh",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "oildrumkit engine segmentation dependence; this plan's block independence is by D-006 design (T-023)."
+ },
+ {
+  "id": "K-20261008T173537Z-oildrum-engine-v1-peak-levels",
+  "statement": "In the Oil Drum Kit modal engine, one full-velocity hit at default tuning peaks at 1.64-1.98 for the nine drum voices (bass, two snares, six toms), 1.19 for the cowbell, 1.21 for the rimshot and 0.52-",
+  "verdict": "irrelevant",
+  "applies_to_version": "DrumEngine.h in OilDrumKit_VST_Source.zip delivered 2026-10-08 (zip 13931 bytes)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261008T173538Z-oildrum-engine-v1-cymbal-spectrum",
+  "statement": "The v1 Oil Drum Kit cymbals (4-5 resonant bandpassed-noise partials, Q 5-10, ratios up to 5.6 times a 250-1000 Hz tuning) put 6.8% (splash), 0.6% (ride), 7.6% (closed hat) and 12.0% (open hat) of thei",
+  "verdict": "irrelevant",
+  "applies_to_version": "DrumEngine.h in OilDrumKit_VST_Source.zip delivered 2026-10-08 (zip 13931 bytes)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120101Z-oildrum-legacy-main-engine-clips",
+  "statement": "The pre-rewrite oildrumkit main-branch engine (Tools/legacy/DrumEngine_legacy.h) clips: single full-velocity hits peak at +4.3 to +5.7 dBFS for bass, snares, toms, cowbell and rimshot (cowbell +1.3, r",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit main before commit 35fbfea (legacy engine kept in Tools/legacy)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261008T223321Z-oildrum-engine-v2-peak-levels",
+  "statement": "In the fixed additive Oil Drum Kit engine, output through render() (master gain 0.25, then tanh) peaks at 0.874 for Bass, Snare 1, Ride and Low Tom 1 struck together at velocity 1 (raw sum 5.392), and",
+  "verdict": "irrelevant",
+  "applies_to_version": "DrumEngine.h at qualitycoding/oildrumkit branch archive/additive-v1-fixed, additive-v1/Source",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261008T223321Z-oildrum-engine-v2-cymbal-spectrum",
+  "statement": "In the redesigned Oil Drum Kit cymbal voices (six PolyBLEP squares at ratios 1, 1.4471, 1.6170, 1.9265, 2.5028, 2.6637 plus noise, two 24 dB/octave high-pass stages and a low-pass), at least 80% of th",
+  "verdict": "irrelevant",
+  "applies_to_version": "DrumEngine.h at qualitycoding/oildrumkit branch archive/additive-v1-fixed, additive-v1/Source",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120102Z-oildrum-legacy-pitch-smoothing-bug",
+  "statement": "In the legacy oildrumkit DrumEngine, the pitch-smoothing update `currentHz = target + coef * (currentHz - target)` with a per-sample coefficient for 20 ms ran once per process() call rather than per s",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit Tools/legacy/DrumEngine_legacy.h",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120110Z-oildrum-modal-engine-measured-results",
+  "statement": "At velocity 1.0, 48 kHz, dry, the rewritten oildrumkit modal engine resolves 2 to 58 partials at 50 ms (legacy 1 to 4; only the ride, 58, and the open hi-hat, 28, reach 25), has high-frequency to low-",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit main 35fbfea, Tools/metrics.py and Tools/compare.py",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120117Z-uniform-noise-needs-sqrt3-for-unit-variance",
+  "statement": "A uniform [-1, 1) noise generator has standard deviation 1/sqrt(3), so band-limited residual noise needs a factor of sqrt(3) (1.7321) and a sample-rate normalisation to reach the intended power; omitt",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit Source/DrumEngine.h at 35fbfea",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T162314Z-inharmonic-square-cymbal-density",
+  "statement": "Six square oscillators at frequency ratios 1, 1.4471, 1.6170, 1.9265, 2.5028 and 2.6637, plus a noise wash, through a bandpass (Q 0.25) and a high-pass, gave a cymbal with 400+ spectral peaks and spec",
+  "verdict": "irrelevant",
+  "applies_to_version": "atmospheric-javascript main 1602634 (cymbal())",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T161606Z-github-license-api-and-detection",
+  "statement": "GitHub's authenticated GET /licenses/apache-2.0 returns the canonical Apache License 2.0 text (201 lines, no copyright line) in its body field; committing it as LICENSE makes GET /repos/<owner>/<repo>",
+  "verdict": "irrelevant",
+  "applies_to_version": "GitHub REST API, observed 2026-10-04",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Apache LICENSE already committed to main; no license detection step in the plan."
+ },
+ {
+  "id": "K-20261009T123022Z-python-can-slcan-listen-only",
+  "statement": "In python-can 4.6.1, SlcanBus(listen_only=True) opens the adapter channel with the slcan command L (listen-only) instead of O, so the adapter does not acknowledge or transmit frames.",
+  "verdict": "irrelevant",
+  "applies_to_version": "python-can 4.6.1",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193503Z-github-web-upload-tree-hash",
+  "statement": "Files uploaded through the GitHub web UI become 'Add files via upload' commits with new SHAs, so correctness is verified by fetching the branch and comparing git rev-parse <ref>^{tree} with the tree o",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Web UI uploads; plan pushes with git."
+ },
+ {
+  "id": "K-20261009T234222Z-oildrumkit-engine-trigger-sounds-on-the-same-sample",
+  "statement": "A trigger produces non-zero output on the same sample (first sample of the next process()); with no triggers the output is exactly 0.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234220Z-oildrumkit-engine-reset-gives-exact-silence",
+  "statement": "setSampleRate(sr)+allNotesOff() yields exactly zero output until the next trigger.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234250Z-oildrumkit-engine-implements-hi-hat-choke",
+  "statement": "DrumEngine.h implements hi-hat choke: a chokeGroup test at lines 202-205 and chokeVoice at line 428 cut a sounding open hi-hat when the closed hi-hat is triggered.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234240Z-oildrumkit-engine-api-and-instrument-list",
+  "statement": "qualitycoding/oildrumkit@35fbfea: Source/DrumEngine.h is header-only with no JUCE dependency; API trigger(inst, vel), process(L, R, n) adds into buffers, setters clamp, 15 instruments, kChunk=128.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234216Z-oildrumkit-engine-has-no-mutable-static-state",
+  "statement": "The engine header has no mutable static state, so multiple module instances on Rack worker threads are independent.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234218Z-oildrumkit-engine-setsamplerate-allocates",
+  "statement": "DrumEngine::setSampleRate allocates (Room std::vector) and does not silence voices; re-preparing is equivalent to constructing at the new rate.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit@35fbfea (DrumEngine.h)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "oildrumkit setSampleRate allocation; plan's prepare() rule is D-026/T-024."
+ },
+ {
+  "id": "K-20261009T160105Z-transcription-synthetic-bias",
+  "statement": "Accuracy figures for note transcription measured on Karplus-Strong synthetic fixtures may overstate accuracy on real recordings, which have distortion, vibrato and string bleed; no real-recording accu",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Synthetic-fixture bias in transcription; plan's realism test uses real TinySOL recordings."
+ },
+ {
+  "id": "K-20261009T160118Z-pages-headers",
+  "statement": "GitHub Pages cannot set custom response headers such as COOP and COEP, so the page is not cross-origin isolated and SharedArrayBuffer, hence multi-threaded wasm, is unavailable.",
+  "verdict": "irrelevant",
+  "applies_to_version": "GitHub Pages, as reported 2026-09-26",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "GitHub Pages headers; no Pages."
+ },
+ {
+  "id": "K-20261009T193014Z-bs-roformer-sw-has-no-clear-weights-licence",
+  "statement": "The BS-RoFormer SW six-stem checkpoint has no clear licence: the upstream jarredou/BS-ROFO-SW-Fixed README says 'license: unknown', mirrors variously claim CC-BY-NC-SA-4.0, 'unlicensed' or MIT, and th",
+  "verdict": "irrelevant",
+  "applies_to_version": "as reported in research/EXTENDED_STEMS.md, 2026-09-28",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T151400Z-circular-correlation-shift-linearity",
+  "statement": "Circular cross-correlation is linear in its first operand (correlate(A+B, T) = correlate(A, T) + correlate(B, T)), and circularly rotating one operand by k rotates the correlation output by k: correla",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent (a DSP identity)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Pitch-class harmonicity optimisation."
+ },
+ {
+  "id": "K-20261009T160121Z-dispatch-default-branch",
+  "statement": "A workflow with a workflow_dispatch trigger did not offer the Run workflow button while it existed only on a feature branch; the person could not find it until the workflow files were on the default b",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "GitHub Actions, observed 2026-09-27",
+  "version_match": null,
+  "plan_refs": [
+   "D-020 gate-evidence job (workflow_dispatch not used)",
+   "plan-verify.yml"
+  ],
+  "rationale": "Plan explicitly avoids workflow_dispatch because it only works for workflows on the default branch and triggers gate-evidence by commit-message marker instead. Identical conclusion. GitHub Actions behaviour; version-independent in practice."
+ },
+ {
+  "id": "K-20261009T234204Z-rack-plugin-links-libRack-via-plugin-mk-stub-suffices",
+  "statement": "Plugins build with Rack's plugin.mk from headers (include/, dep/include/) and link -lRack; on Linux libRack is resolved at load time via rpath /tmp/Rack2. A stub libRack.so suffices to link.",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234242Z-rack-windows-build-needs-msys2-mingw64-packages",
+  "statement": "Windows plugin builds use MSYS2 MINGW64 with packages: git wget make tar unzip zip mingw-w64-x86_64-gcc mingw-w64-x86_64-gdb mingw-w64-x86_64-cmake autoconf automake libtool mingw-w64-x86_64-jq python",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T234214Z-rack-compile-mk-flags-and-cpp17",
+  "statement": "Rack compile.mk adds -std=c++11 then EXTRA_CXXFLAGS (so -std=c++17 there wins) and uses -O3 -funsafe-math-optimizations -fno-omit-frame-pointer -march=nehalem; the engine requires C++17 (std::clamp).",
+  "verdict": "irrelevant",
+  "applies_to_version": "Rack 2.6.6",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120104Z-lid-axisymmetric-ratio-in-the-patent",
+  "statement": "US 6,339,960 B1 reports second-axisymmetric-mode frequencies of 250-280 Hz for oil-drum lids with a stiffening ring about 3 mm deep (fundamental about 100 Hz, ratio 2.5-2.8, below the ideal clamped-pl",
+  "verdict": "irrelevant",
+  "applies_to_version": "US 6,339,960 B1",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120113Z-bessel-ive-not-needed-below-lambda-700",
+  "statement": "For lambda up to 48, scipy.special.iv(3, 48) = 3.7e19 and iv(0, 48) = 4.1e19, far below the double-precision limit of 1.8e308 (overflow of I_n begins near x = 700), so the exponentially scaled ive in ",
+  "verdict": "irrelevant",
+  "applies_to_version": "scipy.special as installed in the sandbox on 2026-10-09",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "scipy.special ive overflow for plates; plan's scipy use is the TMM."
+ },
+ {
+  "id": "K-20261009T120103Z-clamped-circular-plate-eigenvalues",
+  "statement": "The eigenvalues lambda of a clamped circular plate satisfy J_n(lambda) I_{n+1}(lambda) + I_n(lambda) J_{n+1}(lambda) = 0 with frequency proportional to lambda^2; the ideal ratio of the second axisymme",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120119Z-donnell-shell-mode-example",
+  "statement": "For the Donnell cylindrical-shell model in oildrumkit Tools/modes.py with m = 1, the lowest frequency is at n = 5 (152 Hz) and the n = 0 mode lies at the ring frequency, 2811 Hz.",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit Tools/modes.py at 35fbfea (default shell parameters)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120105Z-plate-stretch-default-is-a-chosen-value",
+  "statement": "The oildrumkit engine maps plate mode ratios with r' = 1 + s(r - 1) and defaults to s = 0.8; only the lower anchor s = 0.57 (from the patent's 2.5-2.8 second-axisymmetric ratio: (2.65 - 1)/(3.893 - 1)",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit Tools/voicing.json plateStretch 0.8",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120118Z-radiation-efficiency-law-ignores-net-volume",
+  "statement": "The oildrumkit modal engine's radiation weighting by frequency does not model net-volume-displacement radiation, whereas the patent US 6,339,960 B1 says the second axisymmetric lid mode is hard to det",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit main 35fbfea; US 6,339,960 B1",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120107Z-ansys-clamped-plate-benchmark-vm-lsdyna-solve-051",
+  "statement": "The ANSYS verification case VM-LSDYNA-SOLVE-051 (after Blevins 1979, Formulas for Natural Frequency and Mode Shape, table 11-1 case 3) lists a clamped circular plate (R 17 in, h 0.5 in, E 3e7 psi, rho",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T120108Z-plate-modal-density-weyl-check",
+  "statement": "For the clamped plate table generated by oildrumkit Tools/modes.py (lambda_max 48), there are 200 distinct frequencies (387 counting cos/sin pairs) up to a frequency ratio of 163.8, against a Weyl est",
+  "verdict": "irrelevant",
+  "applies_to_version": "oildrumkit Tools/modes.py at 35fbfea",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T092106Z-fret-position-from-pitch-ratio",
+  "statement": "For any tuning, a fret whose pitch is ratio r above the open string sits at 1 - 1/r of the scale length from the nut, and measured from a virtual nut at fret a, fret n sits at 1 - r_a/r_n of the remai",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261008T223321Z-c-to-js-engine-port-needs-float32-state",
+  "statement": "A JavaScript port of a float32 C++ oscillator engine, run in doubles, differed from the C++ output by up to 1.6e-2 of the file peak (Ride, 1.5 s) while a port that stores oscillator phases and envelop",
+  "verdict": "irrelevant",
+  "applies_to_version": "additive-v1/web/engine.js against additive-v1/Source/DrumEngine.h, g++ 13.3 -O2, node 2026-10-08",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261008T173539Z-web-audio-exponential-ramp-time-constant",
+  "statement": "AudioParam.exponentialRampToValueAtTime follows v(t) = V0 * (V1/V0)^((t-T0)/(T1-T0)) with V0 and V1 positive (a target of 0 throws), so ramping to 0.001 * V0 at T0 + 3d is an exponential decay with ti",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T193007Z-var-picard-and-acceleration-negative-results",
+  "statement": "At the N=76 smootherstep fixed point (original advective convection) the Picard map has spectral radius 0.907; Newton-Krylov did not converge on the linear ramp and Anderson acceleration made the iter",
+  "verdict": "irrelevant",
+  "applies_to_version": "var-simulation commit 819736a (pre-flux-form measurement)",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T092105Z-juce-mpesynthesiser-voice-allocation-and-default-zone",
+  "statement": "In JUCE's MPESynthesiser, noteAdded calls findFreeVoice, which returns a voice that is not playing and can play the note (or, with stealing on, the oldest voice that is not playing the lowest or highe",
+  "verdict": "irrelevant",
+  "applies_to_version": "JUCE 8.0.9 documentation mirror",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "MPESynthesiser voice allocation; plan is monophonic with its own TrumpetVoice (A-010), no MPESynthesiser."
+ },
+ {
+  "id": "K-20261009T164500Z-juce-module-build-on-one-cpu-core-exceeds-a-300-second-tool-call",
+  "statement": "On the single-core sandbox, a full build of the JUCE modules plus the plugin's sources, and an AddressSanitizer build, each took longer than one 300-second tool call, and plain nohup background builds",
+  "verdict": "relevant-new",
+  "applies_to_version": "JUCE 8.0.15",
+  "version_match": null,
+  "plan_refs": [
+   "S-001 step 1",
+   "D-022",
+   "ENVIRONMENT.md Build commands",
+   "D-026 R-016 ASan build"
+  ],
+  "rationale": "A full JUCE-module build (and an ASan build) on a 1-core sandbox exceeded a 300 s tool call and nohup-less background builds did not survive. Plan assumes 4 vCPU and -j4, with the plugin built mainly in CI, so impact is limited to a weaker or sudo-capable implementer machine.",
+  "amendment": "S-001/S-013: if building the plugin locally, run with setsid nohup, log to file and poll; otherwise rely on the CI plugin job; do not run the ASan plugin build locally.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261009T092103Z-vst3-system-folder-needs-write-access-windows",
+  "statement": "On Windows the default VST3 folder C:\\\\Program Files\\\\Common Files\\\\VST3 is not writable by ordinary users, so JUCE's COPY_PLUGIN_AFTER_BUILD step fails there with 'Permission denied' (copyDir.cmake:4",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "Ableton Live help article (undated, current 2026-10-09); JUCE forum thread; observed with a JUCE 8 checkout",
+  "version_match": false,
+  "plan_refs": [
+   "plugin/CMakeLists.txt COPY_PLUGIN_AFTER_BUILD FALSE",
+   "ENVIRONMENT.md Windows result line",
+   "G-006 install instructions",
+   "D-025"
+  ],
+  "rationale": "Plan sets COPY_PLUGIN_AFTER_BUILD FALSE and tells the owner to copy Trumpet.vst3 manually to C:\\Program Files\\Common Files\\VST3, avoiding the Permission denied. Optional wording: say the copy needs an elevated prompt (Explorer prompts automatically). Observed on a JUCE 8 checkout / Windows host behaviour, not 9.0.3."
+ },
+ {
+  "id": "K-20261009T234256Z-dash-lacks-pipestatus-and-time-keyword",
+  "statement": "In the sandbox's /bin/sh (dash), ${PIPESTATUS[0]} gives 'Bad substitution', the time keyword is not found when used as `(time cmd)`, and brace expansion such as cp dir/{a,b} is not performed; run such",
+  "verdict": "relevant-new",
+  "applies_to_version": "sandbox observed 2026-09-29",
+  "version_match": null,
+  "plan_refs": [
+   "ENVIRONMENT.md Build and test commands",
+   "PLAN Conventions"
+  ],
+  "rationale": "In dash ${PIPESTATUS[0]}, the time keyword and brace expansion fail. Plan's own commands avoid them, but step logging (`... > logs/x 2>&1 || true`) is fine; risk only when an implementer improvises.",
+  "amendment": "Same note as K-125: prefix improvised commands with bash -c.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261008T173543Z-sandbox-working-directory-resets-corroborated",
+  "statement": "On 2026-10-08 the work directories under /home/claude/oildrum (src, juce_plugin, web, staged zip) were gone at the start of a later turn while the three delivered files persisted under /mnt/user-data/",
+  "verdict": "relevant-new",
+  "applies_to_version": "sandbox observed 2026-10-04 and 2026-10-08",
+  "version_match": null,
+  "plan_refs": [
+   "Conventions (idempotency, commit and push each step)",
+   "S-000 step 2",
+   "ENVIRONMENT.md sandbox setup"
+  ],
+  "rationale": "Work directories (build dir, venv, tool downloads) can vanish between turns in the sandbox while pushed or delivered files persist. Plan already pushes after every step and states idempotency; it does not say the tool/venv install must be re-checked at each session start.",
+  "amendment": "ENVIRONMENT.md/S-000: state that $HOME/tools, $HOME/.venvs and build/ may be gone at a new turn; re-run the setup block (idempotent) and rely on the pushed branch as the intact copy.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261004T162307Z-sandbox-shell-is-dash",
+  "statement": "The sandbox bash tool runs commands with /bin/sh, which is dash (/bin/sh -> dash): bash-only syntax such as process substitution <(...) fails with 'Syntax error: \\\"(\\\" unexpected'.",
+  "verdict": "relevant-new",
+  "applies_to_version": "sandbox observed 2026-10-04",
+  "version_match": null,
+  "plan_refs": [
+   "ENVIRONMENT.md Build and test commands",
+   "PLAN Conventions"
+  ],
+  "rationale": "The sandbox bash tool runs /bin/sh = dash; bash-only syntax (process substitution, PIPESTATUS) fails. Plan scripts use #!/usr/bin/env bash or 'bash x.sh' and its inline commands are POSIX, but implementers writing ad-hoc commands may hit this.",
+  "amendment": "ENVIRONMENT.md: note 'sandbox /bin/sh is dash: run bash-isms through bash -c'.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261009T120116Z-sandbox-background-jobs-and-git-proxy-limits",
+  "statement": "In the sandbox, background jobs started with plain '&' die when the tool call ends and need `setsid nohup <cmd> > log 2>&1 < /dev/null &`; the shell is dash (no `time` keyword, no `disown`); the git p",
+  "verdict": "relevant-new",
+  "applies_to_version": "sandbox observed 2026-10-04 to 2026-10-09",
+  "version_match": null,
+  "plan_refs": [
+   "Conventions (commit/push after every step)",
+   "S-000 step 1",
+   "ENVIRONMENT.md sandbox"
+  ],
+  "rationale": "Background jobs with plain & die at the end of the tool call (need setsid nohup ... < /dev/null &); /bin/sh is dash; a shallow clone must git fetch origin main before push or the push gets HTTP 413; git proxy allows two concurrent operations.",
+  "amendment": "ENVIRONMENT.md sandbox section: run long builds via setsid nohup and poll; use bash -c for bash syntax; run git fetch origin before first push if the clone is shallow; avoid concurrent git operations.",
+  "severity": "Low"
+ },
+ {
+  "id": "K-20261008T173541Z-sandbox-build-tools-and-juce-tags-2026-10-08",
+  "statement": "On 2026-10-08 the sandbox had cmake 3.28.3, g++ and pkg-config installed, and pkg-config found freetype2, x11 and xext but not alsa, xinerama, xrandr, xcursor or gl; anonymous `git ls-remote --tags` o",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "sandbox observed 2026-10-08; JUCE tags 7.0.12 and 8.0.15",
+  "version_match": null,
+  "plan_refs": [
+   "D-022",
+   "C-090",
+   "ENVIRONMENT.md sandbox"
+  ],
+  "rationale": "Sandbox lacks JUCE dev packages (pkg-config finds only freetype2/x11/xext) and has cmake 3.28.3: consistent with D-022/C-090 (plugin builds CI-only; no-sudo CMake 4.4.4 binary installed). Environmental observation, no plan pin."
+ },
+ {
+  "id": "K-20261009T092101Z-juce-vst3-can-replace-vst2-default-and-error",
+  "statement": "JUCE defines JUCE_VST3_CAN_REPLACE_VST2 as 1 by default, and the #error 'You may have a conflict with parameter automation between VST2 and VST3 versions of your plugin' in juce_audio_plugin_client_VS",
+  "verdict": "relevant-consistent",
+  "applies_to_version": "JUCE 7.0+ and 8.x macro names as in the forum thread (undated); error observed with a JUCE 8 checkout that has the juce_audio_processors_headless module",
+  "version_match": false,
+  "plan_refs": [
+   "plugin/CMakeLists.txt JUCE_VST3_CAN_REPLACE_VST2=0",
+   "D-016 parameters"
+  ],
+  "rationale": "Plan already defines JUCE_VST3_CAN_REPLACE_VST2=0 (never shipped as VST2), which is the fix this item infers. Item is single-source and version stated as JUCE 7.0+/8.x; plan's 9.0.3 build was verified in CI, so the item is not a source for 9.0.3."
+ },
+ {
+  "id": "K-20261009T193008Z-coi-serviceworker-adds-coop-and-coep-by-reload",
+  "statement": "coi-serviceworker 0.1.7 (MIT, last published 2023-07-09 per the npm registry) is a service worker that adds COOP and COEP headers and reloads the page, which is how a site on a host that cannot set he",
+  "verdict": "irrelevant",
+  "applies_to_version": "coi-serviceworker 0.1.7",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "coi-serviceworker/Pages; no web build."
+ },
+ {
+  "id": "K-20261009T160113Z-musicxml-xsd-local",
+  "statement": "The official MusicXML 4.0 XSD imports xml.xsd and xlink.xsd by remote URL, so xmllint --schema needs those two imports rewritten to local copies (a sed on the schemaLocation attributes) before it can ",
+  "verdict": "irrelevant",
+  "applies_to_version": "MusicXML 4.0 XSD",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261009T233105Z-licence-texts-offline-in-sandbox",
+  "statement": "In the sandbox, the Apache-2.0 licence text was available at /usr/share/common-licenses/Apache-2.0, while a curl to https://www.apache.org/licenses/LICENSE-2.0.txt produced no file; the full CERN-OHL-",
+  "verdict": "irrelevant",
+  "applies_to_version": "sandbox observed 2026-09-30",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Licence text availability in a sandbox; plan's LICENSE exists and D-025 fetches AGPL text from the JUCE tree in CI."
+ },
+ {
+  "id": "K-20261004T161601Z-vinyl-lead-out-click-period",
+  "statement": "A lead-out (locked) groove repeats once per revolution, so a click in it recurs every 60/rpm seconds: 1.8 s at 33 1/3 rpm, 1.333 s at 45 rpm, about 0.77 s at 78 rpm.",
+  "verdict": "irrelevant",
+  "applies_to_version": "version-independent",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ },
+ {
+  "id": "K-20261004T161602Z-vinyl-three-level-side-detector",
+  "statement": "In a single-take vinyl capture, a 100 Hz to 8 kHz band-passed 50 ms RMS envelope, median-filtered over 0.5 s, separates three levels: arm-up phono hiss, groove noise, and music; splitting music region",
+  "verdict": "irrelevant",
+  "applies_to_version": "qualitycoding/side-splitter vinyl_trim.py at c1e8525",
+  "version_match": null,
+  "plan_refs": [],
+  "rationale": "Subject does not touch this plan (other project/domain)."
+ }
+]

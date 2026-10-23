@@ -1,0 +1,2082 @@
+[
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192601Z-convection-omitted-vortex-stretching-and-was-non-conservative.md",
+  "id": "L-20261009T192601Z-convection-omitted-vortex-stretching-and-was-non-conservative",
+  "severity": "Critical",
+  "recorded_at": "2026-10-09T19:26:01Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:python",
+   "tech:scipy"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261004T150300Z-fixture-cents-reference-undeclared.md",
+  "id": "L-20261004T150300Z-fixture-cents-reference-undeclared",
+  "severity": "Critical",
+  "recorded_at": "2026-10-04T15:03:00Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:specification",
+   "tech:cpp",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T234100Z-intake-defaults-and-draft-numbers-stated-before-measurement.md",
+  "id": "L-20261009T234100Z-intake-defaults-and-draft-numbers-stated-before-measurement",
+  "severity": "High",
+  "recorded_at": "2026-10-09T23:41:00Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:planning",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T193602Z-proxy-repo-authorization-blocks-push.md",
+  "id": "L-20261009T193602Z-proxy-repo-authorization-blocks-push",
+  "severity": "High",
+  "recorded_at": "2026-10-09T19:36:02Z",
+  "tags": [
+   "kind:permissions",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T193601Z-plan-assumed-hosts-reachable.md",
+  "id": "L-20261009T193601Z-plan-assumed-hosts-reachable",
+  "severity": "High",
+  "recorded_at": "2026-10-09T19:36:01Z",
+  "tags": [
+   "domain:quantum-gravity",
+   "kind:environment",
+   "phase:planning",
+   "tech:github",
+   "tech:zenodo"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192616Z-fixed-width-mushy-ramp-left-a-free-parameter.md",
+  "id": "L-20261009T192616Z-fixed-width-mushy-ramp-left-a-free-parameter",
+  "severity": "High",
+  "recorded_at": "2026-10-09T19:26:16Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:wrong-assumption",
+   "phase:specification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192603Z-wide-mushy-band-converged-to-a-spurious-branch.md",
+  "id": "L-20261009T192603Z-wide-mushy-band-converged-to-a-spurious-branch",
+  "severity": "High",
+  "recorded_at": "2026-10-09T19:26:03Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:scipy"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261009T160100Z-frozen-test-edited-and-hash-manifest-regenerated-by-implementer.md",
+  "id": "L-20261009T160100Z-frozen-test-edited-and-hash-manifest-regenerated-by-implementer",
+  "severity": "High",
+  "recorded_at": "2026-10-09T16:01:00Z",
+  "tags": [
+   "domain:audio",
+   "kind:integrity",
+   "phase:implementation",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T123005Z-corroborated-label-without-independent-sources.md",
+  "id": "L-20261009T123005Z-corroborated-label-without-independent-sources",
+  "severity": "High",
+  "recorded_at": "2026-10-09T12:30:05Z",
+  "tags": [
+   "applies:all",
+   "domain:automotive",
+   "kind:integrity",
+   "phase:research"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120015Z-research-note-stated-recalled-details-as-cited-facts.md",
+  "id": "L-20261009T120015Z-research-note-stated-recalled-details-as-cited-facts",
+  "severity": "High",
+  "recorded_at": "2026-10-09T12:00:15Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:research"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120012Z-residual-noise-level-41-db-low-found-only-by-spectrogram.md",
+  "id": "L-20261009T120012Z-residual-noise-level-41-db-low-found-only-by-spectrogram",
+  "severity": "High",
+  "recorded_at": "2026-10-09T12:00:12Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120011Z-numeric-realism-targets-set-before-attainable-range.md",
+  "id": "L-20261009T120011Z-numeric-realism-targets-set-before-attainable-range",
+  "severity": "High",
+  "recorded_at": "2026-10-09T12:00:11Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:specification"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120001Z-wav-writer-clipped-baseline-before-analysis.md",
+  "id": "L-20261009T120001Z-wav-writer-clipped-baseline-before-analysis",
+  "severity": "High",
+  "recorded_at": "2026-10-09T12:00:01Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T092002Z-note-routing-changed-twice-never-tabulated-key-to-hz.md",
+  "id": "L-20261009T092002Z-note-routing-changed-twice-never-tabulated-key-to-hz",
+  "severity": "High",
+  "recorded_at": "2026-10-09T09:20:02Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:cpp",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T092001Z-ui-code-edited-and-bug-diagnosed-without-reading-displayed-component.md",
+  "id": "L-20261009T092001Z-ui-code-edited-and-bug-diagnosed-without-reading-displayed-component",
+  "severity": "High",
+  "recorded_at": "2026-10-09T09:20:01Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:cpp",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261008T173536Z-juce-glue-delivered-uncompiled.md",
+  "id": "L-20261008T173536Z-juce-glue-delivered-uncompiled",
+  "severity": "High",
+  "recorded_at": "2026-10-08T17:35:36Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:cpp",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261008T173532Z-untested-claims-stated-as-fact-four-times.md",
+  "id": "L-20261008T173532Z-untested-claims-stated-as-fact-four-times",
+  "severity": "High",
+  "recorded_at": "2026-10-08T17:35:32Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:verification",
+   "tech:juce",
+   "tech:web-audio"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261008T173530Z-gain-staging-masked-by-normalising-renderers.md",
+  "id": "L-20261008T173530Z-gain-staging-masked-by-normalising-renderers",
+  "severity": "High",
+  "recorded_at": "2026-10-08T17:35:30Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:cpp",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T162217Z-nonstationary-recording-analysed-as-one-note.md",
+  "id": "L-20261004T162217Z-nonstationary-recording-analysed-as-one-note",
+  "severity": "High",
+  "recorded_at": "2026-10-04T16:22:17Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:research"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T162213Z-timbre-invariance-measured-on-whole-chain.md",
+  "id": "L-20261004T162213Z-timbre-invariance-measured-on-whole-chain",
+  "severity": "High",
+  "recorded_at": "2026-10-04T16:22:13Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:specification"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261004T162211Z-frozen-tests-drifted-from-harness.md",
+  "id": "L-20261004T162211Z-frozen-tests-drifted-from-harness",
+  "severity": "High",
+  "recorded_at": "2026-10-04T16:22:11Z",
+  "tags": [
+   "applies:all",
+   "kind:integrity",
+   "phase:specification"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261004T150500Z-cross-library-float-fix-regressed-passing-cases.md",
+  "id": "L-20261004T150500Z-cross-library-float-fix-regressed-passing-cases",
+  "severity": "High",
+  "recorded_at": "2026-10-04T15:05:00Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:cpp",
+   "tech:numpy"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261004T150400Z-interface-gap-found-only-by-implementing.md",
+  "id": "L-20261004T150400Z-interface-gap-found-only-by-implementing",
+  "severity": "High",
+  "recorded_at": "2026-10-04T15:04:00Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:specification",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261004T150200Z-frozen-header-default-contradicted-fixture.md",
+  "id": "L-20261004T150200Z-frozen-header-default-contradicted-fixture",
+  "severity": "High",
+  "recorded_at": "2026-10-04T15:02:00Z",
+  "tags": [
+   "kind:integrity",
+   "phase:specification",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261004T150100Z-stray-superseded-test-files.md",
+  "id": "L-20261004T150100Z-stray-superseded-test-files",
+  "severity": "High",
+  "recorded_at": "2026-10-04T15:01:00Z",
+  "tags": [
+   "kind:integrity",
+   "phase:verification",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T102003Z-window-semantics-off-by-one.md",
+  "id": "L-20261004T102003Z-window-semantics-off-by-one",
+  "severity": "High",
+  "recorded_at": "2026-10-04T10:20:03Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T234124Z-addendum-adopted-after-run-and-stores-not-read-again.md",
+  "id": "L-20261009T234124Z-addendum-adopted-after-run-and-stores-not-read-again",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T23:41:24Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T234120Z-readme-claims-not-tied-to-a-test-or-to-the-segmentation-condition.md",
+  "id": "L-20261009T234120Z-readme-claims-not-tied-to-a-test-or-to-the-segmentation-condition",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T23:41:20Z",
+  "tags": [
+   "domain:audio",
+   "kind:scope",
+   "phase:verification",
+   "tech:vcv-rack"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T234116Z-add-repo-came-back-not-run-and-turn-ended.md",
+  "id": "L-20261009T234116Z-add-repo-came-back-not-run-and-turn-ended",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T23:41:16Z",
+  "tags": [
+   "kind:process",
+   "phase:intake",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T234112Z-token-url-left-in-git-config-after-unsetting-insteadof.md",
+  "id": "L-20261009T234112Z-token-url-left-in-git-config-after-unsetting-insteadof",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T23:41:12Z",
+  "tags": [
+   "kind:permissions",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-apt/L-20261009T234108Z-apt-install-before-update-and-set-e-aborted-on-unrelated-repo-error.md",
+  "id": "L-20261009T234108Z-apt-install-before-update-and-set-e-aborted-on-unrelated-repo-error",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T23:41:08Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:apt",
+   "tech:bash"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261009T234102Z-draft-test-unsatisfiable-found-by-oracle-t-021.md",
+  "id": "L-20261009T234102Z-draft-test-unsatisfiable-found-by-oracle-t-021",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T23:41:02Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:specification",
+   "tech:cpp",
+   "tech:vcv-rack"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T232008Z-addendum-adopted-after-run-stores-not-read.md",
+  "id": "L-20261009T232008Z-addendum-adopted-after-run-stores-not-read",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T23:20:08Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T232004Z-deviation-evidence-cited-lost-tmp-spikes.md",
+  "id": "L-20261009T232004Z-deviation-evidence-cited-lost-tmp-spikes",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T23:20:04Z",
+  "tags": [
+   "kind:process",
+   "phase:verification",
+   "tech:git",
+   "tech:simavr"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T193619Z-addendum-adopted-after-run-again.md",
+  "id": "L-20261009T193619Z-addendum-adopted-after-run-again",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:19Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T193618Z-repo-not-attached-probe-first.md",
+  "id": "L-20261009T193618Z-repo-not-attached-probe-first",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:18Z",
+  "tags": [
+   "kind:permissions",
+   "phase:intake",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T193617Z-manual-upload-bundle-hygiene.md",
+  "id": "L-20261009T193617Z-manual-upload-bundle-hygiene",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:17Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261009T193614Z-src-change-after-production-run-d025.md",
+  "id": "L-20261009T193614Z-src-change-after-production-run-d025",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:14Z",
+  "tags": [
+   "kind:process",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261009T193613Z-heavy-jobs-without-memory-preflight.md",
+  "id": "L-20261009T193613Z-heavy-jobs-without-memory-preflight",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:13Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:python",
+   "tech:scipy"
+  ]
+ },
+ {
+  "path": "lessons/tech-pytest/L-20261009T193612Z-frozen-test-silent-fallback-single-seed.md",
+  "id": "L-20261009T193612Z-frozen-test-silent-fallback-single-seed",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:12Z",
+  "tags": [
+   "domain:quantum-gravity",
+   "kind:wrong-assumption",
+   "phase:specification",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/domain-quantum-gravity/L-20261009T193610Z-hand-typed-numbers-and-lint-rounds.md",
+  "id": "L-20261009T193610Z-hand-typed-numbers-and-lint-rounds",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:10Z",
+  "tags": [
+   "domain:quantum-gravity",
+   "kind:process",
+   "phase:implementation",
+   "tech:latex",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/domain-quantum-gravity/L-20261009T193609Z-sci-bound-round-to-nearest.md",
+  "id": "L-20261009T193609Z-sci-bound-round-to-nearest",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:09Z",
+  "tags": [
+   "domain:quantum-gravity",
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T193604Z-zip-exclude-dotfiles-dropped-checkpoints.md",
+  "id": "L-20261009T193604Z-zip-exclude-dotfiles-dropped-checkpoints",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:04Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:release",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T193603Z-ambient-git-config-breaks-fetch.md",
+  "id": "L-20261009T193603Z-ambient-git-config-breaks-fetch",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:36:03Z",
+  "tags": [
+   "kind:environment",
+   "phase:verification",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261009T192617Z-solver-studies-exceeded-tool-limit-and-background-runs-died.md",
+  "id": "L-20261009T192617Z-solver-studies-exceeded-tool-limit-and-background-runs-died",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:17Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:environment",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-codeberg/L-20261009T192613Z-codeberg-called-not-allowlisted-without-checking-the-live-proxy.md",
+  "id": "L-20261009T192613Z-codeberg-called-not-allowlisted-without-checking-the-live-proxy",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:13Z",
+  "tags": [
+   "kind:environment",
+   "phase:release",
+   "tech:codeberg",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T192612Z-filter-branch-rewrite-then-force-push-with-the-wrong-lease.md",
+  "id": "L-20261009T192612Z-filter-branch-rewrite-then-force-push-with-the-wrong-lease",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:12Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192609Z-van-leer-correction-claimed-second-order-measured-1-55.md",
+  "id": "L-20261009T192609Z-van-leer-correction-claimed-second-order-measured-1-55",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:09Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192608Z-stale-coupling-survived-override-coefficient-1e16-at-corner.md",
+  "id": "L-20261009T192608Z-stale-coupling-survived-override-coefficient-1e16-at-corner",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:08Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:scipy"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192606Z-results-from-superseded-ramp-stayed-in-the-thermal-table.md",
+  "id": "L-20261009T192606Z-results-from-superseded-ramp-stayed-in-the-thermal-table",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:06Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:integrity",
+   "phase:release",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192605Z-limit-cycle-described-as-ran-out-of-time.md",
+  "id": "L-20261009T192605Z-limit-cycle-described-as-ran-out-of-time",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:05Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:wrong-assumption",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192604Z-order-fitted-from-pre-asymptotic-meshes-then-withdrawn.md",
+  "id": "L-20261009T192604Z-order-fitted-from-pre-asymptotic-meshes-then-withdrawn",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:04Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192602Z-point-extrema-and-interpolated-isotherm-gave-nonsense-orders.md",
+  "id": "L-20261009T192602Z-point-extrema-and-interpolated-isotherm-gave-nonsense-orders",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:26:02Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:wrong-assumption",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T192000Z-lessons-addendum-adopted-after-implementation-and-follow-on-research.md",
+  "id": "L-20261009T192000Z-lessons-addendum-adopted-after-implementation-and-follow-on-research",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:20:00Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T191900Z-implementation-reported-in-one-66-file-commit-with-no-deviations-or-execution-log.md",
+  "id": "L-20261009T191900Z-implementation-reported-in-one-66-file-commit-with-no-deviations-or-execution-log",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:19:00Z",
+  "tags": [
+   "domain:source-separation",
+   "kind:process",
+   "phase:implementation",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T191800Z-local-clone-fell-behind-origin-and-was-later-lost-in-a-sandbox-reset.md",
+  "id": "L-20261009T191800Z-local-clone-fell-behind-origin-and-was-later-lost-in-a-sandbox-reset",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:18:00Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T191700Z-pasted-tokens-failed-three-ways-and-add-repo-gave-read-only-on-the-target.md",
+  "id": "L-20261009T191700Z-pasted-tokens-failed-three-ways-and-add-repo-gave-read-only-on-the-target",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:17:00Z",
+  "tags": [
+   "kind:permissions",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-playwright/L-20261009T191300Z-browser-suite-first-ran-after-the-whole-implementation-was-pushed.md",
+  "id": "L-20261009T191300Z-browser-suite-first-ran-after-the-whole-implementation-was-pushed",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T19:13:00Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:github-actions",
+   "tech:playwright",
+   "tech:vitest"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T161600Z-integration-tests-frozen-as-compile-unverified-juce-reachable-later.md",
+  "id": "L-20261009T161600Z-integration-tests-frozen-as-compile-unverified-juce-reachable-later",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:16:00Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:planning",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T161200Z-edocontrol-differs-from-plan-3-3-and-nothing-logged.md",
+  "id": "L-20261009T161200Z-edocontrol-differs-from-plan-3-3-and-nothing-logged",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:12:00Z",
+  "tags": [
+   "kind:scope",
+   "phase:implementation",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T161100Z-audio-thread-takes-mutex-and-copies-vectors-not-in-premortem.md",
+  "id": "L-20261009T161100Z-audio-thread-takes-mutex-and-copies-vectors-not-in-premortem",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:11:00Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:planning",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T161000Z-ji-labels-computed-with-12-tet-maths-in-the-editor.md",
+  "id": "L-20261009T161000Z-ji-labels-computed-with-12-tet-maths-in-the-editor",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:10:00Z",
+  "tags": [
+   "domain:microtonal-tuning",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T160900Z-juce-api-assumed-from-memory-compile-caught-and-version-floor-unchecked.md",
+  "id": "L-20261009T160900Z-juce-api-assumed-from-memory-compile-caught-and-version-floor-unchecked",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:09:00Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:cmake",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/domain-microtonal-tuning/L-20261009T160700Z-layout-rules-frozen-before-owner-confirmed-three-resets.md",
+  "id": "L-20261009T160700Z-layout-rules-frozen-before-owner-confirmed-three-resets",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:07:00Z",
+  "tags": [
+   "domain:audio",
+   "domain:microtonal-tuning",
+   "kind:wrong-assumption",
+   "phase:specification"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T160600Z-protocol-records-not-kept-one-implementation-commit.md",
+  "id": "L-20261009T160600Z-protocol-records-not-kept-one-implementation-commit",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:06:00Z",
+  "tags": [
+   "domain:audio",
+   "kind:process",
+   "phase:implementation",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T160500Z-lessons-addendum-adopted-after-implementation-again.md",
+  "id": "L-20261009T160500Z-lessons-addendum-adopted-after-implementation-again",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:05:00Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T160400Z-pasted-token-rejected-401-add-repo-not-tried-first.md",
+  "id": "L-20261009T160400Z-pasted-token-rejected-401-add-repo-not-tried-first",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:04:00Z",
+  "tags": [
+   "kind:permissions",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T160200Z-ui-compiled-but-never-run-and-smoke-test-abandoned.md",
+  "id": "L-20261009T160200Z-ui-compiled-but-never-run-and-smoke-test-abandoned",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T16:02:00Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T151301Z-workflow-files-were-pushed-straight-to-main-which-diverged-h.md",
+  "id": "L-20261009T151301Z-workflow-files-were-pushed-straight-to-main-which-diverged-h",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T15:13:01Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T151201Z-a-permission-probe-overwrote-the-body-of-pr-1.md",
+  "id": "L-20261009T151201Z-a-permission-probe-overwrote-the-body-of-pr-1",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T15:12:01Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github-actions/L-20261009T151001Z-the-plan-s-mitigation-for-workflow-dispatch-needing-the-defa.md",
+  "id": "L-20261009T151001Z-the-plan-s-mitigation-for-workflow-dispatch-needing-the-defa",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T15:10:01Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:release",
+   "tech:github",
+   "tech:github-actions"
+  ]
+ },
+ {
+  "path": "lessons/tech-github-actions/L-20261009T150901Z-the-deploy-workflow-broke-on-an-empty-ref-input-and-its-depl.md",
+  "id": "L-20261009T150901Z-the-deploy-workflow-broke-on-an-empty-ref-input-and-its-depl",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T15:09:01Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:release",
+   "tech:github",
+   "tech:github-actions"
+  ]
+ },
+ {
+  "path": "lessons/tech-playwright/L-20261009T150601Z-browser-tests-could-not-run-in-the-sandbox-so-four-defects-i.md",
+  "id": "L-20261009T150601Z-browser-tests-could-not-run-in-the-sandbox-so-four-defects-i",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T15:06:01Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:github-actions",
+   "tech:playwright"
+  ]
+ },
+ {
+  "path": "lessons/tech-playwright/L-20261009T150301Z-zoom-cost-was-measured-with-inter-raf-deltas-which-headless-.md",
+  "id": "L-20261009T150301Z-zoom-cost-was-measured-with-inter-raf-deltas-which-headless-",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T15:03:01Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:verification",
+   "tech:playwright"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T140015Z-the-lessons-and-knowledge-addendum-was-adopted-after-plannin.md",
+  "id": "L-20261009T140015Z-the-lessons-and-knowledge-addendum-was-adopted-after-plannin",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T14:00:15Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T140013Z-a-token-pasted-in-chat-was-needed-three-times-in-one-run-eac.md",
+  "id": "L-20261009T140013Z-a-token-pasted-in-chat-was-needed-three-times-in-one-run-eac",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T14:00:13Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-pip-tools/L-20261009T140003Z-the-hash-locked-environment-omitted-the-build-backend-and-th.md",
+  "id": "L-20261009T140003Z-the-hash-locked-environment-omitted-the-build-backend-and-th",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T14:00:03Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:pip-tools",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T123015Z-addendum-adopted-after-run-again.md",
+  "id": "L-20261009T123015Z-addendum-adopted-after-run-again",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:30:15Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T123014Z-pat-purged-before-push-needed-again.md",
+  "id": "L-20261009T123014Z-pat-purged-before-push-needed-again",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:30:14Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-pip-tools/L-20261009T123010Z-build-backend-pin-and-pyproject-order.md",
+  "id": "L-20261009T123010Z-build-backend-pin-and-pyproject-order",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:30:10Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:pip-tools",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T123004Z-checkpoints-back-filled-no-execution-log.md",
+  "id": "L-20261009T123004Z-checkpoints-back-filled-no-execution-log",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:30:04Z",
+  "tags": [
+   "kind:process",
+   "phase:retrospective",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261009T123002Z-unguarded-first-element-indexing.md",
+  "id": "L-20261009T123002Z-unguarded-first-element-indexing",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:30:02Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:elm327",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-automotive/L-20261009T123001Z-non-ascii-vin-uncaught.md",
+  "id": "L-20261009T123001Z-non-ascii-vin-uncaught",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:30:01Z",
+  "tags": [
+   "domain:automotive",
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261009T123000Z-transcript-log-never-closed.md",
+  "id": "L-20261009T123000Z-transcript-log-never-closed",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:30:00Z",
+  "tags": [
+   "domain:automotive",
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T120019Z-protocol-adopted-mid-run-without-before-run-step.md",
+  "id": "L-20261009T120019Z-protocol-adopted-mid-run-without-before-run-step",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:19Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/tech-bash/L-20261009T120014Z-chained-sed-edit-skipped-after-timed-out-call.md",
+  "id": "L-20261009T120014Z-chained-sed-edit-skipped-after-timed-out-call",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:14Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:bash",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120010Z-calibration-nonlinearity-from-plan-did-not-converge.md",
+  "id": "L-20261009T120010Z-calibration-nonlinearity-from-plan-did-not-converge",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:10Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120009Z-plate-stretch-direction-taken-from-plan.md",
+  "id": "L-20261009T120009Z-plate-stretch-direction-taken-from-plan",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:09Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:research"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120008Z-analyser-hann-window-erased-fast-decaying-modes.md",
+  "id": "L-20261009T120008Z-analyser-hann-window-erased-fast-decaying-modes",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:08Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261009T120007Z-emitted-float-literals-invalid-or-subnormal.md",
+  "id": "L-20261009T120007Z-emitted-float-literals-invalid-or-subnormal",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:07Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:cpp",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120004Z-published-table-orientation-misread.md",
+  "id": "L-20261009T120004Z-published-table-orientation-misread",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:04Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120003Z-roll-correlation-metric-passed-on-legacy-engine.md",
+  "id": "L-20261009T120003Z-roll-correlation-metric-passed-on-legacy-engine",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:03Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:specification"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120002Z-partial-counter-counted-noise-floor.md",
+  "id": "L-20261009T120002Z-partial-counter-counted-noise-floor",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T12:00:02Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T092006Z-juce-code-delivered-uncompiled-again.md",
+  "id": "L-20261009T092006Z-juce-code-delivered-uncompiled-again",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T09:20:06Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:cpp",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261009T092004Z-claims-attributed-to-sources-not-read.md",
+  "id": "L-20261009T092004Z-claims-attributed-to-sources-not-read",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T09:20:04Z",
+  "tags": [
+   "applies:all",
+   "kind:verification-gap",
+   "phase:research",
+   "tech:juce",
+   "tech:vst3"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261009T092003Z-multi-file-patch-sent-as-snippets-partly-applied.md",
+  "id": "L-20261009T092003Z-multi-file-patch-sent-as-snippets-partly-applied",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T09:20:03Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:cpp",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T090805Z-generative-audio-claims-made-without-listening-or-rendering.md",
+  "id": "L-20261009T090805Z-generative-audio-claims-made-without-listening-or-rendering",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T09:08:05Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:web-audio"
+  ]
+ },
+ {
+  "path": "lessons/tech-web-audio/L-20261009T090804Z-master-compressor-without-ceiling-in-void-choir-app.md",
+  "id": "L-20261009T090804Z-master-compressor-without-ceiling-in-void-choir-app",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T09:08:04Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:web-audio"
+  ]
+ },
+ {
+  "path": "lessons/tech-web-audio/L-20261009T090803Z-waveshaper-curve-reassigned-again-in-void-choir-app.md",
+  "id": "L-20261009T090803Z-waveshaper-curve-reassigned-again-in-void-choir-app",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T09:08:03Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:web-audio"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T090802Z-guitars-too-clean-overdrive-not-measured.md",
+  "id": "L-20261009T090802Z-guitars-too-clean-overdrive-not-measured",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T09:08:02Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:web-audio"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T090801Z-tremolo-lead-arpeggiated-every-pick-sounded-like-synth.md",
+  "id": "L-20261009T090801Z-tremolo-lead-arpeggiated-every-pick-sounded-like-synth",
+  "severity": "Medium",
+  "recorded_at": "2026-10-09T09:08:01Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:verification",
+   "tech:web-audio"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261008T223321Z-fixed-a-snapshot-without-checking-the-project-repo.md",
+  "id": "L-20261008T223321Z-fixed-a-snapshot-without-checking-the-project-repo",
+  "severity": "Medium",
+  "recorded_at": "2026-10-08T22:33:21Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:release",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261008T173535Z-cymbals-checked-against-own-recipe-not-realism.md",
+  "id": "L-20261008T173535Z-cymbals-checked-against-own-recipe-not-realism",
+  "severity": "Medium",
+  "recorded_at": "2026-10-08T17:35:35Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261008T173534Z-build-directory-vanished-between-turns.md",
+  "id": "L-20261008T173534Z-build-directory-vanished-between-turns",
+  "severity": "Medium",
+  "recorded_at": "2026-10-08T17:35:34Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261008T173531Z-editor-note-labels-diverged-from-midi-map.md",
+  "id": "L-20261008T173531Z-editor-note-labels-diverged-from-midi-map",
+  "severity": "Medium",
+  "recorded_at": "2026-10-08T17:35:31Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:cpp",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261007T150832Z-analysis-windows-overlapped-dropout-and-contaminated-profile.md",
+  "id": "L-20261007T150832Z-analysis-windows-overlapped-dropout-and-contaminated-profile",
+  "severity": "Medium",
+  "recorded_at": "2026-10-07T15:08:32Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261004T162222Z-multi-branch-edit-loop-ran-on-wrong-branch.md",
+  "id": "L-20261004T162222Z-multi-branch-edit-loop-ran-on-wrong-branch",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:22Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T162220Z-beat-phase-biased-harmonic-levels.md",
+  "id": "L-20261004T162220Z-beat-phase-biased-harmonic-levels",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:20Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T162219Z-pitch-tracker-octave-errors.md",
+  "id": "L-20261004T162219Z-pitch-tracker-octave-errors",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:19Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:research"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261004T162218Z-unmeasured-claims-stated-as-fact.md",
+  "id": "L-20261004T162218Z-unmeasured-claims-stated-as-fact",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:18Z",
+  "tags": [
+   "applies:all",
+   "kind:verification-gap",
+   "phase:implementation"
+  ]
+ },
+ {
+  "path": "lessons/tech-web-audio/L-20261004T162216Z-dynamics-compressor-assumed-ideal.md",
+  "id": "L-20261004T162216Z-dynamics-compressor-assumed-ideal",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:16Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:web-audio"
+  ]
+ },
+ {
+  "path": "lessons/tech-web-audio/L-20261004T162215Z-waveshaper-curve-reassigned.md",
+  "id": "L-20261004T162215Z-waveshaper-curve-reassigned",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:15Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:web-audio"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T162214Z-dsp-test-measured-wrong-quantity.md",
+  "id": "L-20261004T162214Z-dsp-test-measured-wrong-quantity",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:14Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:verification"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T162212Z-unsatisfiable-frozen-assertions.md",
+  "id": "L-20261004T162212Z-unsatisfiable-frozen-assertions",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:12Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:specification"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T162210Z-user-premise-dismissed-instead-of-asked.md",
+  "id": "L-20261004T162210Z-user-premise-dismissed-instead-of-asked",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:22:10Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:research"
+  ]
+ },
+ {
+  "path": "lessons/tech-audacity/L-20261004T161503Z-audacity-commands-coded-from-memory.md",
+  "id": "L-20261004T161503Z-audacity-commands-coded-from-memory",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:15:03Z",
+  "tags": [
+   "domain:audio",
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:audacity"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T161500Z-fade-in-onset-clipped-by-single-threshold.md",
+  "id": "L-20261004T161500Z-fade-in-onset-clipped-by-single-threshold",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T16:15:00Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261004T153000Z-index-regen-skipped-after-crash-fix.md",
+  "id": "L-20261004T153000Z-index-regen-skipped-after-crash-fix",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T15:30:00Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261004T150900Z-local-head-diverged-from-api-pushed-remote.md",
+  "id": "L-20261004T150900Z-local-head-diverged-from-api-pushed-remote",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T15:09:00Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261004T150800Z-bulk-delete-removed-tracked-file.md",
+  "id": "L-20261004T150800Z-bulk-delete-removed-tracked-file",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T15:08:00Z",
+  "tags": [
+   "kind:integrity",
+   "phase:implementation",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261004T150700Z-scripted-str-replace-silently-no-opped.md",
+  "id": "L-20261004T150700Z-scripted-str-replace-silently-no-opped",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T15:07:00Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261004T150600Z-git-push-pack-transport-failed-reproducibly.md",
+  "id": "L-20261004T150600Z-git-push-pack-transport-failed-reproducibly",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T15:06:00Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261004T102010Z-plan-controls-not-traced-to-delivery.md",
+  "id": "L-20261004T102010Z-plan-controls-not-traced-to-delivery",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T10:20:10Z",
+  "tags": [
+   "applies:all",
+   "kind:scope",
+   "phase:verification"
+  ]
+ },
+ {
+  "path": "lessons/tech-pytest/L-20261004T102009Z-stale-test-counts-in-reports.md",
+  "id": "L-20261004T102009Z-stale-test-counts-in-reports",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T10:20:09Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261004T102008Z-duplicate-pitch-modules-shipped.md",
+  "id": "L-20261004T102008Z-duplicate-pitch-modules-shipped",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T10:20:08Z",
+  "tags": [
+   "kind:scope",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261004T102007Z-sandbox-reset-lost-working-tree.md",
+  "id": "L-20261004T102007Z-sandbox-reset-lost-working-tree",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T10:20:07Z",
+  "tags": [
+   "applies:all",
+   "kind:environment",
+   "phase:implementation",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261004T102004Z-checkpoint-rotated-corrupt-file.md",
+  "id": "L-20261004T102004Z-checkpoint-rotated-corrupt-file",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T10:20:04Z",
+  "tags": [
+   "kind:integrity",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-pytest/L-20261004T102002Z-perf-test-budget-not-derived.md",
+  "id": "L-20261004T102002Z-perf-test-budget-not-derived",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T10:20:02Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:specification",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/domain-music-perception/L-20261004T102001Z-recalled-literature-facts-wrong.md",
+  "id": "L-20261004T102001Z-recalled-literature-facts-wrong",
+  "severity": "Medium",
+  "recorded_at": "2026-10-04T10:20:01Z",
+  "tags": [
+   "applies:all",
+   "domain:music-perception",
+   "kind:wrong-assumption",
+   "phase:research"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T234122Z-checkpoint-state-stale-after-implementation-and-main-not-default.md",
+  "id": "L-20261009T234122Z-checkpoint-state-stale-after-implementation-and-main-not-default",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T23:41:22Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-bash/L-20261009T234110Z-test-script-make-clean-deleted-the-log-directory.md",
+  "id": "L-20261009T234110Z-test-script-make-clean-deleted-the-log-directory",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T23:41:10Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:bash"
+  ]
+ },
+ {
+  "path": "lessons/tech-bash/L-20261009T234106Z-dash-has-no-brace-expansion-pipestatus-or-time-keyword.md",
+  "id": "L-20261009T234106Z-dash-has-no-brace-expansion-pipestatus-or-time-keyword",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T23:41:06Z",
+  "tags": [
+   "kind:tooling",
+   "phase:implementation",
+   "tech:bash"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T232011Z-licence-text-not-obtainable-offline-pointer-left.md",
+  "id": "L-20261009T232011Z-licence-text-not-obtainable-offline-pointer-left",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T23:20:11Z",
+  "tags": [
+   "kind:environment",
+   "phase:release",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T232010Z-built-binaries-committed-no-gitignore.md",
+  "id": "L-20261009T232010Z-built-binaries-committed-no-gitignore",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T23:20:10Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:avr",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T232009Z-checkpoint-state-stale-after-implementation.md",
+  "id": "L-20261009T232009Z-checkpoint-state-stale-after-implementation",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T23:20:09Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261009T193605Z-premature-checkpoint-subphase.md",
+  "id": "L-20261009T193605Z-premature-checkpoint-subphase",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T19:36:05Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192614Z-newton-krylov-with-loose-forcing-and-anderson-did-not-help.md",
+  "id": "L-20261009T192614Z-newton-krylov-with-loose-forcing-and-anderson-did-not-help",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T19:26:14Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:process",
+   "phase:implementation",
+   "tech:scipy"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T192611Z-tracked-file-count-typed-in-a-prompt-was-wrong.md",
+  "id": "L-20261009T192611Z-tracked-file-count-typed-in-a-prompt-was-wrong",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T19:26:11Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:release",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T192610Z-gitignore-log-pattern-left-manifest-logs-untracked.md",
+  "id": "L-20261009T192610Z-gitignore-log-pattern-left-manifest-logs-untracked",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T19:26:10Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:integrity",
+   "phase:release",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/domain-computational-fluid-dynamics/L-20261009T192607Z-patch-assumed-applied-mushy-width-default-was-0-02.md",
+  "id": "L-20261009T192607Z-patch-assumed-applied-mushy-width-default-was-0-02",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T19:26:07Z",
+  "tags": [
+   "domain:computational-fluid-dynamics",
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T192200Z-verified-label-on-a-claim-whose-cited-sources-covered-only-half.md",
+  "id": "L-20261009T192200Z-verified-label-on-a-claim-whose-cited-sources-covered-only-half",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T19:22:00Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:research",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T192100Z-tool-call-came-back-not-run-and-the-turn-ended-with-no-response-requested.md",
+  "id": "L-20261009T192100Z-tool-call-came-back-not-run-and-the-turn-ended-with-no-response-requested",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T19:21:00Z",
+  "tags": [
+   "kind:process",
+   "phase:intake",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T191500Z-gitignore-model-pattern-excluded-the-tiny-test-fixtures.md",
+  "id": "L-20261009T191500Z-gitignore-model-pattern-excluded-the-tiny-test-fixtures",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T19:15:00Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-cmake/L-20261009T161500Z-work-and-build-directories-vanished-between-turns.md",
+  "id": "L-20261009T161500Z-work-and-build-directories-vanished-between-turns",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T16:15:00Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:cmake",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-cpp/L-20261009T161300Z-stale-compile-unverified-statements-and-frozen-headers-on-retired-tests.md",
+  "id": "L-20261009T161300Z-stale-compile-unverified-statements-and-frozen-headers-on-retired-tests",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T16:13:00Z",
+  "tags": [
+   "domain:audio",
+   "kind:integrity",
+   "phase:verification",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261009T160800Z-naming-rule-first-draft-failed-14-of-217-oracle-cells.md",
+  "id": "L-20261009T160800Z-naming-rule-first-draft-failed-14-of-217-oracle-cells",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T16:08:00Z",
+  "tags": [
+   "domain:microtonal-tuning",
+   "kind:wrong-assumption",
+   "phase:research",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-cmake/L-20261009T160300Z-single-core-sandbox-builds-exceeded-tool-limit-background-jobs-died.md",
+  "id": "L-20261009T160300Z-single-core-sandbox-builds-exceeded-tool-limit-background-jobs-died",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T16:03:00Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:cmake",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T152201Z-the-checkpoint-state-was-never-updated-after-planning-and-th.md",
+  "id": "L-20261009T152201Z-the-checkpoint-state-was-never-updated-after-planning-and-th",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T15:22:01Z",
+  "tags": [
+   "applies:all",
+   "kind:process",
+   "phase:implementation"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T151401Z-a-draft-pr-could-not-be-marked-ready-through-the-rest-api.md",
+  "id": "L-20261009T151401Z-a-draft-pr-could-not-be-marked-ready-through-the-rest-api",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T15:14:01Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:release",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github-actions/L-20261009T150801Z-the-plan-s-ci-workflow-template-failed-to-parse-because-gha-.md",
+  "id": "L-20261009T150801Z-the-plan-s-ci-workflow-template-failed-to-parse-because-gha-",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T15:08:01Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:implementation",
+   "tech:github-actions"
+  ]
+ },
+ {
+  "path": "lessons/tech-github-actions/L-20261009T150701Z-actions-logs-and-artifacts-were-unreachable-from-the-sandbox.md",
+  "id": "L-20261009T150701Z-actions-logs-and-artifacts-were-unreachable-from-the-sandbox",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T15:07:01Z",
+  "tags": [
+   "kind:environment",
+   "phase:verification",
+   "tech:github",
+   "tech:github-actions"
+  ]
+ },
+ {
+  "path": "lessons/general/L-20261009T140014Z-the-addendum-s-gate-id-g-003-collided-with-the-plan-s-own-g-.md",
+  "id": "L-20261009T140014Z-the-addendum-s-gate-id-g-003-collided-with-the-plan-s-own-g-",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T14:00:14Z",
+  "tags": [
+   "applies:all",
+   "kind:integrity",
+   "phase:retrospective"
+  ]
+ },
+ {
+  "path": "lessons/tech-pytest/L-20261009T140011Z-test-category-counts-in-the-traceability-report-were-estimat.md",
+  "id": "L-20261009T140011Z-test-category-counts-in-the-traceability-report-were-estimat",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T14:00:11Z",
+  "tags": [
+   "kind:integrity",
+   "phase:verification",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261009T140010Z-parsing-slips-found-only-by-the-implementation-compact-frame.md",
+  "id": "L-20261009T140010Z-parsing-slips-found-only-by-the-implementation-compact-frame",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T14:00:10Z",
+  "tags": [
+   "domain:automotive",
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-pytest/L-20261009T140009Z-the-red-verification-classifier-mis-read-junit-failure-and-e.md",
+  "id": "L-20261009T140009Z-the-red-verification-classifier-mis-read-junit-failure-and-e",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T14:00:09Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T140008Z-a-blanket-git-add-a-committed-emulator-log-files-again.md",
+  "id": "L-20261009T140008Z-a-blanket-git-add-a-committed-emulator-log-files-again",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T14:00:08Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-elm327-emulator/L-20261009T140001Z-the-emulator-s-cli-batch-mode-does-not-print-the-pty-path-so.md",
+  "id": "L-20261009T140001Z-the-emulator-s-cli-batch-mode-does-not-print-the-pty-path-so",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T14:00:01Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:research",
+   "tech:elm327-emulator",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-pytest/L-20261009T123012Z-status-counts-typed-and-commit-count-misreported.md",
+  "id": "L-20261009T123012Z-status-counts-typed-and-commit-count-misreported",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:30:12Z",
+  "tags": [
+   "kind:integrity",
+   "phase:verification",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/tech-pytest/L-20261009T123011Z-red-verification-matched-wrong-exception.md",
+  "id": "L-20261009T123011Z-red-verification-matched-wrong-exception",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:30:11Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:specification",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/tech-bash/L-20261009T123009Z-dash-brace-expansion-created-literal-directory.md",
+  "id": "L-20261009T123009Z-dash-brace-expansion-created-literal-directory",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:30:09Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:bash"
+  ]
+ },
+ {
+  "path": "lessons/tech-python-obd/L-20261009T123008Z-oracle-spike-assumed-library-api.md",
+  "id": "L-20261009T123008Z-oracle-spike-assumed-library-api",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:30:08Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:research",
+   "tech:python",
+   "tech:python-obd"
+  ]
+ },
+ {
+  "path": "lessons/tech-pytest/L-20261009T123006Z-performance-budget-docstring-wrong-multiple.md",
+  "id": "L-20261009T123006Z-performance-budget-docstring-wrong-multiple",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:30:06Z",
+  "tags": [
+   "kind:integrity",
+   "phase:verification",
+   "tech:pytest"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261009T120018Z-pat-in-chat-did-not-grant-repo-access-in-session.md",
+  "id": "L-20261009T120018Z-pat-in-chat-did-not-grant-repo-access-in-session",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:00:18Z",
+  "tags": [
+   "kind:environment",
+   "phase:release",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T120016Z-blanket-git-add-swept-in-foreign-file.md",
+  "id": "L-20261009T120016Z-blanket-git-add-swept-in-foreign-file",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:00:16Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-bash/L-20261009T120013Z-background-builds-killed-when-shell-call-ended.md",
+  "id": "L-20261009T120013Z-background-builds-killed-when-shell-call-ended",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:00:13Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:bash"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261009T120006Z-plate-table-too-short-for-mode-budget.md",
+  "id": "L-20261009T120006Z-plate-table-too-short-for-mode-budget",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T12:00:06Z",
+  "tags": [
+   "domain:audio",
+   "kind:scope",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/tech-cmake/L-20261009T092005Z-assumed-visual-studio-2022-log-said-18.md",
+  "id": "L-20261009T092005Z-assumed-visual-studio-2022-log-said-18",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T09:20:05Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:implementation",
+   "tech:cmake",
+   "tech:msvc"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261009T090806Z-built-new-app-without-checking-the-named-project-repo.md",
+  "id": "L-20261009T090806Z-built-new-app-without-checking-the-named-project-repo",
+  "severity": "Low",
+  "recorded_at": "2026-10-09T09:08:06Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:intake",
+   "tech:git",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-git/L-20261008T223321Z-git-add-all-committed-build-directories.md",
+  "id": "L-20261008T223321Z-git-add-all-committed-build-directories",
+  "severity": "Low",
+  "recorded_at": "2026-10-08T22:33:21Z",
+  "tags": [
+   "kind:process",
+   "phase:release",
+   "tech:git"
+  ]
+ },
+ {
+  "path": "lessons/tech-juce/L-20261008T173533Z-readme-names-files-not-in-the-zip.md",
+  "id": "L-20261008T173533Z-readme-names-files-not-in-the-zip",
+  "severity": "Low",
+  "recorded_at": "2026-10-08T17:35:33Z",
+  "tags": [
+   "kind:scope",
+   "phase:release",
+   "tech:juce"
+  ]
+ },
+ {
+  "path": "lessons/tech-bash/L-20261004T162223Z-bash-only-syntax-in-dash.md",
+  "id": "L-20261004T162223Z-bash-only-syntax-in-dash",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T16:22:23Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:bash"
+  ]
+ },
+ {
+  "path": "lessons/domain-audio/L-20261004T162221Z-fit-range-chosen-before-reference-bandwidth.md",
+  "id": "L-20261004T162221Z-fit-range-chosen-before-reference-bandwidth",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T16:22:21Z",
+  "tags": [
+   "domain:audio",
+   "kind:wrong-assumption",
+   "phase:implementation"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261004T161505Z-guessed-raw-github-path-404.md",
+  "id": "L-20261004T161505Z-guessed-raw-github-path-404",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T16:15:05Z",
+  "tags": [
+   "kind:wrong-assumption",
+   "phase:research",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261004T161504Z-new-repo-pushed-without-license.md",
+  "id": "L-20261004T161504Z-new-repo-pushed-without-license",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T16:15:04Z",
+  "tags": [
+   "kind:scope",
+   "phase:release",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-github/L-20261004T161502Z-unauthenticated-github-api-call.md",
+  "id": "L-20261004T161502Z-unauthenticated-github-api-call",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T16:15:02Z",
+  "tags": [
+   "kind:environment",
+   "phase:implementation",
+   "tech:github"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261004T161501Z-synthetic-ground-truth-misprinted.md",
+  "id": "L-20261004T161501Z-synthetic-ground-truth-misprinted",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T16:15:01Z",
+  "tags": [
+   "kind:verification-gap",
+   "phase:verification",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-music-perception/L-20261004T151000Z-parameter-range-set-without-attainable-range-check.md",
+  "id": "L-20261004T151000Z-parameter-range-set-without-attainable-range-check",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T15:10:00Z",
+  "tags": [
+   "domain:music-perception",
+   "kind:wrong-assumption",
+   "phase:specification",
+   "tech:cpp"
+  ]
+ },
+ {
+  "path": "lessons/tech-python/L-20261004T102006Z-placeholder-arithmetic-left-in-code.md",
+  "id": "L-20261004T102006Z-placeholder-arithmetic-left-in-code",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T10:20:06Z",
+  "tags": [
+   "kind:process",
+   "phase:implementation",
+   "tech:python"
+  ]
+ },
+ {
+  "path": "lessons/domain-music-perception/L-20261004T102005Z-calibration-targets-before-attainable-range.md",
+  "id": "L-20261004T102005Z-calibration-targets-before-attainable-range",
+  "severity": "Low",
+  "recorded_at": "2026-10-04T10:20:05Z",
+  "tags": [
+   "domain:music-perception",
+   "kind:wrong-assumption",
+   "phase:verification",
+   "tech:python"
+  ]
+ }
+]

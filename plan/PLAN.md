@@ -48,6 +48,10 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   `impl-20261007T145241Z-trumpet-vst-plan` (created in S-000).
 - **Build:** "build" means `cmake --build build -j4`, with the build directory configured as in `plan/ENVIRONMENT.md`.
 - **After every step attempt:**
+  0. stage by explicit file list (`git add <paths>`, never `git add -A` or `.`); read `git status --short` and
+     `git diff --cached --stat` and confirm every staged path is one this step wrote and every file it was meant to change
+     is listed (a scripted replace must assert its pattern matched); no `*.log` outside `logs/`, `*.o`, `build/` or other-run
+     file; `git diff --cached | grep -nE '^\+.*(TODO|FIXME|\* ?0\b)'` hits are removed or justified in `DEVIATIONS.md`;
   1. commit the work with the message `S-0xx: <title>`;
   2. append one line to `EXECUTION_LOG.md`: `UTC time | step | attempt | pass/fail/blocked | <sha of commit 1> | note`;
   3. append `{"step":"S-0xx","status":"done|failed|blocked","commit":"<sha of commit 1>","utc":"…"}` to the JSON array in
@@ -67,6 +71,16 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   starting a build, calibration or other slow command; never chain an edit after a slow command with `&&` or `;`. Run
   commands that may exceed the tool timeout as `setsid nohup <cmd> > logs/<step>/<name>.log 2>&1 < /dev/null &` and
   poll the log. The sandbox `/bin/sh` is dash: run bash syntax (`PIPESTATUS`, `<(...)`, brace expansion) via `bash -c`.
+- **Counts and claims:** every count of tests, files, commits, lessons or knowledge items in a report, gate file,
+  checkpoint or session message is pasted from a command run in the same step (`ctest --test-dir build -N`,
+  `pytest --collect-only -q | tail -1`, `git ls-files | wc -l`, `git rev-list --count`), never typed.
+- **New files:** before creating a source file or Python module, grep `core/`, `plugin/` and `tools/` for one with the same
+  responsibility and extend it. Create directory trees with `bash -c 'mkdir -p …'` or a loop and list them afterwards.
+- **Tool calls:** if a tool result says it did not run or is empty, re-issue it once; if it still fails, log it in
+  `EXECUTION_LOG.md` and say what did not run in the session message. Every session ends with a message naming the
+  current step, its status and any unpushed commits.
+- **Long jobs:** calibration (`tpt_calibrate`, its long-hold mode), T-029/`compare_tinysol` and any build over about 4 minutes
+  run detached as in "Edits and slow commands"; output files are written to a temporary name and renamed on success.
 - **Interfaces:** if a declared function cannot be implemented as specified from its header alone, add the missing
   member additively (logged in `DEVIATIONS.md`) and continue; only a signature change halts (`BLOCKED.md`).
 - **First failure of a frozen test:** check the test's own preconditions (initial state, defaults, helpers) before
@@ -103,7 +117,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      Then `git fetch origin && git checkout --no-track -b impl-20261007T145241Z-trumpet-vst-plan origin/gen-20261007T145241Z-trumpet-vst-plan`
      (if the branch exists: `git checkout impl-20261007T145241Z-trumpet-vst-plan`). `mkdir -p logs`. The first push is
      `git push -u origin impl-20261007T145241Z-trumpet-vst-plan`; later pushes are plain `git push`.
-  2. Install the tools per `plan/ENVIRONMENT.md` (the sudo variant if `sudo -n true` succeeds, else the no-sudo variant).
+  2. Install the tools per `plan/ENVIRONMENT.md` (the sudo variant if `sudo -n true` succeeds, else the no-sudo variant),
+     through a committed idempotent script `tools/bootstrap_env.sh` (bash shebang) that also configures `build/`; every
+     later session that finds the tools or `build/` missing re-runs it.
   3. Check access:
      - `gh auth status`;
      - `git push --dry-run origin HEAD:refs/heads/impl-20261007T145241Z-trumpet-vst-plan`;
@@ -154,6 +170,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      `nominalPartialOf(nominalPartialHz(v, m), v) == m` for all 8 valve combinations and m = 1..13, and
      `nominalPartialOf(0, 0) == 0`. It may fail now only where it calls stubs (`loweringSemitones`); it must pass after
      S-003. A failure after S-003 → `TEST_CHALLENGE.md` (the helpers are frozen).
+  3c. Produce `logs/S-001/red-summary.md` with a small script from `ctest -N`, `ctest --output-junit` and
+     `pytest --junitxml`: per test its status and reason (NotImplemented, missing output, skipped T-029, guard pass); the
+     script exits non-zero if a test is unclassified.
   4. Compare with the planning red run in `plan/ENVIRONMENT.md`:
      - every C++ test case in unit, integration, operational, alloc and perf fails;
      - if the plugin was built: `tpt_plugin_tests` has 1 passing case ("T-026 parameters", guard) and 4 failing;
@@ -195,6 +214,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      missing package. Every script or step that pushes uses `set -euo pipefail`, asserts the current branch (or uses
      `git -C <worktree>`) before `git rm`/commit, and requires `git status --short` to be empty before a checkout.
   4. Create `THIRD_PARTY_NOTICES.md` with one row per D-021 component: name, version, licence, URL, use, shipped yes/no.
+  4b. Parse every `.github/workflows/*.yml` locally before the push (`.venv/bin/python -c "import yaml,sys;
+     [yaml.safe_load(open(f)) for f in sys.argv[1:]]" .github/workflows/*.yml`, with `pyyaml` installed in the venv
+     but not added to the lock).
   5. Push, then `gh run watch` (or poll `gh run list --branch impl-20261007T145241Z-trumpet-vst-plan`).
 - Outputs: `.github/workflows/ci.yml`, `THIRD_PARTY_NOTICES.md`, `tools/requirements.hashes.txt`, `.gitignore`
 - Evidence produced: T-031 (all four cases)
@@ -495,6 +517,11 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
        blocks in chunks of at most that size.
      - **Held valves:** write and restore `heldValves` per D-026 R-014 (`target_link_libraries(TrumpetVST PRIVATE nlohmann_json::nlohmann_json)` in `plugin/CMakeLists.txt`).
      - **State conversion:** sized `std::string_view` per D-026 R-016.
+     - **Variant tests (not frozen, required):** add `tests/plugin_extra/test_plugin_variants.cpp` (own CTest entry, label
+       `plugin`) covering: `heldValves` round trip and an invalid value ignored (R-014); a non-NUL-terminated state blob
+       (R-016); an unsupported rate giving silence and `unsupportedRate()` (R-022); CC11 = 0 then a transport start
+       restoring the level (R-033); CC68 on with touching notes slurring and off re-tonguing (R-035). They are part of
+       S-013's Done-when.
      - **`currentUiState()`:** returns `voice.uiState()`.
   2. Build with the plugin; run `xvfb-run -a build/plugin/tpt_plugin_tests` (all except the editor case).
 - Outputs: `plugin/src/PluginProcessor.{h,cpp}` (additive members), `plugin/CMakeLists.txt`
@@ -590,7 +617,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   and re-frozen), S-015
 - Inputs: D-007, D-008, D-012, D-017, DR-REAL; `core/src/VoiceTuning.h`
 - Actions:
-  1. Run T-029 (locally or in the CI `realism` job), T-021 and T-022. Write `logs/S-016-round-<k>.md` with the per-dynamic metrics and the 10 worst notes, split by register (p2–p3, p4–p6, p8+).
+  1. Every round log, `tpt_calibrate` log and `compare_tinysol` run starts with a table of the effective `VoiceTuning.h`
+     constants (name, value) and the values changed this round, printed by the tool itself, not typed. Run T-029 (locally
+     or in the CI `realism` job), T-021 and T-022. Write `logs/S-016-round-<k>.md` with the per-dynamic metrics and the 10 worst notes, split by register (p2–p3, p4–p6, p8+).
   2. Adjust only the non-frozen constants listed in DR-REAL. After each round: build, run `tpt_calibrate`, build again
      (re-embeds the table), then re-run every frozen test (no regression). At most 5 rounds.
   3. Build the G-005 bundle per `plan/GATES.md`:
@@ -659,6 +688,10 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      README numbers refer to it. Every behavioural README sentence (MIDI map, latency, rates, Fixed valves, legato) is
      followed by the T-ID or CI run that shows it, else the word UNVERIFIED; coverage reads "k of N". Run
      `grep -nE 'identical|validated|complete|guarantee|always' README.md` and justify each hit in `REPORT.md`.
+  3c. Control-delivery table in `REPORT.md`: for every R-### marked mitigated or partly mitigated and every D-026 item,
+     the file:line, CI step or test that delivers it (checked with `grep`/`ls .github/workflows`); an unmapped control gets
+     a `DEVIATIONS.md` entry. Run `git check-ignore -v` on every path in `tests/FROZEN_MANIFEST.sha256`, `gates/*/SHA256SUMS`,
+     `REPORT.md` and `EXECUTION_LOG.md`; it must print nothing.
   3b. Write `REPORT.md`: tests by ID with status, the SC table, deviations, gate outcomes, open risks, and what was not verified (a real DAW host test, unless the human did one).
   4. Write `MAINTENANCE.md` (D-026 R-019) and recommend branch protection on `main` in `REPORT.md` (R-020).
   5. Push.
@@ -680,7 +713,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - Actions:
   1. A Haiku agent collects every input into `logs/retro-digest.md` (without subagent support: do it yourself, then start a fresh section of reasoning for step 2 and log the substitution in `EXECUTION_LOG.md`).
   2. A fresh Opus agent answers the four questions of protocol 3.7.1 (`plan/PROTOCOL_EXTRACTS.md`) and writes `RETROSPECTIVE.md`, linking every finding to an `L-` or `K-` file.
-  3. Add a lesson (Appendix A) for every error or overlooked step not yet recorded, and a knowledge item (Appendix B) for every missing fact.
+  3. Add a lesson (Appendix A) for every error or overlooked step not yet recorded, and a knowledge item (Appendix B) for
+     every missing fact: one item per factual assertion, confidence `verified` only if the cited source (with locator)
+     contains that assertion, a limitation and its workaround as two items.
   4. Run `python3 research/spikes/schema_check.py`.
 - Outputs: `RETROSPECTIVE.md`, `logs/retro-digest.md`, new `lessons/L-*.md`, new `knowledge/K-*.md`
 - Evidence produced: none
