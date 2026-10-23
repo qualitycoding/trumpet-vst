@@ -92,9 +92,9 @@ resource.
 - Optional: branch protection on `main` (R-020).
 - Early, non-blocking: in the first session message after S-000, send the owner the fingering table
   (`tests/fixtures/trumpet_fingerings.txt` rows: written note, valves, partial, trigger), the normal/extended range and
-  the trigger rules, and ask for corrections. Record the answer as a new `A-0xx` in `plan/ASSUMPTIONS.md`. Work continues
-  on the frozen table meanwhile; a correction goes through the `correct-chart` amendment path of G-004 (lesson
-  L-20261009T160700Z).
+  the trigger rules, and ask for corrections. Record the answer as "owner reply" in `EXECUTION_LOG.md` (the planning documents are not edited by the implementer).
+  Work continues on the frozen table meanwhile; a correction is held and applied through the `correct-chart` amendment
+  path when G-004 is issued (lesson L-20261009T160700Z).
 
 ## Human gates
 - **G-004:** fingering chart and drawing.
@@ -111,7 +111,7 @@ irreversible action while halted.
 ## Halt and deviation protocol
 - **Unanticipated situation:** apply the decision rules in `plan/DECISIONS.md`; DR-DEFAULT applies when no specific
   rule fits. Every deviation is logged in `DEVIATIONS.md` (step, situation, choice, rationale, evidence). The evidence is
-  a committed path under `logs/<step>/` or `research/spikes/`, never `/tmp` or a scratch directory: commit any probe
+  a committed path under `logs/` or `research/spikes/`, never `/tmp` or a scratch directory: commit any probe
   script or output before citing it.
 - **Halt and write `BLOCKED.md`** when a choice would touch frozen tests, security, data integrity, a public interface
   (signature change; additive members are allowed and logged), or research integrity.

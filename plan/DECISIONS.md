@@ -234,9 +234,10 @@ Signatures may be **extended** (new members, new functions) but never changed. E
 - **Breath noise:**
   - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise mapped to [−1, 1) as w = x/2³¹ − 1 (seed 0x7A11C0DE at
     `reset()`; variance 1/3), through a 3 kHz one-pole (y += a·(w − y), a = 1 − exp(−2π·3000/f_int)). The expected power of
-    the filtered noise in a band [f1, f2] is (1/3)·∫|H(f)|² df over the band divided by f_int/2, with H the one-pole
-    response (S-008 noise-power test);
-  - plus 0.002·breathNoise·pm/pth·w added to the output.
+    the filtered noise in a band [f1, f2] is (1/3)·∫|H(f)|² df over the band divided by f_int/2, with H the discrete
+    response H(z) = a/(1 − (1 − a)z⁻¹) evaluated at z = e^{j2πf/f_int}, f_int = 2 × host rate (D-006) (S-008 noise-power
+    test, on the filtered noise y alone via `core/src/BreathNoise.h`);
+  - plus 0.002·breathNoise·pm/pth·y (the same filtered noise) added to the output.
 - **Gain:** scale by K_out (fixed so that written C5 at ff peaks near −6 dBFS; in `VoiceTuning.h`) × dB(gain), then the decimator.
 - **Safety limiter:** after decimation, on the output sample: y = x for |x| ≤ 0.9, else sign(x)·(0.9 + 0.1·tanh((|x| − 0.9)/0.1)), so that |y| < 1; then the cast to float.
 
@@ -483,7 +484,9 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   LICENSE.txt`; `${nlohmann_json_SOURCE_DIR}/LICENSE.MIT`; the AGPLv3 text from the JUCE tree if present, else downloaded
   from https://www.gnu.org/licenses/agpl-3.0.txt) into `rc/<os>/`, write
   `BUILD_INFO.txt` there, and upload `rc/<os>`.
-- **Dry run:** the same job also runs for the marker `[rc-dryrun <sha7>]`: the sha extraction, ancestry and records-only
+- **Dry run:** the same job also runs for the marker `[rc-dryrun <sha7>]` (`<sha7>` = the commit that introduced the
+  `rc-artifacts` job or its last change; regex `\[rc-dryrun ([0-9a-f]{7})\]`; the job `if:` also matches
+  `contains(github.event.head_commit.message, '[rc-dryrun ')`): the sha extraction, ancestry and records-only
   checks and the staging run, but `upload-artifact` is skipped. S-017 needs one green dry run before asking G-002.
 - **Approval scope:** a G-002 approval covers exactly one sha. Every new RC upload (for example after G-006 `issues`
   fixes) needs its own G-002 request for the new sha, and G-006 is re-issued after it.
@@ -524,8 +527,9 @@ URLs come from `plan/ENVIRONMENT.md` and the pins (repository URLs on github.com
   - Scheduled workflows run only from the default branch (`main`), which this plan never changes (G-002), so no
     schedule is relied on (R-026). `MAINTENANCE.md` gives the owner two ways to get a new binary: (a) as the G-002
     approver, commit `GATE-G-002.RESPONSE.md` with `approve` for a sha and push the `[g002-approved rc <sha>]` marker
-    commit (D-025), or (b) build locally on Windows (first ask the owner to paste `cmake --version` and the generator list
-    of `cmake --help`, and name the Visual Studio generator that list shows) with Visual Studio 2026 (`plan/ENVIRONMENT.md` "Windows" commands;
+    commit (D-025), or (b) build locally on Windows: `MAINTENANCE.md` gives the `"Visual Studio 18 2026"` line and tells the
+    owner to check `cmake --version` (≥ 4.2) and the generator list of `cmake --help` first (`GATE-G-006.md` asks for them,
+    optionally) with Visual Studio 2026 (`plan/ENVIRONMENT.md` "Windows" commands;
     the VST3 is under `build/plugin/TrumpetVST_artefacts/Release/VST3/`). `MAINTENANCE.md` tells the owner to push an empty commit or re-run the last workflow
     once a month, and that a `schedule: - cron: '0 6 1 * *'` trigger becomes active only once `ci.yml` is merged to `main`.
   - `pip-audit` reports without failing on push (`continue-on-error: true`, `::warning::`).
@@ -579,6 +583,7 @@ Each rule names the step(s) where it applies.
 | DR-PLUGINVAL (S-017) | pluginval fails | Fix the plugin. On Windows, a path or hash issue is fixed in the workflow, never in the frozen script. |
 | DR-ZENODO (S-015, S-016) | Zenodo is unreachable locally | Run T-029 in CI only. Continue the other steps. |
 | DR-SECURITY (S-002, S-017) | `pip-audit` reports a vulnerability | Upgrade within the same major version if available and regenerate the lock (log it). Otherwise record it in `DEVIATIONS.md`. Halt with `BLOCKED.md` only if it is exploitable in the shipped plugin (Python is test-only). |
-| DR-CRED (any step) | A push or API call fails with HTTP 401/403 (for example after the human revoked a pasted token, R-027) | Diagnose first (names only, never values): `env \| grep -E '^(GIT_CONFIG\|GH_TOKEN\|GITHUB_TOKEN\|GIT_ASKPASS\|GIT_)' \| cut -d= -f1`, `gh auth status`, then retry the git command once with the `GIT_CONFIG_*` variables unset in the command scope and `gh auth setup-git` re-run; a per-command `-c http.extraheader` built from the environment (never typed, never written to `.git/config`) is an accepted fallback. If the error text names the proxy, "authorized repository set" or "not enabled for this session", the cause is repository authorisation, not the token: ask the human to attach the repository to the session (or accept a manual upload: a zip mirroring the repository paths plus `UPLOAD.md`), and do not ask for a token. On a reproducible server-side `index-pack`/`unpack` error, try the GitHub Git Data API. Only when all this fails is the token treated as bad. Do not retry with any token from the chat. Finish only the current step locally; start no new step. Write `BLOCKED.md` (asking for a new credential via `GH_TOKEN`) and end the session with a message that lists the unpushed commits (sha and subject) and the request. On restart with a working credential, push first; if the local commits are gone, re-run the steps after the last pushed commit and log it (pre-mortem R-031). |
-| DR-PUSH (any step) | `git push` fails with "remote unpack failed", "index-pack failed" or "did not receive expected object" twice, with different content | Stop retrying. Confirm with a tiny test push to a scratch branch; if that also fails, push through the GitHub Git Data API (blobs, tree, commit, ref update via `gh api`), skipping git-ignored files, and log it; if the API also fails, DR-CRED's manual-upload path. |
+| DR-CRED (any step) | A push or API call fails with HTTP 401/403 (for example after the human revoked a pasted token, R-027) | Diagnose first (names only, never values): `env \| grep -E '^(GIT_CONFIG\|GH_TOKEN\|GITHUB_TOKEN\|GIT_ASKPASS\|GIT_)' \| cut -d= -f1`, `gh auth status`, then retry the git command once with the indexed `GIT_CONFIG_COUNT`/`GIT_CONFIG_KEY_n`/`GIT_CONFIG_VALUE_n` variables unset
+  in the command scope (`env $(env | sed -n 's/^\(GIT_CONFIG_[A-Z_0-9]*\)=.*/-u \1/p') git …`) and `gh auth setup-git` re-run; a per-command `-c http.extraheader` built from the environment (never typed, never written to `.git/config`) is an accepted fallback. If the error text names the proxy, "authorized repository set" or "not enabled for this session", the cause is repository authorisation, not the token: ask the human to attach the repository to the session (or accept a manual upload: a zip mirroring the repository paths plus `UPLOAD.md`), and do not ask for a token. On a reproducible server-side `index-pack`/`unpack` error, try the GitHub Git Data API. Only when all this fails is the token treated as bad. Do not retry with any token from the chat. Finish only the current step locally; start no new step. Write `BLOCKED.md` (asking for a new credential via `GH_TOKEN`) and end the session with a message that lists the unpushed commits (sha and subject) and the request. On restart with a working credential, push first; if the local commits are gone, re-run the steps after the last pushed commit and log it (pre-mortem R-031). |
+| DR-PUSH (any step) | `git push` fails with "remote unpack failed", "index-pack failed" or "did not receive expected object" twice, with different content | Stop retrying. Confirm with a tiny test push to the scratch branch `evidence/push-probe` (deleted afterwards); if that also fails, push through the GitHub Git Data API (blobs, tree, commit, ref update via `gh api`), skipping git-ignored files, and log it; if the API also fails, DR-CRED's manual-upload path. |
 | DR-DEFAULT (any) | Anything unanticipated | Choose the most reversible option that does not expand scope, log it in `DEVIATIONS.md` with the rationale, and continue. Exception: if it touches frozen tests, security, data integrity, a public interface or research integrity, halt and write `BLOCKED.md`. |

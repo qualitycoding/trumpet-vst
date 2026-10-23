@@ -169,3 +169,17 @@ A fresh Sonnet dry run checked the changes since 257d87d: 5 items (1 High, 2 Med
 - **5:** README section lists CC68.
 
 No frozen test contradicts CC11 or CC68 (checked by the reviewer: T-016, T-019, T-026, T-035).
+
+## Re-run after the R0 re-run against the real knowledge store (pass 10)
+A fresh dry run checked the R0 amendments (diff 104d893..HEAD): 20 items (2 High, 6 Medium, 12 Low). All were resolved:
+- **1 (High):** non-frozen tests live under `extras/` (outside the frozen `tests/` tree), wired from the root CMake with the
+  fixture define and `tests/core` include, label `extra`, excluded from red-run comparisons (PLAN Conventions).
+- **2 (High):** breath noise is a private `BreathNoise.h` class; D-012 states the discrete H(z) and f_int = 2 × host rate;
+  the test compares band-power ratios and variance of the filtered noise alone.
+- **3–8 (Medium):** `perf_probe` prints the RTF; `tpt::tuning::table()` and `tpt_render --print-tuning`; G-003
+  `push-to: knowledge=…, lessons=…`; `--notes` partial-run semantics and full-coverage check; `make_report.py` inputs,
+  markers and Done-when; `bootstrap_env.sh` in Outputs, proxy status body only.
+- **9–20 (Low):** S-013 Done-when names the variant tests; dry-run sha and regex; narrowed `* 0` grep; session-start
+  `git log` once the branch exists; `python3` from the clone root; evidence under `logs/**`; `ui-checklist` in S-014;
+  S-RETRO `/tmp/` check; G-006 optional `cmake --version` request; `GIT_CONFIG_*` unset loop and `evidence/push-probe`;
+  early fingering reply logged in `EXECUTION_LOG.md`; the READY header replaces IN REVISION (Phase 5).
