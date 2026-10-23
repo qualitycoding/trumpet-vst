@@ -37,6 +37,15 @@ sudo apt-get install -y g++ libasound2-dev libjack-jackd2-dev ladspa-sdk libfree
 python3 -m venv $HOME/.venvs/trumpet-vst && ln -sfn $HOME/.venvs/trumpet-vst .venv && .venv/bin/pip install -r tools/requirements.lock
 ```
 
+### Sandbox notes (store knowledge, R0)
+- `/bin/sh` is dash: run bash syntax via `bash -c`. Background jobs started with `&` die with the tool call: use
+  `setsid nohup <cmd> > log 2>&1 < /dev/null &` and poll. A full JUCE plugin build on few cores can exceed one tool call:
+  build the plugin in CI, or in the background as above; never run the sanitizer plugin builds locally.
+- `$HOME/tools`, `$HOME/.venvs` and `build/` may be gone at a new turn; every setup command below is idempotent.
+- If `apt-get update` fails on an unrelated repository, continue with the install and check each package with
+  `dpkg -s`; fall back to the no-sudo variant if packages are missing.
+- MSVC builds with the Ninja generator need the vcvars environment; on Windows use the Visual Studio generator.
+
 ### Sandbox without sudo or pip (verified in the planning sandbox; L-20261007T150000Z)
 The core library, its tests and the Python tools build and run locally this way. The plugin builds only in CI (D-022).
 ```bash

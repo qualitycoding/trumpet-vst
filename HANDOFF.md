@@ -42,7 +42,11 @@ bash tests/scripts/run_pluginval.sh <Trumpet.vst3>        # T-027
 - the SHA-256 of every file in `tests/FROZEN_MANIFEST.sha256` (tests, fixtures, test scripts);
 - every `EXPECTED:` literal, via `research/spikes/expected_values.py --check`.
 
-**Immutability rule:** you cannot modify, skip, mark as expected-failure, or weaken a frozen test. If you believe a
+**Immutability rule:** you cannot modify, skip, mark as expected-failure, or weaken a frozen test. Never edit
+`tests/FROZEN_MANIFEST.sha256`, `research/spikes/expected_values.py` or any frozen file, and never regenerate the
+manifest: only the planning agent amends them (protocol 2E.4). CI's `freeze` job also diffs `tests/` and
+`expected_values.py` against the generation branch, so a regenerated manifest is caught (lesson
+L-20261009T160100Z-frozen-test-edited-and-hash-manifest-regenerated-by-implementer). If you believe a
 frozen test or fixture is wrong:
 1. halt that path;
 2. write `TEST_CHALLENGE.md` (item ID, evidence, proposed fix);
@@ -84,6 +88,11 @@ resource.
   The implementer never uses them: its credential is a new token provided as `GH_TOKEN` (R-027, DR-CRED). Ask for the reply
   `tokens-revoked` with the G-004 response; G-005 is not processed until it is recorded (`plan/GATES.md`).
 - Optional: branch protection on `main` (R-020).
+- Early, non-blocking: in the first session message after S-000, send the owner the fingering table
+  (`tests/fixtures/trumpet_fingerings.txt` rows: written note, valves, partial, trigger), the normal/extended range and
+  the trigger rules, and ask for corrections. Record the answer as a new `A-0xx` in `plan/ASSUMPTIONS.md`. Work continues
+  on the frozen table meanwhile; a correction goes through the `correct-chart` amendment path of G-004 (lesson
+  L-20261009T160700Z).
 
 ## Human gates
 - **G-004:** fingering chart and drawing.
@@ -99,7 +108,9 @@ irreversible action while halted.
 
 ## Halt and deviation protocol
 - **Unanticipated situation:** apply the decision rules in `plan/DECISIONS.md`; DR-DEFAULT applies when no specific
-  rule fits. Every deviation is logged in `DEVIATIONS.md` (step, situation, choice, rationale).
+  rule fits. Every deviation is logged in `DEVIATIONS.md` (step, situation, choice, rationale, evidence). The evidence is
+  a committed path under `logs/<step>/` or `research/spikes/`, never `/tmp` or a scratch directory: commit any probe
+  script or output before citing it.
 - **Halt and write `BLOCKED.md`** when a choice would touch frozen tests, security, data integrity, a public interface
   (signature change; additive members are allowed and logged), or research integrity.
 - **Execution log:** after every step attempt, append to `EXECUTION_LOG.md`:

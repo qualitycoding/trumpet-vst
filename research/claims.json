@@ -502,7 +502,7 @@
     "tier": 1
    }
   ],
-  "confidence": "corroborated",
+  "confidence": "verified",
   "evidence_class": "n/a",
   "contradicted_by": [],
   "informs": [
@@ -880,6 +880,14 @@
     "tier": 1
    },
    {
+    "url": "research/spikes/plan_verify_ci.md",
+    "title": "plan-verify CI run 37748754510",
+    "version": "2026-10-08",
+    "locator": "table rows macos-15 (auval) and ubuntu-24.04 (xvfb)",
+    "accessed": "2026-10-08",
+    "tier": 1
+   },
+   {
     "url": "https://github.com/qualitycoding/clarinet-vst/blob/impl/clarinet-v1/REPORT.md",
     "title": "clarinet-vst REPORT (sibling project CI on JUCE 9.0.3)",
     "version": "ef14e98",
@@ -888,7 +896,7 @@
     "tier": 2
    }
   ],
-  "confidence": "corroborated",
+  "confidence": "verified",
   "evidence_class": "n/a",
   "contradicted_by": [],
   "informs": [
@@ -1001,6 +1009,14 @@
     "tier": 1
    },
    {
+    "url": "research/spikes/plan_verify_ci.md",
+    "title": "plan-verify CI run 37748754510",
+    "version": "2026-10-08",
+    "locator": "table rows macos-15 (auval) and ubuntu-24.04 (xvfb)",
+    "accessed": "2026-10-08",
+    "tier": 1
+   },
+   {
     "url": "https://github.com/qualitycoding/clarinet-vst/blob/impl/clarinet-v1/REPORT.md",
     "title": "clarinet-vst REPORT (sibling project CI on JUCE 9.0.3)",
     "version": "ef14e98",
@@ -1009,7 +1025,7 @@
     "tier": 2
    }
   ],
-  "confidence": "corroborated",
+  "confidence": "verified",
   "evidence_class": "n/a",
   "contradicted_by": [],
   "informs": [

@@ -10,6 +10,9 @@ The response is accepted in either of two forms:
 - a file `GATE-<id>.RESPONSE.md` committed to the implementation branch;
 - the human's message in the session, which the implementer copies verbatim into that file.
 
+A response that is not one of the allowed forms, or that describes the instrument in a way that conflicts with what
+the code does, is not acted on: restate in the next `GATE-<id>.md` what the code does and ask which meaning is intended.
+
 While halted, the implementer may continue any step whose `Depends on` list does not include the gated step. It never takes an external or irreversible action.
 
 **Waiting:** after pushing `GATE-<id>.md`, continue every independent step. When nothing independent remains, end the

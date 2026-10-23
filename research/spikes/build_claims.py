@@ -154,6 +154,9 @@ def main():
         if c.get("supersedes_claim"):
             o = byid[c["supersedes_claim"]]
             o["superseded_by"] = c["id"]; o["contradicted_by"] = sorted(set(o["contradicted_by"]) | {c["id"]}); o["load_bearing"] = False
+    for c in claims:
+        if c["source_item"] == "E-15":   # one publisher (Tracktion); read directly at the tag by R5 -> verified, not corroborated
+            c["confidence"] = "verified"
     # R3/R4 resolutions: arithmetic facts verified by computation; claims superseded by spike-based design decisions.
     for c in claims:
         if c["source_item"] in ("A-22", "F-1", "F-14"):
@@ -168,7 +171,12 @@ def main():
             c["notes"] = "Superseded: the 0-6 ms onsets were an artefact of circular FFT filtering (lesson L-20261008T010500Z)."
         if c["source_item"] in ("E-26", "E-29"):
             c["load_bearing"] = True
-            c["confidence"] = "corroborated"
+            # R0 (lesson L-20261009T123005Z): the sibling report is the same publisher; the claim is verified by this
+            # project's own CI run instead (auval PASS on macos-15, plugin tests under xvfb-run on ubuntu-24.04).
+            c["confidence"] = "verified"
+            c["sources"].append({"url": "research/spikes/plan_verify_ci.md", "title": "plan-verify CI run 37748754510",
+                                 "version": "2026-10-08", "locator": "table rows macos-15 (auval) and ubuntu-24.04 (xvfb)",
+                                 "accessed": "2026-10-08", "tier": 1})
             c["sources"].append({"url": "https://github.com/qualitycoding/clarinet-vst/blob/impl/clarinet-v1/REPORT.md",
                                  "title": "clarinet-vst REPORT (sibling project CI on JUCE 9.0.3)", "version": "ef14e98",
                                  "locator": "SC-1 row: CI plugin job green on Linux (xvfb), macOS (auval PASS), Windows",

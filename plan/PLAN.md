@@ -54,7 +54,30 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      `.checkpoints/impl-state.json` (create it as `[]` in S-000);
   4. commit steps 2 and 3 as `S-0xx: record`;
   5. push.
-- **Freeze check:** run `bash tests/scripts/verify_freeze.sh` before and after every step; it must print `freeze OK`.
+- **Freeze check:** run `bash tests/scripts/verify_freeze.sh` before and after every step; it must print `freeze OK`. Also
+  `git diff --exit-code origin/gen-20261007T145241Z-trumpet-vst-plan -- tests research/spikes/expected_values.py` must be
+  empty (until a planning amendment moves the generation branch).
+- **Session start and pushes:** at the start of every session and after any gate wait, run
+  `git fetch origin && git status -sb && git log --oneline HEAD..origin/impl-20261007T145241Z-trumpet-vst-plan`; if
+  anything is listed (for example a `GATE-*.RESPONSE.md` from the human), `git pull --rebase` before new commits. On a push
+  rejection, `git pull --rebase` and retry; never force-push the implementation branch. The sandbox may lose
+  `$HOME/tools`, `$HOME/.venvs` and `build/` between turns: re-run the idempotent setup of `plan/ENVIRONMENT.md`; the
+  pushed branch is the intact copy.
+- **Edits and slow commands:** make each source edit its own call and confirm it (`git diff --stat` or `grep`) before
+  starting a build, calibration or other slow command; never chain an edit after a slow command with `&&` or `;`. Run
+  commands that may exceed the tool timeout as `setsid nohup <cmd> > logs/<step>/<name>.log 2>&1 < /dev/null &` and
+  poll the log. The sandbox `/bin/sh` is dash: run bash syntax (`PIPESTATUS`, `<(...)`, brace expansion) via `bash -c`.
+- **Interfaces:** if a declared function cannot be implemented as specified from its header alone, add the missing
+  member additively (logged in `DEVIATIONS.md`) and continue; only a signature change halts (`BLOCKED.md`).
+- **First failure of a frozen test:** check the test's own preconditions (initial state, defaults, helpers) before
+  changing code; if the test itself looks unsatisfiable, write `TEST_CHALLENGE.md` with the analysis at once and
+  continue with independent steps.
+- **Resources:** open every file, socket and archive in a `with` block (Python) or an RAII scope (C++); write outputs to
+  a temporary name and rename after verification.
+- **JUCE APIs:** before using any JUCE class or method not already present in the stub files, find its declaration in
+  the JUCE source at the pinned commit (`build/_deps/juce-src/modules/` once configured with the plugin, or a clone of
+  `be29c81` outside the repository) and note the header in the step checkpoint; never write JUCE calls from memory (JUCE 9
+  differs from 8). Use `juce::Font(juce::FontOptions(size))`, not deprecated constructors.
 - **Idempotency:** every step is safe to re-run. Completion is detected by its "Done when" checks.
 - **Lessons and knowledge:**
   - Whenever you correct your own execution (Rule 11), write a lesson in `lessons/` before continuing.
@@ -96,7 +119,12 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      status (not `000`) counts as reachable; some hosts answer 404 at the root (files.pythonhosted.org). Hosts:
      github.com, api.github.com, codeload.github.com, objects.githubusercontent.com, release-assets.githubusercontent.com,
      zenodo.org, pypi.org, files.pythonhosted.org, bootstrap.pypa.io.
-     Record each result.
+     Record each result. If a host returns `000` and `HTTPS_PROXY` is set, also record the output of
+     `curl -s "$HTTPS_PROXY/__agentproxy/status"` (if it answers): an allowlist change reaches only a new container, so a
+     host shown as allowed there but refused here means "restart in a fresh session", not "not allowlisted".
+  4b. Push probes for all three repositories: `git push --dry-run` to `qualitycoding/trumpet-vst` and
+     `git ls-remote` + `gh api repos/<r> --jq .permissions.push` for `qualitycoding/knowledge` and `qualitycoding/Lessons`; a
+     refusal naming the session's authorised repository set is handled by DR-CRED (repository authorisation).
   5. `bash tests/scripts/verify_freeze.sh`.
   6. Create `EXECUTION_LOG.md` with its header line, and `.checkpoints/impl-state.json` containing `[]`.
 - Outputs: `EXECUTION_LOG.md`, `.checkpoints/impl-state.json`
@@ -121,6 +149,11 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      xvfb-run). (`plugin/CMakeLists.txt` labels the test `plugin`.) Also
      `ctest --test-dir build -L perf --output-on-failure >> logs/S-001-red-ctest.txt 2>&1 || true`.
   3. `.venv/bin/python -m pytest tests/python > logs/S-001-red-pytest.txt 2>&1 || true`.
+  3b. Add a non-frozen self-test `tests/core_extra/test_support_selftest.cpp` (own CMake target `tpt_support_selftest`,
+     not in the manifest) asserting `loadMeasuredModes().size() == 11`, `loadFingeringFixture().size() == 56`,
+     `nominalPartialOf(nominalPartialHz(v, m), v) == m` for all 8 valve combinations and m = 1..13, and
+     `nominalPartialOf(0, 0) == 0`. It may fail now only where it calls stubs (`loweringSemitones`); it must pass after
+     S-003. A failure after S-003 → `TEST_CHALLENGE.md` (the helpers are frozen).
   4. Compare with the planning red run in `plan/ENVIRONMENT.md`:
      - every C++ test case in unit, integration, operational, alloc and perf fails;
      - if the plugin was built: `tpt_plugin_tests` has 1 passing case ("T-026 parameters", guard) and 4 failing;
@@ -152,6 +185,15 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   3. Apply the CI additions of D-024, D-025 and D-026 (R-015 TSan step, R-016 ASan step, R-018 append-only `ci-results`,
      R-019 monthly schedule and non-failing `pip-audit` on push and toolchain logging, R-020 `tools/requirements.hashes.txt`
      and `persist-credentials: false`, R-024 concurrency).
+  3c. Prove `tools/requirements.hashes.txt` in a clean venv (`python3 -m venv $RUNNER_TEMP/x && $RUNNER_TEMP/x/bin/pip
+     install --require-hashes -r tools/requirements.hashes.txt`, locally with a scratch path) and make the CI `python` job
+     install from it; run `pip-audit -r tools/requirements.lock` once and log the result in `logs/S-002/`.
+  3d. The `freeze` job also runs `git fetch origin gen-20261007T145241Z-trumpet-vst-plan` and
+     `git diff --exit-code FETCH_HEAD -- tests research/spikes/expected_values.py`.
+  3e. The Linux package step is `sudo apt-get update || echo "::warning::apt-get update failed"`, then
+     `sudo apt-get install -y --no-install-recommends <packages>`, then a `dpkg -s` loop that fails the job naming any
+     missing package. Every script or step that pushes uses `set -euo pipefail`, asserts the current branch (or uses
+     `git -C <worktree>`) before `git rm`/commit, and requires `git status --short` to be empty before a checkout.
   4. Create `THIRD_PARTY_NOTICES.md` with one row per D-021 component: name, version, licence, URL, use, shipped yes/no.
   5. Push, then `gh run watch` (or poll `gh run list --branch impl-20261007T145241Z-trumpet-vst-plan`).
 - Outputs: `.github/workflows/ci.yml`, `THIRD_PARTY_NOTICES.md`, `tools/requirements.hashes.txt`, `.gitignore`
@@ -314,6 +356,11 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      `setHeldValves()` (D-026 R-014; `prepare()`/`reset()` keep held valves), UI atomics outside the reallocated state
      (R-015), and `-ffp-contract=off` / `/fp:precise` for `tpt_core` in `core/CMakeLists.txt` (R-021).
   3. Run `tpt_operational_tests` and `tpt_alloc_tests`.
+  4. Early performance check (A-012 is an unmeasured default): build Release, run `ctest --test-dir build -L perf`
+     once and write the real-time factor to `logs/S-008/rtf.txt`; if RTF > 0.03, apply DR-PERF items (1)–(2) now.
+  5. Breath-noise power (D-012): add a non-frozen test `tests/core_extra/test_noise_power.cpp` that renders
+     breathNoise = 1 with the lips held closed and compares the flow-noise path's output power in 0.3–1, 1–3 and 3–8 kHz
+     with the analytic value of D-012 within 1 dB at 44.1, 48 and 96 kHz.
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h` (+ private helpers in `core/src/`), `core/CMakeLists.txt`,
   `core/include/tpt/TrumpetVoice.h` (additive members only), `DEVIATIONS.md`
 - Evidence produced: T-023, T-024 (alloc part), T-025
@@ -336,6 +383,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   3. Build (so `tpt_calibrate` has the current constants), run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`,
      then build again (this re-embeds the table).
   4. Run `tpt_integration_tests "[T-012],[T-013]"`, `tpt_unit_tests "[T-007]"` and `tpt_operational_tests`.
+  5b. `tpt_calibrate` and its read-only modes accept `--notes <first>-<last>` (written MIDI) and append to their log, so
+     a run can be split across tool calls.
   5. Long hold (D-026 R-023): `build/tools/render/tpt_calibrate --long-hold data/trumpet_resonators.json` writes
      `logs/S-009-long-hold.md`.
 - Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`, `logs/S-009-long-hold.md`
@@ -482,7 +531,10 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
        `xvfb-run -a`, and pushes the PNGs plus `SHA256SUMS` to the orphan branch `evidence/G-004`. (With sudo locally you
        may run the same script `tools/render/push_evidence.sh G-004 renders/G-004`.) Copy only `SHA256SUMS` to
        `gates/G-004/` on the implementation branch.
-  5. Run all T-026 cases. Write `GATE-G-004.md` per `plan/GATES.md`.
+  5. Run all T-026 cases. Write `logs/S-014/ui-checklist.md`: one row per D-013 and S-014 bullet (layout rectangles,
+     colours, trigger extension, ladder, caption, level meter, 960×600, 9 knobs and 2 toggles, build id,
+     unsupported-rate overlay, 60 Hz timer) with status built / deviated (`DEVIATIONS.md` entry) / not built; no row may be
+     blank; attach it to `GATE-G-004.md`. Write `GATE-G-004.md` per `plan/GATES.md`.
 - Outputs: `core/src/Layout.cpp`, `plugin/src/{TrumpetView,PluginEditor}.cpp`, `tools/render/{snapshot_ui.cpp,push_evidence.sh}`, `plugin/CMakeLists.txt`, `.github/workflows/ci.yml` (job `gate-evidence`), `GATE-G-004.md`, `gates/G-004/SHA256SUMS`
 - Evidence produced: T-033, T-026 (editor case)
 - Done when: T-033 and all of T-026 pass, the G-004 bundle is pushed, and `GATE-G-004.md` is committed.
@@ -512,7 +564,10 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      - exits 0 on success, 2 on bad arguments or a malformed event file.
   2. Implement `tinysol.download` (Zenodo REST API, record 3685367, streamed download, md5 verify, partial extraction) and
      `trumpet_notes`. Idempotency: after a verified extraction write the marker `<dest>/.extracted-36030a7fe389da86c3419e5ee48e3b7f`
-     and delete the archive; if the marker exists, skip download and md5 (this is what the CI cache restores).
+     and delete the archive; if the marker exists, skip download and md5 (this is what the CI cache restores). The
+     download is resumable: write `<dest>/TinySOL.tar.gz.part`, resume with an HTTP `Range` header, verify the md5 at the
+     end and rename; run it in repeated calls under `timeout 500`; after three calls without completion apply DR-ZENODO.
+     `tpt_render` must not leave a partial WAV when it exits with code 2.
   3. Implement `compare_tinysol.main` per its docstring, using `metrics.py`.
   4. Add `tools/realism/summarize.py <results.json> --out SUMMARY.md`: per-dynamic metrics against the D-017 thresholds and
      the 10 worst notes by `harm_mad_db`, split by register using the standard fingering's partial of written = concert + 2
@@ -569,7 +624,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   2. Run `pip-audit -r tools/requirements.lock` (DR-SECURITY).
   3. Check that the Windows `dumpbin` step (D-024) passes; apply D-026 R-017 if sound-affecting files changed since the
      G-005 bundle commit.
-  4. Add the `rc-artifacts` job (D-025) to `ci.yml`. Write `GATE-G-002.md` asking approval to run it for the current commit
+  4. Add the `rc-artifacts` job (D-025) to `ci.yml`, including its dry-run mode (marker `[rc-dryrun <sha7>]`: sha
+     extraction, ancestry and records-only checks and staging, no upload); push one dry run and record its green run URL.
+     Then write `GATE-G-002.md` asking approval to run it for the current commit
      and halt at G-002. On `approve`: push `git commit --allow-empty -m "[g002-approved rc <short sha>]"` and wait for the
      artifacts. On `deny`: skip the upload.
   5. Write `GATE-G-006.md` per `plan/GATES.md` (REAPER checklist, with the RC artifact or local build instructions) and
@@ -597,7 +654,12 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   2. Update the README "Status" and "Building" sections (no claims beyond the evidence), and add a "MIDI and latency"
      section: CC2 breath, CC11 expression, CC68 legato pedal (touching notes), CC121, keyswitches 24–31, the ≤ 1.3 ms unreported warp delay (D-012) and the
      supported sample-rate range (D-026 R-022).
-  3. Write `REPORT.md`: tests by ID with status, the SC table, deviations, gate outcomes, open risks, and what was not verified (a real DAW host test, unless the human did one).
+  3. Generate the tables of `REPORT.md` with `tools/report/make_report.py` (reads `ctest --output-junit` and pytest junit
+     files, `logs/*`, `results.json`); `REPORT.md` contains no hand-typed result numbers outside generated blocks, and
+     README numbers refer to it. Every behavioural README sentence (MIDI map, latency, rates, Fixed valves, legato) is
+     followed by the T-ID or CI run that shows it, else the word UNVERIFIED; coverage reads "k of N". Run
+     `grep -nE 'identical|validated|complete|guarantee|always' README.md` and justify each hit in `REPORT.md`.
+  3b. Write `REPORT.md`: tests by ID with status, the SC table, deviations, gate outcomes, open risks, and what was not verified (a real DAW host test, unless the human did one).
   4. Write `MAINTENANCE.md` (D-026 R-019) and recommend branch protection on `main` in `REPORT.md` (R-020).
   5. Push.
 - Outputs: `README.md`, `REPORT.md`, `MAINTENANCE.md`
@@ -622,7 +684,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   4. Run `python3 research/spikes/schema_check.py`.
 - Outputs: `RETROSPECTIVE.md`, `logs/retro-digest.md`, new `lessons/L-*.md`, new `knowledge/K-*.md`
 - Evidence produced: none
-- Done when: every finding links to an `L-` or `K-` file, and the schema check exits 0.
+- Done when: every finding links to an `L-` or `K-` file, the schema check exits 0, and
+  `grep -rn '/tmp' DEVIATIONS.md TEST_CHALLENGE.md BLOCKED.md lessons/ 2>/dev/null` finds no evidence path.
 - Checkpoint: counts of lessons and knowledge items.
 - On failure: fix the entries until the schema check passes.
 - Gate: none
@@ -650,6 +713,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      - in each repository run `python scripts/build_index.py`, then `python scripts/check_knowledge_schema.py` (must print
        `all entries valid`), commit, and push.
      - If a push is rejected: pull, re-run `build_index.py` and retry, up to 3 times.
+  2b. After pushing, clone each target into a new directory and check there that every pushed ID appears in its
+     `INDEX.md`; if a script crashed or a push was retried, re-run it to completion first.
   3. On `do-not-push`: finish.
   4. If a target is unreachable or no response arrives: `git bundle create knowledge-20261007T145241Z-trumpet-vst-plan.bundle
      <lessons and knowledge commits>`, and report its path.

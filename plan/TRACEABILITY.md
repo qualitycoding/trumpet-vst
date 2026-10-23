@@ -54,3 +54,45 @@
 | T-034 | tests/core/test_voice_ranges.cpp | SC-5, SC-3, D-011, D-012, DR-RANGE | pre-mortem R-013; lesson L-20261007T150600Z |
 
 Every test maps to at least one requirement, and every SC maps to at least one test.
+
+## Satisfiability evidence per test (R0 lesson L-20261009T234102Z)
+What shows, before implementation, that each frozen test can pass. "unverified" tests get first-failure analysis under the
+PLAN convention "First failure of a frozen test" and `TEST_CHALLENGE.md` if their own premise is wrong.
+
+| Test | Evidence of satisfiability |
+|---|---|
+| T-001 | spec (closed form) |
+| T-002 | spec |
+| T-003 | fixture (script-checked) |
+| T-004 | spec |
+| T-005 | spec (rule re-implemented in test) |
+| T-006 | spec (fixture) |
+| T-007 | spike (bore_fit, make_table; R5) |
+| T-008 | spec (published constants) |
+| T-009 | spike (lipsim reproduces Fréour, R5 RK4) |
+| T-010 | spec (synthetic signals) |
+| T-011 | spec |
+| T-012 | spike (C-091, 4 s re-runs) |
+| T-013 | spike (C-081/C-092, calibrated) |
+| T-014 | partial (table formula; pitch at r=1 not spiked) |
+| T-015 | spike (C-083/C-084/C-093) |
+| T-016 | unverified (valve slur not spiked; DR-VALVE) |
+| T-017 | partial (jump spike; fixed-valves fscale rule not spiked) |
+| T-018 | spike (alternates calibrated, C-081) |
+| T-019 | unverified (design-level) |
+| T-020 | partial (regime spike; tracker design) |
+| T-021 | partial (C-085/C-094, 3–6 notes) |
+| T-022 | partial (C-085/C-094) |
+| T-023 | design (bitwise grid D-006) |
+| T-024 | unmeasured estimate (A-012; S-008 early check) |
+| T-025 | design |
+| T-026 | partial (stub CI: parameters case passes) |
+| T-027 | verified (stub pluginval on 3 OSes) |
+| T-028 | verified (reference metric, t028_values.py) |
+| T-029 | partial (spikes C-073/C-085/C-089/C-094) |
+| T-030 | spike (tmm/bore_fit; short-frustum fix verified) |
+| T-031 | partial (guards pass; rest needs S-002) |
+| T-032 | verified (planning runs) |
+| T-033 | spec (layout arithmetic checked in cold read) |
+| T-034 | partial (tuning extremes spiked within 2.7 c, round 4) |
+| T-035 | spike (C-101/C-102) |
