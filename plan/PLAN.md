@@ -60,12 +60,18 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   5. push.
 - **Freeze check:** run `bash tests/scripts/verify_freeze.sh` before and after every step; it must print `freeze OK`. Also
   `git diff --exit-code origin/gen-20261007T145241Z-trumpet-vst-plan -- tests research/spikes/expected_values.py` must be
-  empty (until a planning amendment moves the generation branch).
+  empty (until a planning amendment moves the generation branch). **Taking in an amendment:** when `TEST_CHALLENGE.md` is
+  answered or a gate amendment is announced, run `git fetch origin && git merge --no-ff origin/gen-20261007T145241Z-trumpet-vst-plan
+  -m 'merge planning amendment D-0xx'` (never rebase, never copy files by hand); on a conflict in `tests/`,
+  `tests/FROZEN_MANIFEST.sha256` or `research/spikes/expected_values.py` take the generation-branch side
+  (`git checkout --theirs <path>`); then run `verify_freeze.sh` and the diff check, log the merge in `EXECUTION_LOG.md`, and
+  re-run the steps named by the amendment's `plan/TRACEABILITY.md` rows.
 - **Session start and pushes:** at the start of every session and after any gate wait, run
   `git fetch origin && git status -sb` and, once the branch exists on origin,
   `git log --oneline HEAD..origin/impl-20261007T145241Z-trumpet-vst-plan`; if
-  anything is listed (for example a `GATE-*.RESPONSE.md` from the human), `git pull --rebase` before new commits. On a push
-  rejection, `git pull --rebase` and retry; never force-push the implementation branch. The sandbox may lose
+  anything is listed (for example a `GATE-*.RESPONSE.md` from the human), `git pull --no-rebase --no-edit` before new
+  commits. On a push rejection, `git pull --no-rebase --no-edit` (a merge: it keeps the shas already written to
+  `EXECUTION_LOG.md` and `.checkpoints/` valid) and retry; never force-push the implementation branch. The sandbox may lose
   `$HOME/tools`, `$HOME/.venvs` and `build/` between turns: re-run the idempotent setup of `plan/ENVIRONMENT.md`; the
   pushed branch is the intact copy.
 - **Edits and slow commands:** make each source edit its own call and confirm it (`git diff --stat` or `grep`) before
@@ -85,7 +91,10 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - **Extra (non-frozen) tests:** live under `extras/` (never under `tests/`, which is frozen and diffed), are wired from
   the root `CMakeLists.txt` with `add_subdirectory(extras)` when `TPT_BUILD_TESTS` is on, define
   `TPT_FIXTURE_DIR="${CMAKE_SOURCE_DIR}/tests/fixtures"`, include `tests/core` for `TestSupport.h`, and carry the CTest
-  label `extra`; red-run comparisons exclude them (`-LE 'perf|plugin|extra'`).
+  label `extra`; red-run comparisons exclude them (`-LE 'perf|plugin|extra'`). `add_subdirectory(extras)` comes after
+  `add_subdirectory(plugin)`; `extras/CMakeLists.txt` adds `extras/plugin` only `if(TPT_BUILD_PLUGIN)`. Core extras link
+  `tpt_core Catch2::Catch2WithMain` and add `${CMAKE_SOURCE_DIR}/core/src` to their include path; plugin extras link
+  `TrumpetVST Catch2::Catch2` and provide a `main` with JUCE initialisation like `tests/plugin/test_plugin.cpp`.
 - **Interfaces:** if a declared function cannot be implemented as specified from its header alone, add the missing
   member additively (logged in `DEVIATIONS.md`) and continue; only a signature change halts (`BLOCKED.md`).
 - **First failure of a frozen test:** check the test's own preconditions (initial state, defaults, helpers) before
@@ -134,8 +143,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      - `gh api repos/qualitycoding/trumpet-vst/actions/runs --jq '.total_count'` (must succeed);
      - record the scopes shown by `gh auth status` (fine-grained tokens show none: the workflows permission is then first
        exercised by the S-002 push; a rejection there is a `BLOCKED.md` for the missing permission);
-     - `gh api repos/qualitycoding/knowledge --jq .permissions.push` and the same for `qualitycoding/Lessons` (both must be
-       `true` before S-KNOW; record them);
+     - `gh api repos/qualitycoding/knowledge --jq .permissions.push` and the same for `qualitycoding/Lessons` (recorded, not
+       blocking at S-000: both must be `true` only before S-KNOW);
      - `gh api repos/qualitycoding/trumpet-vst --jq .visibility` (record it; if `public`, D-025 applies as written; if
        `private`, D-025 still applies).
   4. Check that hosts are reachable with `curl -s -o /dev/null -m 15 -w "%{http_code}" https://<host>/`. Any HTTP
@@ -148,14 +157,16 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      host shown as allowed there but refused here means "restart in a fresh session", not "not allowlisted".
   4b. Push probes for all three repositories: `git push --dry-run` to `qualitycoding/trumpet-vst` and
      `git ls-remote` + `gh api repos/<r> --jq .permissions.push` for `qualitycoding/knowledge` and `qualitycoding/Lessons`; a
-     refusal naming the session's authorised repository set is handled by DR-CRED (repository authorisation).
+     refusal naming the session's authorised repository set is handled by DR-CRED (repository authorisation). The two
+     store probes are recorded, not blocking at S-000.
   5. `bash tests/scripts/verify_freeze.sh`.
   6. Create `EXECUTION_LOG.md` with its header line, and `.checkpoints/impl-state.json` containing `[]`.
 - Outputs: `EXECUTION_LOG.md`, `.checkpoints/impl-state.json`, `tools/bootstrap_env.sh`, `logs/`
 - Evidence produced: none
-- Done when: every check succeeds and `freeze OK` is printed.
+- Done when: every check succeeds and `freeze OK` is printed, except the two store probes, which only need to succeed
+  before S-KNOW.
 - Checkpoint: the reachability and permission results.
-- On failure: write `BLOCKED.md` listing exactly what is missing (credential, permission, host), then halt before any delivery work. Exception: zenodo.org unreachable locally is not blocking (DR-ZENODO).
+- On failure: write `BLOCKED.md` listing exactly what is missing (credential, permission, host), then halt before any delivery work. Exceptions: zenodo.org unreachable locally is not blocking (DR-ZENODO); a failed store probe is noted in the first session message, asking the human to attach `qualitycoding/knowledge` and `qualitycoding/Lessons` to a session before G-003, and work continues.
 - Gate: none
 - Relevant decisions/claims: D-019, D-022, C-090
 - Lessons applied: L-20261007T150000Z-sandbox-no-pip-no-sudo, L-20261007T150100Z-no-credentials-in-command-lines
@@ -168,7 +179,7 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - Inputs: `plan/ENVIRONMENT.md`; `research/spikes/plan_verify_ci.md`
 - Actions:
   1. `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release` (add `-DTPT_BUILD_PLUGIN=OFF` if the JUCE Linux packages are not installable), then build.
-  2. `ctest --test-dir build -LE 'perf|plugin' --output-on-failure > logs/S-001-red-ctest.txt 2>&1 || true`; if the plugin was
+  2. `ctest --test-dir build -LE 'perf|plugin|extra' --output-on-failure > logs/S-001-red-ctest.txt 2>&1 || true`; if the plugin was
      built: `xvfb-run -a build/plugin/tpt_plugin_tests > logs/S-001-red-plugin.txt 2>&1 || true` (macOS/Windows: without
      xvfb-run). (`plugin/CMakeLists.txt` labels the test `plugin`.) Also
      `ctest --test-dir build -L perf --output-on-failure >> logs/S-001-red-ctest.txt 2>&1 || true`.
@@ -178,7 +189,7 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      `nominalPartialOf(nominalPartialHz(v, m), v) == m` for all 8 valve combinations and m = 1..13, and
      `nominalPartialOf(0, 0) == 0`. It may fail now only where it calls stubs (`loweringSemitones`); it must pass after
      S-003. A failure after S-003 → `TEST_CHALLENGE.md` (the helpers are frozen).
-  3c. Produce `logs/S-001/red-summary.md` with a small script from `ctest -N`, `ctest --output-junit` and
+  3c. Produce `logs/S-001/red-summary.md` with a small script from `ctest -N -LE 'perf|plugin|extra'` (plus `-L perf`), `ctest --output-junit` and
      `pytest --junitxml`: per test its status and reason (NotImplemented, missing output, skipped T-029, guard pass); the
      script exits non-zero if a test is unclassified.
   4. Compare with the planning red run in `plan/ENVIRONMENT.md`:
@@ -311,7 +322,9 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   5. Run: `.venv/bin/python -m pytest tests/python/test_resonator_tools.py`.
 - Outputs: `tools/resonator/{tmm,bore_fit,generate_table}.py`, `data/trumpet_resonators.json`
 - Evidence produced: T-030
-- Done when: T-030 passes, and `data/trumpet_resonators.json` is committed with its SHA-256 recorded in the checkpoint.
+- Done when: T-030 passes; `python3 -c "import json; assert json.load(open('data/trumpet_resonators.json'))['provenance']['cents_reference']"`
+  exits 0 (D-004 cents convention; lesson L-20261004T150300Z); and `data/trumpet_resonators.json` is committed with its
+  SHA-256 recorded in the checkpoint.
 - Checkpoint: table SHA-256, bore-fit cents errors, loop lengths, radiation fit RMS error.
 - On failure: DR-T007. If the CI `python` job's regeneration disagrees with the committed table beyond T-030's tolerance,
   regenerate the table in that CI job (upload it as an artifact), commit the CI-generated file with `--keep-calibration`
@@ -393,7 +406,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   5. Breath-noise power (D-012): implement the noise as a private class `core/src/BreathNoise.h` (xorshift32 → uniform
      [−1, 1) → one-pole H(z) = a/(1 − (1 − a)z⁻¹), a = 1 − exp(−2π·3000/f_int)) used by the voice, and add the non-frozen
      test `extras/core/test_noise_power.cpp` (target `tpt_noise_power`, label `extra`; includes `core/src/BreathNoise.h`) that generates 10 s of its output at
-     f_int = 88.2, 96 and 192 kHz (the D-006 internal rates for 44.1, 48 and 96 kHz hosts) and checks that the
+     f_int = 88.2, 96 and 192 kHz (the D-006 internal rates fs × os of 44.1, 48 and 192 kHz hosts; the voice passes its own
+     f_int to `BreathNoise`, never 2 × fs) and checks that the
      measured band-power ratios 0.3–1 : 1–3 : 3–8 kHz and the total variance match the discrete formula
      (1/3)·|H(e^{jω})|² integrated over each band, within 0.5 dB.
 - Outputs: `core/src/TrumpetVoice.cpp`, `core/src/VoiceTuning.h` (+ private helpers in `core/src/`), `core/CMakeLists.txt`,
@@ -417,16 +431,18 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - Actions:
   1. (`tools/render/CMakeLists.txt` exists from S-004.)
   2. Add `tools/render/calibrate.cpp` → target `tpt_calibrate` (links `tpt_core` and nlohmann_json). It loads the JSON, calibrates every note per D-011 (with sustain gating), and rewrites `fscale` in place, formatted with `%.10g` and otherwise preserving the file as in `generate_table` (D-004 number formatting).
+  2b. `tpt_calibrate` and its read-only modes accept `--notes <first>-<last>` (written MIDI) so a run can be split across
+     tool calls: calibration rewrites only those notes' `fscale` (formatting as D-004) and appends one row per note to
+     `logs/S-009/calibrate.log`; `--long-hold` appends rows to `logs/S-009-long-hold.md` (header written once). Done-when
+     is judged over all notes: every standard note appears in both logs at least once, and the latest row per note counts.
+     Each run's section of `calibrate.log` starts with `# tuning <sha256 of the tpt::tuning::table() JSON>`.
   3. Build (so `tpt_calibrate` has the current constants), run `build/tools/render/tpt_calibrate data/trumpet_resonators.json`,
      then build again (this re-embeds the table).
   4. Run `tpt_integration_tests "[T-012],[T-013]"`, `tpt_unit_tests "[T-007]"` and `tpt_operational_tests`.
-  5b. `tpt_calibrate` and its read-only modes accept `--notes <first>-<last>` (written MIDI) so a run can be split across
-     tool calls: calibration rewrites only those notes' `fscale` (formatting as D-004) and appends one row per note to
-     `logs/S-009/calibrate.log`; `--long-hold` appends rows to `logs/S-009-long-hold.md` (header written once). Done-when
-     is judged over all notes: both logs must contain every standard note exactly once (latest row wins).
   5. Long hold (D-026 R-023): `build/tools/render/tpt_calibrate --long-hold data/trumpet_resonators.json` writes
      `logs/S-009-long-hold.md`.
-- Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`, `logs/S-009-long-hold.md`
+- Outputs: `tools/render/{CMakeLists.txt,calibrate.cpp}`, `data/trumpet_resonators.json`, `logs/S-009-long-hold.md`,
+  `logs/S-009/calibrate.log`
 - Evidence produced: T-012, T-013
 - Done when: those tags pass, `tpt_operational_tests` passes completely (the S-008 exception for the pitch assertion
   has expired), and `logs/S-009-long-hold.md` shows no failing note.
@@ -540,8 +556,12 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
        restoring the level (R-033); CC68 on with touching notes slurring and off re-tonguing (R-035). They are part of
        S-013's Done-when.
      - **`currentUiState()`:** returns `voice.uiState()`.
-  2. Build with the plugin; run `xvfb-run -a build/plugin/tpt_plugin_tests` (all except the editor case).
-- Outputs: `plugin/src/PluginProcessor.{h,cpp}` (additive members), `plugin/CMakeLists.txt`
+  2. Build with the plugin; run `xvfb-run -a build/plugin/tpt_plugin_tests` (all except the editor case) and
+     `ctest --test-dir build -L extra -L plugin --output-on-failure`.
+  3. Add to the CI `plugin` job (D-020) a step `ctest --test-dir build -L extra -L plugin --output-on-failure` (xvfb-run on
+     Linux; `-C Release` on Windows), also run in the Linux ASan step.
+- Outputs: `plugin/src/PluginProcessor.{h,cpp}` (additive members), `plugin/CMakeLists.txt`,
+  `extras/plugin/{CMakeLists.txt,test_plugin_variants.cpp}`, `.github/workflows/ci.yml`
 - Evidence produced: T-026 (parameters, sound, keyswitch and state cases)
 - Done when: those cases pass and `tpt_plugin_variant_tests` (from `extras/plugin/test_plugin_variants.cpp`, label
   `extra`) passes, locally or in the CI `plugin` job.
@@ -597,6 +617,7 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - Inputs: D-017; `tools/realism/{tinysol,compare_tinysol}.py` stubs; C-072, C-096
 - Actions:
   1. Add `tools/render/main.cpp` → target `tpt_render` (core only):
+     - `tpt_render --print-tuning` prints `tpt::tuning::table()` as a JSON object name → value and exits 0;
      - `tpt_render --note <concert> --velocity <0..1> --seconds <s> --fs <hz> --out <file.wav> [--param <name>=<value> ...]`
        renders one held note (`<name>` = a `VoiceParameters` field name);
      - `tpt_render --events <file.json> --fs <hz> --out <file.wav>` renders a timed event list:
@@ -638,7 +659,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   1. Every round log, `tpt_calibrate` log and `compare_tinysol` run starts with a table of the effective `VoiceTuning.h`
      constants (name, value) and the values changed this round, printed by the tool itself, not typed: `VoiceTuning.h`
      exposes `tpt::tuning::table()` (name/value pairs, added in S-008), `tpt_render --print-tuning` writes it as JSON to
-     `logs/S-016/tuning-round-<k>.json`, and the round log diffs it against round k − 1. Run T-029 (locally
+     `logs/S-016/tuning-round-<k>.json`, and the round log diffs it against round k − 1; `compare_tinysol` stores the output of `<render> --print-tuning` under
+     the key `tuning` in `results.json`, and `tpt_calibrate` writes the `# tuning <sha256>` line of S-009 2b. Run T-029 (locally
      or in the CI `realism` job), T-021 and T-022. Write `logs/S-016-round-<k>.md` with the per-dynamic metrics and the 10 worst notes, split by register (p2–p3, p4–p6, p8+).
   2. Adjust only the non-frozen constants listed in DR-REAL. After each round: build, run `tpt_calibrate`, build again
      (re-embeds the table), then re-run every frozen test (no regression). At most 5 rounds.
@@ -649,7 +671,8 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
      - run it in the CI job `gate-evidence` (D-020) by pushing `git commit --allow-empty -m "[gate-evidence G-005]"`; the
        job pushes `renders/G-005` to the orphan branch `evidence/G-005`, or locally with `tools/render/push_evidence.sh G-005 renders/G-005`.
      Write `GATE-G-005.md`.
-- Outputs: `core/src/VoiceTuning.h`, `logs/S-016-*.md`, `tools/realism/make_g005_bundle.py`, `tools/realism/demos/*.json`, `GATE-G-005.md`
+- Outputs: `core/src/VoiceTuning.h`, `logs/S-016-*.md`, `logs/S-016/`, `tools/render/{main,calibrate}.cpp`,
+  `tools/realism/compare_tinysol.py`, `tools/realism/make_g005_bundle.py`, `tools/realism/demos/*.json`, `GATE-G-005.md`
 - Evidence produced: T-029, T-021, T-022
 - Done when: T-029, T-021 and T-022 pass, or 5 rounds are exhausted; and the G-005 bundle is pushed.
 - Checkpoint: round number and metrics.
@@ -704,25 +727,26 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
   2. Update the README "Status" and "Building" sections (no claims beyond the evidence), and add a "MIDI and latency"
      section: CC2 breath, CC11 expression, CC68 legato pedal (touching notes), CC121, keyswitches 24–31, the ≤ 1.3 ms unreported warp delay (D-012) and the
      supported sample-rate range (D-026 R-022).
-  3. Generate the tables of `REPORT.md` with `tools/report/make_report.py`, which reads `logs/S-018/ctest.xml`
-     (`ctest --output-junit`), `logs/S-018/pytest.xml` (`pytest --junitxml`), the plugin test output, `logs/**` and the
-     latest `results/<sha>/results.json` of `ci-results`, and writes the blocks between `<!-- BEGIN GENERATED <name> -->`
+  3. Write `REPORT.md` with the `<!-- BEGIN GENERATED <name> -->` / `<!-- END GENERATED -->` markers: tests by ID with status, the SC table, deviations, gate outcomes, open risks, and what was not verified (a real DAW host test, unless the human did one).
+  3b. Generate the tables of `REPORT.md` with `tools/report/make_report.py`, which reads `logs/S-018/ctest.xml`
+     (`ctest --output-junit`), `logs/S-018/pytest.xml` (`pytest --junitxml`), the plugin test output, `logs/**` and `results/<sha>/results.json` (`ci-results`) for the last
+     commit that changed `core/src`, `data/` or `tools/realism` (re-run the `realism` job if it is missing), and writes the blocks between `<!-- BEGIN GENERATED <name> -->`
      and `<!-- END GENERATED -->`; `REPORT.md` contains no hand-typed result numbers outside generated blocks, and
      README numbers refer to it. Every behavioural README sentence (MIDI map, latency, rates, Fixed valves, legato) is
      followed by the T-ID or CI run that shows it, else the word UNVERIFIED; coverage reads "k of N". Run
      `grep -nE 'identical|validated|complete|guarantee|always' README.md` and justify each hit in `REPORT.md`.
   3c. Control-delivery table in `REPORT.md`: for every R-### marked mitigated or partly mitigated and every D-026 item,
      the file:line, CI step or test that delivers it (checked with `grep`/`ls .github/workflows`); an unmapped control gets
-     a `DEVIATIONS.md` entry. Run `git check-ignore -v` on every path in `tests/FROZEN_MANIFEST.sha256` (second column), `gates/*/SHA256SUMS`,
-     `REPORT.md` and `EXECUTION_LOG.md`; it must print nothing.
-  3b. Write `REPORT.md`: tests by ID with status, the SC table, deviations, gate outcomes, open risks, and what was not verified (a real DAW host test, unless the human did one).
+     a `DEVIATIONS.md` entry. Run `git check-ignore --no-index -v` (must print nothing) and
+     `git ls-files --error-unmatch` (must exit 0) on every path in `tests/FROZEN_MANIFEST.sha256` (second column), `gates/*/SHA256SUMS`,
+     `REPORT.md` and `EXECUTION_LOG.md`.
   4. Write `MAINTENANCE.md` (D-026 R-019) and recommend branch protection on `main` in `REPORT.md` (R-020).
   5. Push.
 - Outputs: `README.md`, `REPORT.md`, `MAINTENANCE.md`, `tools/report/make_report.py`, `logs/S-018/{ctest,pytest}.xml`
 - Evidence produced: every T-ID green on one commit (CI link)
 - Done when: everything is green apart from the accepted failures recorded at G-005; `REPORT.md` is pushed with every
   number inside generated blocks, every README `grep` hit justified, the control-delivery table complete, and
-  `git check-ignore -v` printing nothing.
+  `git check-ignore --no-index -v` printing nothing and `git ls-files --error-unmatch` exiting 0.
 - Checkpoint: final.
 - On failure: DR-DEFAULT.
 - Gate: none (merging, tags and releases are G-002, outside this plan)
@@ -761,18 +785,23 @@ to READY when that is done. The figures below are those of the 2026-10-22 READY 
 - Inputs: `lessons/`, `knowledge/`, `RETROSPECTIVE.md`; A-018; `plan/PROTOCOL_EXTRACTS.md` (3.7.2); the READMEs of
   `qualitycoding/knowledge` and `qualitycoding/Lessons`
 - Actions:
-  1. Write `GATE-G-003.md` per `plan/GATES.md` and halt at G-003.
-  2. On `push-to-proposed` (or `push-to: <repo>` for either target):
+  0. Re-run the S-000 4b store probes; on failure apply DR-CRED (repository authorisation), else the bundle fallback (4).
+  1. Write `GATE-G-003.md` per `plan/GATES.md` (quoting the exact response forms and the Lessons README placement rule)
+     and halt at G-003.
+  2. On `push-to-proposed` (or either `push-to:` form of GATES.md G-003):
      - clone `qualitycoding/knowledge` and `qualitycoding/Lessons` (outside the repository directory);
      - copy each knowledge item to `knowledge/<first subject: value>/` in `qualitycoding/knowledge`;
-     - copy each lesson to `lessons/<first tech: or domain: tag, ':' replaced by '-'>/` in `qualitycoding/Lessons`
-       (`general` if none);
+     - place each lesson in `qualitycoding/Lessons` per the Lessons README's placement rule: `applies:all` lessons go to
+       `lessons/general/`; otherwise use the first `domain:`/`tech:` tag (`:` → `-`) for which a directory already exists
+       (`ls lessons/`), else `lessons/general/`; create a new directory only for a tag added to `TAXONOMY.md` in the same
+       commit;
      - copy `RETROSPECTIVE.md` to `retrospectives/trumpet-vst/RETROSPECTIVE.md` in `qualitycoding/Lessons`;
      - add every new tag (at least `domain:musical-acoustics`, `domain:brass` and the new `subject:` tags) to
        `TAXONOMY.md` in **both** repositories, in the existing format (`` - `<facet>:<value>`: <meaning> ``, under its
        facet heading), in the same commit as the entries that use it;
      - in each repository's clone root run `python3 scripts/build_index.py`, then `python3 scripts/check_knowledge_schema.py` (must print
-       `all entries valid`), commit, and push.
+       `all entries valid`), commit, and push. If a store script fails with `ModuleNotFoundError`, install the module into
+       `$HOME/.venvs/trumpet-vst` (not into the lock), re-run it with that interpreter from the clone root, and log it.
      - If a push is rejected: pull, re-run `build_index.py` and retry, up to 3 times.
   2b. After pushing, clone each target into a new directory and check there that every pushed ID appears in its
      `INDEX.md`; if a script crashed or a push was retried, re-run it to completion first.

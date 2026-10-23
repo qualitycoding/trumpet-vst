@@ -235,7 +235,8 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - u·(1 + 0.05·breathNoise·w), where w is xorshift32 white noise mapped to [−1, 1) as w = x/2³¹ − 1 (seed 0x7A11C0DE at
     `reset()`; variance 1/3), through a 3 kHz one-pole (y += a·(w − y), a = 1 − exp(−2π·3000/f_int)). The expected power of
     the filtered noise in a band [f1, f2] is (1/3)·∫|H(f)|² df over the band divided by f_int/2, with H the discrete
-    response H(z) = a/(1 − (1 − a)z⁻¹) evaluated at z = e^{j2πf/f_int}, f_int = 2 × host rate (D-006) (S-008 noise-power
+    response H(z) = a/(1 − (1 − a)z⁻¹) evaluated at z = e^{j2πf/f_int}, f_int = the voice's internal rate fs × os of D-006 (88.2 kHz at a 44.1 kHz host,
+    96 kHz at 48 and at 96 kHz, 192 kHz at 192 kHz) (S-008 noise-power
     test, on the filtered noise y alone via `core/src/BreathNoise.h`);
   - plus 0.002·breathNoise·pm/pth·y (the same filtered noise) added to the output.
 - **Gain:** scale by K_out (fixed so that written C5 at ff peaks near −6 dBFS; in `VoiceTuning.h`) × dB(gain), then the decimator.
@@ -384,7 +385,7 @@ Signatures may be **extended** (new members, new functions) but never changed. E
   - `core` (3 OSes): configure with `-DTPT_BUILD_PLUGIN=OFF`, build Release, `ctest -LE perf`, then `ctest -L perf` as its own
     step with `if: ${{ !cancelled() }}` (so T-024b is evidenced even while accepted failures keep `integration` red).
   - `python` (ubuntu): venv outside the checkout (`$RUNNER_TEMP/venv`, symlinked as `.venv`) from `tools/requirements.lock`, then `pytest tests/python -k "not t029"` and `pip-audit -r tools/requirements.lock`.
-  - `plugin` (3 OSes): build with the plugin, run `tpt_plugin_tests` (xvfb-run on Linux), `run_pluginval.sh`, and `auval -v aumu Tpts Qcod` on macOS.
+  - `plugin` (3 OSes): build with the plugin, run `tpt_plugin_tests` and `ctest -L extra -L plugin` (the S-013 variant tests; xvfb-run on Linux), `run_pluginval.sh`, and `auval -v aumu Tpts Qcod` on macOS.
   - `build-linux` (ubuntu): Release build of `tpt_render` only; uploads it as an artifact for `realism` with
     `retention-days: 1` (an internal hand-off of an Apache-2.0 core tool without JUCE, not a product binary, D-025).
   - `realism` (ubuntu, `needs: build-linux`): set up the venv, download TinySOL (cache path `reference-data/tinysol`, the
@@ -583,7 +584,34 @@ Each rule names the step(s) where it applies.
 | DR-PLUGINVAL (S-017) | pluginval fails | Fix the plugin. On Windows, a path or hash issue is fixed in the workflow, never in the frozen script. |
 | DR-ZENODO (S-015, S-016) | Zenodo is unreachable locally | Run T-029 in CI only. Continue the other steps. |
 | DR-SECURITY (S-002, S-017) | `pip-audit` reports a vulnerability | Upgrade within the same major version if available and regenerate the lock (log it). Otherwise record it in `DEVIATIONS.md`. Halt with `BLOCKED.md` only if it is exploitable in the shipped plugin (Python is test-only). |
-| DR-CRED (any step) | A push or API call fails with HTTP 401/403 (for example after the human revoked a pasted token, R-027) | Diagnose first (names only, never values): `env \| grep -E '^(GIT_CONFIG\|GH_TOKEN\|GITHUB_TOKEN\|GIT_ASKPASS\|GIT_)' \| cut -d= -f1`, `gh auth status`, then retry the git command once with the indexed `GIT_CONFIG_COUNT`/`GIT_CONFIG_KEY_n`/`GIT_CONFIG_VALUE_n` variables unset
-  in the command scope (`env $(env | sed -n 's/^\(GIT_CONFIG_[A-Z_0-9]*\)=.*/-u \1/p') git …`) and `gh auth setup-git` re-run; a per-command `-c http.extraheader` built from the environment (never typed, never written to `.git/config`) is an accepted fallback. If the error text names the proxy, "authorized repository set" or "not enabled for this session", the cause is repository authorisation, not the token: ask the human to attach the repository to the session (or accept a manual upload: a zip mirroring the repository paths plus `UPLOAD.md`), and do not ask for a token. On a reproducible server-side `index-pack`/`unpack` error, try the GitHub Git Data API. Only when all this fails is the token treated as bad. Do not retry with any token from the chat. Finish only the current step locally; start no new step. Write `BLOCKED.md` (asking for a new credential via `GH_TOKEN`) and end the session with a message that lists the unpushed commits (sha and subject) and the request. On restart with a working credential, push first; if the local commits are gone, re-run the steps after the last pushed commit and log it (pre-mortem R-031). |
-| DR-PUSH (any step) | `git push` fails with "remote unpack failed", "index-pack failed" or "did not receive expected object" twice, with different content | Stop retrying. Confirm with a tiny test push to the scratch branch `evidence/push-probe` (deleted afterwards); if that also fails, push through the GitHub Git Data API (blobs, tree, commit, ref update via `gh api`), skipping git-ignored files, and log it; if the API also fails, DR-CRED's manual-upload path. |
+| DR-CRED (any step) | A push or API call fails with HTTP 401/403 (for example after the human revoked a pasted token, R-027) | Follow "DR-CRED procedure" below the table. |
+| DR-PUSH (any step) | `git push` fails with "remote unpack failed", "index-pack failed" or "did not receive expected object" twice, with different content | Stop retrying. Confirm with a tiny test push to the scratch branch `evidence/push-probe` (deleted afterwards); if that also fails, push through the GitHub Git Data API (blobs, tree, commit, ref update via `gh api`), skipping git-ignored files, and log it; if the API also fails, DR-CRED's manual-upload path. After an API push: confirm `git diff <old local sha> origin/<branch> --stat` is empty after `git fetch origin`, then `git reset --hard origin/<branch>`; log old → new shas in `EXECUTION_LOG.md` and use the new shas in records and gate files from then on. Never use the API path for a commit that a G-002 approval or an `[rc-dryrun]`/`[g002-approved rc]` marker names; ask for a new G-002 sha instead. |
 | DR-DEFAULT (any) | Anything unanticipated | Choose the most reversible option that does not expand scope, log it in `DEVIATIONS.md` with the rationale, and continue. Exception: if it touches frozen tests, security, data integrity, a public interface or research integrity, halt and write `BLOCKED.md`. |
+
+### DR-CRED procedure
+1. Diagnose (names only, never values):
+   ```bash
+   env | grep -E '^(GIT_|GH_|GITHUB_)' | cut -d= -f1
+   gh auth status
+   ```
+2. Retry the failing git command once with the indexed `GIT_CONFIG_COUNT`/`GIT_CONFIG_KEY_n`/`GIT_CONFIG_VALUE_n`
+   variables unset in the command scope, after re-running `gh auth setup-git`:
+   ```bash
+   gh auth setup-git
+   env $(env | sed -n 's/^\(GIT_CONFIG_[A-Z_0-9]*\)=.*/-u \1/p') git push origin HEAD
+   ```
+   If that still fails, use `gh` itself (`gh repo clone`, `gh api` Git Data per DR-PUSH), which reads `GH_TOKEN` without
+   exposing it. Never pass a header or token in argv, a URL or a file.
+3. If the error text names the proxy, "authorized repository set" or "not enabled for this session", the cause is
+   repository authorisation, not the token: ask the human to attach the repository to the session, or accept a manual
+   upload, and do not ask for a token. Manual upload: build the zip from `git diff --name-status <last pushed sha>..HEAD`
+   (dot-directories such as `.checkpoints/` and `.github/` included); `unzip -l` must list exactly those paths; `UPLOAD.md`
+   names the repository, the branch and each path with add/overwrite/delete; after the human uploads, `git fetch` and
+   require `git rev-parse origin/<branch>^{tree}` = `git rev-parse HEAD^{tree}` (lessons L-20261009T193617Z,
+   L-20261009T193604Z).
+4. On a reproducible server-side `index-pack`/`unpack` error, follow DR-PUSH.
+5. Only when all this fails is the token treated as bad. Do not retry with any token from the chat. Finish only the
+   current step locally; start no new step. Write `BLOCKED.md` (asking for a new credential via `GH_TOKEN`) and end the
+   session with a message that lists the unpushed commits (sha and subject) and the request. On restart with a working
+   credential, push first; if the local commits are gone, re-run the steps after the last pushed commit and log it
+   (pre-mortem R-031).

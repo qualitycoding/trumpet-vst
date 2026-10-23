@@ -10,8 +10,10 @@ The response is accepted in either of two forms:
 - a file `GATE-<id>.RESPONSE.md` committed to the implementation branch;
 - the human's message in the session, which the implementer copies verbatim into that file.
 
-A response that is not one of the allowed forms, or that describes the instrument in a way that conflicts with what
-the code does, is not acted on: restate in the next `GATE-<id>.md` what the code does and ask which meaning is intended.
+A response that is not one of the allowed forms is not acted on: restate the allowed forms in the next `GATE-<id>.md`.
+A free-text remark in a response that contradicts what the code does is not dismissed: the next gate file states what
+the code does and asks which meaning is intended. The payloads of `correct-chart`, `fix-drawing`, `issues`, `iterate` and
+`override-intonation` are acted on as given.
 
 While halted, the implementer may continue any step whose `Depends on` list does not include the gated step. It never takes an external or irreversible action.
 
@@ -45,8 +47,8 @@ Template for `GATE-<id>.md`:
 | Trigger | S-RETRO done. |
 | Evidence | The list of every `lessons/L-*.md` and `knowledge/K-*.md` (ID, title or statement, tags), the schema-check output, and the proposed targets: knowledge items to `qualitycoding/knowledge`, lessons and `RETROSPECTIVE.md` to `qualitycoding/Lessons` (A-018). |
 | Questions | Where should the run's lessons and knowledge go? |
-| Allowed responses | `push-to-proposed`, `push-to: <owner/repo>`, `do-not-push` |
-| Branches | Push to the targets in their own layouts (S-KNOW); regenerate the indexes with each repository's `scripts/build_index.py`. `push-to: knowledge=<repo>, lessons=<repo>` replaces either or both targets (a bare `push-to: <repo>` is not an allowed form and is restated per the response rule). `do-not-push` → finish. No response within the session → write the bundle fallback `knowledge-<run_id>.bundle` and report its path. |
+| Allowed responses | `push-to-proposed`; `push-to: knowledge=<owner/repo>, lessons=<owner/repo>` (either key may be omitted; an omitted key keeps the proposed target); `push-to: <owner/repo>` (both kinds to that one repository, each in its own `knowledge/` or `lessons/` tree); `do-not-push` |
+| Branches | Push to the targets in their own layouts (S-KNOW); regenerate the indexes with each repository's `scripts/build_index.py`. A `push-to:` response replaces the targets as defined under Allowed responses. `do-not-push` → finish. No response within the session → write the bundle fallback `knowledge-<run_id>.bundle` and report its path. |
 
 ## G-004: fingering chart and trumpet drawing check (after S-014)
 | Aspect | Definition |

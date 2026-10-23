@@ -20,6 +20,14 @@ def own_lessons():
     return out
 
 
+OVERRIDES = {
+    "L-20261004T150300Z-fixture-cents-reference-undeclared": "partly applied: D-004 Cents convention (informative `provenance.cents_reference`; the parser stays lenient because the frozen T-006 fixture lacks it) and the S-005 Done-when check that the generated table carries it",
+    "L-20261004T150400Z-interface-gap-found-only-by-implementing": "partly applied: PLAN.md Conventions 'Interfaces' (additive members, only a signature change halts); no planner-side walk of every declared function was done",
+    "L-20261009T193617Z-manual-upload-bundle-hygiene": "applied: DECISIONS.md 'DR-CRED procedure' step 3 (UPLOAD.md, tree comparison)",
+    "L-20261009T193604Z-zip-exclude-dotfiles-dropped-checkpoints": "applied: DECISIONS.md 'DR-CRED procedure' step 3 (zip from name-status, dot-directories included)",
+}
+
+
 def main():
     store = []
     for b in (1, 2, 3):
@@ -38,6 +46,8 @@ def main():
              "  (`research/r0/lessons_all.json`, `knowledge_all.json`).",
              "- **Triage:** done by three Sonnet agents for the lessons and one for the knowledge items. Results are in",
              "  `research/r0/result_*.json`. Every gap was turned into a plan amendment (commits 9a713cb and later).",
+             "- **Reading the application table:** for gaps it quotes the triage *proposal* (truncated); the adopted text is in the",
+             "  plan files and may differ (for example paths under `extras/`). Where a row and the plan differ, the plan wins.",
              "- **This run's own lessons:** 15 lessons in `lessons/`. Eight were backfilled from sibling runs (A-019); the",
              "  planner recorded the rest during this run.",
              "- **Aliases:** \"R5\" and \"R5 review\" refer to `research/rounds/round-3-adversarial.md`.", "",
@@ -55,9 +65,11 @@ def main():
         n += 1
         lines.append(f"| {n} | {x['id']} | {x['severity']} | {x['prevention_rule'].replace('|', '/')} |")
     lines += ["", "## Application of every store lesson", "",
-              "| Lesson | Severity | Verdict | Applied as / reason |", "|---|---|---|---|"]
+              "| Lesson | Severity | Triage verdict | Applied as / proposal / reason |", "|---|---|---|---|"]
     for x in store:
-        if x["verdict"] == "applied":
+        if x["id"] in OVERRIDES:
+            how = OVERRIDES[x["id"]]
+        elif x["verdict"] == "applied":
             how = "applied: " + ", ".join(x.get("plan_refs", []))
         elif x["verdict"] == "gap":
             how = f"gap ({x.get('gap_severity')}) → amended (R0 re-run 2026-10-22): " + " ".join(x.get("amendment", "").split())[:220]

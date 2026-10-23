@@ -3,7 +3,7 @@
 ## Purpose
 Build a physically modelled B♭ trumpet instrument plugin with overblowing and a UI that shows the fingering. It is
 VST3/Standalone on Windows, macOS and Linux, plus AU on macOS. Execute `plan/PLAN.md` from S-000 to S-KNOW, without
-questions, except at the human gates in `plan/GATES.md`.
+questions, except at the human gates in `plan/GATES.md` and the one early fingering confirmation (Open human actions).
 
 **Active profile:** `software` only (`software.deploys = false`); see `plan/PROFILE.md`.
 
@@ -54,7 +54,8 @@ frozen test or fixture is wrong:
 
 The planning agent then runs an amendment (protocol 2E.4). An amendment that supersedes a test removes it from
 `tests/CMakeLists.txt` and the manifest (or marks it `RETIRED - not built`) and updates `plan/TRACEABILITY.md` in the same
-commit.
+commit. The implementer takes the amendment in by merging the generation branch (PLAN.md Conventions "Freeze check":
+`git merge --no-ff`, generation-branch side for frozen paths, then the freeze checks).
 
 ## Steps at a glance
 | Step | Title | Gate |
@@ -93,8 +94,8 @@ resource.
 - Early, non-blocking: in the first session message after S-000, send the owner the fingering table
   (`tests/fixtures/trumpet_fingerings.txt` rows: written note, valves, partial, trigger), the normal/extended range and
   the trigger rules, and ask for corrections. Record the answer as "owner reply" in `EXECUTION_LOG.md` (the planning documents are not edited by the implementer).
-  Work continues on the frozen table meanwhile; a correction is held and applied through the `correct-chart` amendment
-  path when G-004 is issued (lesson L-20261009T160700Z).
+  A correction → write `TEST_CHALLENGE.md` at once (fixture rows affected, the reply verbatim) and continue with the steps
+  that do not use the fingering table (S-004–S-007, S-015) until the amendment lands (lesson L-20261009T160700Z).
 
 ## Human gates
 - **G-004:** fingering chart and drawing.
