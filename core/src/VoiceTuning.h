@@ -24,10 +24,10 @@ inline constexpr double kBoundaryBlend = 0.05;     // linear interpolation acros
 inline constexpr double kOnsetMinThresholdMul = 1.3;   // pm_on >= 1.3 x threshold
 inline constexpr double kReleaseS = 0.040;         // pm falls to 0 on the last note-off
 // --- D-010 re-articulation -------------------------------------------------------------------------------------------
-inline constexpr double kTongueStopS = 0.025;      // lips closed, pm = 0
+inline constexpr double kTongueStopS = 0.028;      // lips closed, pm = 0
 inline constexpr double kReattackS = 0.003;        // raised-cosine re-attack, no accent
 inline constexpr double kLegatoPedalWindowS = 0.020;   // D-014 CC68
-inline constexpr double kRegisterRampS = 0.020;    // D-009/D-010 f_l, h0, pm, fscale ramps
+inline constexpr double kRegisterRampS = 0.01;    // D-009/D-010 f_l, h0, pm, fscale ramps
 inline constexpr double kValveRampS = 0.015;       // D-010 mode interpolation
 // --- D-008 dynamics map ------------------------------------------------------------------------------------------------
 inline constexpr double kSusLow = 0.8;             // k_sus for L <= 0.2
@@ -36,7 +36,7 @@ inline constexpr double kSusHigh = 5.0;            // at L = 1.0
 inline constexpr double kSusL0 = 0.2, kSusL1 = 0.6, kSusL2 = 1.0;
 inline constexpr double kPmSmoothS = 0.010;        // 10 ms one-pole at control rate
 // --- D-009 overblow ---------------------------------------------------------------------------------------------------
-inline constexpr double kBrightenUp = 0.9;         // pm x (1 + 0.9 r), r in [0, 1)
+inline constexpr double kBrightenUp = 0.5;         // pm x (1 + 0.9 r), r in [0, 1)
 inline constexpr double kBrightenDown = 0.15;      // pm x (1 + 0.15 r), r in (-1, 0]
 inline constexpr int kCapPartial = 9;              // target partial <= max(n, 9)
 inline constexpr double kDownHysteresis = 0.2;
@@ -46,10 +46,11 @@ inline constexpr double kFloorWritten88 = 5.0;
 // --- D-005 lip opening scale: h0 x (1.15 - 0.3 lipStiffness) ---------------------------------------------------------
 inline constexpr double kStiffBase = 1.15, kStiffSlope = 0.3;
 // per-partial trims (DR-REGIME), index = partial 1..13 (slot 0 unused); all 1.0 initially
-// partial 3: fl x 0.98 so that written C#4 (123 + 3rd slide) grows fast enough at mf (DR-REGIME round 1, S-009)
-// partial 4: fl x 0.98 so that alternate written F#4 (1-2-3, p4) does not lock onto partial 5 (DR-REGIME round 2)
-inline constexpr std::array<double, 14> kFlTrim = {1, 1, 1, 0.98, 0.98, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-inline constexpr std::array<double, 14> kH0Trim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+// partial 3: fl x 0.97 so that written C#4 (123 + 3rd slide) grows fast enough at mf (DR-REGIME round 1, S-009)
+// partial 4: fl x 0.97 so that alternate written F#4 (1-2-3, p4) does not lock onto partial 5 (DR-REGIME round 2)
+inline constexpr std::array<double, 14> kFlTrim = {1, 1, 1, 0.97, 0.97, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+// partial 9: h0 x 0.85 so that written C#6 (valve 2) sustains at pp (DR-REGIME)
+inline constexpr std::array<double, 14> kH0Trim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 0.85, 1, 1, 1, 1};
 inline constexpr std::array<double, 14> kPmTrim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 // --- D-011 vibrato ----------------------------------------------------------------------------------------------------
 inline constexpr double kVibratoCents = 25.0;

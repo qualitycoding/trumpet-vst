@@ -347,6 +347,7 @@ struct TrumpetVoice::Impl {
         ctrlPhase = 0;
         noise.reset();
         ringVal.assign(ringVal.size(), 0.0);
+        clampCount.store(0, std::memory_order_relaxed);
         nSrc = -1;             // virtual history of zeros whose arrival times equal their indices
         ptr = -warpD - 2;
         for (std::int64_t k = ptr; k <= nSrc; ++k) { ringVal[std::size_t(k & ringMask)] = 0.0; ringTa[std::size_t(k & ringMask)] = double(k); }
@@ -890,6 +891,7 @@ struct TrumpetVoice::Impl {
         const double pplus = 0.5 * (p + zcIn * u);
         const double pc = clampd(pplus, -tu::kWarpClampPa, tu::kWarpClampPa);
         const double off = clampd(warpK * pc, -(warpD - 1.0), warpD - 1.0);
+        if (std::fabs(warpK * pc) > warpD - 1.0) clampCount.fetch_add(1, std::memory_order_relaxed);
         ++nSrc;
         const double ta = std::max(taPrev, double(nSrc) - off);
         taPrev = ta;
@@ -916,6 +918,7 @@ struct TrumpetVoice::Impl {
     }
 
     bool fault = false;
+    std::atomic<long> clampCount{0};
 
     void process(float* out, int n) {
         if (n <= 0) return;
@@ -1010,5 +1013,6 @@ void TrumpetVoice::setHeldValves(Valves v) noexcept { impl_->held = static_cast<
 void TrumpetVoice::setLegatoPedal(bool on) noexcept { impl_->legatoPedal = on; }
 void TrumpetVoice::releaseOverblowControl() noexcept { impl_->overblowOverride = false; }
 Valves TrumpetVoice::heldValves() const noexcept { return impl_->held; }
+long TrumpetVoice::warpClampCount() const noexcept { return impl_->clampCount.load(std::memory_order_relaxed); }
 
 } // namespace tpt

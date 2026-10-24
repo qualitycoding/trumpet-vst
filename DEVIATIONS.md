@@ -14,3 +14,15 @@
   measured modes (k > 11). The open state still equals the measured modes exactly (T-030, T-007); only the states with
   valves differ from the literal D-004 wording. Re Z near DC stays slightly negative (|Re Z| < 0.6 Zc) because the
   measured modes themselves have a positive excess for k >= 6.
+- S-011 (D-004, DR-REGIME): the measured residue-phase excess is kept for modes 1..9 of the valve states (and for all 11
+  measured modes of the open state, as T-030 requires) but not for modes 10 and 11 (and not above), whose excess of 9.7 and
+  23.7 degrees made Re Z clearly negative at low frequency and the pedal tones (partial 1) of the 3-valve states aperiodic
+  (reference integrator f0 = 0). Keeping the excess of modes 1..9 preserves the oscillation margin the lip trims were tuned for.
+- S-011 (D-012, DR-RANGE): `nlp.length_m` is 0.4 m instead of 0.85 m. With 0.85 m (and 0.6, 0.5) the strong nonlinear
+  steepening of the loud low notes (written 54-59) made the shipped YIN return 0 on a 1 s window with +-25 cent vibrato
+  (T-034 "vibrato 3 Hz / 8 Hz"); 0.4 m passes T-034 with no failure. Brightness 1 still doubles it (0.8 m). The value is a
+  table field (validated to [0, 2]) and may be raised again in S-016 if the listening test asks for more brass.
+- S-011 (D-004, DR-REGIME, DR-RANGE): the residues of the valve states use the peak heights of the TMM impedance times the
+  open horn's measured/TMM peak-height ratio (as research/spikes/make_table.py did) instead of the fit's |R| ratio: the
+  fit inflated the weak upper modes (modes 7-11 by 20-60 % in the 3-valve states) and written 61 (1-2-3, partial 3) then
+  locked partial 4 or the pedal tone at ff. Frequencies, damping and the open state stay as specified (T-030).

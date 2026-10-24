@@ -208,15 +208,50 @@ int longHold(const std::string& path, const Range& range) {
     return failures ? 1 : 0;
 }
 
+/// Brightness 1 at velocity 124/127 on every normal-range standard note, 1 s at 48 kHz and 192 kHz (D-012 R-028).
+int brightnessFf(const std::string& path, const Range& range) {
+    const json table = json::parse(readFile(path));
+    std::ostringstream out;
+    out << "# S-011 brightness 1 at ff: warp-clamp counter and peak output per note\n\n"
+        << "| written | clamp events 48 kHz | peak 48 kHz | clamp events 192 kHz | peak 192 kHz |\n|---|---|---|---|---|\n";
+    long total = 0;
+    for (std::size_t i = 0; i < table["notes"].size(); ++i) {
+        if (table["notes"][i]["kind"].get<std::string>() != "std") continue;
+        const int written = table["notes"][i]["written"].get<int>();
+        if (!inRange(range, written) || written > tpt::kHighestNormalWritten) continue;
+        out << "| " << written << " |";
+        for (double fs : {48000.0, 192000.0}) {
+            auto t = std::make_shared<const tpt::ResonatorTable>(tpt::ResonatorTable::fromJson(table.dump()));
+            tpt::TrumpetVoice v(t);
+            v.prepare(fs, 512);
+            tpt::VoiceParameters p;
+            p.brightness = 1.0f;
+            v.setParameters(p);
+            v.noteOn(written - 2, 124.0f / 127.0f);
+            const auto x = render(v, fs, 1.0);
+            float peak = 0;
+            for (float s : x) peak = std::max(peak, std::fabs(s));
+            total += v.warpClampCount();
+            out << " " << v.warpClampCount() << " | " << peak << " |";
+        }
+        out << "\n";
+    }
+    out << "\nTotal clamp events: " << total << "\n";
+    appendLog("logs/S-011-brightness-ff.md", out.str());
+    std::cout << out.str();
+    return total ? 1 : 0;
+}
+
 } // namespace
 
 int main(int argc, char** argv) {
-    bool hold = false;
+    bool hold = false, bright = false;
     Range range;
     std::string path;
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
         if (a == "--long-hold") hold = true;
+        else if (a == "--brightness-ff") bright = true;
         else if (a == "--notes" && i + 1 < argc) {
             const std::string r = argv[++i];
             const auto dash = r.find('-');
@@ -225,9 +260,9 @@ int main(int argc, char** argv) {
             range.hi = std::atoi(r.substr(dash + 1).c_str());
         } else path = a;
     }
-    if (path.empty()) { std::cerr << "usage: tpt_calibrate [--long-hold] [--notes <first>-<last>] <table.json>\n"; return 2; }
+    if (path.empty()) { std::cerr << "usage: tpt_calibrate [--long-hold|--brightness-ff] [--notes <first>-<last>] <table.json>\n"; return 2; }
     try {
-        return hold ? longHold(path, range) : calibrate(path, range);
+        return bright ? brightnessFf(path, range) : (hold ? longHold(path, range) : calibrate(path, range));
     } catch (const std::exception& e) {
         std::cerr << "error: " << e.what() << "\n";
         return 2;

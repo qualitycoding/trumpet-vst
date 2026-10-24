@@ -72,6 +72,9 @@ public:
     void setLegatoPedal(bool on) noexcept;          ///< MIDI CC68 >= 64: touching notes are slurred (D-010)
     void releaseOverblowControl() noexcept;         ///< CC121: the Overblow parameter applies again (D-014)
     Valves heldValves() const noexcept;
+    /// Debug accessor (S-011, D-012 R-028): number of internal samples whose nonlinear-propagation offset hit the clamp
+    /// since prepare()/reset(). Zero in normal operation; any non-zero value is a defect.
+    long warpClampCount() const noexcept;
 
     /// Renders n mono samples (n <= maxBlock) into out (overwrites).
     void process(float* out, int n) noexcept;
