@@ -10,3 +10,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-24T19:19:08Z | S-007 | 1 | pass | 7656cdb | T-008, T-009 pass
 2026-10-24T19:28:58Z | S-008 | 1 | pass | 961a3ef | operational 4/5 cases pass (only the T-025 pitch assertion fails, needs S-009), alloc pass, noise power pass, RTF 0.0105
 2026-10-24T19:42:49Z | S-009 | 1 | pass | dec4ea4 | T-012, T-013, T-007, operational pass; long hold 36/36 ok; DR-REGIME round 1: kFlTrim[3]=0.98; residue phase deviation logged
+2026-10-24T19:48:50Z | S-010 | 1 | pass | be44433 | T-014, T-019 (and T-012/13/18/20) pass; DR-REGIME round 2: kFlTrim[4]=0.98 re-calibrated; long hold ok
