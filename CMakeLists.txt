@@ -41,3 +41,7 @@ if(TPT_BUILD_PLUGIN)
   FetchContent_MakeAvailable(JUCE)
   add_subdirectory(plugin)
 endif()
+
+if(TPT_BUILD_TESTS)
+  add_subdirectory(extras)
+endif()

@@ -1,0 +1,1056 @@
+Internal ctest changing into directory: /home/claude/projects/trumpet-vst/build
+Test project /home/claude/projects/trumpet-vst/build
+    Start 1: unit
+1/4 Test #1: unit .............................***Failed    0.01 sec
+Randomness seeded to: 1940861984
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tpt_unit_tests is a Catch2 v3.16.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+T-002 lowering, names, parsing
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:7
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:9: FAILED:
+  CHECK( loweringSemitones(0) == 0 )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:10: FAILED:
+  CHECK( loweringSemitones(kValve2) == 1 )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:11: FAILED:
+  CHECK( loweringSemitones(kValve1) == 2 )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:12: FAILED:
+  CHECK( loweringSemitones(kValve3) == 3 )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:13: FAILED:
+  CHECK( loweringSemitones(kValve1 | kValve2) == 3 )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:14: FAILED:
+  CHECK( loweringSemitones(kValve2 | kValve3) == 4 )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:15: FAILED:
+  CHECK( loweringSemitones(kValve1 | kValve3) == 5 )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:16: FAILED:
+  CHECK( loweringSemitones(kValve1 | kValve2 | kValve3) == 6 )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:17: FAILED:
+  CHECK_THROWS_AS( loweringSemitones(8), std::out_of_range )
+due to unexpected exception with message:
+  not implemented: loweringSemitones
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:21: FAILED:
+  CHECK( valvesName(m) == names[m] )
+due to unexpected exception with message:
+  not implemented: valvesName
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:22: FAILED:
+  REQUIRE( parseValves(names[m]).has_value() )
+due to unexpected exception with message:
+  not implemented: parseValves
+
+-------------------------------------------------------------------------------
+T-001 note names
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:23
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:24: FAILED:
+  CHECK( tpt::noteName(60) == "C4" )
+due to unexpected exception with message:
+  not implemented: noteName
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:25: FAILED:
+  CHECK( tpt::noteName(54) == "F#3" )
+due to unexpected exception with message:
+  not implemented: noteName
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:26: FAILED:
+  CHECK( tpt::noteName(70) == "A#4" )
+due to unexpected exception with message:
+  not implemented: noteName
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:27: FAILED:
+  CHECK( tpt::noteName(89) == "F6" )
+due to unexpected exception with message:
+  not implemented: noteName
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:28: FAILED:
+  CHECK( tpt::noteName(0) == "C-1" )
+due to unexpected exception with message:
+  not implemented: noteName
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:29: FAILED:
+  CHECK( tpt::noteName(127) == "G9" )
+due to unexpected exception with message:
+  not implemented: noteName
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:30: FAILED:
+  CHECK_THROWS_AS( tpt::noteName(-1), std::out_of_range )
+due to unexpected exception with message:
+  not implemented: noteName
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:31: FAILED:
+  CHECK_THROWS_AS( tpt::noteName(128), std::out_of_range )
+due to unexpected exception with message:
+  not implemented: noteName
+
+-------------------------------------------------------------------------------
+T-007 embedded table: structure and coverage of the fingering fixture
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:113
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:113: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-011 VoiceParameters::clamped
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_state.cpp:10
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_state.cpp:10: FAILED:
+due to unexpected exception with message:
+  not implemented: VoiceParameters::clamped
+
+-------------------------------------------------------------------------------
+T-003 standard and alternate lookups
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_fingering.cpp:33
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_fingering.cpp:33: FAILED:
+due to unexpected exception with message:
+  not implemented: standardFingering
+
+-------------------------------------------------------------------------------
+T-001 equal temperament and cents
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:10
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:11: FAILED:
+  CHECK( tpt::equalTemperedHz(69) == Approx(440.0).epsilon(1e-12) )
+due to unexpected exception with message:
+  not implemented: equalTemperedHz
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:12: FAILED:
+  CHECK( tpt::equalTemperedHz(58) == Approx(233.08188075904496).epsilon(1e-12) )
+due to unexpected exception with message:
+  not implemented: equalTemperedHz
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:13: FAILED:
+  CHECK( tpt::equalTemperedHz(52) == Approx(164.81377845643496).epsilon(1e-12) )
+due to unexpected exception with message:
+  not implemented: equalTemperedHz
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:14: FAILED:
+  CHECK( tpt::equalTemperedHz(87) == Approx(1244.5079348883237).epsilon(1e-12) )
+due to unexpected exception with message:
+  not implemented: equalTemperedHz
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:15: FAILED:
+  CHECK( tpt::equalTemperedHz(82, 442.0) == Approx(936.5653754136171).epsilon(1e-12) )
+due to unexpected exception with message:
+  not implemented: equalTemperedHz
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:16: FAILED:
+  CHECK( tpt::centsBetween(880.0, 440.0) == Approx(1200.0).epsilon(1e-12) )
+due to unexpected exception with message:
+  not implemented: centsBetween
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:17: FAILED:
+  CHECK( tpt::centsBetween(466.0, 440.0) == Approx(99.39171735554476).epsilon(1e-12) )
+due to unexpected exception with message:
+  not implemented: centsBetween
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:18: FAILED:
+  CHECK_THROWS_AS( tpt::centsBetween(0.0, 440.0), std::invalid_argument )
+due to unexpected exception with message:
+  not implemented: centsBetween
+
+/home/claude/projects/trumpet-vst/tests/core/test_pitch.cpp:19: FAILED:
+  CHECK_THROWS_AS( tpt::centsBetween(440.0, -1.0), std::invalid_argument )
+due to unexpected exception with message:
+  not implemented: centsBetween
+
+-------------------------------------------------------------------------------
+T-010 YIN f0
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_analysis.cpp:24
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_analysis.cpp:24: FAILED:
+due to unexpected exception with message:
+  not implemented: estimateF0
+
+-------------------------------------------------------------------------------
+T-004 normal-mode resolution
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_fingering.cpp:57
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_fingering.cpp:57: FAILED:
+due to unexpected exception with message:
+  not implemented: resolveNote
+
+-------------------------------------------------------------------------------
+T-006 malformed tables are rejected with ParseError
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:69
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:70: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(""), tpt::ParseError )
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:71: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson("{"), tpt::ParseError )
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:72: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson("[]"), tpt::ParseError )
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:73: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(std::string(1024 * 1024 + 1, ' ')), tpt::ParseError )
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:77: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(big), tpt::ParseError )
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  missing format
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  wrong format
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  no states
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  missing valve combination 123
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  unstable pole Re(s) >= 0
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  negative Im(s)
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  pole above 20 kHz
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  fewer than 4 modes
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  residue too large
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  Re(R) <= 0 (flow solve needs Z0 > 0)
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  residue not a pair
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  bad valves name
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  bad trigger
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  duplicate state id
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  unknown state reference
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  written below range
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  written above range
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  partial 0
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  partial above mode count
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  fscale out of range
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  natural deviation out of range
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  bad kind
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  duplicate note
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  no notes
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  bad radiation type
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  radiation frequency 0
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  radiation q out of range
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  no radiation sections
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  nlp length out of range
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  nlp beta out of range
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  wrong type
+  not implemented: ResonatorTable::fromJson
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:23: FAILED:
+  CHECK_THROWS_AS( tpt::ResonatorTable::fromJson(j.dump()), tpt::ParseError )
+due to unexpected exception with messages:
+  missing air density
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-006 valid fixture parses
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:27
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:27: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-010 harmonic levels, centroid, partial, rms
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_analysis.cpp:41
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_analysis.cpp:41: FAILED:
+due to unexpected exception with message:
+  not implemented: harmonicLevelsDb
+
+-------------------------------------------------------------------------------
+T-011 garbage and partial state
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_state.cpp:41
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_state.cpp:50: FAILED:
+  REQUIRE( r.has_value() )
+with expansion:
+  false
+
+-------------------------------------------------------------------------------
+T-008 lip setting per partial (D-005)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:13
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:13: FAILED:
+due to unexpected exception with message:
+  not implemented: lipSettingFor
+
+-------------------------------------------------------------------------------
+T-005 Fixed-valves resolution
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_fingering.cpp:82
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_fingering.cpp:82: FAILED:
+due to unexpected exception with message:
+  not implemented: resolveNote
+
+-------------------------------------------------------------------------------
+T-007 valve loops and natural tendencies
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:153
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:153: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-033 layout rectangles
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:9
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:9: FAILED:
+due to unexpected exception with message:
+  not implemented: trumpetLayout
+
+-------------------------------------------------------------------------------
+T-033 caption text
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:34
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:37: FAILED:
+  CHECK( tpt::captionText(s).empty() )
+due to unexpected exception with message:
+  not implemented: captionText
+
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:39: FAILED:
+  CHECK( tpt::captionText(s) == "Fixed valves 1-2" )
+due to unexpected exception with message:
+  not implemented: captionText
+
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:43: FAILED:
+  CHECK( tpt::captionText(s) == "Written D4" + dot + "Concert C4" + dot + "Valves 1-3" + dot + "Partial 3" + dot + "3rd slide" )
+due to unexpected exception with message:
+  not implemented: captionText
+
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:46: FAILED:
+  CHECK( tpt::captionText(s) == "Written D4" + dot + "Concert C4" + dot + "Valves 1-3" + dot + "Partial 4 (sounding 5)" )
+due to unexpected exception with message:
+  not implemented: captionText
+
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:49: FAILED:
+  CHECK( tpt::captionText(s) == "Written E6" + dot + "Concert D6" + dot + "Valves open" + dot + "Partial 10" + dot + "extended" )
+due to unexpected exception with message:
+  not implemented: captionText
+
+/home/claude/projects/trumpet-vst/tests/core/test_layout.cpp:53: FAILED:
+  CHECK( tpt::captionText(s) == "Written F5" + dot + "Concert D#5" + dot + "Valves 1" + dot + "Partial 6" + dot + "1st slide" + dot + "fixed valves" )
+due to unexpected exception with message:
+  not implemented: captionText
+
+-------------------------------------------------------------------------------
+T-007 open state matches the measured trumpet (Freour 2022 Table 1)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:137
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_resonator_table.cpp:137: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-008 threshold pressures (Doc 2023 Table I, D-005)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:43
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:45: FAILED:
+  CHECK( tpt::thresholdPressurePa(i + 2) == Approx(table1[i]) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:45: FAILED:
+  CHECK( tpt::thresholdPressurePa(i + 2) == Approx(table1[i]) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:45: FAILED:
+  CHECK( tpt::thresholdPressurePa(i + 2) == Approx(table1[i]) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:45: FAILED:
+  CHECK( tpt::thresholdPressurePa(i + 2) == Approx(table1[i]) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:45: FAILED:
+  CHECK( tpt::thresholdPressurePa(i + 2) == Approx(table1[i]) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:46: FAILED:
+  CHECK( tpt::thresholdPressurePa(1) == Approx(800.0) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:47: FAILED:
+  CHECK( tpt::thresholdPressurePa(n) == Approx(4109.0 + 700.0 * (n - 6)) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:47: FAILED:
+  CHECK( tpt::thresholdPressurePa(n) == Approx(4109.0 + 700.0 * (n - 6)) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:47: FAILED:
+  CHECK( tpt::thresholdPressurePa(n) == Approx(4109.0 + 700.0 * (n - 6)) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:47: FAILED:
+  CHECK( tpt::thresholdPressurePa(n) == Approx(4109.0 + 700.0 * (n - 6)) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:47: FAILED:
+  CHECK( tpt::thresholdPressurePa(n) == Approx(4109.0 + 700.0 * (n - 6)) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:47: FAILED:
+  CHECK( tpt::thresholdPressurePa(n) == Approx(4109.0 + 700.0 * (n - 6)) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:47: FAILED:
+  CHECK( tpt::thresholdPressurePa(n) == Approx(4109.0 + 700.0 * (n - 6)) )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:48: FAILED:
+  CHECK_THROWS_AS( tpt::thresholdPressurePa(0), std::invalid_argument )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+/home/claude/projects/trumpet-vst/tests/core/test_lip_model.cpp:49: FAILED:
+  CHECK_THROWS_AS( tpt::thresholdPressurePa(14), std::invalid_argument )
+due to unexpected exception with message:
+  not implemented: thresholdPressurePa
+
+-------------------------------------------------------------------------------
+T-002 keyswitch notes 24..31
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:29
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_valves.cpp:29: FAILED:
+due to unexpected exception with message:
+  not implemented: keyswitchValves
+
+-------------------------------------------------------------------------------
+T-003 compiled table equals the fixture
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_fingering.cpp:19
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_fingering.cpp:19: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-011 state round trip
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_state.cpp:26
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_state.cpp:26: FAILED:
+due to unexpected exception with message:
+  not implemented: serializeState
+
+===============================================================================
+test cases:  22 |  0 passed |  22 failed
+assertions: 112 | 10 passed | 102 failed
+
+
+    Start 2: integration
+2/4 Test #2: integration ......................***Failed    0.00 sec
+Randomness seeded to: 2786822813
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tpt_integration_tests is a Catch2 v3.16.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+T-009 Doc 2023 lip settings select partials 2..6 on the embedded open state
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:68
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:68: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-017 Fixed-valves mode and keyswitches
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:129
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:129: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-009 Freour 2022 B-flat4 reproduction
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:41
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:41: FAILED:
+due to unexpected exception with message:
+  not implemented: simulateReference
+
+-------------------------------------------------------------------------------
+T-016 lip slur jumps between partials without retriggering
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:82
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:82: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-015 Overblow via MIDI CC 16 mapping
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:71
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:71: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-019 pitch bend, vibrato
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_midi_ui.cpp:47
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_midi_ui.cpp:47: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-013 tuning within 10 cents (mf at 44.1/48/96 kHz; pp and ff at 48 kHz)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:57
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:57: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-016 valve slurs on one partial
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:109
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:109: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-034 parameter extremes (normal range, mf)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_ranges.cpp:25
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_ranges.cpp:25: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-009 deterministic and argument checks
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:56
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:59: FAILED:
+  CHECK( tpt::simulateReference(c) == tpt::simulateReference(c) )
+due to unexpected exception with message:
+  not implemented: simulateReference
+
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:61: FAILED:
+  CHECK_THROWS_AS( tpt::simulateReference(bad), std::invalid_argument )
+due to unexpected exception with message:
+  not implemented: simulateReference
+
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:63: FAILED:
+  CHECK_THROWS_AS( tpt::simulateReference(bad), std::invalid_argument )
+due to unexpected exception with message:
+  not implemented: simulateReference
+
+/home/claude/projects/trumpet-vst/tests/core/test_reference_sim.cpp:65: FAILED:
+  CHECK_THROWS_AS( tpt::simulateReference(bad), std::invalid_argument )
+due to unexpected exception with message:
+  not implemented: simulateReference
+
+-------------------------------------------------------------------------------
+T-035 same-pitch repeats and detached notes are re-tongued (normal range, mf)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_articulation.cpp:29
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_articulation.cpp:29: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-021 / T-022 dynamics and brassiness (normal range)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_timbre.cpp:12
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_timbre.cpp:12: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-019 monophonic last-note priority and release
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_midi_ui.cpp:16
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_midi_ui.cpp:16: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-035 a note-on while another note is held stays legato
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_articulation.cpp:73
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_articulation.cpp:73: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-015 register jumps with Overblow and Underblow (normal range, mf)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:24
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:24: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-020 UI state for every fingering
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_midi_ui.cpp:90
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_midi_ui.cpp:90: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-012 regime lock at lip-stiffness extremes (mf, normal range)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:44
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:44: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-014 Intonation realism = 1 reproduces the natural tendencies; A4 tuning
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:78
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:78: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-019 breath controller replaces velocity
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_midi_ui.cpp:73
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_midi_ui.cpp:73: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-015 Overblow below 0.5 stays on the partial and brightens
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:51
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_overblow.cpp:51: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-012 regime lock for every standard fingering at pp, mf, ff
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:28
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:28: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+-------------------------------------------------------------------------------
+T-018 alternate fingerings
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:98
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_pitch.cpp:98: FAILED:
+due to unexpected exception with message:
+  not implemented: fingeringTable
+
+===============================================================================
+test cases: 22 | 22 failed
+assertions: 25 | 25 failed
+
+
+    Start 3: operational
+3/4 Test #3: operational ......................***Failed    0.00 sec
+Randomness seeded to: 2518612246
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tpt_operational_tests is a Catch2 v3.16.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+T-023 output is independent of the host block size and deterministic
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:53
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:53: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-023 long random performance
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:91
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:91: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-023 release to digital silence and invalid input
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:64
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:64: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-023 sample rates and latency (T-025)
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:36
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:36: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+-------------------------------------------------------------------------------
+T-023 parameter extremes stay finite and bounded
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:16
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_voice_robustness.cpp:16: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+===============================================================================
+test cases: 5 | 5 failed
+assertions: 5 | 5 failed
+
+
+    Start 4: alloc
+4/4 Test #4: alloc ............................***Failed    0.00 sec
+Randomness seeded to: 3114606401
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tpt_alloc_tests is a Catch2 v3.16.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+T-024 no allocation in real-time calls
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_alloc.cpp:27
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_alloc.cpp:27: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 1 | 1 failed
+
+
+
+0% tests passed, 4 tests failed out of 4
+
+Total Test time (real) =   0.03 sec
+
+The following tests FAILED:
+	  1 - unit (Failed)
+	  2 - integration (Failed)
+	  3 - operational (Failed)
+	  4 - alloc (Failed)
+Errors while running CTest
+Internal ctest changing into directory: /home/claude/projects/trumpet-vst/build
+Test project /home/claude/projects/trumpet-vst/build
+    Start 5: perf
+1/1 Test #5: perf .............................***Failed    0.00 sec
+Randomness seeded to: 2939088350
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tpt_perf_tests is a Catch2 v3.16.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+T-024 real-time factor
+-------------------------------------------------------------------------------
+/home/claude/projects/trumpet-vst/tests/core/test_perf.cpp:8
+...............................................................................
+
+/home/claude/projects/trumpet-vst/tests/core/test_perf.cpp:8: FAILED:
+due to unexpected exception with message:
+  not implemented: ResonatorTable::fromJson
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 1 | 1 failed
+
+
+
+0% tests passed, 1 tests failed out of 1
+
+Label Time Summary:
+perf    =   0.00 sec*proc (1 test)
+
+Total Test time (real) =   0.01 sec
+
+The following tests FAILED:
+	  5 - perf (Failed)
+Errors while running CTest

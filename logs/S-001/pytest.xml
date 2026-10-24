@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="9" skipped="6" tests="20" time="0.326" timestamp="2026-10-24T18:35:36.530536+01:00" hostname="claude-the-butler"><testcase classname="tests.python.test_realism_metrics" name="test_t028_harmonic_levels" time="0.010"><failure message="NotImplementedError: harmonic_levels_db">def test_t028_harmonic_levels():
+        x = tone(220.0, [1.0, 0.5, 0.25, 0.125])
+&gt;       h = m.harmonic_levels_db(x, FS, 220.0, 4)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/python/test_realism_metrics.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = array([ 0.        ,  0.10176892,  0.20293118, ..., -0.30288631,
+       -0.20293118, -0.10176892], shape=(66150,))
+fs = 44100, f0 = 220.0, count = 4
+
+    def harmonic_levels_db(x, fs, f0, count=10):
+        """Levels (dB re the strongest) of harmonics 1..count: Hann window, zero padding to the next power of two &gt;= 4 len,
+        maximum magnitude bin within +-3 % of h f0."""
+&gt;       raise NotImplementedError("harmonic_levels_db")
+E       NotImplementedError: harmonic_levels_db
+
+tools/realism/metrics.py:23: NotImplementedError</failure></testcase><testcase classname="tests.python.test_realism_metrics" name="test_t028_centroid_and_mad" time="0.002"><failure message="NotImplementedError: spectral_centroid_hz">def test_t028_centroid_and_mad():
+        x = tone(1000.0, [1.0])
+&gt;       assert m.spectral_centroid_hz(x, FS) == pytest.approx(1000.0, rel=0.01)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/python/test_realism_metrics.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = array([ 0.        ,  0.14199432,  0.28111111, ..., -0.41453118,
+       -0.28111111, -0.14199432], shape=(66150,))
+fs = 44100
+
+    def spectral_centroid_hz(x, fs):
+        """Power-spectrum centroid over [20 Hz, min(10 kHz, fs/2)], Hann window; 0.0 for silence."""
+&gt;       raise NotImplementedError("spectral_centroid_hz")
+E       NotImplementedError: spectral_centroid_hz
+
+tools/realism/metrics.py:28: NotImplementedError</failure></testcase><testcase classname="tests.python.test_realism_metrics" name="test_t028_onset_metric" time="0.002"><failure message="NotImplementedError: onset_ms">def test_t028_onset_metric():
+        # linear 100 ms / 200 ms ramps after 50 ms of silence; values from the reference metric (t028_values.py)
+        t = np.arange(int(1.0 * FS)) / FS
+        x = np.concatenate([np.zeros(int(0.05 * FS)), np.clip(t / 0.1, 0, 1) * np.sin(2 * np.pi * 440 * t)])
+&gt;       assert m.onset_ms(x, FS) == pytest.approx(53.0, abs=1.0)  # EXPECTED:onset_ramp100_ms
+               ^^^^^^^^^^^^^^^^^
+
+tests/python/test_realism_metrics.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = array([ 0.        ,  0.        ,  0.        , ..., -0.18696144,
+       -0.12505052, -0.06264832], shape=(46305,))
+fs = 44100
+
+    def onset_ms(x, fs):
+        """Synthetic-onset metric (D-017): 1 ms frames; from the first frame above -40 dB re the global maximum to the first
+        frame &gt;= the maximum of the following 300 ms minus 6.0206 dB. Meaningful only for signals that start in silence
+        (the TinySOL files are trimmed at the attack, C-096)."""
+&gt;       raise NotImplementedError("onset_ms")
+E       NotImplementedError: onset_ms
+
+tools/realism/metrics.py:35: NotImplementedError</failure></testcase><testcase classname="tests.python.test_realism_metrics" name="test_t028_steady_segment" time="0.004"><failure message="NotImplementedError: steady_segment">def test_t028_steady_segment():
+        t = np.arange(int(2.0 * FS)) / FS
+        env = np.where(t &lt; 1.6, np.clip(t / 0.05, 0, 1), np.clip(1 - (t - 1.6) / 0.2, 0, 1))
+&gt;       seg = m.steady_segment(env * np.sin(2 * np.pi * 300 * t), FS)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/python/test_realism_metrics.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = array([ 0.00000000e+00,  1.93785685e-05,  7.74434778e-05, ...,
+       -0.00000000e+00, -0.00000000e+00, -0.00000000e+00], shape=(88200,))
+fs = 44100
+
+    def steady_segment(x, fs):
+        """Longest run of 10 ms frames within 6 dB of the maximum, starting &gt;= 0.15 s after the first frame above -40 dB,
+        at most 1.0 s long."""
+&gt;       raise NotImplementedError("steady_segment")
+E       NotImplementedError: steady_segment
+
+tools/realism/metrics.py:17: NotImplementedError</failure></testcase><testcase classname="tests.python.test_realism_vs_tinysol" name="test_t029_coverage" time="0.000"><skipped type="pytest.skip" message="T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)">/home/claude/projects/trumpet-vst/tests/python/test_realism_vs_tinysol.py:35: T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)</skipped></testcase><testcase classname="tests.python.test_realism_vs_tinysol" name="test_t029_harmonics_centroid_onset[pp]" time="0.000"><skipped type="pytest.skip" message="T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)">/home/claude/projects/trumpet-vst/tests/python/test_realism_vs_tinysol.py:39: T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)</skipped></testcase><testcase classname="tests.python.test_realism_vs_tinysol" name="test_t029_harmonics_centroid_onset[mf]" time="0.000"><skipped type="pytest.skip" message="T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)">/home/claude/projects/trumpet-vst/tests/python/test_realism_vs_tinysol.py:39: T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)</skipped></testcase><testcase classname="tests.python.test_realism_vs_tinysol" name="test_t029_harmonics_centroid_onset[ff]" time="0.000"><skipped type="pytest.skip" message="T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)">/home/claude/projects/trumpet-vst/tests/python/test_realism_vs_tinysol.py:39: T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)</skipped></testcase><testcase classname="tests.python.test_realism_vs_tinysol" name="test_t029_dynamics_ordering" time="0.000"><skipped type="pytest.skip" message="T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)">/home/claude/projects/trumpet-vst/tests/python/test_realism_vs_tinysol.py:52: T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)</skipped></testcase><testcase classname="tests.python.test_realism_vs_tinysol" name="test_t029_tinysol_selection" time="0.000"><skipped type="pytest.skip" message="T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)">/home/claude/projects/trumpet-vst/tests/python/test_realism_vs_tinysol.py:59: T-029 needs TPT_RENDER and TINYSOL_DIR (CI realism job)</skipped></testcase><testcase classname="tests.python.test_resonator_tools" name="test_t030_cylinder_lossless" time="0.000"><failure message="NotImplementedError: input_impedance">def test_t030_cylinder_lossless():
+        f = np.linspace(20, 3000, 29801)
+        r, L = 7.5e-3, 0.5
+&gt;       z, _ = tmm.input_impedance(f, [(0.0, r), (L, r)], 0.0, 0.0, r, lossless=True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/python/test_resonator_tools.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+f = array([  20. ,   20.1,   20.2, ..., 2999.8, 2999.9, 3000. ],
+      shape=(29801,))
+profile = [(0.0, 0.0075), (0.5, 0.0075)], valve_x = 0.0, extra_length = 0.0
+valve_r = 0.0075, lossless = True, c = 347.2881840075121
+rho = 1.1760183741462602
+
+    def input_impedance(f, profile, valve_x, extra_length, valve_r, lossless=False, c=C27, rho=RHO27):
+        """(Zin, H) of the bore: profile = [(x, r), ...]; a cylinder of extra_length and radius valve_r inserted at valve_x;
+        unflanged radiation at the last point; H = p_bell / p_in."""
+&gt;       raise NotImplementedError("input_impedance")
+E       NotImplementedError: input_impedance
+
+tools/resonator/tmm.py:17: NotImplementedError</failure></testcase><testcase classname="tests.python.test_resonator_tools" name="test_t030_cone_vs_staircase" time="0.000"><failure message="NotImplementedError: input_impedance">def test_t030_cone_vs_staircase():
+        f = np.linspace(20, 2000, 19801)
+&gt;       z1, _ = tmm.input_impedance(f, [(0.0, 5e-3), (1.0, 40e-3)], 0.0, 0.0, 5e-3)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/python/test_resonator_tools.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+f = array([  20. ,   20.1,   20.2, ..., 1999.8, 1999.9, 2000. ],
+      shape=(19801,))
+profile = [(0.0, 0.005), (1.0, 0.04)], valve_x = 0.0, extra_length = 0.0
+valve_r = 0.005, lossless = False, c = 347.2881840075121
+rho = 1.1760183741462602
+
+    def input_impedance(f, profile, valve_x, extra_length, valve_r, lossless=False, c=C27, rho=RHO27):
+        """(Zin, H) of the bore: profile = [(x, r), ...]; a cylinder of extra_length and radius valve_r inserted at valve_x;
+        unflanged radiation at the last point; H = p_bell / p_in."""
+&gt;       raise NotImplementedError("input_impedance")
+E       NotImplementedError: input_impedance
+
+tools/resonator/tmm.py:17: NotImplementedError</failure></testcase><testcase classname="tests.python.test_resonator_tools" name="test_t030_bore_fit" time="0.000"><failure message="NotImplementedError: bore_fit.fit">def test_t030_bore_fit():
+&gt;       res = bore_fit.fit()
+              ^^^^^^^^^^^^^^
+
+tests/python/test_resonator_tools.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def fit():
+        """Returns {"params": [...7 floats...], "geometry": {"profile", "valve_x_m", "valve_r_m"}, "cents_err": [10 floats: modes 2..11],
+        "air": {"T_C", "c", "rho"}} with the pole frequencies of a complex modal fit compared like with like (C-099)."""
+&gt;       raise NotImplementedError("bore_fit.fit")
+E       NotImplementedError: bore_fit.fit
+
+tools/resonator/bore_fit.py:8: NotImplementedError</failure></testcase><testcase classname="tests.python.test_resonator_tools" name="test_t030_deterministic" time="0.021"><error message="failed on setup with &quot;subprocess.CalledProcessError: Command '['/home/claude/projects/trumpet-vst/.venv/bin/python', '-m', 'tools.resonator.generate_table', '--fingerings', '/home/claude/projects/trumpet-vst/tests/fixtures/trumpet_fingerings.txt', '--out', '/tmp/pytest-of-claude/pytest-21/t0300/t0.json', '--keep-calibration', '/home/claude/projects/trumpet-vst/data/trumpet_resonators.json']' returned non-zero exit status 1.&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=&lt;pluggy._tracing.TagTracerSub object at 0x72fc9f31a720&gt;, _basetemp=PosixPath('/tmp/pytest-of-claude/pytest-21'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def generated(tmp_path_factory):
+        d = tmp_path_factory.mktemp("t030")
+        outs = []
+        for k in range(2):
+            out = d / f"t{k}.json"
+&gt;           subprocess.run([sys.executable, "-m", "tools.resonator.generate_table", "--fingerings", str(FIX / "trumpet_fingerings.txt"),
+                            "--out", str(out), "--keep-calibration", str(ROOT / "data" / "trumpet_resonators.json")], check=True, cwd=ROOT)
+
+tests/python/test_resonator_tools.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['/home/claude/projects/trumpet-vst/.venv/bin/python', '-m', 'tools.resonator.generate_table', '--fingerings', '/home/claude/projects/trumpet-vst/tests/fixtures/trumpet_fingerings.txt', '--out', ...],)
+kwargs = {'cwd': PosixPath('/home/claude/projects/trumpet-vst')}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output &amp; stderr attributes if those streams
+        were captured.
+    
+        If timeout is given, and the process takes too long, a TimeoutExpired
+        exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+&gt;               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['/home/claude/projects/trumpet-vst/.venv/bin/python', '-m', 'tools.resonator.generate_table', '--fingerings', '/home/claude/projects/trumpet-vst/tests/fixtures/trumpet_fingerings.txt', '--out', '/tmp/pytest-of-claude/pytest-21/t0300/t0.json', '--keep-calibration', '/home/claude/projects/trumpet-vst/data/trumpet_resonators.json']' returned non-zero exit status 1.
+
+/usr/lib/python3.12/subprocess.py:571: CalledProcessError</error></testcase><testcase classname="tests.python.test_resonator_tools" name="test_t030_committed_table_is_current" time="0.000"><error message="failed on setup with &quot;subprocess.CalledProcessError: Command '['/home/claude/projects/trumpet-vst/.venv/bin/python', '-m', 'tools.resonator.generate_table', '--fingerings', '/home/claude/projects/trumpet-vst/tests/fixtures/trumpet_fingerings.txt', '--out', '/tmp/pytest-of-claude/pytest-21/t0300/t0.json', '--keep-calibration', '/home/claude/projects/trumpet-vst/data/trumpet_resonators.json']' returned non-zero exit status 1.&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=&lt;pluggy._tracing.TagTracerSub object at 0x72fc9f31a720&gt;, _basetemp=PosixPath('/tmp/pytest-of-claude/pytest-21'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def generated(tmp_path_factory):
+        d = tmp_path_factory.mktemp("t030")
+        outs = []
+        for k in range(2):
+            out = d / f"t{k}.json"
+&gt;           subprocess.run([sys.executable, "-m", "tools.resonator.generate_table", "--fingerings", str(FIX / "trumpet_fingerings.txt"),
+                            "--out", str(out), "--keep-calibration", str(ROOT / "data" / "trumpet_resonators.json")], check=True, cwd=ROOT)
+
+tests/python/test_resonator_tools.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['/home/claude/projects/trumpet-vst/.venv/bin/python', '-m', 'tools.resonator.generate_table', '--fingerings', '/home/claude/projects/trumpet-vst/tests/fixtures/trumpet_fingerings.txt', '--out', ...],)
+kwargs = {'cwd': PosixPath('/home/claude/projects/trumpet-vst')}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output &amp; stderr attributes if those streams
+        were captured.
+    
+        If timeout is given, and the process takes too long, a TimeoutExpired
+        exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+&gt;               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['/home/claude/projects/trumpet-vst/.venv/bin/python', '-m', 'tools.resonator.generate_table', '--fingerings', '/home/claude/projects/trumpet-vst/tests/fixtures/trumpet_fingerings.txt', '--out', '/tmp/pytest-of-claude/pytest-21/t0300/t0.json', '--keep-calibration', '/home/claude/projects/trumpet-vst/data/trumpet_resonators.json']' returned non-zero exit status 1.
+
+/usr/lib/python3.12/subprocess.py:571: CalledProcessError</error></testcase><testcase classname="tests.python.test_resonator_tools" name="test_t030_open_state_is_measured" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/claude/projects/trumpet-vst/data/trumpet_resonators.json'">def test_t030_open_state_is_measured():
+&gt;       com = json.loads((ROOT / "data" / "trumpet_resonators.json").read_text())
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/python/test_resonator_tools.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/claude/projects/trumpet-vst/data/trumpet_resonators.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/claude/projects/trumpet-vst/data/trumpet_resonators.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError</failure></testcase><testcase classname="tests.python.test_supply_chain" name="test_t031_fetchcontent_pins" time="0.001" /><testcase classname="tests.python.test_supply_chain" name="test_t031_python_lock" time="0.001" /><testcase classname="tests.python.test_supply_chain" name="test_t031_workflows_pinned_and_least_privilege" time="0.001" /><testcase classname="tests.python.test_supply_chain" name="test_t031_notices_and_attribution" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/home/claude/projects/trumpet-vst/THIRD_PARTY_NOTICES.md'">def test_t031_notices_and_attribution():
+&gt;       tpn = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/python/test_supply_chain.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/claude/projects/trumpet-vst/THIRD_PARTY_NOTICES.md')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/claude/projects/trumpet-vst/THIRD_PARTY_NOTICES.md'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError</failure></testcase></testsuite></testsuites>
