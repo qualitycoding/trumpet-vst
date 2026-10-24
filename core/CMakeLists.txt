@@ -2,6 +2,8 @@
 add_library(tpt_core STATIC
   src/Pitch.cpp src/Valves.cpp src/Fingering.cpp src/ResonatorTable.cpp src/LipModel.cpp
   src/ReferenceSim.cpp src/Analysis.cpp src/TrumpetVoice.cpp src/Layout.cpp src/State.cpp)
+include(${CMAKE_CURRENT_SOURCE_DIR}/embed_table.cmake)
+tpt_embed_resonator_table(tpt_core "${CMAKE_SOURCE_DIR}/data/trumpet_resonators.json")
 target_include_directories(tpt_core PUBLIC include)
 target_compile_features(tpt_core PUBLIC cxx_std_20)
 target_link_libraries(tpt_core PRIVATE nlohmann_json::nlohmann_json)
