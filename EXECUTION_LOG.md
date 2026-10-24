@@ -6,3 +6,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-24T18:26:04Z | S-003 | 1 | pass | f6a13d0 | T-001..T-005 pass; support selftest passes
 2026-10-24T18:27:34Z | S-004 | 1 | pass | 5cec710 | T-010, T-028 pass; YIN cross-check 56/56 rows agree (1 excluded)
 2026-10-24T19:17:36Z | S-005 | 1 | pass | 6ac08dd | T-030 pass (6); table sha256 e90919aac5b8681c; bore fit max 5.10 c; loops 0.0898/0.1844/0.2840 m; radiation 2 sections rms 2.61 dB
+2026-10-24T19:18:35Z | S-006 | 1 | pass | 5267e38 | T-006, T-007 pass
