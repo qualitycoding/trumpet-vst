@@ -67,6 +67,12 @@ public:
     /// keyswitch (it never sounds), false otherwise.
     bool keyswitch(int midiNote) noexcept;
 
+    /// Additive members (D-026 R-014, D-010, D-014; logged in DEVIATIONS.md).
+    void setHeldValves(Valves v) noexcept;          ///< held valves of Fixed-valves mode (kept by prepare()/reset())
+    void setLegatoPedal(bool on) noexcept;          ///< MIDI CC68 >= 64: touching notes are slurred (D-010)
+    void releaseOverblowControl() noexcept;         ///< CC121: the Overblow parameter applies again (D-014)
+    Valves heldValves() const noexcept;
+
     /// Renders n mono samples (n <= maxBlock) into out (overwrites).
     void process(float* out, int n) noexcept;
 
