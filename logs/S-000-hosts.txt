@@ -1,0 +1,9 @@
+github.com 200
+api.github.com 200
+codeload.github.com 301
+objects.githubusercontent.com 404
+release-assets.githubusercontent.com 404
+zenodo.org 200
+pypi.org 200
+files.pythonhosted.org 404
+bootstrap.pypa.io 200
