@@ -56,7 +56,7 @@ public:
     void noteOn(int concertMidi, float velocity) noexcept;   ///< velocity in (0, 1]; <= 0 behaves as noteOff
     void noteOff(int concertMidi) noexcept;
     void allNotesOff() noexcept;
-    /// Breath controller (CC2/CC11) in [0, 1]; once a value >= 0 has been received it replaces velocity as the
+    /// Breath controller (CC2) in [0, 1]; once a value >= 0 has been received it replaces velocity as the
     /// blowing level until reset(). A negative value means "no breath controller".
     void setBreath(float level) noexcept;
     void setPitchBend(float semitones) noexcept;              ///< clamped to [-2, 2]

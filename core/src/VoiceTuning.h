@@ -47,7 +47,8 @@ inline constexpr double kFloorWritten88 = 5.0;
 inline constexpr double kStiffBase = 1.15, kStiffSlope = 0.3;
 // per-partial trims (DR-REGIME), index = partial 1..13 (slot 0 unused); all 1.0 initially
 // partial 3: fl x 0.98 so that written C#4 (123 + 3rd slide) grows fast enough at mf (DR-REGIME round 1, S-009)
-inline constexpr std::array<double, 14> kFlTrim = {1, 1, 1, 0.98, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+// partial 4: fl x 0.98 so that alternate written F#4 (1-2-3, p4) does not lock onto partial 5 (DR-REGIME round 2)
+inline constexpr std::array<double, 14> kFlTrim = {1, 1, 1, 0.98, 0.98, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 inline constexpr std::array<double, 14> kH0Trim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 inline constexpr std::array<double, 14> kPmTrim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 // --- D-011 vibrato ----------------------------------------------------------------------------------------------------

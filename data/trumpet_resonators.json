@@ -123,7 +123,7 @@
    "written": 67
   },
   {
-   "fscale": 0.9590532797,
+   "fscale": 0.973243063,
    "kind": "std",
    "natural_dev_cents": 10.76361527,
    "partial": 4,
@@ -131,7 +131,7 @@
    "written": 68
   },
   {
-   "fscale": 0.9645659442,
+   "fscale": 0.9776110363,
    "kind": "std",
    "natural_dev_cents": 3.958958122,
    "partial": 4,
@@ -139,7 +139,7 @@
    "written": 69
   },
   {
-   "fscale": 0.9709326768,
+   "fscale": 0.9835327937,
    "kind": "std",
    "natural_dev_cents": -6.12839118,
    "partial": 4,
@@ -147,7 +147,7 @@
    "written": 70
   },
   {
-   "fscale": 0.9698047585,
+   "fscale": 0.9824053255,
    "kind": "std",
    "natural_dev_cents": -4.315109872,
    "partial": 4,
@@ -155,7 +155,7 @@
    "written": 71
   },
   {
-   "fscale": 0.967284259,
+   "fscale": 0.979701123,
    "kind": "std",
    "natural_dev_cents": 0.0,
    "partial": 4,
@@ -315,7 +315,7 @@
    "written": 64
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9463708797,
    "kind": "alt",
    "natural_dev_cents": 52.74716232,
    "partial": 4,
@@ -323,7 +323,7 @@
    "written": 66
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.962528552,
    "kind": "alt",
    "natural_dev_cents": 27.67800206,
    "partial": 4,
@@ -331,7 +331,7 @@
    "written": 67
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9830914621,
    "kind": "alt",
    "natural_dev_cents": -5.402556054,
    "partial": 4,
@@ -339,7 +339,7 @@
    "written": 69
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9676793539,
    "kind": "alt",
    "natural_dev_cents": -11.70367338,
    "partial": 5,
@@ -347,7 +347,7 @@
    "written": 72
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9353383187,
    "kind": "alt",
    "natural_dev_cents": 59.16117876,
    "partial": 6,
@@ -355,7 +355,7 @@
    "written": 73
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.946660662,
    "kind": "alt",
    "natural_dev_cents": 38.97595351,
    "partial": 6,
@@ -363,7 +363,7 @@
    "written": 74
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.953202033,
    "kind": "alt",
    "natural_dev_cents": 26.32781408,
    "partial": 6,
@@ -371,7 +371,7 @@
    "written": 75
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9558637816,
    "kind": "alt",
    "natural_dev_cents": 21.64082085,
    "partial": 6,
@@ -379,7 +379,7 @@
    "written": 76
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9403828299,
    "kind": "alt",
    "natural_dev_cents": 75.97468677,
    "partial": 8,
@@ -387,7 +387,7 @@
    "written": 78
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9542646375,
    "kind": "alt",
    "natural_dev_cents": 49.75907558,
    "partial": 8,
@@ -395,7 +395,7 @@
    "written": 79
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9740531731,
    "kind": "alt",
    "natural_dev_cents": 11.42681255,
    "partial": 8,
@@ -403,7 +403,7 @@
    "written": 81
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9639943851,
    "kind": "alt",
    "natural_dev_cents": 23.37762691,
    "partial": 9,
@@ -411,7 +411,7 @@
    "written": 82
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9691819041,
    "kind": "alt",
    "natural_dev_cents": 14.93894753,
    "partial": 9,
@@ -419,7 +419,7 @@
    "written": 83
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.978718377,
    "kind": "alt",
    "natural_dev_cents": 2.843127055,
    "partial": 9,
@@ -427,7 +427,7 @@
    "written": 84
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9846407685,
    "kind": "alt",
    "natural_dev_cents": -14.66266158,
    "partial": 10,
@@ -435,7 +435,7 @@
    "written": 85
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9932055467,
    "kind": "alt",
    "natural_dev_cents": -23.8906602,
    "partial": 10,
@@ -443,7 +443,7 @@
    "written": 86
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9725778324,
    "kind": "alt",
    "natural_dev_cents": 0.431778763,
    "partial": 12,
@@ -451,7 +451,7 @@
    "written": 87
   },
   {
-   "fscale": 1.0,
+   "fscale": 0.9744347028,
    "kind": "alt",
    "natural_dev_cents": -0.8507336041,
    "partial": 12,
@@ -483,7 +483,7 @@
   ],
   "cents_reference": "12-TET, A4 = 440 Hz, concert = written - 2; natural_dev_cents = hs_dev + dev(state) - dev(open)",
   "generator": "tools/resonator/generate_table.py",
-  "git": "52823f956f737b5dcb8c8e84385ef8fd61104d3b",
+  "git": "2fc922bb20be9b92e965a2f366400c4f697a9977",
   "loops_m": {
    "1": 0.1844393497,
    "2": 0.08983041842,

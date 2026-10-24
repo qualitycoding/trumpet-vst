@@ -67,6 +67,7 @@ std::vector<float> render(tpt::TrumpetVoice& v, double fs, double seconds) {
 
 /// Cents of the played note relative to 12-TET (NaN if the estimator finds no pitch).
 double centsOf(json& table, std::size_t idx, double fscale) {
+    if (!(fscale >= 0.8 && fscale <= 1.25)) return std::numeric_limits<double>::quiet_NaN();   // outside the table limits
     table["notes"][idx]["fscale"] = round10(fscale);
     const int written = table["notes"][idx]["written"].get<int>();
     const bool alt = table["notes"][idx]["kind"].get<std::string>() == "alt";
@@ -142,7 +143,8 @@ int calibrate(const std::string& path, const Range& range) {
             c1 = c0;
         }
         if (ok && (x1 < 0.8 || x1 > 1.25)) ok = false;
-        table["notes"][i]["fscale"] = round10(x1);
+        table["notes"][i]["fscale"] = round10(ok ? x1 : std::clamp(x1, 0.8, 1.25));
+        if (!std::isfinite(x1)) table["notes"][i]["fscale"] = 1.0;
         // sustain gate and regime lock at 48 kHz (as T-012)
         bool sustained = false, partialOk = false;
         if (ok) {

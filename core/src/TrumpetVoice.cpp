@@ -145,7 +145,8 @@ struct Setup {
 
 /// A lip/pressure/tuning setting that ramps between partials, registers and notes (D-009, D-010).
 struct LipSet {
-    double flBase = 100, h0 = 1e-4, pth = 1000, floorK = 0, S = 1;   // flBase: ratio * resonance, unscaled
+    double flBase = 100, h0 = 1e-4, pth = 1000, floorK = 0;   // flBase: ratio * resonance, unscaled
+    double fsNote = 1, devCents = 0;                        // table fscale and natural deviation of the target partial
 };
 
 enum class Env { Idle, Attack, Sustain, Release, Stop, Reattack };
@@ -527,9 +528,8 @@ struct TrumpetVoice::Impl {
         l.h0 = lp.h0M * tu::kH0Trim[mi];
         l.pth = thresholdPressurePa(std::clamp(m, 1, 13)) * tu::kPmTrim[mi];
         l.floorK = s.floorK;
-        const double dev = (m == s.partial) ? s.devCents : 0.0;
-        const double scaleNote = (m == s.partial) ? s.fscaleNote : fscaleFor(s.valves, m);
-        l.S = scaleNote * (s.fixed ? 1.0 : std::pow(2.0, realismS * dev / 1200.0)) * (par.tuningA4Hz / 440.0);
+        l.devCents = (m == s.partial && !s.fixed) ? s.devCents : 0.0;
+        l.fsNote = (m == s.partial) ? s.fscaleNote : fscaleFor(s.valves, m);
         return l;
     }
 
@@ -675,7 +675,8 @@ struct TrumpetVoice::Impl {
         now.h0 = lerp(from.h0, to.h0, rho);
         now.pth = lerp(from.pth, to.pth, rho);
         now.floorK = lerp(from.floorK, to.floorK, rho);
-        now.S = geoLerp(from.S, to.S, rho);
+        now.fsNote = geoLerp(from.fsNote, to.fsNote, rho);
+        now.devCents = lerp(from.devCents, to.devCents, rho);
         // only the target of a ramp that has not started yet is "to"; a finished ramp makes from == to
         if (rho >= 1.0) from = to;
 
@@ -719,7 +720,8 @@ struct TrumpetVoice::Impl {
 
         // segment end values (linear interpolation within the segment)
         const double Wrt = runtimeScale();
-        const double scale = now.S * Wrt;
+        const double S = now.fsNote * std::pow(2.0, realismS * now.devCents / 1200.0) * (static_cast<double>(par.tuningA4Hz) / 440.0);
+        const double scale = S * Wrt;
         flA = flB; h0A = h0B; pmA = pmB;
         flB = now.flBase * scale;
         h0B = now.h0 * heightScale();
