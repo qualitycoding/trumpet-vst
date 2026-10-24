@@ -8,3 +8,7 @@ renders/
 *.raw
 *.wav
 logs/*.raw
+*.wav
+logs/*.raw
+renders/
+reference-data/

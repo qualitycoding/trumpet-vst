@@ -1,0 +1,1 @@
+hash install in a clean venv: ok (2026-10-24)

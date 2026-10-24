@@ -1,0 +1,7 @@
+Found 4 known vulnerabilities in 2 packages
+Name     Version   ID              Fix Versions
+-------- --------- --------------- ------------
+certifi  2026.7.22 PYSEC-2026-4320 2026.10.19
+filelock 4.0.12    CVE-2026-112940 4.2.1
+filelock 4.0.12    CVE-2026-112913 4.2.1
+filelock 4.0.12    CVE-2026-112907 4.2.1

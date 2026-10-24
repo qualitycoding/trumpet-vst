@@ -1,0 +1,275 @@
+# SPDX-License-Identifier: Apache-2.0
+# CI for trumpet-vst (D-020, D-024, D-025, D-026). Actions are pinned to full commit SHAs.
+name: ci
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  freeze:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Frozen tests and expected values
+        run: bash tests/scripts/verify_freeze.sh
+      - name: Diff against the generation branch
+        run: |
+          git fetch origin gen-20261007T145241Z-trumpet-vst-plan
+          git diff --exit-code FETCH_HEAD -- tests research/spikes/expected_values.py \
+            || { echo "::error::tests/ or expected_values.py differ from the generation branch"; exit 1; }
+
+  core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Toolchain
+        shell: bash
+        run: |
+          cmake --version | head -1
+          (c++ --version || cl 2>&1 || true) | head -2
+          echo "runner image: ${ImageOS:-?} ${ImageVersion:-?}"
+      - name: Configure
+        shell: bash
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DTPT_BUILD_PLUGIN=OFF
+      - name: Build
+        shell: bash
+        run: cmake --build build --config Release --parallel 4
+      - name: Tests (all except perf and plugin)
+        shell: bash
+        run: ctest --test-dir build -C Release -LE 'perf|plugin' --output-on-failure
+      - name: Performance (T-024b)
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: ctest --test-dir build -C Release -L perf --output-on-failure
+      - name: ThreadSanitizer on the operational tests (R-015)
+        if: ${{ !cancelled() && runner.os == 'Linux' }}
+        run: |
+          cmake -S . -B build-tsan -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTPT_BUILD_PLUGIN=OFF \
+            -DCMAKE_CXX_FLAGS="-fsanitize=thread -g"
+          cmake --build build-tsan --target tpt_operational_tests --parallel 4
+          if ! build-tsan/tests/tpt_operational_tests > tsan.log 2>&1; then
+            if grep -q "unexpected memory mapping" tsan.log; then
+              echo "mmap_rnd_bits=$(cat /proc/sys/vm/mmap_rnd_bits); rerunning with ASLR disabled"
+              setarch "$(uname -m)" -R build-tsan/tests/tpt_operational_tests
+            else
+              tail -50 tsan.log; exit 1
+            fi
+          fi
+      - name: Summary
+        if: ${{ failure() }}
+        shell: bash
+        run: echo "::error::core job failed on ${{ matrix.os }}"
+
+  python:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Virtual environment outside the checkout
+        run: |
+          python -m venv "$RUNNER_TEMP/venv"
+          ln -sfn "$RUNNER_TEMP/venv" .venv
+          .venv/bin/pip install --require-hashes -r tools/requirements.hashes.txt
+          .venv/bin/python --version
+      - name: Python tests (T-029 runs in the realism job)
+        run: .venv/bin/python -m pytest tests/python -k "not t029"
+      - name: pip-audit (reports, does not fail on push)
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: .venv/bin/pip-audit -r tools/requirements.lock || echo "::warning::pip-audit reported vulnerabilities"
+      - name: Summary
+        if: ${{ failure() }}
+        run: echo "::error::python job failed"
+
+  plugin:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Linux packages
+        if: runner.os == 'Linux'
+        run: |
+          PKGS="libasound2-dev libjack-jackd2-dev ladspa-sdk libfreetype-dev libfontconfig1-dev libx11-dev libxcomposite-dev \
+            libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libxi-dev libcurl4-openssl-dev libegl-dev \
+            libgl-dev xvfb ninja-build"
+          sudo apt-get update || echo "::warning::apt-get update failed"
+          sudo apt-get install -y --no-install-recommends $PKGS
+          for p in $PKGS; do dpkg -s "$p" > /dev/null 2>&1 || { echo "::error::missing package $p"; MISSING=1; }; done
+          test -z "${MISSING:-}"
+      - name: Toolchain
+        shell: bash
+        run: |
+          cmake --version | head -1
+          (c++ --version || cl 2>&1 || true) | head -2
+          echo "runner image: ${ImageOS:-?} ${ImageVersion:-?}"
+      - name: Configure
+        shell: bash
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        shell: bash
+        run: cmake --build build --config Release --parallel 4
+      - name: Plugin tests (T-026)
+        shell: bash
+        run: |
+          EXE=$(find build -name 'tpt_plugin_tests*' -type f \( -perm -u+x -o -name '*.exe' \) | head -1)
+          echo "plugin test binary: $EXE"
+          if [ "$RUNNER_OS" = Linux ]; then xvfb-run -a "$EXE" --reporter compact; else "$EXE" --reporter compact; fi
+      - name: Variant tests (extra;plugin)
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a ctest --test-dir build -C Release -L extra -L plugin --no-tests=ignore --output-on-failure
+          else
+            ctest --test-dir build -C Release -L extra -L plugin --no-tests=ignore --output-on-failure
+          fi
+      - name: AddressSanitizer on the plugin tests (R-016)
+        if: ${{ !cancelled() && runner.os == 'Linux' }}
+        run: |
+          cmake -S . -B build-asan -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -g"
+          cmake --build build-asan --parallel 4
+          xvfb-run -a build-asan/plugin/tpt_plugin_tests --reporter compact
+          xvfb-run -a ctest --test-dir build-asan -L extra -L plugin --no-tests=ignore --output-on-failure
+      - name: pluginval on the VST3 (T-027)
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          VST3=$(find build -name 'Trumpet.vst3' -maxdepth 6 | head -1)
+          echo "bundle: $VST3"
+          if [ "$RUNNER_OS" = Linux ]; then xvfb-run -a bash tests/scripts/run_pluginval.sh "$VST3"; else bash tests/scripts/run_pluginval.sh "$VST3"; fi
+      - name: Static MSVC runtime check (D-024)
+        if: ${{ !cancelled() && runner.os == 'Windows' }}
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          $dumpbin = Get-ChildItem -Recurse -Filter dumpbin.exe "$vs\VC\Tools\MSVC" | Where-Object { $_.FullName -match 'Hostx64\\x64' } | Select-Object -First 1
+          $bin = Get-ChildItem -Recurse -Filter Trumpet.vst3 build | Where-Object { -not $_.PSIsContainer } | Select-Object -First 1
+          Write-Host "binary: $($bin.FullName)"
+          $deps = & $dumpbin.FullName /dependents $bin.FullName
+          $deps
+          if ($deps -match '(?i)(msvcp140|vcruntime140|ucrtbase|api-ms-win-crt)') { Write-Error "dynamic MSVC runtime dependency"; exit 1 }
+      - name: auval on the AU
+        if: ${{ !cancelled() && runner.os == 'macOS' }}
+        run: |
+          COMP=$(find build -name 'Trumpet.component' -maxdepth 6 | head -1)
+          mkdir -p ~/Library/Audio/Plug-Ins/Components && cp -R "$COMP" ~/Library/Audio/Plug-Ins/Components/
+          killall -9 AudioComponentRegistrar || true
+          auval -v aumu Tpts Qcod
+      - name: Summary
+        if: ${{ failure() }}
+        shell: bash
+        run: echo "::error::plugin job failed on ${{ matrix.os }}"
+
+  build-linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Is tpt_render present yet?
+        id: chk
+        run: test -f tools/render/main.cpp && echo present=1 >> "$GITHUB_OUTPUT" || true
+      - name: Build tpt_render
+        if: steps.chk.outputs.present == '1'
+        run: |
+          cmake --version | head -1; c++ --version | head -1
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DTPT_BUILD_PLUGIN=OFF -DTPT_BUILD_TESTS=OFF
+          cmake --build build --target tpt_render --parallel 4
+      - name: Hand tpt_render to the realism job (internal, one day, not a product binary)
+        if: steps.chk.outputs.present == '1'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tpt_render
+          path: build/tools/render/tpt_render
+          retention-days: 1
+      - name: Summary
+        if: ${{ failure() }}
+        run: echo "::error::build-linux failed"
+
+  realism:
+    needs: build-linux
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    concurrency:
+      group: results-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Is tpt_render present yet?
+        id: chk
+        run: test -f tools/render/main.cpp && echo present=1 >> "$GITHUB_OUTPUT" || true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        if: steps.chk.outputs.present == '1'
+        with:
+          python-version: "3.12"
+      - name: Virtual environment outside the checkout
+        if: steps.chk.outputs.present == '1'
+        run: |
+          python -m venv "$RUNNER_TEMP/venv"
+          ln -sfn "$RUNNER_TEMP/venv" .venv
+          .venv/bin/pip install --require-hashes -r tools/requirements.hashes.txt
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        if: steps.chk.outputs.present == '1'
+        with:
+          name: tpt_render
+          path: ${{ runner.temp }}/render
+      - name: Prepare tpt_render
+        if: steps.chk.outputs.present == '1'
+        run: chmod +x "$RUNNER_TEMP/render/tpt_render"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        if: steps.chk.outputs.present == '1'
+        with:
+          path: reference-data/tinysol
+          key: tinysol-36030a7fe389da86c3419e5ee48e3b7f
+      - name: Compare with TinySOL
+        if: steps.chk.outputs.present == '1'
+        run: |
+          .venv/bin/python -m tools.realism.compare_tinysol --tinysol reference-data/tinysol \
+            --render "$RUNNER_TEMP/render/tpt_render" --out results.json
+      - name: Summarise
+        if: ${{ !cancelled() && steps.chk.outputs.present == '1' && hashFiles('results.json') != '' }}
+        run: .venv/bin/python tools/realism/summarize.py results.json --out SUMMARY.md
+      - name: T-029
+        if: steps.chk.outputs.present == '1'
+        env:
+          TPT_RENDER: ${{ runner.temp }}/render/tpt_render
+          TINYSOL_DIR: reference-data/tinysol
+        run: .venv/bin/python -m pytest tests/python -k t029
+      - name: Publish results to ci-results (append-only)
+        if: ${{ !cancelled() && github.event_name == 'push' && steps.chk.outputs.present == '1' && hashFiles('results.json') != '' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/out"; mkdir -p "$OUT"
+          cp results.json "$OUT/"; cp SUMMARY.md "$OUT/" 2>/dev/null || true
+          printf '{"sha":"%s","run":"%s","image":"%s %s"}\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "${ImageOS:-?}" "${ImageVersion:-?}" > "$OUT/results.meta.json"
+          SRC_SHA="$GITHUB_SHA" bash tools/ci/push_results.sh "$OUT"
+      - name: Summary
+        if: ${{ failure() }}
+        run: echo "::error::realism job failed (T-029 or tooling)"
