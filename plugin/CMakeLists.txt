@@ -20,10 +20,21 @@ juce_add_plugin(TrumpetVST
 
 target_sources(TrumpetVST PRIVATE src/PluginProcessor.cpp src/PluginEditor.cpp src/TrumpetView.cpp)
 target_include_directories(TrumpetVST PUBLIC src)
+# Short git sha shown in the editor (D-025); -DTPT_GIT_SHA_OVERRIDE=<sha7> wins (release-candidate job).
+if(TPT_GIT_SHA_OVERRIDE)
+  set(TPT_GIT_SHA "${TPT_GIT_SHA_OVERRIDE}")
+else()
+  execute_process(COMMAND git rev-parse --short=7 HEAD WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                  OUTPUT_VARIABLE TPT_GIT_SHA OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET RESULT_VARIABLE TPT_GIT_RC)
+  if(NOT TPT_GIT_RC EQUAL 0 OR TPT_GIT_SHA STREQUAL "")
+    set(TPT_GIT_SHA "unknown")
+  endif()
+endif()
+target_compile_definitions(TrumpetVST PUBLIC TPT_GIT_SHA="${TPT_GIT_SHA}")
 target_compile_definitions(TrumpetVST PUBLIC
   JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_VST3_CAN_REPLACE_VST2=0 JUCE_DISPLAY_SPLASH_SCREEN=0 JUCE_ASIO=0)
 target_link_libraries(TrumpetVST
-  PUBLIC tpt_core juce::juce_audio_utils juce::juce_audio_processors juce::juce_gui_basics
+  PUBLIC tpt_core nlohmann_json::nlohmann_json juce::juce_audio_utils juce::juce_audio_processors juce::juce_gui_basics
   PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_lto_flags juce::juce_recommended_warning_flags)
 
 if(TPT_BUILD_TESTS)

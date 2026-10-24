@@ -26,3 +26,5 @@
   open horn's measured/TMM peak-height ratio (as research/spikes/make_table.py did) instead of the fit's |R| ratio: the
   fit inflated the weak upper modes (modes 7-11 by 20-60 % in the 3-valve states) and written 61 (1-2-3, partial 3) then
   locked partial 4 or the pedal tone at ff. Frequencies, damping and the open state stay as specified (T-030).
+- S-013 (Conventions "Interfaces", additive members): `TrumpetAudioProcessor::unsupportedRate() const noexcept` (D-026 R-022).
+  The processor links `nlohmann_json` (heldValves in the state, D-026 R-014).
