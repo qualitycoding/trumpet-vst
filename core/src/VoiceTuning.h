@@ -46,7 +46,8 @@ inline constexpr double kFloorWritten88 = 5.0;
 // --- D-005 lip opening scale: h0 x (1.15 - 0.3 lipStiffness) ---------------------------------------------------------
 inline constexpr double kStiffBase = 1.15, kStiffSlope = 0.3;
 // per-partial trims (DR-REGIME), index = partial 1..13 (slot 0 unused); all 1.0 initially
-inline constexpr std::array<double, 14> kFlTrim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+// partial 3: fl x 0.98 so that written C#4 (123 + 3rd slide) grows fast enough at mf (DR-REGIME round 1, S-009)
+inline constexpr std::array<double, 14> kFlTrim = {1, 1, 1, 0.98, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 inline constexpr std::array<double, 14> kH0Trim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 inline constexpr std::array<double, 14> kPmTrim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 // --- D-011 vibrato ----------------------------------------------------------------------------------------------------

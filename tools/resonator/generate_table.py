@@ -8,6 +8,7 @@ Deterministic: same inputs -> identical bytes (json.dumps(indent=1, sort_keys=Tr
 digits, provenance.git = `git rev-parse HEAD` or "unknown"). --keep-calibration copies "fscale" of matching notes from
 an existing table (calibration is done by tpt_calibrate, S-009)."""
 import argparse
+import cmath
 import json
 import math
 import os
@@ -106,22 +107,36 @@ class Bore:
         return open_pk
 
 
+def passive_phase(s):
+    """Phase of the residue of a passive second-order mode with pole s: atan(|Re s| / Im s) (Z(0) = 0)."""
+    return math.atan2(-s.real, s.imag)
+
+
 def calibration(open_modes):
-    """Complex pole and residue ratios measured / TMM-open for k = 1..14 (k > 11 reuse k = 11)."""
+    """Pole ratios s_meas/s_TMM-open (complex), residue magnitude ratios |R_meas|/|R_TMM-open| and the measured residue
+    phase excess over the passive phase, for k = 1..14 (k > 11 reuse the k = 11 ratios and have no phase excess)."""
     meas = read_measured()
-    cs, cr = [], []
+    cs, cm, dl = [], [], []
     for k in range(NMODES):
         if k < len(meas):
             cs.append(meas[k][0] / open_modes[k][0])
-            cr.append(meas[k][1] / open_modes[k][1])
+            cm.append(abs(meas[k][1]) / abs(open_modes[k][1]))
+            dl.append(cmath.phase(meas[k][1]) - passive_phase(meas[k][0]))
         else:
-            cs.append(cs[-1])
-            cr.append(cr[-1])
-    return cs, cr
+            cs.append(cs[-1]); cm.append(cm[-1]); dl.append(0.0)   # modes above the measured ones: passive phase
+    return cs, cm, dl
 
 
-def calibrated(modes, cs, cr):
-    return [(s * cs[k], r * cr[k]) for k, (s, r) in enumerate(modes)]
+def calibrated(modes, cal):
+    """Calibrated modes: s * c_s,k and |R| * |c_R,k| with the phase passive_phase(s') + delta_k. The residue phase is not
+    transferred as a ratio from the TMM fit: its fit noise made the 3-valve states active (Re Z < 0 near DC) and the
+    reference integrator diverged (DEVIATIONS.md S-005). The open state still equals the measured modes."""
+    cs, cm, dl = cal
+    out = []
+    for k, (s, r) in enumerate(modes):
+        s2 = s * cs[k]
+        out.append((s2, cmath.rect(abs(r) * cm[k], passive_phase(s2) + dl[k])))
+    return out
 
 
 def hs_dev(n):
@@ -214,8 +229,9 @@ def build(fingerings, keep=None):
     bore = Bore(bore_fit.geometry(params))
     open_pk = bore.tune_loops()
     modes = {c: bore.fit(c) for c in COMBOS}
-    cs, cr = calibration(modes["0"])
-    states = {c: calibrated(modes[c], cs, cr) for c in COMBOS}
+    cal = calibration(modes["0"])
+    cs = cal[0]
+    states = {c: calibrated(modes[c], cal) for c in COMBOS}
     open_f = [m[0].imag / (2 * math.pi) for m in states["0"]]
     open_dev = {k + 1: cents(open_f[k], et_hz(46 + 12 * math.log2(k + 1))) for k in range(NMODES)}
     # peak-to-pole frequency ratio of the open horn, used to steer the trigger bisections on the cheap peak list
@@ -245,13 +261,13 @@ def build(fingerings, keep=None):
             # two Newton steps on the pole frequencies of the modal fit (like with like, C-099)
             slope = (dev_peak(trig_len + 1e-4) - dev_peak(trig_len - 1e-4)) / 2e-4
             for _ in range(2):
-                m = calibrated(bore.fit(key, trig_len), cs, cr)
+                m = calibrated(bore.fit(key, trig_len), cal)
                 d = cents(m[n - 1][0].imag / (2 * math.pi), target)
                 trig_len = min(0.08, max(0.0, trig_len - (d - want) / slope))
             bore.loops[v] = saved
             state_id = f"{key}+t{v}@{r['written']}"
             if state_id not in trig_states:
-                m = calibrated(bore.fit(key, trig_len), cs, cr)
+                m = calibrated(bore.fit(key, trig_len), cal)
                 trig_states[state_id] = m
                 state_rows.append({"id": state_id, "valves": key, "trigger": v, "trigger_len_m": trig_len, "modes": m})
         st = trig_states[state_id] if state_id in trig_states else states[key]
