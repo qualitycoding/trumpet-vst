@@ -16,6 +16,7 @@ import pathlib
 import subprocess
 import sys
 
+os.environ["OPENBLAS_CORETYPE"] = "Haswell"   # see tools/resonator/__init__.py
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
@@ -91,7 +92,7 @@ class Bore:
 
     def fit(self, combo, trig_extra=0.0):
         z, _ = self.zin(F_FIT, combo, trig_extra)
-        return tmm.complex_modal_fit(F_FIT, z, NMODES, F_MAX, tol=1e-10)
+        return tmm.complex_modal_fit(F_FIT, z, NMODES, F_MAX, tol=1e-15)
 
     def tune_loops(self):
         open_pk = self.peaks("0")
@@ -103,7 +104,7 @@ class Bore:
                 pk = self.peaks(v)
                 low = np.mean([cents(open_pk[k][0], pk[k][0]) for k in range(2, 6)])
                 lo, hi = (mid, hi) if low < 100 * st else (lo, mid)
-            self.loops[v] = 0.5 * (lo + hi)
+            self.loops[v] = round(0.5 * (lo + hi), 7)    # 0.1 um: keeps CPU-dependent noise out of the geometry
         return open_pk
 
 
@@ -270,7 +271,7 @@ def build(fingerings, keep=None):
             for _ in range(2):
                 m = calibrated(bore.fit(key, trig_len), cal, bore.peaks(key, trig_len))
                 d = cents(m[n - 1][0].imag / (2 * math.pi), target)
-                trig_len = min(0.08, max(0.0, trig_len - (d - want) / slope))
+                trig_len = round(min(0.08, max(0.0, trig_len - (d - want) / slope)), 7)
             bore.loops[v] = saved
             state_id = f"{key}+t{v}@{r['written']}"
             if state_id not in trig_states:

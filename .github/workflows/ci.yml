@@ -86,6 +86,17 @@ jobs:
           .venv/bin/python --version
       - name: Python tests (T-029 runs in the realism job)
         run: .venv/bin/python -m pytest tests/python -k "not t029"
+      - name: Keep the regenerated table for diagnosis (JSON only)
+        if: ${{ failure() }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/table"
+          .venv/bin/python -m tools.resonator.generate_table --fingerings tests/fixtures/trumpet_fingerings.txt --out "$RUNNER_TEMP/table/trumpet_resonators.json" --keep-calibration data/trumpet_resonators.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ failure() }}
+        with:
+          name: table-ci
+          path: ${{ runner.temp }}/table/trumpet_resonators.json
+          retention-days: 1
       - name: pip-audit (reports, does not fail on push)
         if: ${{ !cancelled() }}
         continue-on-error: true

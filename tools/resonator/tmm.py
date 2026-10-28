@@ -146,7 +146,7 @@ def _jac(w, x, weight):
     return j
 
 
-def complex_modal_fit(f, z, n_modes, f_max, tol=1e-12, max_nfev=300):
+def complex_modal_fit(f, z, n_modes, f_max, tol=1e-12, max_nfev=3000):
     """Fit Z(w) = sum_k R_k/(jw - s_k) + conj(R_k)/(jw - conj(s_k)) with n_modes complex poles (initialised from peaks(),
     refined by scipy.optimize.least_squares on complex Z, relative weighting, f <= 1.1 f_max). Returns [(s_k, R_k)]
     sorted by Im(s_k), all Re(s_k) < 0 and Re(R_k) > 0."""

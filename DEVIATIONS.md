@@ -28,3 +28,6 @@
   locked partial 4 or the pedal tone at ff. Frequencies, damping and the open state stay as specified (T-030).
 - S-013 (Conventions "Interfaces", additive members): `TrumpetAudioProcessor::unsupportedRate() const noexcept` (D-026 R-022).
   The processor links `nlohmann_json` (heldValves in the state, D-026 R-014).
+- S-014 (D-013 "Level meter"): the editor shows a "sounding" lamp, not a level meter. `UiState` carries no level (it is
+  compared field by field by the frozen T-026/T-020 tests), so a meter would need a new field; the voice's meter exists
+  only for `sounding`, the tracker gate and the idle rule. Logged in `logs/S-014/ui-checklist.md`.
