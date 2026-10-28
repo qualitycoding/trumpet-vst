@@ -14,3 +14,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-24T22:53:44Z | S-011 | 1 | pass | 9c20956 | T-015..T-018, T-020, T-034, T-035 pass; T-021 pass, T-022 brassy 21/25 (<25) waits for S-016 (DR-REAL); brightness-ff: 0 clamp events. Final constants: kRegisterRampS 0.01, kBrightenUp 0.5, kTongueStopS 0.028, kFlTrim p3/p4 0.97, kH0Trim p9 0.85, nlp 0.4 m
 2026-10-24T22:54:12Z | S-012 | 1 | pass | b36c9d7 | T-011 pass
 2026-10-28T23:19:14Z | S-015 | 1 | pass | db6b7d5 | 82 reference notes; test_t029_coverage and selection pass; pp/mf thresholds already met, ff centroid band fails (0 %) -> S-016
+2026-10-28T23:22:03Z | S-014 | 1 | pass | f59237d | T-033, T-026 (all) pass; G-004 evidence branch d81d071; GATE-G-004.md issued; CI run https://github.com/qualitycoding/trumpet-vst/actions/runs/40785962043
