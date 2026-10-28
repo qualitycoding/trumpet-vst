@@ -31,3 +31,8 @@
 - S-014 (D-013 "Level meter"): the editor shows a "sounding" lamp, not a level meter. `UiState` carries no level (it is
   compared field by field by the frozen T-026/T-020 tests), so a meter would need a new field; the voice's meter exists
   only for `sounding`, the tracker gate and the idle rule. Logged in `logs/S-014/ui-checklist.md`.
+- S-014 (D-004 reproducibility, T-030): the table generator re-executes itself once with the CPU-dependent numerics pinned
+  (glibc FMA/AVX2 libm variants disabled through GLIBC_TUNABLES, NumPy AVX-512 loops disabled, OpenBLAS kernel fixed to
+  Haswell, one thread), rounds the valve loops and trigger lengths to 0.1 um and runs the modal fits to ftol 1e-15.
+  Without this the CI `python` job regenerated the table with differences up to 4e-8 on some runner CPUs (the weak modes
+  12-14 and the tiny imaginary parts of the residues), which fails T-030's 1e-9 comparison intermittently.

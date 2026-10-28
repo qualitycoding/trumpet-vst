@@ -16,9 +16,27 @@ import pathlib
 import subprocess
 import sys
 
-os.environ["OPENBLAS_CORETYPE"] = "Haswell"   # see tools/resonator/__init__.py
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
+
+def _pin_environment():
+    """Re-executes once with the CPU-dependent numerics pinned: glibc's libm picks FMA/AVX2 variants of exp, sin, atan2 ...
+    by CPU, NumPy picks AVX-512 loops, OpenBLAS picks kernels. Their last-bit differences move the weak upper modes of the
+    nonlinear fits by 1e-8 and break the bitwise comparison of T-030 between CI runners (DEVIATIONS.md S-014)."""
+    want = {
+        "GLIBC_TUNABLES": "glibc.cpu.hwcaps=-AVX2,-AVX512F,-FMA,-FMA4,-AVX,-BMI2",
+        "OPENBLAS_CORETYPE": "Haswell",
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "NPY_DISABLE_CPU_FEATURES": "AVX512F AVX512CD AVX512_KNL AVX512_KNM AVX512_SKX AVX512_CLX AVX512_CNL AVX512_ICL AVX512_SPR",
+    }
+    if all(os.environ.get(k) == v for k, v in want.items()):
+        return
+    os.environ.update(want)
+    os.execv(sys.executable, [sys.executable, "-m", "tools.resonator.generate_table", *sys.argv[1:]])
+
+
+if __name__ == "__main__":
+    _pin_environment()
 
 import numpy as np                        # noqa: E402
 from scipy.optimize import least_squares  # noqa: E402
