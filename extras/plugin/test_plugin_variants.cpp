@@ -131,11 +131,11 @@ TEST_CASE("variant: CC68 slurs touching notes, without it they are tongued", "[v
         TrumpetAudioProcessor p;
         prepare(p);
         if (pedal) run(p, 1, msg({juce::MidiMessage::controllerEvent(1, 68, 127)}));
-        run(p, 80, msg({juce::MidiMessage::noteOn(1, 60, (juce::uint8) 100)}));
+        run(p, 160, msg({juce::MidiMessage::noteOn(1, 67, (juce::uint8) 100)}));
         const auto steadyBlock = run(p, 20);
         const float steady = db(rms(steadyBlock, 0, steadyBlock.getNumSamples()));
         // touching notes: note-off and the next note-on at one sample position
-        const auto y = run(p, 24, msg({juce::MidiMessage::noteOff(1, 60), juce::MidiMessage::noteOn(1, 65, (juce::uint8) 100)}));
+        const auto y = run(p, 24, msg({juce::MidiMessage::noteOff(1, 67), juce::MidiMessage::noteOn(1, 72, (juce::uint8) 100)}));
         return minWindowDb(y, 80) - steady;
     };
     CHECK(dip(true) > -20.0f);       // legato: no articulation dip

@@ -43,3 +43,7 @@ if(TPT_BUILD_TESTS)
   add_test(NAME plugin COMMAND tpt_plugin_tests)
   set_tests_properties(plugin PROPERTIES LABELS plugin)
 endif()
+
+# G-004 editor snapshots (S-014); run under xvfb-run on Linux.
+add_executable(tpt_ui_snapshots ${CMAKE_SOURCE_DIR}/tools/render/snapshot_ui.cpp)
+target_link_libraries(tpt_ui_snapshots PRIVATE TrumpetVST)

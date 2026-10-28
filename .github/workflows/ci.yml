@@ -273,3 +273,65 @@ jobs:
       - name: Summary
         if: ${{ failure() }}
         run: echo "::error::realism job failed (T-029 or tooling)"
+
+  gate-evidence:
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[gate-evidence') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    concurrency:
+      group: results-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Which gate?
+        id: gate
+        env:
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          case "$MSG" in
+            *"[gate-evidence G-004]"*) echo "gate=G-004" >> "$GITHUB_OUTPUT" ;;
+            *"[gate-evidence G-005]"*) echo "gate=G-005" >> "$GITHUB_OUTPUT" ;;
+            *) echo "::error::unknown gate marker"; exit 1 ;;
+          esac
+      - name: Linux packages
+        run: |
+          PKGS="libasound2-dev libjack-jackd2-dev ladspa-sdk libfreetype-dev libfontconfig1-dev libx11-dev libxcomposite-dev \
+            libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libxi-dev libcurl4-openssl-dev libegl-dev \
+            libgl-dev xvfb ninja-build"
+          sudo apt-get update || echo "::warning::apt-get update failed"
+          sudo apt-get install -y --no-install-recommends $PKGS
+          for p in $PKGS; do dpkg -s "$p" > /dev/null 2>&1 || { echo "::error::missing package $p"; MISSING=1; }; done
+          test -z "${MISSING:-}"
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Virtual environment outside the checkout
+        run: |
+          python -m venv "$RUNNER_TEMP/venv"
+          ln -sfn "$RUNNER_TEMP/venv" .venv
+          .venv/bin/pip install --require-hashes -r tools/requirements.hashes.txt
+      - name: Build
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DTPT_BUILD_TESTS=OFF
+          cmake --build build --parallel 4
+      - name: G-004 editor snapshots
+        if: steps.gate.outputs.gate == 'G-004'
+        run: xvfb-run -a build/plugin/tpt_ui_snapshots renders/G-004
+      - name: G-005 bundle
+        if: steps.gate.outputs.gate == 'G-005'
+        env:
+          TINYSOL_DIR: reference-data/tinysol
+        run: |
+          .venv/bin/python tools/realism/make_g005_bundle.py --tinysol "$TINYSOL_DIR" --render build/tools/render/tpt_render --out renders/G-005
+      - name: Push the evidence branch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash tools/render/push_evidence.sh "${{ steps.gate.outputs.gate }}" "renders/${{ steps.gate.outputs.gate }}"
+      - name: Summary
+        if: ${{ failure() }}
+        run: echo "::error::gate-evidence failed"
