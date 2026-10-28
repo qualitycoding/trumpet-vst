@@ -13,3 +13,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-24T19:48:50Z | S-010 | 1 | pass | be44433 | T-014, T-019 (and T-012/13/18/20) pass; DR-REGIME round 2: kFlTrim[4]=0.98 re-calibrated; long hold ok
 2026-10-24T22:53:44Z | S-011 | 1 | pass | 9c20956 | T-015..T-018, T-020, T-034, T-035 pass; T-021 pass, T-022 brassy 21/25 (<25) waits for S-016 (DR-REAL); brightness-ff: 0 clamp events. Final constants: kRegisterRampS 0.01, kBrightenUp 0.5, kTongueStopS 0.028, kFlTrim p3/p4 0.97, kH0Trim p9 0.85, nlp 0.4 m
 2026-10-24T22:54:12Z | S-012 | 1 | pass | b36c9d7 | T-011 pass
+2026-10-28T23:19:14Z | S-015 | 1 | pass | db6b7d5 | 82 reference notes; test_t029_coverage and selection pass; pp/mf thresholds already met, ff centroid band fails (0 %) -> S-016
