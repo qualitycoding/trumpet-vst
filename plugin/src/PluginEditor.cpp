@@ -21,6 +21,7 @@ TrumpetAudioProcessorEditor::TrumpetAudioProcessorEditor(TrumpetAudioProcessor& 
         auto& k = knobs_[i];
         k.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
         k.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 18);
+        k.setNumDecimalPlacesToDisplay(2);
         addAndMakeVisible(k);
         knobAttachments_[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.parameters(), kKnobs[i].id, k);
         knobLabels_[i].setText(kKnobs[i].label, juce::dontSendNotification);
