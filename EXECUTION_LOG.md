@@ -15,3 +15,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-24T22:54:12Z | S-012 | 1 | pass | b36c9d7 | T-011 pass
 2026-10-28T23:19:14Z | S-015 | 1 | pass | db6b7d5 | 82 reference notes; test_t029_coverage and selection pass; pp/mf thresholds already met, ff centroid band fails (0 %) -> S-016
 2026-10-28T23:22:03Z | S-014 | 1 | pass | f59237d | T-033, T-026 (all) pass; G-004 evidence branch d81d071; GATE-G-004.md issued; CI run https://github.com/qualitycoding/trumpet-vst/actions/runs/40785962043
+2026-10-29T11:33:29Z | G-004 | - | answered | - | proceed (no tokens-revoked: G-005 stays blocked until recorded)
