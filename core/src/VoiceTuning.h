@@ -58,11 +58,15 @@ inline constexpr double kParamSmoothS = 0.010;     // smoothing of bend, realism
 // --- D-012 output stage -----------------------------------------------------------------------------------------------
 inline constexpr double kCupRadiusM = 8.25e-3;
 inline constexpr double kWarpClampPa = 30000.0;
+inline constexpr double kFfShelfDb = 8.0;         // high-shelf boost at ff (L = 1), 0 dB at mf (L <= 0.6): dynamic brightness (DR-REAL, S-016)
+inline constexpr double kPpShelfDb = 8.0;         // high-shelf cut at pp (L <= 0.2), rising to 0 dB at mf
+inline constexpr double kFfShelfHz = 1800.0, kFfShelfQ = 0.7;
+inline constexpr double kNlFfBoost = 0.0;          // L_nl grows by this factor from L = 0.6 (mf) to L = 1 (ff) (DR-REAL, S-016)
 inline constexpr double kNoiseCutoffHz = 3000.0;
 inline constexpr double kNoiseFlowGain = 0.05;
 inline constexpr double kNoiseOutGain = 0.002;
 inline constexpr unsigned kNoiseSeed = 0x7A11C0DEu;
-inline constexpr double kOutGain = 1.0 / 45000.0;  // K_out: written C5 at ff peaks near -6 dBFS (calibrated in S-016)
+inline constexpr double kOutGain = 1.0 / 92000.0;  // K_out: written C5 at ff peaks near -6 dBFS (calibrated in S-016)
 inline constexpr double kLimiterKnee = 0.9;
 // --- D-006 / D-013 ------------------------------------------------------------------------------------------------------
 inline constexpr double kFlowRhoKgM3 = 1.2041;     // lipsim value
@@ -83,7 +87,7 @@ inline std::vector<std::pair<std::string, double>> table() {
         {"kCupRadiusM", kCupRadiusM}, {"kDownHysteresis", kDownHysteresis}, {"kFloorExtended", kFloorExtended},
         {"kFloorWritten88", kFloorWritten88}, {"kFlowRhoKgM3", kFlowRhoKgM3}, {"kIdleDb", kIdleDb},
         {"kIdleHoldS", kIdleHoldS}, {"kLegatoPedalWindowS", kLegatoPedalWindowS}, {"kLimiterKnee", kLimiterKnee},
-        {"kMeterWindowS", kMeterWindowS}, {"kNoiseCutoffHz", kNoiseCutoffHz}, {"kNoiseFlowGain", kNoiseFlowGain},
+        {"kMeterWindowS", kMeterWindowS}, {"kFfShelfDb", kFfShelfDb}, {"kPpShelfDb", kPpShelfDb}, {"kFfShelfHz", kFfShelfHz}, {"kFfShelfQ", kFfShelfQ}, {"kNlFfBoost", kNlFfBoost}, {"kNoiseCutoffHz", kNoiseCutoffHz}, {"kNoiseFlowGain", kNoiseFlowGain},
         {"kNoiseOutGain", kNoiseOutGain}, {"kOnsetMinThresholdMul", kOnsetMinThresholdMul}, {"kOutGain", kOutGain},
         {"kPanicFadeS", kPanicFadeS}, {"kParamSmoothS", kParamSmoothS}, {"kPmSmoothS", kPmSmoothS},
         {"kReattackS", kReattackS}, {"kRegisterRampS", kRegisterRampS}, {"kReleaseS", kReleaseS},

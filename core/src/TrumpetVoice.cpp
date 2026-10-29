@@ -54,7 +54,7 @@ double blend(double L, double boundary) { return clampd((L - (boundary - tu::kBo
 /// RBJ cookbook biquad (D-012), direct form II transposed.
 struct Biquad {
     double b0 = 1, b1 = 0, b2 = 0, a1 = 0, a2 = 0, z1 = 0, z2 = 0;
-    void design(RadiationSection::Type type, double f, double q, double gainDb, double fs) {
+    void design(RadiationSection::Type type, double f, double q, double gainDb, double fs, bool keepState = false) {
         const double w0 = 2.0 * kPi * std::min(f, 0.45 * fs) / fs, c = std::cos(w0), s = std::sin(w0);
         const double alpha = s / (2.0 * q), A = std::pow(10.0, gainDb / 40.0), sA = std::sqrt(A);
         double B0 = 1, B1 = 0, B2 = 0, A0 = 1, A1 = 0, A2 = 0;
@@ -73,7 +73,7 @@ struct Biquad {
             A1 = 2 * ((A - 1) - (A + 1) * c); A2 = (A + 1) - (A - 1) * c - 2 * sA * alpha; break;
         }
         b0 = B0 / A0; b1 = B1 / A0; b2 = B2 / A0; a1 = A1 / A0; a2 = A2 / A0;
-        z1 = z2 = 0;
+        if (!keepState) z1 = z2 = 0;
     }
     double process(double x) {
         const double y = b0 * x + z1;
@@ -248,6 +248,8 @@ struct TrumpetVoice::Impl {
     double warpA = 0.0, warpK = 0.0, taPrev = 0.0;
     std::array<Biquad, kMaxSections> bq{};
     int nBq = 0;
+    Biquad ffShelf;                  // level-dependent high shelf (S-016)
+    double ffShelfDb = 0.0;
     std::array<HalfBand, 2> dec{};
     int nDec = 0;
     std::vector<double> meterRing;
@@ -320,7 +322,7 @@ struct TrumpetVoice::Impl {
         latency = os == 1 ? 0 : static_cast<int>(std::lround(os == 2 ? 31.0 / 2.0 : 31.0 / 4.0 + 31.0 / 2.0));
         // output-stage warp: ring sized from A = beta L_nl,max 30 kPa / (rho c^3) f_int (D-012)
         const double rho = table->airDensity(), c = table->soundSpeed();
-        warpA = table->nlpBeta() * table->nlpLengthM() * 2.0 * tu::kWarpClampPa / (rho * c * c * c) * fInt;
+        warpA = table->nlpBeta() * table->nlpLengthM() * 2.0 * (1.0 + tu::kNlFfBoost) * tu::kWarpClampPa / (rho * c * c * c) * fInt;
         warpD = static_cast<int>(std::ceil(warpA)) + 2;
         std::size_t ringSize = 1;
         while (ringSize < static_cast<std::size_t>(2 * warpD + 8)) ringSize <<= 1;
@@ -353,6 +355,8 @@ struct TrumpetVoice::Impl {
         for (std::int64_t k = ptr; k <= nSrc; ++k) { ringVal[std::size_t(k & ringMask)] = 0.0; ringTa[std::size_t(k & ringMask)] = double(k); }
         taPrev = double(nSrc);
         for (auto& b : bq) b.clear();
+        ffShelf.clear(); ffShelfDb = 0.0;
+        ffShelf.design(RadiationSection::Type::HighShelf, tu::kFfShelfHz, tu::kFfShelfQ, 0.0, fInt);
         for (auto& d : dec) d.clear();
         std::fill(meterRing.begin(), meterRing.end(), 0.0);
         meterPos = 0; meterSum = 0; meterDb = -200; idleCount = 0;
@@ -743,9 +747,17 @@ struct TrumpetVoice::Impl {
             Z0 += 2.0 * g.real();
         }
 
+        // dynamic brightness: high-shelf gain follows the blowing level above mf
+        {
+            const double want = tu::kFfShelfDb * clampd((L - 0.6) / 0.4, 0.0, 1.0) - tu::kPpShelfDb * clampd((0.6 - L) / 0.4, 0.0, 1.0);
+            if (std::fabs(want - ffShelfDb) > 0.02) {
+                ffShelfDb = want;
+                ffShelf.design(RadiationSection::Type::HighShelf, tu::kFfShelfHz, tu::kFfShelfQ, ffShelfDb, fInt, true);
+            }
+        }
         // output stage constants
         const double rhoAir = table->airDensity(), c = table->soundSpeed();
-        const double Lnl = table->nlpLengthM() * 2.0 * brightS;
+        const double Lnl = table->nlpLengthM() * 2.0 * brightS * (1.0 + tu::kNlFfBoost * clampd((L - 0.6) / 0.4, 0.0, 1.0));
         warpK = table->nlpBeta() * Lnl / (rhoAir * c * c * c) * fInt;
 
         // tracker
@@ -903,6 +915,7 @@ struct TrumpetVoice::Impl {
         const double v0 = ringVal[std::size_t(ptr & ringMask)], v1 = ringVal[std::size_t((ptr + 1) & ringMask)];
         double w = (ptr + 1 <= nSrc && t1 > t0) ? v0 + (v1 - v0) * clampd((j - t0) / (t1 - t0), 0.0, 1.0) : v0;
         for (int b = 0; b < nBq; ++b) w = bq[std::size_t(b)].process(w);
+        w = ffShelf.process(w);
         w *= tu::kOutGain * gainS * panicGain;
         w += tu::kNoiseOutGain * noiseS * (pm / std::max(now.pth, 1.0)) * noiseVal * panicGain;
 

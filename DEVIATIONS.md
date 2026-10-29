@@ -36,3 +36,7 @@
   Haswell, one thread), rounds the valve loops and trigger lengths to 0.1 um and runs the modal fits to ftol 1e-15.
   Without this the CI `python` job regenerated the table with differences up to 4e-8 on some runner CPUs (the weak modes
   12-14 and the tiny imaginary parts of the residues), which fails T-030's 1e-9 comparison intermittently.
+- S-016 (DR-REAL, D-012): besides the listed constants, the voice has a level-dependent high shelf (`kFfShelfDb` +8 dB at ff,
+  `kPpShelfDb` -8 dB at pp, corner `kFfShelfHz` 1800 Hz, Q 0.7, linear in the blowing level, 0 dB at mf) after the radiation
+  biquads. A static radiation change fixed ff but broke pp/mf, and neither L_nl (`kNlFfBoost`, a level-dependent factor, kept
+  at 0) nor a higher ff blowing factor moved the ff centroid beyond 36 %. K_out is 1/92000 (written C5 at ff peaks at -6.0 dBFS).
