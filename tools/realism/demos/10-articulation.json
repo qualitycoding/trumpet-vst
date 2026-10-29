@@ -1,0 +1,182 @@
+{
+ "seconds": 5.95,
+ "params": {},
+ "events": [
+  {
+   "t": 0.0,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.125,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 0.125,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.25,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 0.25,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.375,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 0.375,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.5,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 0.5,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.625,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 0.625,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.75,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 0.75,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.875,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 0.875,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.0,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 1.5,
+   "type": "noteOn",
+   "note": 58,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.9,
+   "type": "noteOff",
+   "note": 58
+  },
+  {
+   "t": 1.95,
+   "type": "noteOn",
+   "note": 62,
+   "velocity": 0.598425
+  },
+  {
+   "t": 2.35,
+   "type": "noteOff",
+   "note": 62
+  },
+  {
+   "t": 2.4,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 2.8,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 2.85,
+   "type": "noteOn",
+   "note": 70,
+   "velocity": 0.598425
+  },
+  {
+   "t": 3.25,
+   "type": "noteOff",
+   "note": 70
+  },
+  {
+   "t": 3.75,
+   "type": "noteOn",
+   "note": 58,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.15,
+   "type": "noteOn",
+   "note": 62,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.16,
+   "type": "noteOff",
+   "note": 58
+  },
+  {
+   "t": 4.55,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.56,
+   "type": "noteOff",
+   "note": 62
+  },
+  {
+   "t": 4.95,
+   "type": "noteOn",
+   "note": 70,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.96,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 5.35,
+   "type": "noteOff",
+   "note": 70
+  }
+ ]
+}

@@ -1,0 +1,310 @@
+{
+ "seconds": 13.5,
+ "params": {},
+ "events": [
+  {
+   "t": 0.0,
+   "type": "param",
+   "name": "intonationRealism",
+   "value": 0.0
+  },
+  {
+   "t": 0.0,
+   "type": "param",
+   "name": "intonationRealism",
+   "value": 0.0
+  },
+  {
+   "t": 0.0,
+   "type": "noteOn",
+   "note": 52,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.45,
+   "type": "noteOff",
+   "note": 52
+  },
+  {
+   "t": 0.5,
+   "type": "noteOn",
+   "note": 53,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.95,
+   "type": "noteOff",
+   "note": 53
+  },
+  {
+   "t": 1.0,
+   "type": "noteOn",
+   "note": 54,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.45,
+   "type": "noteOff",
+   "note": 54
+  },
+  {
+   "t": 1.5,
+   "type": "noteOn",
+   "note": 55,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.95,
+   "type": "noteOff",
+   "note": 55
+  },
+  {
+   "t": 2.0,
+   "type": "noteOn",
+   "note": 56,
+   "velocity": 0.598425
+  },
+  {
+   "t": 2.45,
+   "type": "noteOff",
+   "note": 56
+  },
+  {
+   "t": 2.5,
+   "type": "noteOn",
+   "note": 57,
+   "velocity": 0.598425
+  },
+  {
+   "t": 2.95,
+   "type": "noteOff",
+   "note": 57
+  },
+  {
+   "t": 3.0,
+   "type": "noteOn",
+   "note": 58,
+   "velocity": 0.598425
+  },
+  {
+   "t": 3.45,
+   "type": "noteOff",
+   "note": 58
+  },
+  {
+   "t": 3.5,
+   "type": "noteOn",
+   "note": 59,
+   "velocity": 0.598425
+  },
+  {
+   "t": 3.95,
+   "type": "noteOff",
+   "note": 59
+  },
+  {
+   "t": 4.0,
+   "type": "noteOn",
+   "note": 60,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.45,
+   "type": "noteOff",
+   "note": 60
+  },
+  {
+   "t": 4.5,
+   "type": "noteOn",
+   "note": 61,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.95,
+   "type": "noteOff",
+   "note": 61
+  },
+  {
+   "t": 5.0,
+   "type": "noteOn",
+   "note": 62,
+   "velocity": 0.598425
+  },
+  {
+   "t": 5.45,
+   "type": "noteOff",
+   "note": 62
+  },
+  {
+   "t": 5.5,
+   "type": "noteOn",
+   "note": 63,
+   "velocity": 0.598425
+  },
+  {
+   "t": 5.95,
+   "type": "noteOff",
+   "note": 63
+  },
+  {
+   "t": 6.0,
+   "type": "noteOn",
+   "note": 64,
+   "velocity": 0.598425
+  },
+  {
+   "t": 6.45,
+   "type": "noteOff",
+   "note": 64
+  },
+  {
+   "t": 6.5,
+   "type": "param",
+   "name": "intonationRealism",
+   "value": 1.0
+  },
+  {
+   "t": 6.5,
+   "type": "noteOn",
+   "note": 52,
+   "velocity": 0.598425
+  },
+  {
+   "t": 6.95,
+   "type": "noteOff",
+   "note": 52
+  },
+  {
+   "t": 7.0,
+   "type": "noteOn",
+   "note": 53,
+   "velocity": 0.598425
+  },
+  {
+   "t": 7.45,
+   "type": "noteOff",
+   "note": 53
+  },
+  {
+   "t": 7.5,
+   "type": "noteOn",
+   "note": 54,
+   "velocity": 0.598425
+  },
+  {
+   "t": 7.95,
+   "type": "noteOff",
+   "note": 54
+  },
+  {
+   "t": 8.0,
+   "type": "noteOn",
+   "note": 55,
+   "velocity": 0.598425
+  },
+  {
+   "t": 8.45,
+   "type": "noteOff",
+   "note": 55
+  },
+  {
+   "t": 8.5,
+   "type": "noteOn",
+   "note": 56,
+   "velocity": 0.598425
+  },
+  {
+   "t": 8.95,
+   "type": "noteOff",
+   "note": 56
+  },
+  {
+   "t": 9.0,
+   "type": "noteOn",
+   "note": 57,
+   "velocity": 0.598425
+  },
+  {
+   "t": 9.45,
+   "type": "noteOff",
+   "note": 57
+  },
+  {
+   "t": 9.5,
+   "type": "noteOn",
+   "note": 58,
+   "velocity": 0.598425
+  },
+  {
+   "t": 9.95,
+   "type": "noteOff",
+   "note": 58
+  },
+  {
+   "t": 10.0,
+   "type": "noteOn",
+   "note": 59,
+   "velocity": 0.598425
+  },
+  {
+   "t": 10.45,
+   "type": "noteOff",
+   "note": 59
+  },
+  {
+   "t": 10.5,
+   "type": "noteOn",
+   "note": 60,
+   "velocity": 0.598425
+  },
+  {
+   "t": 10.95,
+   "type": "noteOff",
+   "note": 60
+  },
+  {
+   "t": 11.0,
+   "type": "noteOn",
+   "note": 61,
+   "velocity": 0.598425
+  },
+  {
+   "t": 11.45,
+   "type": "noteOff",
+   "note": 61
+  },
+  {
+   "t": 11.5,
+   "type": "noteOn",
+   "note": 62,
+   "velocity": 0.598425
+  },
+  {
+   "t": 11.95,
+   "type": "noteOff",
+   "note": 62
+  },
+  {
+   "t": 12.0,
+   "type": "noteOn",
+   "note": 63,
+   "velocity": 0.598425
+  },
+  {
+   "t": 12.45,
+   "type": "noteOff",
+   "note": 63
+  },
+  {
+   "t": 12.5,
+   "type": "noteOn",
+   "note": 64,
+   "velocity": 0.598425
+  },
+  {
+   "t": 12.95,
+   "type": "noteOff",
+   "note": 64
+  }
+ ]
+}

@@ -1,0 +1,105 @@
+{
+ "seconds": 6.0,
+ "params": {},
+ "events": [
+  {
+   "t": 0.0,
+   "type": "noteOn",
+   "note": 58,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.6,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.605,
+   "type": "noteOff",
+   "note": 58
+  },
+  {
+   "t": 1.2,
+   "type": "noteOn",
+   "note": 70,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.205,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 1.8,
+   "type": "noteOn",
+   "note": 74,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.805,
+   "type": "noteOff",
+   "note": 70
+  },
+  {
+   "t": 2.4,
+   "type": "noteOn",
+   "note": 77,
+   "velocity": 0.598425
+  },
+  {
+   "t": 2.405,
+   "type": "noteOff",
+   "note": 74
+  },
+  {
+   "t": 3.0,
+   "type": "noteOn",
+   "note": 74,
+   "velocity": 0.598425
+  },
+  {
+   "t": 3.005,
+   "type": "noteOff",
+   "note": 77
+  },
+  {
+   "t": 3.6,
+   "type": "noteOn",
+   "note": 70,
+   "velocity": 0.598425
+  },
+  {
+   "t": 3.605,
+   "type": "noteOff",
+   "note": 74
+  },
+  {
+   "t": 4.2,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.205,
+   "type": "noteOff",
+   "note": 70
+  },
+  {
+   "t": 4.8,
+   "type": "noteOn",
+   "note": 58,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.805,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 5.4,
+   "type": "noteOff",
+   "note": 58
+  }
+ ]
+}

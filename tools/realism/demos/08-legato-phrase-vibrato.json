@@ -1,0 +1,88 @@
+{
+ "seconds": 4.1,
+ "params": {},
+ "events": [
+  {
+   "t": 0.0,
+   "type": "noteOn",
+   "note": 58,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.5,
+   "type": "noteOn",
+   "note": 62,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.505,
+   "type": "noteOff",
+   "note": 58
+  },
+  {
+   "t": 1.0,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.005,
+   "type": "noteOff",
+   "note": 62
+  },
+  {
+   "t": 1.5,
+   "type": "noteOn",
+   "note": 70,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.505,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 2.0,
+   "type": "noteOn",
+   "note": 69,
+   "velocity": 0.598425
+  },
+  {
+   "t": 2.005,
+   "type": "noteOff",
+   "note": 70
+  },
+  {
+   "t": 2.5,
+   "type": "noteOn",
+   "note": 67,
+   "velocity": 0.598425
+  },
+  {
+   "t": 2.505,
+   "type": "noteOff",
+   "note": 69
+  },
+  {
+   "t": 3.0,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 3.005,
+   "type": "noteOff",
+   "note": 67
+  },
+  {
+   "t": 3.5,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 1.0,
+   "type": "vibrato",
+   "value": 0.6
+  }
+ ]
+}

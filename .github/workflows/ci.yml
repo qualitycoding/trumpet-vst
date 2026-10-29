@@ -326,6 +326,11 @@ jobs:
           python -m venv "$RUNNER_TEMP/venv"
           ln -sfn "$RUNNER_TEMP/venv" .venv
           .venv/bin/pip install --require-hashes -r tools/requirements.hashes.txt
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        if: steps.gate.outputs.gate == 'G-005'
+        with:
+          path: reference-data/tinysol
+          key: tinysol-36030a7fe389da86c3419e5ee48e3b7f
       - name: Build
         run: |
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DTPT_BUILD_TESTS=OFF
@@ -338,7 +343,7 @@ jobs:
         env:
           TINYSOL_DIR: reference-data/tinysol
         run: |
-          .venv/bin/python tools/realism/make_g005_bundle.py --tinysol "$TINYSOL_DIR" --render build/tools/render/tpt_render --out renders/G-005
+          .venv/bin/python -m tools.realism.make_g005_bundle --tinysol "$TINYSOL_DIR" --render build/tools/render/tpt_render --out renders/G-005
       - name: Push the evidence branch
         env:
           GITHUB_TOKEN: ${{ github.token }}

@@ -1,0 +1,68 @@
+{
+ "seconds": 4.5,
+ "params": {
+  "fixedValves": true
+ },
+ "events": [
+  {
+   "t": 0.0,
+   "type": "keyswitch",
+   "note": 29
+  },
+  {
+   "t": 0.1,
+   "type": "noteOn",
+   "note": 53,
+   "velocity": 0.598425
+  },
+  {
+   "t": 0.8,
+   "type": "noteOff",
+   "note": 53
+  },
+  {
+   "t": 0.9,
+   "type": "noteOn",
+   "note": 60,
+   "velocity": 0.598425
+  },
+  {
+   "t": 1.6,
+   "type": "noteOff",
+   "note": 60
+  },
+  {
+   "t": 1.7,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 2.4,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 2.5,
+   "type": "noteOn",
+   "note": 68,
+   "velocity": 0.598425
+  },
+  {
+   "t": 3.2,
+   "type": "noteOff",
+   "note": 68
+  },
+  {
+   "t": 3.3,
+   "type": "noteOn",
+   "note": 72,
+   "velocity": 0.598425
+  },
+  {
+   "t": 4.0,
+   "type": "noteOff",
+   "note": 72
+  }
+ ]
+}

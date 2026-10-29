@@ -1,0 +1,90 @@
+{
+ "seconds": 9.5,
+ "params": {},
+ "events": [
+  {
+   "t": 0.0,
+   "type": "param",
+   "name": "brightness",
+   "value": 0.0
+  },
+  {
+   "t": 0.0,
+   "type": "noteOn",
+   "note": 70,
+   "velocity": 0.976378
+  },
+  {
+   "t": 1.4,
+   "type": "noteOff",
+   "note": 70
+  },
+  {
+   "t": 1.5,
+   "type": "noteOn",
+   "note": 79,
+   "velocity": 0.976378
+  },
+  {
+   "t": 2.9,
+   "type": "noteOff",
+   "note": 79
+  },
+  {
+   "t": 3.0,
+   "type": "param",
+   "name": "brightness",
+   "value": 0.5
+  },
+  {
+   "t": 3.0,
+   "type": "noteOn",
+   "note": 70,
+   "velocity": 0.976378
+  },
+  {
+   "t": 4.4,
+   "type": "noteOff",
+   "note": 70
+  },
+  {
+   "t": 4.5,
+   "type": "noteOn",
+   "note": 79,
+   "velocity": 0.976378
+  },
+  {
+   "t": 5.9,
+   "type": "noteOff",
+   "note": 79
+  },
+  {
+   "t": 6.0,
+   "type": "param",
+   "name": "brightness",
+   "value": 1.0
+  },
+  {
+   "t": 6.0,
+   "type": "noteOn",
+   "note": 70,
+   "velocity": 0.976378
+  },
+  {
+   "t": 7.4,
+   "type": "noteOff",
+   "note": 70
+  },
+  {
+   "t": 7.5,
+   "type": "noteOn",
+   "note": 79,
+   "velocity": 0.976378
+  },
+  {
+   "t": 8.9,
+   "type": "noteOff",
+   "note": 79
+  }
+ ]
+}

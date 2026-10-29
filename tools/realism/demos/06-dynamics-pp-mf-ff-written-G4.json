@@ -1,0 +1,39 @@
+{
+ "seconds": 5.9,
+ "params": {},
+ "events": [
+  {
+   "t": 0.0,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.188976
+  },
+  {
+   "t": 1.5,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 1.8,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.598425
+  },
+  {
+   "t": 3.3,
+   "type": "noteOff",
+   "note": 65
+  },
+  {
+   "t": 3.6,
+   "type": "noteOn",
+   "note": 65,
+   "velocity": 0.976378
+  },
+  {
+   "t": 5.1,
+   "type": "noteOff",
+   "note": 65
+  }
+ ]
+}
