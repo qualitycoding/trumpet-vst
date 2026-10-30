@@ -351,3 +351,90 @@ jobs:
       - name: Summary
         if: ${{ failure() }}
         run: echo "::error::gate-evidence failed"
+
+  rc-artifacts:
+    # Release-candidate binaries of a PUBLIC repository: only after the owner's G-002 approval (marker commit
+    # "[g002-approved rc <sha7>]"), or as a dry run without upload ("[rc-dryrun <sha7>]"). See plan/DECISIONS.md D-025.
+    if: ${{ github.event_name == 'push' && (contains(github.event.head_commit.message, '[g002-approved rc ') || contains(github.event.head_commit.message, '[rc-dryrun ')) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Approved commit, ancestry and records-only checks
+        id: sha
+        shell: bash
+        env:
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          set -euo pipefail
+          DRY=0
+          if [[ "$MSG" =~ \[g002-approved\ rc\ ([0-9a-f]{7})\] ]]; then SHA="${BASH_REMATCH[1]}"
+          elif [[ "$MSG" =~ \[rc-dryrun\ ([0-9a-f]{7})\] ]]; then SHA="${BASH_REMATCH[1]}"; DRY=1
+          else echo "::error::no approval marker with a 7-character sha"; exit 1; fi
+          git merge-base --is-ancestor "$SHA" HEAD || { echo "::error::$SHA is not an ancestor of HEAD"; exit 1; }
+          BAD=$(git diff --name-only "$SHA" HEAD | grep -vE '^(GATE-[^/]*\.md|EXECUTION_LOG\.md|\.checkpoints/.*|logs/.*)$' || true)
+          if [ -n "$BAD" ]; then echo "::error::files changed since the approved commit that are not records:"; echo "$BAD"; exit 1; fi
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "dry=$DRY" >> "$GITHUB_OUTPUT"
+      - name: Linux packages
+        if: runner.os == 'Linux'
+        run: |
+          PKGS="libasound2-dev libjack-jackd2-dev ladspa-sdk libfreetype-dev libfontconfig1-dev libx11-dev libxcomposite-dev \
+            libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libxi-dev libcurl4-openssl-dev libegl-dev \
+            libgl-dev xvfb ninja-build"
+          sudo apt-get update || echo "::warning::apt-get update failed"
+          sudo apt-get install -y --no-install-recommends $PKGS
+          for p in $PKGS; do dpkg -s "$p" > /dev/null 2>&1 || { echo "::error::missing package $p"; MISSING=1; }; done
+          test -z "${MISSING:-}"
+      - name: Configure and build the release candidate
+        shell: bash
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DTPT_BUILD_TESTS=OFF -DTPT_GIT_SHA_OVERRIDE=${{ steps.sha.outputs.sha }}
+          cmake --build build --config Release --parallel 4
+      - name: Stage the release candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="rc/${{ matrix.os }}"
+          mkdir -p "$OUT/licenses"
+          ART=$(find build/plugin -type d -name TrumpetVST_artefacts | head -1)
+          test -n "$ART"
+          for fmt in VST3 Standalone AU; do
+            find "$ART" -maxdepth 2 -type d -name "$fmt" -exec cp -R {} "$OUT/" \;
+          done
+          ls "$OUT"
+          cp LICENSE NOTICE THIRD_PARTY_NOTICES.md ATTRIBUTION.md "$OUT/"
+          JUCE=build/_deps/juce-src
+          cp "$JUCE/LICENSE.md" "$OUT/licenses/JUCE-LICENSE.md"
+          V3=$(find "$JUCE" -path '*VST3_SDK*' -name LICENSE.txt | head -1)
+          if [ -n "$V3" ]; then cp "$V3" "$OUT/licenses/VST3-SDK-LICENSE.txt"; else echo "::error::VST3 SDK licence not found"; exit 1; fi
+          cp build/_deps/nlohmann_json-src/LICENSE.MIT "$OUT/licenses/nlohmann-json-LICENSE.MIT"
+          AG=$(find "$JUCE" -iname 'agpl-3.0*' | head -1)
+          if [ -n "$AG" ]; then cp "$AG" "$OUT/licenses/AGPL-3.0.txt"; else curl -fsSL https://www.gnu.org/licenses/agpl-3.0.txt -o "$OUT/licenses/AGPL-3.0.txt"; fi
+          {
+            echo "approved commit: ${{ steps.sha.outputs.sha }}"
+            echo "built commit (GITHUB_SHA): $GITHUB_SHA"
+            echo "built (UTC): $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "runner image: ${ImageOS:-?} ${ImageVersion:-?}"
+            echo "cmake: $(cmake --version | head -1)"
+            echo "compiler: $( (c++ --version || cl 2>&1 || true) | head -1)"
+            echo "source (AGPLv3): https://github.com/qualitycoding/trumpet-vst/tree/${{ steps.sha.outputs.sha }}"
+          } > "$OUT/BUILD_INFO.txt"
+          cat "$OUT/BUILD_INFO.txt"
+      - name: Upload the release candidate (not in a dry run)
+        if: steps.sha.outputs.dry != '1'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: trumpet-rc-${{ steps.sha.outputs.sha }}-${{ matrix.os }}
+          path: rc/${{ matrix.os }}
+          retention-days: 90
+      - name: Summary
+        if: ${{ failure() }}
+        run: echo "::error::rc-artifacts failed on ${{ matrix.os }}"
