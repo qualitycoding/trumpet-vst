@@ -1,0 +1,12 @@
+## TinySOL
+Carmine Emanuele Cella, Daniele Ghisi, Vincent Lostanlen, Fabien Lévy, Joshua Fineberg, Yan Maresz.
+*TinySOL: an audio dataset of isolated musical notes*, version 6.0, Zenodo, 2020. DOI
+[10.5281/zenodo.3685367](https://doi.org/10.5281/zenodo.3685367).
+
+- **Used:** the 96 "Trumpet in C", ordinario notes, as a reference for automated realism tests.
+- **Changes:** the recordings are downloaded at test time and are never committed or distributed with the plugin.
+  The repository contains only metrics derived from them: per-note harmonic levels, spectral centroid and onset
+  times, in `research/spikes/ref_spread_result.json` and in CI result files. The G-005 evidence bundle contains short
+  excerpts (1.0 s steady segments, RMS-normalised to −23 dBFS with 10 ms fades) on the branch `evidence/G-005`, with its
+  own copy of this attribution.
+
