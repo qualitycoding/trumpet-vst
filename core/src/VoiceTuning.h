@@ -71,7 +71,7 @@ inline constexpr double kJitterCents = 0.2, kJitterHz = 40.0;   // fast pitch ji
 inline constexpr unsigned kWanderSeed = 0x2545F491u;
 inline constexpr double kCreepDepth = 0.35;       // after the attack the output level keeps blooming: gain x (1 - depth exp(-age / tau))
 inline constexpr double kCreepTauS = 0.25;
-inline constexpr double kAttackNoise = 4.0;      // extra breath-noise amount at a note start (the chiff of the tongue release) ...
+inline constexpr double kAttackNoise = 1.0;      // extra breath-noise amount at a note start (the chiff of the tongue release) ...
 inline constexpr double kAttackNoiseS = 0.05;      // ... decaying with this time constant
 inline constexpr double kBloomDb = 3.0;          // the high shelf starts this many dB lower at a note start and blooms with time constant kBloomS
 inline constexpr double kBloomS = 0.25;
