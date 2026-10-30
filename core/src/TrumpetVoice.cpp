@@ -326,7 +326,7 @@ struct TrumpetVoice::Impl {
         latency = os == 1 ? 0 : static_cast<int>(std::lround(os == 2 ? 31.0 / 2.0 : 31.0 / 4.0 + 31.0 / 2.0));
         // output-stage warp: ring sized from A = beta L_nl,max 30 kPa / (rho c^3) f_int (D-012)
         const double rho = table->airDensity(), c = table->soundSpeed();
-        warpA = table->nlpBeta() * table->nlpLengthM() * 2.0 * (1.0 + tu::kNlFfBoost) * tu::kWarpClampPa / (rho * c * c * c) * fInt;
+        warpA = table->nlpBeta() * table->nlpLengthM() * 2.0 * (1.0 + tu::kNlFfBoost) * (1.0 + tu::kOverblowNl) * tu::kWarpClampPa / (rho * c * c * c) * fInt;
         warpD = static_cast<int>(std::ceil(warpA)) + 2;
         std::size_t ringSize = 1;
         while (ringSize < static_cast<std::size_t>(2 * warpD + 8)) ringSize <<= 1;
@@ -535,6 +535,8 @@ struct TrumpetVoice::Impl {
         const LipParams lp = lipSettingFor(std::clamp(m, 1, 13), fres);
         LipSet l;
         l.flBase = lp.flHz * tu::kFlTrim[mi];
+        if (m == 1 && tu::kPedalFlRatio > 0.0 && table->state(s.state).modes.size() >= 2)
+            l.flBase = tu::kPedalFlRatio * 0.5 * table->partialHz(s.state, 2) * tu::kFlTrim[mi];   // the pedal tone sits on the harmonic series of the upper resonances
         l.h0 = lp.h0M * tu::kH0Trim[mi];
         l.pth = thresholdPressurePa(std::clamp(m, 1, 13)) * tu::kPmTrim[mi];
         l.floorK = s.floorK;
@@ -679,7 +681,8 @@ struct TrumpetVoice::Impl {
             wanderSlow += as * (uniform() - wanderSlow);
             wanderFast += af * (uniform() - wanderFast);
             const double amp = tu::kWanderSsCents + tu::kWanderAttCents * std::exp(-noteAge / tu::kWanderTauS);
-            wanderCents = amp * wanderSlow / ns + tu::kJitterCents * wanderFast / nf;
+            const double pedal = target == 1 ? tu::kPedalWanderMul : 1.0;
+            wanderCents = pedal * (amp * wanderSlow / ns + tu::kJitterCents * wanderFast / nf);
         }
 
         if (cur.valid && stackSize > 0) {
@@ -767,7 +770,9 @@ struct TrumpetVoice::Impl {
 
         // dynamic brightness: high-shelf gain follows the blowing level above mf
         {
-            const double want = -tu::kBloomDb * std::exp(-noteAge / tu::kBloomS) + tu::kFfShelfDb * clampd((L - 0.6) / 0.4, 0.0, 1.0) - tu::kPpShelfDb * clampd((0.6 - L) / 0.4, 0.0, 1.0);
+            const double oc = clampd(static_cast<double>(overblowOverride ? overblowCtl : par.overblow), 0.0, 1.0);
+            const double Ls = clampd(L + tu::kOverblowShelfLevel * oc, 0.0, 1.0);   // overblowing is blowing harder
+            const double want = -tu::kBloomDb * std::exp(-noteAge / tu::kBloomS) + tu::kFfShelfDb * clampd((Ls - 0.6) / 0.4, 0.0, 1.0) - tu::kPpShelfDb * clampd((0.6 - Ls) / 0.4, 0.0, 1.0);
             if (std::fabs(want - ffShelfDb) > 0.02) {
                 ffShelfDb = want;
                 ffShelf.design(RadiationSection::Type::HighShelf, tu::kFfShelfHz, tu::kFfShelfQ, ffShelfDb, fInt, true);
@@ -775,7 +780,8 @@ struct TrumpetVoice::Impl {
         }
         // output stage constants
         const double rhoAir = table->airDensity(), c = table->soundSpeed();
-        const double Lnl = table->nlpLengthM() * 2.0 * brightS * (1.0 + tu::kNlFfBoost * clampd((L - 0.6) / 0.4, 0.0, 1.0));
+        const double ocl = clampd(static_cast<double>(overblowOverride ? overblowCtl : par.overblow), 0.0, 1.0);
+        const double Lnl = table->nlpLengthM() * 2.0 * brightS * (1.0 + tu::kNlFfBoost * clampd((L - 0.6) / 0.4, 0.0, 1.0)) * (1.0 + tu::kOverblowNl * ocl);
         warpK = table->nlpBeta() * Lnl / (rhoAir * c * c * c) * fInt;
 
         // tracker

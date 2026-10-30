@@ -45,3 +45,6 @@
   attack. They follow the owner's note that the attack and the start of the clips are too clean; the constants are in `VoiceTuning.h`
   (`kWander*`, `kJitter*`, `kScoop*`, `kCreep*`, `kBloom*`). The wander noise is a seeded xorshift reset with the voice, so renders stay
   deterministic and independent of the block size (T-023).
+- S-016 round 3 (G-005 second `iterate`, DR-REAL): the pedal tone (partial 1) uses a lip frequency of half the second resonance (`kPedalFlRatio`, wander x
+  `kPedalWanderMul`) instead of the first resonance; overblowing raises the level of the brightness shelf (`kOverblowShelfLevel`) and L_nl (`kOverblowNl`),
+  not the pressure. `kWanderSeed` was chosen among five seeds because T-029 (pp) and T-035 sit on a threshold and depend on the random wander.
