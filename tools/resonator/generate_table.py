@@ -27,7 +27,7 @@ def _pin_environment():
         "OPENBLAS_CORETYPE": "Haswell",
         "OPENBLAS_NUM_THREADS": "1",
         "OMP_NUM_THREADS": "1",
-        "NPY_DISABLE_CPU_FEATURES": "AVX512F AVX512CD AVX512_KNL AVX512_KNM AVX512_SKX AVX512_CLX AVX512_CNL AVX512_ICL AVX512_SPR",
+        "NPY_DISABLE_CPU_FEATURES": "X86_V4 AVX512_ICL AVX512_SPR",   # NumPy 2.x group names; AVX2 (X86_V3) stays on
     }
     if all(os.environ.get(k) == v for k, v in want.items()):
         return

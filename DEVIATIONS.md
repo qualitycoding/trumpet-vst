@@ -48,3 +48,6 @@
 - S-016 round 3 (G-005 second `iterate`, DR-REAL): the pedal tone (partial 1) uses a lip frequency of half the second resonance (`kPedalFlRatio`, wander x
   `kPedalWanderMul`) instead of the first resonance; overblowing raises the level of the brightness shelf (`kOverblowShelfLevel`) and L_nl (`kOverblowNl`),
   not the pressure. `kWanderSeed` was chosen among five seeds because T-029 (pp) and T-035 sit on a threshold and depend on the random wander.
+- S-017 (T-030 on CI): the AVX-512 loops of NumPy 2.x (groups `X86_V4`, `AVX512_ICL`, `AVX512_SPR`) changed the table generator's fits by up to
+  4e-8 on the AMD EPYC 9V45 runners (the `python` job failed there and passed on EPYC 7763); the generator now disables those groups (the old list used
+  the NumPy 1.x names and did nothing). The committed table is unchanged: it was generated with the AVX2 loops that the other runners use.
