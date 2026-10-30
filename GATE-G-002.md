@@ -18,7 +18,7 @@ Nothing else is published: no tag, no GitHub Release, no merge to `main`.
 ## Evidence
 - Job definition: `.github/workflows/ci.yml`, job `rc-artifacts` (commit 58eee99). A dry run (same checks and staging, no upload) was green on all three OSes:
   https://github.com/qualitycoding/trumpet-vst/actions/runs/41057319845 (marker `[rc-dryrun 58eee99]`, jobs `rc-artifacts (ubuntu-24.04 | macos-15 | windows-2025)`).
-- CI for the commit to be built: https://github.com/qualitycoding/trumpet-vst/actions/runs/41067613182 (head 404f981); the identical sound code was green on all jobs in
+- CI for the commit to be built, all jobs green (freeze, core x3, python, plugin x3 with pluginval, auval, dumpbin and ASan, build-linux, realism): https://github.com/qualitycoding/trumpet-vst/actions/runs/41067613182 (head 404f981); the identical sound code was green on all jobs in
   https://github.com/qualitycoding/trumpet-vst/actions/runs/41057223515 (commit 20d8aed) and https://github.com/qualitycoding/trumpet-vst/actions/runs/41065627439.
 - Licence implications (C-098): the binaries include JUCE, so they are AGPLv3 works; the corresponding source is this repository at the approved sha (BUILD_INFO.txt gives the URL). Our own code is Apache-2.0.
   pluginval (GPLv3) and TinySOL are not included. The repository's `NOTICE` states this.

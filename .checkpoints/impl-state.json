@@ -94,5 +94,12 @@
   "status": "done",
   "commit": "b2d7cf2",
   "utc": "2026-10-29T12:36:27Z"
+ },
+ {
+  "step": "S-017",
+  "status": "blocked",
+  "commit": "404f981",
+  "utc": "2026-10-30T15:10:46Z",
+  "note": "waiting for G-002"
  }
 ]
