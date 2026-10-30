@@ -22,3 +22,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-30T10:31:45Z | G-005 | - | answered | - | iterate: attack too clean; the start of each clip identifies the real sound (up to 3 more DR-REAL rounds)
 2026-10-30T11:19:12Z | S-016 | iterate-1 | pass | 72e83b9 | G-005 round 2 issued: evidence/G-005 00d9ef1 (run 41046024094), new blind draw (seed 20261030); T-029/T-021/T-022 and all frozen suites pass locally
 2026-10-30T11:33:38Z | G-005 | iterate-1 | partial | - | Q1 round 2: owner could tell only pairs 6 (A) and 9 (B), both right; others indistinguishable; verdict outstanding
+2026-10-30T11:56:05Z | G-005 | iterate-2 | answered | - | iterate (selected in the session): pedal tone of the underblow sounds synthetic; overblow less bright/harsh than expected
