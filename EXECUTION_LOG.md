@@ -18,3 +18,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-29T11:33:29Z | G-004 | - | answered | - | proceed (no tokens-revoked: G-005 stays blocked until recorded)
 2026-10-29T12:36:27Z | S-016 | 1 | pass | b2d7cf2 | 1 DR-REAL round; T-029, T-021, T-022 pass; G-005 evidence branch 82329ff (run 40873290014); GATE-G-005.md issued, tokens-revoked missing
 2026-10-30T09:49:24Z | G-005 | - | partial | - | tokens-revoked recorded (user: 'The pat has been revoked', singular; three tokens were pasted); G-005 verdict still outstanding
+2026-10-30T10:27:52Z | G-005 | - | partial | - | Q1 blind test: 10/12 real picked (pairs 1 and 9 wrong); verdict outstanding
