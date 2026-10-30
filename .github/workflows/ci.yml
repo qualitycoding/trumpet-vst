@@ -89,6 +89,12 @@ jobs:
           grep -m1 'model name' /proc/cpuinfo; grep -m1 flags /proc/cpuinfo | tr ' ' '\n' | grep -E '^(avx2|fma|avx512f|avx512vl)$' | tr '\n' ' '; echo
           .venv/bin/python -c "import numpy,scipy,sys; print(sys.version.split()[0], numpy.__version__, scipy.__version__)"
           ldd --version | head -1
+          { grep -m1 'model name' /proc/cpuinfo; grep -m1 flags /proc/cpuinfo | tr ' ' '\n' | grep -E '^(avx2|fma|avx512f|avx512vl)$' | tr '\n' ' '; echo; } > "$RUNNER_TEMP/machine.txt"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: python-machine-${{ github.run_id }}
+          path: ${{ runner.temp }}/machine.txt
+          retention-days: 1
       - name: Python tests (T-029 runs in the realism job)
         run: .venv/bin/python -m pytest tests/python -k "not t029"
       - name: Keep the regenerated table for diagnosis (JSON only)
