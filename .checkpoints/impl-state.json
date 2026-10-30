@@ -97,9 +97,9 @@
  },
  {
   "step": "S-017",
-  "status": "blocked",
+  "status": "done",
   "commit": "404f981",
-  "utc": "2026-10-30T15:10:46Z",
-  "note": "waiting for G-002"
+  "utc": "2026-10-30T17:08:32Z",
+  "run": "41086127699"
  }
 ]

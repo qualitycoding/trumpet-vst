@@ -28,3 +28,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-30T12:41:17Z | G-005 | - | answered | - | proceed (round 3: 7/12 blind = chance level, demos all good); no accepted failures
 2026-10-30T15:10:46Z | S-017 | 1 | pass (gate pending) | 404f981 | CI run 41067613182 all jobs green; dry run of rc-artifacts green on 3 OSes (run 41057319845); pip-audit clean; R-017: no sound-affecting file changed since the G-005 bundle; GATE-G-002 issued
 2026-10-30T16:01:44Z | G-002 | - | answered | - | approve (upload of release-candidate artifacts for 404f981)
+2026-10-30T17:08:32Z | S-017 | 1 | pass | 404f981 | G-002 approved; marker f2f45da; run 41086127699: rc artifacts for 3 OSes (windows job re-run once after a gnu.org curl timeout); sha256 in GATE-G-002.md; GATE-G-006 issued

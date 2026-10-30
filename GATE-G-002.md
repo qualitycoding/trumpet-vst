@@ -32,3 +32,19 @@ Nothing else is published: no tag, no GitHub Release, no merge to `main`.
 ## Other open items
 - If you answer `deny`, no binary is uploaded and G-006 will give you local build instructions for Windows (Visual Studio 2026) instead.
 - G-005 is closed (`proceed`); no accepted failures.
+
+## Outcome (approved by you, executed)
+- Marker commit `f2f45da` (`[g002-approved rc 404f981]`); run https://github.com/qualitycoding/trumpet-vst/actions/runs/41086127699, job `rc-artifacts` green on all three systems
+  (the Windows job failed once while downloading the AGPLv3 text from gnu.org with a curl timeout, exit 28, and passed when the same job was re-run on the same commit).
+- Artifacts (workflow artifacts of the public repository, expiry 2027-01-28, SHA-256 of the artifact zip as reported by GitHub):
+
+| Artifact | Size | SHA-256 |
+|---|---|---|
+| `trumpet-rc-404f981-windows-2025` | 9 007 857 bytes | `ef1029df184722779f0c59557f3e173e90b081fc24f54c5163cde24fee566b2f` |
+| `trumpet-rc-404f981-macos-15` | 7 557 039 bytes | `8b4bb36c08ca41048753a55c27870ae1c6ccf908fabd579b4e4740cb46c885e5` |
+| `trumpet-rc-404f981-ubuntu-24.04` | 7 179 400 bytes | `6f268ba76bbc0391a6b9c021d84036e3adac67c2746dbdfa885886effe685865` |
+
+- Contents checked on the Windows and Linux artifacts: VST3, Standalone, `LICENSE`, `NOTICE`, `THIRD_PARTY_NOTICES.md`, `ATTRIBUTION.md`, `licenses/` (AGPL-3.0, JUCE, VST3 SDK, nlohmann/json), `BUILD_INFO.txt`.
+- Known inaccuracy in `BUILD_INFO.txt` of these artifacts: the `compiler` line shows the MinGW `c++` that happens to be on the Windows runner's PATH. The plugin was built by MSVC through the
+  Visual Studio generator (the artifact contains `Trumpet.lib` and `Trumpet.exp`); the CI `plugin` job checks its static runtime with dumpbin. The workflow now takes the compiler and the generator from `CMakeCache.txt`
+  (a later upload would need its own approval).
