@@ -343,7 +343,7 @@ jobs:
         env:
           TINYSOL_DIR: reference-data/tinysol
         run: |
-          .venv/bin/python -m tools.realism.make_g005_bundle --tinysol "$TINYSOL_DIR" --render build/tools/render/tpt_render --out renders/G-005
+          .venv/bin/python -m tools.realism.make_g005_bundle --tinysol "$TINYSOL_DIR" --render build/tools/render/tpt_render --out renders/G-005 --seed 20261030
       - name: Push the evidence branch
         env:
           GITHUB_TOKEN: ${{ github.token }}

@@ -54,6 +54,7 @@ def main(argv=None):
     ap.add_argument("--tinysol", required=True)
     ap.add_argument("--render", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--seed", type=int, default=SEED, help="random seed of the blind-pair draw; a new seed after each G-005 iterate round (the key of the previous round is known)")
     a = ap.parse_args(argv)
     out = pathlib.Path(a.out)
     (out / "blind").mkdir(parents=True, exist_ok=True)
@@ -61,7 +62,7 @@ def main(argv=None):
     root = tinysol.download(a.tinysol)
     notes = tinysol.trumpet_notes(root)
 
-    rng = random.Random(SEED)
+    rng = random.Random(a.seed)
     pitches = sorted({n["concert"] for n in notes if n["dyn"] == "mf"})
     pick = rng.sample(pitches, 12)
     key = {}
