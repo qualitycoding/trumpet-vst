@@ -201,6 +201,10 @@ struct TrumpetVoice::Impl {
     bool legatoPedal = false;
     Valves held = 0;
     double vibPhase = 0.0;
+    // player instability: slow wander and fast jitter of the pitch, strong just after a note start (S-016 iterate)
+    std::uint32_t wanderRng = tu::kWanderSeed;
+    double creepGain = 1.0, noiseEff = 0.0;
+    double wanderSlow = 0.0, wanderFast = 0.0, noteAge = 0.0, wanderCents = 0.0;
 
     // ---- note stack and playing state ----------------------------------------------------------------------------------
     std::array<NoteSlot, kMaxNotes> stack{};
@@ -348,6 +352,7 @@ struct TrumpetVoice::Impl {
         active = false; sounded = false;
         ctrlPhase = 0;
         noise.reset();
+        wanderRng = tu::kWanderSeed; wanderSlow = wanderFast = 0.0; noteAge = 0.0; wanderCents = 0.0;
         ringVal.assign(ringVal.size(), 0.0);
         clampCount.store(0, std::memory_order_relaxed);
         nSrc = -1;             // virtual history of zeros whose arrival times equal their indices
@@ -596,7 +601,7 @@ struct TrumpetVoice::Impl {
             kOn = std::max(kAcc, tu::kOnsetMinThresholdMul * next.pth / std::max(pmSus, 1e-9));
             y = lerp(tu::kY0Low, tu::kY0High, blend(L, tu::kY0BoundaryL)) * next.h0 * heightScale();
             v = 0; u = 0; p = 0;
-            env = Env::Attack; envT = 0; lipClosed = false;
+            env = Env::Attack; envT = 0; lipClosed = false; noteAge = 0.0;
             pmS = pmSus;
             sounded = true; snapSegment = true;
             trackN = 0; trackHz = 0; trackPartial = 0;
@@ -609,7 +614,7 @@ struct TrumpetVoice::Impl {
             from = to = now = next;
             rampT = 1e9;
             target = m;
-            env = Env::Stop; envT = 0; lipClosed = true; y = 0; v = 0;
+            env = Env::Stop; envT = 0; lipClosed = true; y = 0; v = 0; noteAge = 0.0;
             pmS = std::max(sustainFactor(blowingLevel()), next.floorK) * next.pth * brighten();
             sounded = true; snapSegment = true;
         } else { // Legato: lip slur and/or valve slur, no re-attack
@@ -648,7 +653,7 @@ struct TrumpetVoice::Impl {
     double runtimeScale() const {
         const double depth = std::max<double>(par.vibratoDepth, vibControl);
         const double vib = tu::kVibratoCents * depth * std::sin(vibPhase);
-        return std::pow(2.0, bendS / 12.0) * std::pow(2.0, vib / 1200.0);
+        return std::pow(2.0, bendS / 12.0) * std::pow(2.0, (vib + wanderCents) / 1200.0);
     }
 
     void controlTick() {
@@ -665,6 +670,17 @@ struct TrumpetVoice::Impl {
         if (vibPhase > 2.0 * kPi) vibPhase -= 2.0 * kPi;
 
         applyPending(dt);
+        noteAge += dt;
+        {   // pitch wander (low-passed noise, unit variance) and jitter, deterministic from the voice reset
+            auto uniform = [&]() { wanderRng ^= wanderRng << 13; wanderRng ^= wanderRng >> 17; wanderRng ^= wanderRng << 5;
+                                   return static_cast<double>(wanderRng) / 2147483648.0 - 1.0; };
+            const double as = 1.0 - std::exp(-2.0 * kPi * tu::kWanderHz * dt), af = 1.0 - std::exp(-2.0 * kPi * tu::kJitterHz * dt);
+            const double ns = std::sqrt(as / (2.0 - as) / 3.0), nf = std::sqrt(af / (2.0 - af) / 3.0);
+            wanderSlow += as * (uniform() - wanderSlow);
+            wanderFast += af * (uniform() - wanderFast);
+            const double amp = tu::kWanderSsCents + tu::kWanderAttCents * std::exp(-noteAge / tu::kWanderTauS);
+            wanderCents = amp * wanderSlow / ns + tu::kJitterCents * wanderFast / nf;
+        }
 
         if (cur.valid && stackSize > 0) {
             updateOverblowRegister();
@@ -728,9 +744,11 @@ struct TrumpetVoice::Impl {
         const double S = now.fsNote * std::pow(2.0, realismS * now.devCents / 1200.0) * (static_cast<double>(par.tuningA4Hz) / 440.0);
         const double scale = S * Wrt;
         flA = flB; h0A = h0B; pmA = pmB;
-        flB = now.flBase * scale;
+        flB = now.flBase * scale * std::pow(2.0, tu::kScoopCents * (1.0 - tu::kScoopFfCut * clampd((L - 0.6) / 0.4, 0.0, 1.0)) * std::exp(-noteAge / tu::kScoopS) / 1200.0);
         h0B = now.h0 * heightScale();
         pmB = pmS * envFactor;
+        noiseEff = noiseS + tu::kAttackNoise * std::exp(-noteAge / tu::kAttackNoiseS);
+        creepGain = 1.0 - tu::kCreepDepth * std::exp(-noteAge / tu::kCreepTauS);   // the level keeps blooming after the attack
         if (snapSegment) { flA = flB; h0A = h0B; pmA = pmB; snapSegment = false; }
 
         // modes: interpolate states (D-010) and scale by the tuning factor
@@ -749,7 +767,7 @@ struct TrumpetVoice::Impl {
 
         // dynamic brightness: high-shelf gain follows the blowing level above mf
         {
-            const double want = tu::kFfShelfDb * clampd((L - 0.6) / 0.4, 0.0, 1.0) - tu::kPpShelfDb * clampd((0.6 - L) / 0.4, 0.0, 1.0);
+            const double want = -tu::kBloomDb * std::exp(-noteAge / tu::kBloomS) + tu::kFfShelfDb * clampd((L - 0.6) / 0.4, 0.0, 1.0) - tu::kPpShelfDb * clampd((0.6 - L) / 0.4, 0.0, 1.0);
             if (std::fabs(want - ffShelfDb) > 0.02) {
                 ffShelfDb = want;
                 ffShelf.design(RadiationSection::Type::HighShelf, tu::kFfShelfHz, tu::kFfShelfQ, ffShelfDb, fInt, true);
@@ -883,7 +901,7 @@ struct TrumpetVoice::Impl {
         }
         P0 *= 2.0;
         noiseVal = noise.next();
-        const double cflow = 12e-3 * h * std::sqrt(2.0 / tu::kFlowRhoKgM3) * (1.0 + tu::kNoiseFlowGain * noiseS * noiseVal);
+        const double cflow = 12e-3 * h * std::sqrt(2.0 / tu::kFlowRhoKgM3) * (1.0 + tu::kNoiseFlowGain * noiseEff * noiseVal);
         const double D = pm - P0;
         double unew;
         if (cflow <= 0) unew = 0;
@@ -916,7 +934,7 @@ struct TrumpetVoice::Impl {
         double w = (ptr + 1 <= nSrc && t1 > t0) ? v0 + (v1 - v0) * clampd((j - t0) / (t1 - t0), 0.0, 1.0) : v0;
         for (int b = 0; b < nBq; ++b) w = bq[std::size_t(b)].process(w);
         w = ffShelf.process(w);
-        w *= tu::kOutGain * gainS * panicGain;
+        w *= tu::kOutGain * gainS * panicGain * creepGain;
         w += tu::kNoiseOutGain * noiseS * (pm / std::max(now.pth, 1.0)) * noiseVal * panicGain;
 
         if (os == 1) { outSample = w; return true; }

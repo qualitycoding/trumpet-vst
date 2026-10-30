@@ -24,7 +24,7 @@ inline constexpr double kBoundaryBlend = 0.05;     // linear interpolation acros
 inline constexpr double kOnsetMinThresholdMul = 1.3;   // pm_on >= 1.3 x threshold
 inline constexpr double kReleaseS = 0.040;         // pm falls to 0 on the last note-off
 // --- D-010 re-articulation -------------------------------------------------------------------------------------------
-inline constexpr double kTongueStopS = 0.028;      // lips closed, pm = 0
+inline constexpr double kTongueStopS = 0.036;      // lips closed, pm = 0
 inline constexpr double kReattackS = 0.003;        // raised-cosine re-attack, no accent
 inline constexpr double kLegatoPedalWindowS = 0.020;   // D-014 CC68
 inline constexpr double kRegisterRampS = 0.01;    // D-009/D-010 f_l, h0, pm, fscale ramps
@@ -48,7 +48,7 @@ inline constexpr double kStiffBase = 1.15, kStiffSlope = 0.3;
 // per-partial trims (DR-REGIME), index = partial 1..13 (slot 0 unused); all 1.0 initially
 // partial 3: fl x 0.97 so that written C#4 (123 + 3rd slide) grows fast enough at mf (DR-REGIME round 1, S-009)
 // partial 4: fl x 0.97 so that alternate written F#4 (1-2-3, p4) does not lock onto partial 5 (DR-REGIME round 2)
-inline constexpr std::array<double, 14> kFlTrim = {1, 1, 1, 0.97, 0.97, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+inline constexpr std::array<double, 14> kFlTrim = {1, 1.03, 1, 0.97, 0.97, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 // partial 9: h0 x 0.85 so that written C#6 (valve 2) sustains at pp (DR-REGIME)
 inline constexpr std::array<double, 14> kH0Trim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 0.85, 1, 1, 1, 1};
 inline constexpr std::array<double, 14> kPmTrim = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
@@ -58,9 +58,23 @@ inline constexpr double kParamSmoothS = 0.010;     // smoothing of bend, realism
 // --- D-012 output stage -----------------------------------------------------------------------------------------------
 inline constexpr double kCupRadiusM = 8.25e-3;
 inline constexpr double kWarpClampPa = 30000.0;
-inline constexpr double kFfShelfDb = 8.0;         // high-shelf boost at ff (L = 1), 0 dB at mf (L <= 0.6): dynamic brightness (DR-REAL, S-016)
+inline constexpr double kFfShelfDb = 10.0;         // high-shelf boost at ff (L = 1), 0 dB at mf (L <= 0.6): dynamic brightness (DR-REAL, S-016)
 inline constexpr double kPpShelfDb = 8.0;         // high-shelf cut at pp (L <= 0.2), rising to 0 dB at mf
 inline constexpr double kFfShelfHz = 1800.0, kFfShelfQ = 0.7;
+inline constexpr double kScoopCents = -150.0;         // lip frequency starts this many cents off (negative = flat) at a tongued note start ...
+inline constexpr double kScoopS = 0.07;
+inline constexpr double kScoopFfCut = 0.7;        // the scoop shrinks by this fraction from mf to ff (a hard attack does not scoop)            // ... and returns with this time constant (attack realism, S-016 iterate)
+inline constexpr double kWanderSsCents = 2.0;      // slow pitch wander of the player: std (cents) in the sustain ...
+inline constexpr double kWanderAttCents = 20.0;     // ... plus this much at the note start, decaying with kWanderTauS
+inline constexpr double kWanderTauS = 0.2, kWanderHz = 3.0;
+inline constexpr double kJitterCents = 0.2, kJitterHz = 40.0;   // fast pitch jitter: std (cents) and bandwidth
+inline constexpr unsigned kWanderSeed = 0x2545F491u;
+inline constexpr double kCreepDepth = 0.35;       // after the attack the output level keeps blooming: gain x (1 - depth exp(-age / tau))
+inline constexpr double kCreepTauS = 0.25;
+inline constexpr double kAttackNoise = 4.0;      // extra breath-noise amount at a note start (the chiff of the tongue release) ...
+inline constexpr double kAttackNoiseS = 0.05;      // ... decaying with this time constant
+inline constexpr double kBloomDb = 3.0;          // the high shelf starts this many dB lower at a note start and blooms with time constant kBloomS
+inline constexpr double kBloomS = 0.25;
 inline constexpr double kNlFfBoost = 0.0;          // L_nl grows by this factor from L = 0.6 (mf) to L = 1 (ff) (DR-REAL, S-016)
 inline constexpr double kNoiseCutoffHz = 3000.0;
 inline constexpr double kNoiseFlowGain = 0.05;
@@ -87,7 +101,7 @@ inline std::vector<std::pair<std::string, double>> table() {
         {"kCupRadiusM", kCupRadiusM}, {"kDownHysteresis", kDownHysteresis}, {"kFloorExtended", kFloorExtended},
         {"kFloorWritten88", kFloorWritten88}, {"kFlowRhoKgM3", kFlowRhoKgM3}, {"kIdleDb", kIdleDb},
         {"kIdleHoldS", kIdleHoldS}, {"kLegatoPedalWindowS", kLegatoPedalWindowS}, {"kLimiterKnee", kLimiterKnee},
-        {"kMeterWindowS", kMeterWindowS}, {"kFfShelfDb", kFfShelfDb}, {"kPpShelfDb", kPpShelfDb}, {"kFfShelfHz", kFfShelfHz}, {"kFfShelfQ", kFfShelfQ}, {"kNlFfBoost", kNlFfBoost}, {"kNoiseCutoffHz", kNoiseCutoffHz}, {"kNoiseFlowGain", kNoiseFlowGain},
+        {"kMeterWindowS", kMeterWindowS}, {"kFfShelfDb", kFfShelfDb}, {"kPpShelfDb", kPpShelfDb}, {"kFfShelfHz", kFfShelfHz}, {"kFfShelfQ", kFfShelfQ}, {"kNlFfBoost", kNlFfBoost}, {"kBloomDb", kBloomDb}, {"kBloomS", kBloomS}, {"kAttackNoise", kAttackNoise}, {"kAttackNoiseS", kAttackNoiseS}, {"kCreepDepth", kCreepDepth}, {"kCreepTauS", kCreepTauS}, {"kScoopCents", kScoopCents}, {"kScoopS", kScoopS}, {"kScoopFfCut", kScoopFfCut}, {"kWanderSsCents", kWanderSsCents}, {"kWanderAttCents", kWanderAttCents}, {"kWanderTauS", kWanderTauS}, {"kWanderHz", kWanderHz}, {"kJitterCents", kJitterCents}, {"kJitterHz", kJitterHz}, {"kNoiseCutoffHz", kNoiseCutoffHz}, {"kNoiseFlowGain", kNoiseFlowGain},
         {"kNoiseOutGain", kNoiseOutGain}, {"kOnsetMinThresholdMul", kOnsetMinThresholdMul}, {"kOutGain", kOutGain},
         {"kPanicFadeS", kPanicFadeS}, {"kParamSmoothS", kParamSmoothS}, {"kPmSmoothS", kPmSmoothS},
         {"kReattackS", kReattackS}, {"kRegisterRampS", kRegisterRampS}, {"kReleaseS", kReleaseS},

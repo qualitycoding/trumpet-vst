@@ -40,3 +40,8 @@
   `kPpShelfDb` -8 dB at pp, corner `kFfShelfHz` 1800 Hz, Q 0.7, linear in the blowing level, 0 dB at mf) after the radiation
   biquads. A static radiation change fixed ff but broke pp/mf, and neither L_nl (`kNlFfBoost`, a level-dependent factor, kept
   at 0) nor a higher ff blowing factor moved the ff centroid beyond 36 %. K_out is 1/92000 (written C5 at ff peaks at -6.0 dBFS).
+- S-016 round 2 (G-005 `iterate`, DR-REAL): the voice has a player-instability model (slow pitch wander with a larger share
+  just after a note start, fast jitter), a lip-frequency scoop at tongued note starts, an output-level bloom and a high-shelf bloom after the
+  attack. They follow the owner's note that the attack and the start of the clips are too clean; the constants are in `VoiceTuning.h`
+  (`kWander*`, `kJitter*`, `kScoop*`, `kCreep*`, `kBloom*`). The wander noise is a seeded xorshift reset with the voice, so renders stay
+  deterministic and independent of the block size (T-023).
