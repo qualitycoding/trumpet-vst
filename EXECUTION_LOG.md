@@ -20,3 +20,4 @@ UTC time | step | attempt | status | commit | note
 2026-10-30T09:49:24Z | G-005 | - | partial | - | tokens-revoked recorded (user: 'The pat has been revoked', singular; three tokens were pasted); G-005 verdict still outstanding
 2026-10-30T10:27:52Z | G-005 | - | partial | - | Q1 blind test: 10/12 real picked (pairs 1 and 9 wrong); verdict outstanding
 2026-10-30T10:31:45Z | G-005 | - | answered | - | iterate: attack too clean; the start of each clip identifies the real sound (up to 3 more DR-REAL rounds)
+2026-10-30T11:19:12Z | S-016 | iterate-1 | pass | 72e83b9 | G-005 round 2 issued: evidence/G-005 00d9ef1 (run 41046024094), new blind draw (seed 20261030); T-029/T-021/T-022 and all frozen suites pass locally
