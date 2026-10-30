@@ -84,6 +84,11 @@ jobs:
           ln -sfn "$RUNNER_TEMP/venv" .venv
           .venv/bin/pip install --require-hashes -r tools/requirements.hashes.txt
           .venv/bin/python --version
+      - name: Machine used (numerics of the table generator depend on it)
+        run: |
+          grep -m1 'model name' /proc/cpuinfo; grep -m1 flags /proc/cpuinfo | tr ' ' '\n' | grep -E '^(avx2|fma|avx512f|avx512vl)$' | tr '\n' ' '; echo
+          .venv/bin/python -c "import numpy,scipy,sys; print(sys.version.split()[0], numpy.__version__, scipy.__version__)"
+          ldd --version | head -1
       - name: Python tests (T-029 runs in the realism job)
         run: .venv/bin/python -m pytest tests/python -k "not t029"
       - name: Keep the regenerated table for diagnosis (JSON only)
