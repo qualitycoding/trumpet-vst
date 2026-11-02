@@ -1,5 +1,5 @@
 <!-- STATUS: READY -->
-# Status: READY (planning protocol v3.2, Phase 5, 2026-10-23)
+# Status: READY (planning protocol v3.9, Phase 5, 2026-10-23)
 
 Re-issued after the human named the knowledge store (`qualitycoding/knowledge` for knowledge items,
 `qualitycoding/Lessons` for lessons; A-018). R0 was re-run against it and the plan amended, cold-read (passes 10–11) and
@@ -827,3 +827,11 @@ pre-mortem-reviewed (round 5). Every count below was taken from a command on thi
 - Relevant decisions/claims: A-018
 - Lessons applied: L-20261007T150100Z-no-credentials-in-command-lines (secret scan via the schema check)
 - Exclusive resources: none
+
+
+## Amendment closing/review steps (v3.9)
+
+- **S-REVIEW** — Traditional code review before packaging/release.
+- **S-ADVERSARIAL** — Adversarial review of security/correctness claims.
+- **S-RETRO** — Retrospective: review execution log, deviations and gate records.
+- **S-KNOW** — Knowledge/lessons: record classified lessons and knowledge items; G-003 controls publication to the Lessons and knowledge stores.

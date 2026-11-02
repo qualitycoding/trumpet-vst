@@ -395,3 +395,10 @@ projects).
 | K-20261009T120116Z-sandbox-background-jobs-and-git-proxy-limits | relevant-new | ENVIRONMENT.md sandbox section: run long builds via setsid nohup and poll; use bash -c for bash syntax; run git fetch origin before first push if the clone is shallow; avoid concurrent git operations. |
 | K-20261008T173541Z-sandbox-build-tools-and-juce-tags-2026-10-08 | relevant-consistent | D-022, C-090, ENVIRONMENT.md sandbox |
 | K-20261009T092101Z-juce-vst3-can-replace-vst2-default-and-error | relevant-consistent | plugin/CMakeLists.txt JUCE_VST3_CAN_REPLACE_VST2=0, D-016 parameters |
+
+## R0 prior-knowledge load — v3.9 addendum (2026-11-02)
+
+Loaded from the knowledge store topics relevant to this amendment: planning
+protocol v3.9 change record, mutation-in-CI pricing practice, split
+lesson/knowledge store semantics, ephemeral-environment durable-mount
+discipline. No repository product knowledge is altered by this amendment.
