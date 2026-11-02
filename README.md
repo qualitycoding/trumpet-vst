@@ -15,17 +15,30 @@ A physically modelled B♭ trumpet instrument plugin (VST3 / Standalone, plus AU
 
 ## Status
 
-Planning. The execution plan lives on the `gen-*-trumpet-vst-plan` branch (start with `HANDOFF.md`).
-Nothing is implemented on `main` yet.
+`main` contains only the licence files and this file. The plugin is implemented on the
+**`impl-20261007T145241Z-trumpet-vst-plan`** branch, which has not been merged to `main`. This is the
+furthest along of the instrument plugins:
+
+- Built and passing CI on Windows, macOS and Linux: the lip-valve model, the drawn trumpet with valve,
+  slide-trigger and partial display, the Overblow control, lip slurs and Fixed valves mode. The frozen
+  suites pass, including pluginval at strictness 10, `auval` on macOS and an ASan run on Linux.
+- Realism: in the blind listening test (gate G-005), the listener picked the real recording in 7 of 12
+  trials in the last round, which is chance level, and the demos were judged good. It was accepted with `proceed`.
+- A release candidate (commit `404f981`) was built for Windows and macOS and approved for upload
+  (gate G-002). The last open step is a manual host check in REAPER (gate G-006).
+
+The plan is on `gen-20261007T145241Z-trumpet-vst-plan` (start with `HANDOFF.md`).
 
 ## Building
 
-Not yet buildable from `main`. Once implemented: CMake ≥ 3.22, a C++20 compiler, and an internet
-connection for the pinned JUCE / Catch2 / nlohmann-json downloads:
+Build from the implementation branch, not `main`. You need CMake 3.22 or later, a C++20 compiler and an
+internet connection for the pinned JUCE, Catch2 and nlohmann-json downloads:
 
 ```bash
+git checkout impl-20261007T145241Z-trumpet-vst-plan
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build build
+ctest --test-dir build --output-on-failure
 ```
 
 ## Licence
