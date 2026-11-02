@@ -25,3 +25,7 @@ only, any tag/release is behind G-002). `math.exploration`: n/a.
 `research/{QUESTIONS.md,PRIOR_KNOWLEDGE.md,claims.json,SOURCES.md,rounds/,spikes/}`, `tests/`,
 `tests/FROZEN_MANIFEST.sha256`, `premortem/{round-N.md,RISK_REGISTER.md}`, `lessons/`, `knowledge/`,
 `.checkpoints/state.json`.
+
+## v3.9 addendum profile confirmation
+
+Active profiles unchanged; `software` active; `software.deploys` unchanged. Target protocol v3.9.

@@ -1,5 +1,7 @@
 # HANDOFF — trumpet-vst v1 (implementing agent: start here)
 
+
+Reading order: `HANDOFF.md` → `ADDENDUM-PLAN-V3.9.md` → `plan/PLAN.md`. Later protocol amendments take precedence only where the gap ledger says so.
 ## Purpose
 Build a physically modelled B♭ trumpet instrument plugin with overblowing and a UI that shows the fingering. It is
 VST3/Standalone on Windows, macOS and Linux, plus AU on macOS. Execute `plan/PLAN.md` from S-000 to S-KNOW, without
